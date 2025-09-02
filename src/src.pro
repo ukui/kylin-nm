@@ -30,15 +30,16 @@ target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
-# gschema.files = org.ukui.kylin-nm.switch.gschema.xml
-# gschema.path = /usr/share/glib-2.0/schemas/
 qm_files.path = /usr/share/kylin-nm/kylin-nm/
 qm_files.files = translations/*.qm
 
+ts_files.path = /usr/share/kylin-nm/kylin-nm/
+ts_files.files = translations/*.ts
+
 INSTALLS += target \
         desktop \
-        # gschema \
-        qm_files
+        qm_files \
+        ts_files
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -78,6 +79,7 @@ unix {
 
 TRANSLATIONS += \
         translations/kylin-nm_zh_Hant.ts \
+        translations/kylin-nm_zh_HK.ts \
         translations/kylin-nm_zh_CN.ts \
         translations/kylin-nm_ug.ts \
         translations/kylin-nm_tr.ts \

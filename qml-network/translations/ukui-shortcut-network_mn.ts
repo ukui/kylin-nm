@@ -2,25 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="mn">
 <context>
-    <name>BluetoothArea</name>
-    <message>
-        <source>My Devices</source>
-        <translation type="vanished">ᠮᠢᠨᠦ ᠲᠥᠬᠥᠭᠡᠷᠦᠮᠵᠢ</translation>
-    </message>
-    <message>
-        <source>More Bluetooth Settings</source>
-        <translation type="vanished">ᠨᠡᠩ ᠣᠯᠠᠨ ᠯᠠᠨᠶᠠ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠤᠯᠳᠠ</translation>
-    </message>
-    <message>
-        <source>New Devices</source>
-        <translation type="vanished">ᠰᠢᠨ᠎ᠡ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ</translation>
-    </message>
-    <message>
-        <source>Bluetooth is disabled</source>
-        <translation type="vanished">ᠯᠠᠨᠶᠠ ᠴᠢᠳᠠᠪᠬᠢ ᠵᠢ ᠬᠠᠭᠠᠪᠠ</translation>
-    </message>
-</context>
-<context>
     <name>DeviceComboBox</name>
     <message>
         <source>(Connected)</source>
@@ -38,6 +19,42 @@
 <context>
     <name>LanComponent</name>
     <message>
+        <source>network settings</source>
+        <translation type="vanished">网络配置</translation>
+    </message>
+    <message>
+        <source>connected</source>
+        <translation>ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>ᠵᠠᠯᠭᠠᠭ᠎ᠠ ᠦᠭᠡᠢ</translation>
+    </message>
+    <message>
+        <source>disconnect</source>
+        <translation>ᠲᠠᠰᠤᠷᠠᠪᠠ ᠃</translation>
+    </message>
+    <message>
+        <source>connect</source>
+        <translation>ᠵᠠᠯᠭᠠᠬᠤ ᠃</translation>
+    </message>
+    <message>
+        <source>disconnect network</source>
+        <translation type="vanished">断开网络</translation>
+    </message>
+    <message>
+        <source>connect network</source>
+        <translation type="vanished">连接网络</translation>
+    </message>
+    <message>
+        <source>network property</source>
+        <translation type="vanished">网络属性</translation>
+    </message>
+    <message>
+        <source>delete this network</source>
+        <translation type="vanished">删除此网络</translation>
+    </message>
+    <message>
         <source>Disconnect network</source>
         <translation>ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠲᠠᠰᠤᠯᠤᠨ᠎ᠠ ᠃</translation>
     </message>
@@ -52,26 +69,6 @@
     <message>
         <source>Delete this network</source>
         <translation>ᠲᠤᠰ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠠᠰᠤᠬᠤ</translation>
-    </message>
-    <message>
-        <source>connected</source>
-        <translation>ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
-    </message>
-    <message>
-        <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>ᠵᠠᠯᠭᠠᠭ᠎ᠠ ᠦᠭᠡᠢ</translation>
-    </message>
-    <message>
-        <source>disconnect</source>
-        <translation>ᠲᠠᠰᠤᠷᠠᠪᠠ ᠃</translation>
-    </message>
-    <message>
-        <source>connect</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -96,6 +93,30 @@
 <context>
     <name>WlanComponent</name>
     <message>
+        <source>Network settings</source>
+        <translation type="vanished">网络配置</translation>
+    </message>
+    <message>
+        <source>connected</source>
+        <translation type="vanished">已连接</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="vanished">未连接</translation>
+    </message>
+    <message>
+        <source>disconnect</source>
+        <translation>ᠲᠠᠰᠤᠷᠠᠪᠠ ᠃</translation>
+    </message>
+    <message>
+        <source>connect</source>
+        <translation>ᠵᠠᠯᠭᠠᠬᠤ ᠃</translation>
+    </message>
+    <message>
+        <source>AutoConnect</source>
+        <translation>ᠠᠦᠢᠲ᠋ᠣ᠋ ᠬᠣᠯᠪᠣᠭ᠎ᠠ ᠃</translation>
+    </message>
+    <message>
         <source>Disconnect network</source>
         <translation>ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠲᠠᠰᠤᠯᠤᠨ᠎ᠠ ᠃</translation>
     </message>
@@ -112,8 +133,8 @@
         <translation>ᠡᠨᠡ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠮᠠᠷᠲᠠ ᠃</translation>
     </message>
     <message>
-        <source>connect</source>
-        <translation>ᠵᠠᠯᠭᠠᠬᠤ ᠃</translation>
+        <source>Add Others...</source>
+        <translation>ᠪᠤᠰᠤᠳ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠵᠠᠯᠭᠠᠬᠤ···</translation>
     </message>
     <message>
         <source>Connected,network is very good</source>
@@ -134,18 +155,6 @@
     <message>
         <source>Connected,network is weak</source>
         <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠤᠩ ᠪᠠᠭᠤᠷᠠᠢ ᠃</translation>
-    </message>
-    <message>
-        <source>AutoConnect</source>
-        <translation>ᠠᠦᠢᠲ᠋ᠣ᠋ ᠬᠣᠯᠪᠣᠭ᠎ᠠ ᠃</translation>
-    </message>
-    <message>
-        <source>disconnect</source>
-        <translation>ᠲᠠᠰᠤᠷᠠᠪᠠ ᠃</translation>
-    </message>
-    <message>
-        <source>Add Others...</source>
-        <translation>ᠪᠤᠰᠤᠳ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠵᠠᠯᠭᠠᠬᠤ···</translation>
     </message>
 </context>
 </TS>

@@ -2,25 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="kk">
 <context>
-    <name>BluetoothArea</name>
-    <message>
-        <source>My Devices</source>
-        <translation type="vanished">مەنىڭ ئۈسكۈنەم</translation>
-    </message>
-    <message>
-        <source>More Bluetooth Settings</source>
-        <translation type="vanished">الٸدە كوپ بليۇتووت تەڭشەۋلەرى</translation>
-    </message>
-    <message>
-        <source>New Devices</source>
-        <translation type="vanished">جاڭا جابدىقتار</translation>
-    </message>
-    <message>
-        <source>Bluetooth is disabled</source>
-        <translation type="vanished">بليۇتووت قۇلپتاندى</translation>
-    </message>
-</context>
-<context>
     <name>DeviceComboBox</name>
     <message>
         <source>(Connected)</source>
@@ -38,32 +19,16 @@
 <context>
     <name>LanComponent</name>
     <message>
-        <source>Disconnect network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connect network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Network property</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete this network</source>
-        <translation type="unfinished"></translation>
+        <source>network settings</source>
+        <translation type="vanished">网络配置</translation>
     </message>
     <message>
         <source>connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
+        <translation>جالعانعان</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>جالعاۋنبادٸ</translation>
     </message>
     <message>
         <source>disconnect</source>
@@ -73,12 +38,44 @@
         <source>connect</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>disconnect network</source>
+        <translation type="vanished">断开网络</translation>
+    </message>
+    <message>
+        <source>connect network</source>
+        <translation type="vanished">连接网络</translation>
+    </message>
+    <message>
+        <source>network property</source>
+        <translation type="vanished">网络属性</translation>
+    </message>
+    <message>
+        <source>delete this network</source>
+        <translation type="vanished">删除此网络</translation>
+    </message>
+    <message>
+        <source>Disconnect network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect network</source>
+        <translation>تور اۋلاۋ</translation>
+    </message>
+    <message>
+        <source>Network property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this network</source>
+        <translation>نۇ توردى ٴوشىرۋ</translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
     <message>
         <source>Wired network</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمدى تور</translation>
     </message>
     <message>
         <source>No wired network card was detected</source>
@@ -96,12 +93,36 @@
 <context>
     <name>WlanComponent</name>
     <message>
+        <source>Network settings</source>
+        <translation type="vanished">网络配置</translation>
+    </message>
+    <message>
+        <source>connected</source>
+        <translation type="vanished">已连接</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="vanished">未连接</translation>
+    </message>
+    <message>
+        <source>disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AutoConnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Disconnect network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connect network</source>
-        <translation type="unfinished"></translation>
+        <translation>تور اۋلاۋ</translation>
     </message>
     <message>
         <source>Network property</source>
@@ -112,8 +133,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>connect</source>
-        <translation type="unfinished"></translation>
+        <source>Add Others...</source>
+        <translation>باسقا تورعا قوسىلۋ...</translation>
     </message>
     <message>
         <source>Connected,network is very good</source>
@@ -133,18 +154,6 @@
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AutoConnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>disconnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Others...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

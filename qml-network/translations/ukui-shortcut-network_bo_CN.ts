@@ -2,25 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="bo_CN">
 <context>
-    <name>BluetoothArea</name>
-    <message>
-        <source>My Devices</source>
-        <translation type="vanished">སྒྲིག་ཆས།</translation>
-    </message>
-    <message>
-        <source>More Bluetooth Settings</source>
-        <translation type="vanished">སོ་སྔོན་སྒྲིག་འགོད་ནི་དེ་བས་ཀྱང་མང་བ།</translation>
-    </message>
-    <message>
-        <source>New Devices</source>
-        <translation type="vanished">སྒྲིག་ཆས་གསར་བ།</translation>
-    </message>
-    <message>
-        <source>Bluetooth is disabled</source>
-        <translation type="vanished">སོ་སྔོན་བྱེད་ལས་ཁ་རྒྱག་ཟིན།</translation>
-    </message>
-</context>
-<context>
     <name>DeviceComboBox</name>
     <message>
         <source>(Connected)</source>
@@ -38,32 +19,16 @@
 <context>
     <name>LanComponent</name>
     <message>
-        <source>Disconnect network</source>
-        <translation>མཉམ་འབབ་འགུལ་བ་</translation>
-    </message>
-    <message>
-        <source>Connect network</source>
-        <translation>དམངས་དོན་མཉམ་འབབ་</translation>
-    </message>
-    <message>
-        <source>Network property</source>
-        <translation>དམངས་དོན་ཁག་གི་ཁོངས་གཞི་</translation>
-    </message>
-    <message>
-        <source>Delete this network</source>
-        <translation>དམངས་དོན་འདི་གཏམ་རྒྱུད་བཟུང་</translation>
+        <source>network settings</source>
+        <translation type="vanished">网络配置</translation>
     </message>
     <message>
         <source>connected</source>
-        <translation>མཉམ་འབབ་བཟུང་ཡོད</translation>
-    </message>
-    <message>
-        <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
+        <translation>འབྲེལ་མཐུད་བྱེད་ཟིན།</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation>མཉམ་འབབ་བཟུང་མིན</translation>
+        <translation>འབྲེལ་མཐུད་མི་བྱེད་པ།</translation>
     </message>
     <message>
         <source>disconnect</source>
@@ -71,7 +36,39 @@
     </message>
     <message>
         <source>connect</source>
-        <translation>མཉམ་འབབ་བཟུང་ཡོད</translation>
+        <translation>འབྲེལ་མཐུད་བཅས་བྱ་དགོས།</translation>
+    </message>
+    <message>
+        <source>disconnect network</source>
+        <translation type="vanished">断开网络</translation>
+    </message>
+    <message>
+        <source>connect network</source>
+        <translation type="vanished">连接网络</translation>
+    </message>
+    <message>
+        <source>network property</source>
+        <translation type="vanished">网络属性</translation>
+    </message>
+    <message>
+        <source>delete this network</source>
+        <translation type="vanished">删除此网络</translation>
+    </message>
+    <message>
+        <source>Disconnect network</source>
+        <translation>དྲ་བ་གཅོད་དགོས།</translation>
+    </message>
+    <message>
+        <source>Connect network</source>
+        <translation>དྲ་རྒྱ་དང་སྦྲེལ་མཐུད་བྱ་དགོས།</translation>
+    </message>
+    <message>
+        <source>Network property</source>
+        <translation>དྲ་རྒྱའི་ངོ་བོ།</translation>
+    </message>
+    <message>
+        <source>Delete this network</source>
+        <translation>དྲ་རྒྱ་དེ་བསུབ་དགོས།</translation>
     </message>
 </context>
 <context>
@@ -95,6 +92,30 @@
 </context>
 <context>
     <name>WlanComponent</name>
+    <message>
+        <source>Network settings</source>
+        <translation type="vanished">网络配置</translation>
+    </message>
+    <message>
+        <source>connected</source>
+        <translation type="vanished">已连接</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="vanished">未连接</translation>
+    </message>
+    <message>
+        <source>disconnect</source>
+        <translation>བར་མཚམས་ཆད་པ་རེད།</translation>
+    </message>
+    <message>
+        <source>connect</source>
+        <translation>འབྲེལ་མཐུད་བཅས་བྱ་དགོས།</translation>
+    </message>
+    <message>
+        <source>AutoConnect</source>
+        <translation>རང་འགུལ་གྱིས་སྦྲེལ་མཐུད་བྱ་དགོས།</translation>
+    </message>
     <message>
         <source>Disconnect network</source>
         <translation>དྲ་བ་གཅོད་དགོས།</translation>
@@ -134,18 +155,6 @@
     <message>
         <source>Connected,network is weak</source>
         <translation>འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཧ་ཅང་ཞན།</translation>
-    </message>
-    <message>
-        <source>AutoConnect</source>
-        <translation>རང་འགུལ་གྱིས་སྦྲེལ་མཐུད་བྱ་དགོས།</translation>
-    </message>
-    <message>
-        <source>disconnect</source>
-        <translation>དྲ་བ་གཅོད་དགོས།</translation>
-    </message>
-    <message>
-        <source>Add Others...</source>
-        <translation>གཞན་པ་ཁ་སྣོན་བྱས་ནས་...</translation>
     </message>
 </context>
 </TS>

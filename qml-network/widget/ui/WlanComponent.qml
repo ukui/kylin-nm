@@ -269,7 +269,7 @@ ListView {
                             Layout.bottomMargin: 0
 
                             // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
-                            property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
+                            property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
 
                             color: "transparent"
                             width: textMetrics.tightBoundingRect.width + 6
@@ -290,7 +290,7 @@ ListView {
                             UkuiItems.DtThemeText {
                                 id: dtThemeText
                                 anchors.centerIn: parent
-                                property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
+                                property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
                                 text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"
                                 textColor: Platform.GlobalTheme.kFontPlaceholderText
                             }

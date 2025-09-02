@@ -24,38 +24,38 @@
     <name>DeviceComboBox</name>
     <message>
         <source>(Connected)</source>
-        <translation type="unfinished"></translation>
+        <translation>( ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠨ᠎ᠠ )</translation>
     </message>
     <message>
         <source>(Not Connected)</source>
-        <translation type="unfinished"></translation>
+        <translation>( ᠬᠣᠯᠪᠣᠯᠳᠤᠭᠰᠠᠨ ᠦᠭᠡᠢ )</translation>
     </message>
     <message>
         <source>Current Network Card</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠣᠳᠣᠬᠠᠨ ᠳᠤ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠺᠣᠮᠫᠠᠨᠢ ᠃</translation>
     </message>
 </context>
 <context>
     <name>LanComponent</name>
     <message>
         <source>Disconnect network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠲᠠᠰᠤᠯᠤᠨ᠎ᠠ ᠃</translation>
     </message>
     <message>
         <source>Connect network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠵᠠᠯᠭᠠᠬᠤ</translation>
     </message>
     <message>
         <source>Network property</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠣᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ ᠃</translation>
     </message>
     <message>
         <source>Delete this network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠤᠰ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠠᠰᠤᠬᠤ</translation>
     </message>
     <message>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
     </message>
     <message>
         <source>(network restricted)</source>
@@ -63,11 +63,11 @@
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠵᠠᠯᠭᠠᠭ᠎ᠠ ᠦᠭᠡᠢ</translation>
     </message>
     <message>
         <source>disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠠᠰᠤᠷᠠᠪᠠ ᠃</translation>
     </message>
     <message>
         <source>connect</source>
@@ -78,74 +78,74 @@
     <name>NetScrollViewArea</name>
     <message>
         <source>Wired network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
         <source>No wired network card was detected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠤᠲᠠᠰᠤᠲᠤ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠺᠣᠮᠫᠢᠦᠢᠲ᠋ᠧᠷ ᠢ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠰᠢᠯᠭᠠᠭᠰᠠᠨ ᠦᠭᠡᠶ ᠃</translation>
     </message>
     <message>
         <source>Wireless network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠤᠲᠠᠰᠤ ᠦᠭᠡᠢ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠃</translation>
     </message>
     <message>
         <source>More network Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠡᠩ ᠣᠯᠠᠨ ᠲᠣᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠪᠠᠶᠢᠷᠢᠯᠠᠭᠤᠯᠤᠯᠲᠠ ᠃</translation>
     </message>
 </context>
 <context>
     <name>WlanComponent</name>
     <message>
         <source>Disconnect network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠲᠠᠰᠤᠯᠤᠨ᠎ᠠ ᠃</translation>
     </message>
     <message>
         <source>Connect network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠵᠠᠯᠭᠠᠬᠤ</translation>
     </message>
     <message>
         <source>Network property</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠣᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠰᠢᠨᠵᠢ ᠴᠢᠨᠠᠷ ᠃</translation>
     </message>
     <message>
         <source>Forget the network</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠡᠨᠡ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠮᠠᠷᠲᠠ ᠃</translation>
     </message>
     <message>
         <source>connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠵᠠᠯᠭᠠᠬᠤ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠣᠩ ᠰᠠᠢ᠌ᠨ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠰᠠᠶᠢᠨ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠲᠣᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠢ ᠡᠩ ᠦᠨ ᠪᠠᠶᠢᠳᠠᠭ ᠃</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠪᠠᠭᠤᠷᠠᠶ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠤᠩ ᠪᠠᠭᠤᠷᠠᠢ ᠃</translation>
     </message>
     <message>
         <source>AutoConnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠠᠦᠢᠲ᠋ᠣ᠋ ᠬᠣᠯᠪᠣᠭ᠎ᠠ ᠃</translation>
     </message>
     <message>
         <source>disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠲᠠᠰᠤᠷᠠᠪᠠ ᠃</translation>
     </message>
     <message>
         <source>Add Others...</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠪᠤᠰᠤᠳ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠵᠠᠯᠭᠠᠬᠤ···</translation>
     </message>
 </context>
 </TS>

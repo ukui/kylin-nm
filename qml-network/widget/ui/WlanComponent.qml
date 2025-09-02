@@ -13,6 +13,29 @@ ListView {
     visible: true
     model: KInterface.wirelessConLists
     spacing: 0
+    property int baseItemHeight: 56
+    property int expandedItemHeight: 145
+    Component.onCompleted: {
+        // map font size to heights (simple scaling)
+        function updateHeights(fontSize) {
+            var size = parseInt(fontSize)
+            if (!isNaN(size)) {
+                baseItemHeight = Math.round(56 * size / 10)
+                expandedItemHeight = Math.round(145 * size / 10)
+            }
+        }
+        updateHeights(KInterface.fontSize)
+    }
+    Connections {
+        target: KInterface
+        function onFontSizeChanged(fontSize) {
+            var size = parseInt(fontSize)
+            if (!isNaN(size)) {
+                wlanlistView.baseItemHeight = Math.round(56 * size / 10)
+                wlanlistView.expandedItemHeight = Math.round(145 * size / 10)
+            }
+        }
+    }
     property bool connectMac : false
     property int detailShowIndex : -1
     property var currentOpenMenu: null
@@ -42,7 +65,7 @@ ListView {
         id: listItem
         highlighted: enteritem && wlanlistView.currentIndex === index
         width: parent.width
-        height: 56
+        height: wlanlistView.baseItemHeight
         property bool enteritem : false
         property bool conConnected:   model.status === 2
         onConConnectedChanged: {
@@ -55,7 +78,7 @@ ListView {
 
         function hideDetail() {
             if (textEditLayout.visible) {
-                listItem.height = 56
+                listItem.height = wlanlistView.baseItemHeight
                 textEditLayout.visible = false
             }
             autoConnectCheckBox.visible = false
@@ -98,14 +121,14 @@ ListView {
 
                 if (model.status !== 2 ) {
                     console.log("model.security:", model.security, model.security.length)
-                    if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X") || !model.security) {
-                        listItem.height = 56
+                    if (listItem.height == wlanlistView.expandedItemHeight ||  model.Configured || model.security.includes("802.1X") || !model.security) {
+                        listItem.height = wlanlistView.baseItemHeight
                     } else {
-                        listItem.height = 145
+                        listItem.height = wlanlistView.expandedItemHeight
                     }
 
                     if(textEditLayout.visible) {
-                        listItem.height = 56
+                        listItem.height = wlanlistView.baseItemHeight
                         textEditLayout.visible = false
                         connectBtn.visible = true
                     } else {
@@ -249,8 +272,8 @@ ListView {
                             property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
 
                             color: "transparent"
-                            width: wlan_type === 0 ? 56 : wlan_type === 1 ? 24 : 34;
-                            height: 16
+                            width: textMetrics.tightBoundingRect.width + 6
+                            height: textMetrics.tightBoundingRect.height + 6
                             radius: 4
 
                             border {
@@ -258,7 +281,14 @@ ListView {
                                 width: 1
                             }
 
+                            TextMetrics {
+                                id: textMetrics
+                                font: dtThemeText.font
+                                text: dtThemeText.text
+                            }
+
                             UkuiItems.DtThemeText {
+                                id: dtThemeText
                                 anchors.centerIn: parent
                                 property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
                                 text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"

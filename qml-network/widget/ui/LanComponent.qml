@@ -130,6 +130,7 @@ ListView {
                 Layout.leftMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
+                elide: Text.ElideRight
                 MouseArea {
                     onClicked: {
                         nameLabel.visible = false
@@ -146,6 +147,7 @@ ListView {
                 Layout.topMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
+                elide: Text.ElideRight
                 UkuiItems.DtThemeText {
                     id: stateLabel
                     Layout.alignment: Qt.AlignLeft | Qt.AlignBottom

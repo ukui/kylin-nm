@@ -1450,7 +1450,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="992"/>
         <source>Wifi password length less than 8</source>
-        <translation type="unfinished"></translation>
+        <translation>wifi密钥长度低于八位</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1000"/>

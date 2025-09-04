@@ -262,6 +262,7 @@ ListView {
                             Layout.leftMargin: 8
                             Layout.bottomMargin: 0
                             text: model.ssid
+                            elide: Text.ElideRight
                         }
 
                         Rectangle {
@@ -363,6 +364,7 @@ ListView {
 
                             textColor: Platform.GlobalTheme.kFontPlaceholderText
                             height: 16
+                            elide: Text.ElideRight
                         }
                         CheckBox {
                             id: autoConnectCheckBox

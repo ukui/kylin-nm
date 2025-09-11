@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -41,6 +41,7 @@ using namespace kdk;
 #define NORMAL_HEIGHT 48
 #define EXPANDED_HEIGHT 120
 #define PWD_LENGTH_LIMIT 8
+#define PWD_LENGTH_MAX 63
 
 #define EXCELLENT_SIGNAL 80
 #define GOOD_SIGNAL 55
@@ -61,7 +62,6 @@ public:
 
 public:
     QString getSsid();
-
     QString getUuid();
 
     QString getPath();
@@ -91,6 +91,7 @@ protected:
     void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
@@ -131,6 +132,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void onNetButtonClicked();
+    void onNetButtonReleased();
     void onPwdEditorTextChanged();
     void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,8 +116,10 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
     }
 
     QString ifaceUni = activeConnectPtr->devices().at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-                m_networkResourceInstance->findDeviceUni(ifaceUni);
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+    if (devicePtr.isNull()) {
+        return nullptr;
+    }
     activeConnectItem->m_ifaceName = devicePtr->interfaceName();
     activeConnectItem->m_itemType = activeConnectPtr->type();
 
@@ -138,8 +140,7 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
     QStringList interfaces = activeConnectPtr->devices();
     for (int index = 0; index < interfaces.size(); ++index) {
         QString ifaceUni = interfaces.at(index);
-        NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
         if (devicePtr.isNull()) {
             continue;
         }
@@ -191,11 +192,9 @@ void KyActiveConnectResourse::getActiveConnectionList(QString deviceName,
         QStringList interfaces = activeConnectPtr->devices();
         for (int index = 0; index < interfaces.size(); ++index) {
             QString ifaceUni = interfaces.at(index);
-            NetworkManager::Device:: Ptr devicePtr =
-                        m_networkResourceInstance->findDeviceUni(ifaceUni);
-            if (devicePtr->interfaceName() == deviceName) {
-                KyConnectItem *activeConnectItem =
-                        getActiveConnectionItem(activeConnectPtr);
+            NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+            if (!devicePtr.isNull() && devicePtr->interfaceName() == deviceName) {
+                KyConnectItem *activeConnectItem = getActiveConnectionItem(activeConnectPtr);
                 if (nullptr != activeConnectItem) {
                     activeConnectItem->m_ifaceName = deviceName;
                     activeConnectItem->m_itemType = connectionType;
@@ -630,9 +629,10 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
     }
 
     QString ifaceUni = interfaces.at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-              m_networkResourceInstance->findDeviceUni(ifaceUni);
-    deviceName = devicePtr->interfaceName();
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+    if (!devicePtr.isNull()) {
+        deviceName = devicePtr->interfaceName();
+    }
 
     return deviceName;
 }
@@ -654,8 +654,7 @@ bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
     }
 
     QString ifaceUni = interfaces.at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-                m_networkResourceInstance->findDeviceUni(ifaceUni);
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
     if (devicePtr.isNull()) {
         return false;
     }
@@ -781,4 +780,39 @@ int KyActiveConnectResourse::getActivateWifiSignal(QString devName)
     }
 
     return signalStrength;
+}
+
+bool KyActiveConnectResourse::checkInternetLoading()
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::List activeConnectList;
+
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
+
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"
+                   <<"get active connect failed, the active connect list is empty";
+        return false;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    for (index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectPtr->type() &&
+            NetworkManager::ConnectionSettings::ConnectionType::Wired != activeConnectPtr->type() &&
+            NetworkManager::ConnectionSettings::ConnectionType::Pppoe != activeConnectPtr->type()) {
+            continue;
+        }
+
+        if (activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Activating
+            || activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Deactivating) {
+            return true;
+        }
+    }
+    return false;
 }

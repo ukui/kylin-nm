@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -75,14 +75,19 @@ public:
     ~NameLabel() = default;
     void setLabelText(QString text);
     void setLabelMaximumWidth(int width);
+    void setPointSizeOffset(int offset);
 
 private:
     QString m_name;
     int m_maximumWidth = 120;
+    int m_systemPointSize = 10;
+    int m_pointSizeOffset = 0;
 
 private Q_SLOTS:
     void changedLabelSlot();
 
+protected:
+    bool event(QEvent *event) override;
 };
 
 class ListItem : public QFrame
@@ -95,6 +100,7 @@ public:
     void setActive(const bool &isActive);
     void setConnectState(ConnectState state);
     static void showDesktopNotify(const QString &message, QString soundName);
+    void setConnectivityText(const QString connectivityText);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -106,7 +112,8 @@ protected:
 
 protected:
     QFrame * m_itemFrame = nullptr;
-
+    QFrame *m_nameFrame = nullptr;
+    NameLabel *m_connectivityLabel = nullptr;
     NameLabel * m_nameLabel = nullptr;
     RadioItemButton * m_netButton = nullptr;
 //    InfoButton * m_infoButton = nullptr;
@@ -115,6 +122,8 @@ protected:
     ConnectState m_connectState;
 
     QMenu *m_menu = nullptr;
+
+
 public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
@@ -134,6 +143,7 @@ private:
 
 public Q_SLOTS:
     virtual void onNetButtonClicked() = 0;
+    virtual void onNetButtonReleased() = 0;
     void onPaletteChanged();
     virtual void onMenuTriggered(QAction *action)=0;
 

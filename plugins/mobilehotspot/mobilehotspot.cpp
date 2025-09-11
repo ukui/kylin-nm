@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 
 #include <QDebug>
-
+#include <QVariant>
 
 MobileHotspot::MobileHotspot() :  mFirstLoad(true) {
 
@@ -101,6 +101,18 @@ void MobileHotspot::initSearchText()
     tr("mobilehotspot");
     //~ contents_path /mobilehotspot/mobilehotspot open
     tr("mobilehotspot open");
+    //~ contents_path /mobilehotspot/Mobile Hotspot
+    tr("Mobile Hotspot");
+    //~ contents_path /mobilehotspot/Open mobile hotspot
+    tr("Open mobile hotspot");
+    //~ contents_path /mobilehotspot/Wi-Fi Name
+    tr("Wi-Fi Name");
+    //~ contents_path /mobilehotspot/Network Password
+    tr("Network Password");
+    //~ contents_path /mobilehotspot/Network Frequency band
+    tr("Network Frequency band");
+    //~ contents_path /mobilehotspot/Shared NIC port
+    tr("Shared NIC port");
 }
 
 bool MobileHotspot::isExitWirelessDevice()
@@ -113,23 +125,31 @@ bool MobileHotspot::isExitWirelessDevice()
         return false;
     }
 
-    QDBusMessage result = interface->call(QStringLiteral("getDeviceListAndEnabled"),1);
-    if(result.type() == QDBusMessage::ErrorMessage) {
-        qWarning() << "getWirelessDeviceList error:" << result.errorMessage();
+    QDBusReply<QVariantMap> reply = interface->call(QStringLiteral("getDeviceListAndEnabled"),1);
+    if(!reply.isValid()) {
+        qWarning() << "getWirelessDeviceList error:" << reply.error().message();
         return false;
     }
 
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
     QMap<QString, bool> deviceListMap;
-    dbusArg >> deviceListMap;
+    QVariantMap::const_iterator itemIter = reply.value().cbegin();
+    while (itemIter != reply.value().cend()) {
+        deviceListMap.insert(itemIter.key(), itemIter.value().toBool());
+        itemIter ++;
+    }
 
-    QDBusReply<QMap<QString, int> > capReply = interface->call("getWirelessDeviceCap");
+    QDBusReply<QVariantMap> capReply = interface->call("getWirelessDeviceCap");
     if (!capReply.isValid()) {
         qDebug()<<"execute dbus method 'getWirelessDeviceCap' is invalid in func initInterfaceInfo()" <<capReply.error().type() ;
         return false;
     }
-    QMap<QString, int> devCapMap = capReply.value();
 
+    QMap<QString, int> devCapMap;
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        devCapMap.insert(item.key(), item.value().toInt());
+        item ++;
+    }
 
     if (deviceListMap.isEmpty()) {
         qDebug() << "no wireless device";
@@ -142,7 +162,7 @@ bool MobileHotspot::isExitWirelessDevice()
                 iter++;
                 continue;
             }
-            if (deviceListMap[interfaceName] & 0x01) {
+            if (devCapMap[interfaceName] & 0x01) {
                 qDebug() << "wireless device" <<  interfaceName << "support hotspot";
                 return true;
             }

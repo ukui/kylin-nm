@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -24,6 +24,8 @@
 #define MAX_NAME_LENGTH 32
 #define MAX_LABEL_WIDTH 250
 #define MAX_SSID_WIDTH 133
+#define NET_DETAIL_CENTER_X 260
+#define NET_DETAIL_CENTER_Y 194
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -36,7 +38,6 @@ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     if (isCreate) {
      connect(m_SSIDEdit, &LineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
     }
-
     setInteractionFlag();
 }
 
@@ -142,33 +143,16 @@ void DetailPage::addDetailItem(QListWidget *listWidget, QWidget *detailWidget)
 void DetailPage::newCopiedTip()
 {
     //设置“复制成功”消息弹窗格式
-    m_copiedTip = new KBallonTip();
+    m_copiedTip = new KBallonTip(this);
     m_copiedTip->setTipType(Normal);
     m_copiedTip->setContentsMargins(16, 14, 16, 14);
-    m_copiedTip->setFixedHeight(48);
-    m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
+    m_copiedTip->adjustSize();
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
     m_copiedTip->setText(tr("Copied successfully!"));
-}
-
-QPalette DetailPage::getTheme()
-{
-    //获取当前主题的颜色
-    QPalette pal = qApp->palette();
-//    QGSettings * styleGsettings = nullptr;
-//    const QByteArray style_id(THEME_SCHAME);
-//    if (QGSettings::isSchemaInstalled(style_id)) {
-//       styleGsettings = new QGSettings(style_id);
-//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-//       if(currentTheme == "ukui-default"){
-//           pal = lightPalette(this);
-//       }
-//    }
-//    if (styleGsettings != nullptr) {
-//        delete styleGsettings;
-//        styleGsettings = nullptr;
-//    }
-    return pal;
+    QPalette pal = m_copiedTip->palette();
+    pal.setColor(QPalette::Window, qApp->palette().window().color());
+    pal.setColor(QPalette::WindowText, qApp->palette().windowText().color());
+    m_copiedTip->setPalette(pal);
 }
 
 void DetailPage::setInteractionFlag()
@@ -386,9 +370,9 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     ipv4dnsCopy += this->m_IPV4Dns->getText();
     macCopy += this->m_Mac->text();
     netDetailList.append(bandwithCopy);
+    netDetailList.append(ipv6Copy);
     netDetailList.append(ipv4Copy);
     netDetailList.append(ipv4dnsCopy);
-    netDetailList.append(ipv6Copy);
     netDetailList.append(macCopy);
 //    qDebug() << netDetailList;
 
@@ -402,11 +386,21 @@ void DetailPage::on_btnCopyNetDetail_clicked()
         delete m_copiedTip;
         newCopiedTip();
     }
-    QPoint position = m_ssidWidget->mapToGlobal(this->pos());
-    double x = (this->width() - 0.5 * m_copiedTip->width());
-    m_copiedTip->move(position.x() + x, position.y() + this->height() * 0.3);
-    QPalette pal = getTheme();
-    m_copiedTip->setPalette(pal);
+
+    //offset为窗口偏移量，在不同语言环境下，返回的KBallonTip的width是恒定的，
+    //故而无法通过width来判断中心位置，只能引入各个偏移量来解决此问题
+    int offset = 0;
+    QLocale locale = QLocale::system();
+    QPoint position = mapToGlobal(this->pos());
+    if (locale.name() == "nm_MN") {
+        offset = -45;
+    }
+    if (locale.name() == "bo_CN") {
+        offset = -50;
+    }
+    double x = (position.x() + NET_DETAIL_CENTER_X - m_copiedTip->width() + offset);
+    double y = (position.y() + NET_DETAIL_CENTER_Y - m_copiedTip->height());
+    m_copiedTip->move(x, y);
     m_copiedTip->showInfo();
 }
 

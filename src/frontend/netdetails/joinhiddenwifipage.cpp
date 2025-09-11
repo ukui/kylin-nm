@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -146,6 +146,10 @@ void JoinHiddenWiFiPage::initUI()
    m_showListBtn->setText(tr("Show Network List")); //显示网络列表
    m_cancelBtn->setText(tr("Cancel"));
    m_joinBtn->setText(tr("Join"));
+   m_joinBtn->setProperty("useButtonPalette", false);
+   m_joinBtn->setProperty("isImportant", true);
+   m_cancelBtn->setProperty("useButtonPalette", true);
+   m_cancelBtn->setProperty("isImportant", false);
 
    QRegExp nameRx("^.{0,32}$");
    QValidator *validator = new QRegExpValidator(nameRx, this);
@@ -263,7 +267,6 @@ void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
         this->setFixedHeight(EAPMIN_WINDOW_HEIGHT);
     }
 }
-
 #if 0
 void JoinHiddenWiFiPage::onPaletteChanged()
 {
@@ -288,18 +291,3 @@ void JoinHiddenWiFiPage::onPaletteChanged()
     }
 }
 #endif
-
-void JoinHiddenWiFiPage::centerToScreen()
-{
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
-    int desk_x = desk_rect.width();
-    int desk_y = desk_rect.height();
-    int x = this->width();
-    int y = this->height();
-//    this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
-    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
-                                                                desk_y / 2 - y / 2 + desk_rect.top(),
-                                                                this->width(),
-                                                                this->height()));
-}

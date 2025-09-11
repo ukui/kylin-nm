@@ -1,3 +1,9 @@
+kylin-nm (4.20.0.0-ok0.5~1) unstable; urgency=medium
+
+  * New upstream release.(Closes: #xxx)
+
+ -- zhangpan <zhangpan@kylinos.cn>  Thu, 11 Sep 2025 15:47:14 +0800
+
 kylin-nm (4.0.0.0-1) unstable; urgency=medium
 
   * New upstream release.

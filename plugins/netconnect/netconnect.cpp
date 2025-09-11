@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,11 @@
 #define KYLIN_APP_MANAGER_NAME           "com.kylin.AppManager"
 #define KYLIN_APP_MANAGER_PATH           "/com/kylin/AppManager"
 #define KYLIN_APP_MANAGER_INTERFACE      "com.kylin.AppManager"
+
+#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
+
 const QString KLanSymbolic      = "network-wired-connected-symbolic";
 const QString NoNetSymbolic     = "network-wired-disconnected-symbolic";
 
@@ -76,23 +81,31 @@ void NetConnect::showDesktopNotify(const QString &message)
 
 
 NetConnect::NetConnect() :  mFirstLoad(true) {
+    qDBusRegisterMetaType<QStringList>();
+    qDBusRegisterMetaType<QList<QStringList>>();
+
     QTranslator* translator = new QTranslator(this);
     translator->load("/usr/share/kylin-nm/netconnect/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
     pluginName = tr("LAN");
     pluginType = NETWORK;
-
-    needLoad = isExitWiredDevice();
 }
 
-NetConnect::~NetConnect() {
-    if (!mFirstLoad) {
-        delete ui;
-        ui = nullptr;
-        delete m_interface;
-        delete m_switchGsettings;
+/*fortify扫描报错，需要显示删除一下*/
+NetConnect::~NetConnect()
+{
+    QMap<QString, ItemFrame *>::iterator iter1;
+
+    for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++)
+    {
+        ItemFrame *temp= iter1.value();
+        if(temp)
+        {
+            delete temp;
+        }
     }
+   deviceFrameMap.clear();
 }
 
 QString NetConnect::plugini18nName() {
@@ -111,7 +124,7 @@ QWidget *NetConnect::pluginUi() {
         pluginWidget = new QWidget;
         pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
         ui->setupUi(pluginWidget);
-        qDBusRegisterMetaType<QVector<QStringList>>();
+
         m_interface = new QDBusInterface("com.kylin.network",
                                          "/com/kylin/network",
                                          "com.kylin.network",
@@ -119,6 +132,12 @@ QWidget *NetConnect::pluginUi() {
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
+
+        updatePluginShowSettings();
+        connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(updatePluginShowSettings()),Qt::QueuedConnection);
+
+        qDBusRegisterMetaType<QVector<QStringList>>();
+
         initSearchText();
         initComponent();
     }
@@ -132,13 +151,60 @@ const QString NetConnect::name() const {
 
 bool NetConnect::isEnable() const
 {
-    return needLoad;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
+    if(!reply.isValid())
+    {
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+    bool isEnabled = !map.isEmpty();
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+    if (QGSettings::isSchemaInstalled(schema)) {
+        return isEnabled;
+    }
+
+    //get gsettings
+    QGSettings *showSettings;
+    QString path("/org/ukui/control-center/plugins/netconnect/");
+    showSettings = new QGSettings(schema, path.toUtf8());
+
+    QVariant enabledState = showSettings->get("show");
+
+    //set gsettings
+    if (!enabledState.isValid() || enabledState.isNull()) {
+        qWarning() << "QGSettins get plugin show status error";
+    } else {
+        if (enabledState.toBool() != isEnabled) {
+            showSettings->set("show", isEnabled);
+        }
+    }
+    delete showSettings;
+    showSettings = nullptr;
+
+    return isEnabled;
 }
 
 
 bool NetConnect::isShowOnHomePage() const
 {
-    return false;
+    return true;
 }
 
 QIcon NetConnect::icon() const
@@ -156,7 +222,8 @@ void NetConnect::initSearchText() {
     ui->detailBtn->setText(tr("Advanced settings"));
     ui->titleLabel->setText(tr("LAN"));
     //~ contents_path /netconnect/open
-    ui->openLabel->setText(tr("open"));
+    tr("open");
+    ui->openLabel->setText(tr("LAN"));
 }
 
 bool NetConnect::eventFilter(QObject *w, QEvent *e) {
@@ -184,12 +251,11 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 
     return QObject::eventFilter(w,e);
 }
-
 void NetConnect::initComponent() {
-//    wiredSwitch = new KSwitchButton(pluginWidget);
-//    ui->openWIifLayout->addWidget(wiredSwitch);
+    wiredSwitch = new KSwitchButton(pluginWidget);
+    ui->openWIifLayout->addWidget(wiredSwitch);
     ui->openWIifLayout->setContentsMargins(0,0,8,0);
-    ui->openWifiFrame->hide();
+//    ui->openWifiFrame->hide();
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
     ui->verticalLayout_3->setSpacing(8);
@@ -198,6 +264,24 @@ void NetConnect::initComponent() {
 
 //    wiredSwitch->installEventFilter(this);
 
+    m_pSysBusIntfs = new QDBusInterface(SYSTEM_DBUS_SERVICE,
+                                        SYSTEM_DBUS_PATH,
+                                        SYSTEM_DBUS_INTERFACE,
+                                        QDBusConnection::systemBus());
+
+    if (m_pSysBusIntfs->isValid()) {
+        setSwitchStatus();
+        QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
+                                             SYSTEM_DBUS_PATH,
+                                             SYSTEM_DBUS_INTERFACE,
+                                             "sysWiredMainSwitchChanged",
+                                             this,
+                                             SLOT(renewSwitchLayout(bool)));
+    } else {
+                wiredSwitch->blockSignals(true);
+                wiredSwitch->setChecked(true);
+                wiredSwitch->blockSignals(false);
+    }
 //    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
 //        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
 
@@ -216,14 +300,14 @@ void NetConnect::initComponent() {
 //    }
 
     getDeviceStatusMap(deviceStatusMap);
-//    if (deviceStatusMap.isEmpty()) {
-//        qDebug() << "[Netconnect] no device exist when init, set switch disable";
-//        wiredSwitch->setChecked(false);
-//        wiredSwitch->setCheckable(false);
-//    }
+    if (deviceStatusMap.isEmpty()) {
+        qDebug() << "[Netconnect] no device exist when init, set switch disable";
+        wiredSwitch->setChecked(false);
+        wiredSwitch->setCheckable(false);
+    }
     initNet();
 
-    if (/*!wiredSwitch->isChecked() || */deviceStatusMap.isEmpty() || !m_interface->isValid()) {
+    if (!wiredSwitch->isChecked() || deviceStatusMap.isEmpty() || !m_interface->isValid()) {
         hideLayout(ui->availableLayout);
     }
 
@@ -247,6 +331,80 @@ void NetConnect::initComponent() {
         UkccCommon::buriedSettings(QString("netconnect"), QString("Advanced settings"), QString("clicked"));
         runExternalApp();
     });
+
+    connect(wiredSwitch, &KSwitchButton::clicked, this, &NetConnect::wiredSwitchSLot);
+}
+
+void NetConnect::wiredSwitchSLot(bool checked)
+{
+    if (!wiredSwitch->isCheckable()) {
+        showDesktopNotify(tr("No ethernet device avaliable"));
+        return;
+    }
+    UkccCommon::buriedSettings(QString("netconnect"), QString("Open"), QString("settings"),wiredSwitch->isChecked()?"false":"true");
+    if (m_pSysBusIntfs == nullptr || !m_pSysBusIntfs->isValid())
+        return;
+
+    m_pSysBusIntfs->call(QStringLiteral("setWiredMainSwitch"), checked);
+    if (checked) {
+        showLayout(ui->availableLayout);
+        //后续切换到sessiondbus上，进行处理
+        QMap<QString, ItemFrame *>::iterator iter1;
+        for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
+            //set device autoconnect
+            qWarning() << Q_FUNC_INFO << __LINE__ << iter1.key() <<  checked;
+            setDeviceAutoConnectState(iter1.key(),checked);
+        }
+        //后续切换到sessiondbus上，进行处理
+        return;
+    }
+
+    hideLayout(ui->availableLayout);
+    //后续切换到sessiondbus上，进行处理
+    QMap<QString, ItemFrame *>::iterator iter1;
+    for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
+        QMap<QString, LanItem *>::iterator iter2;
+        for (iter2 = iter1.value()->itemMap.begin();
+             iter2 != iter1.value()->itemMap.end();
+             iter2++)
+        {
+            if (iter2.value()->isAcitve) {
+                deActiveConnect(iter2.value()->uuid, iter1.value()->deviceFrame->dropDownLabel->m_devName, WIRED_TYPE);
+            }
+        }
+        //set device autoconnect
+        qWarning() << Q_FUNC_INFO << __LINE__ << iter1.key() <<  checked;
+
+        setDeviceAutoConnectState(iter1.key(),checked);
+    }
+    //后续切换到sessiondbus上，进行处理
+}
+
+void NetConnect::renewSwitchLayout(bool enable)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__ << enable;
+//    wiredSwitch->blockSignals(true);
+    wiredSwitch->setChecked(enable);
+//    wiredSwitch->blockSignals(false);
+    if (!enable) {
+        hideLayout(ui->availableLayout);
+
+        QMap<QString, ItemFrame *>::iterator iter1;
+        for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
+
+            QMap<QString, LanItem *>::iterator iter2;
+            for (iter2 = iter1.value()->itemMap.begin();
+                 iter2 != iter1.value()->itemMap.end();
+                 iter2++)
+            {
+                if (iter2.value()->isAcitve) {
+                    deActiveConnect(iter2.value()->uuid, iter1.value()->deviceFrame->dropDownLabel->m_devName, WIRED_TYPE);
+                }
+            }
+        }
+    } else {
+        showLayout(ui->availableLayout);
+    }
 }
 
 //获取网卡列表
@@ -255,16 +413,21 @@ void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
     if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
+    map.clear();
     qDebug() << "[NetConnect]call getDeviceListAndEnabled"  << __LINE__;
-    QDBusMessage result = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),0);
+    QDBusReply<QVariantMap> reply = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),0);
     qDebug() << "[NetConnect]call getDeviceListAndEnabled Respond"  << __LINE__;
-    if(result.type() == QDBusMessage::ErrorMessage)
+    if(!reply.isValid())
     {
-        qWarning() << "[NetConnect]getWiredDeviceList error:" << result.errorMessage();
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
         return;
     }
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-    dbusArg >> map;
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
 }
 
 //lanUpdate
@@ -309,6 +472,14 @@ void NetConnect::updateLanInfo(QString deviceName, QStringList lanInfo)
 //总开关
 void NetConnect::setSwitchStatus()
 {
+    QDBusReply <bool> reply = m_pSysBusIntfs->call("getWiredMainSwitch");
+    if (reply.isValid()) {
+        bool status = reply.value();
+        renewSwitchLayout(status);
+    } else {
+        qWarning () << "switch init dbus reply invalid";
+    }
+
 //    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
 //        bool status = m_switchGsettings->get(WIRED_SWITCH).toBool();
 //        wiredSwitch->blockSignals(true);
@@ -356,6 +527,7 @@ void NetConnect::initNet()
     //再填充每个设备的列表
     for (int i = 0; i < deviceList.size(); ++i) {
         initNetListFromDevice(deviceList.at(i));
+        initDeviceConnectivity(deviceList.at(i));
     }
 }
 
@@ -395,6 +567,16 @@ void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
 }
 
+//set
+void NetConnect::setDeviceAutoConnectState(QString deviceName, bool state) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
+    qDebug() << "[NetConnect]call setDeviceAutoConnectState" << __LINE__;
+    m_interface->call(QStringLiteral("setDeviceAutoConnectState"),deviceName, state);
+    qDebug() << "[NetConnect]call setDeviceAutoConnectState respond" << __LINE__;
+}
+
 //初始化设备列表 网卡标号问题？
 void NetConnect::initNetListFromDevice(QString deviceName)
 {
@@ -406,26 +588,17 @@ void NetConnect::initNetListFromDevice(QString deviceName)
     if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
-    qDebug() << "[NetConnect]call getWiredList"  << __LINE__;
-    QDBusMessage result = m_interface->call(QStringLiteral("getWiredList"));
-    qDebug() << "[NetConnect]call getWiredList respond"  << __LINE__;
-    if(result.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "getWiredList error:" << result.errorMessage();
-        return;
-    }
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-    QMap<QString, QVector<QStringList>> variantList;
-    dbusArg >> variantList;
+
+    QMap<QString, QList<QStringList>> variantList = getWiredList();
     if (variantList.size() == 0) {
         qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " list empty";
         return;
     }
-    QMap<QString, QVector<QStringList>>::iterator iter;
 
+    QMap<QString, QList<QStringList>>::iterator iter;
     for (iter = variantList.begin(); iter != variantList.end(); iter++) {
         if (deviceName == iter.key()) {
-            QVector<QStringList> wlanListInfo = iter.value();
+            QList<QStringList> wlanListInfo = iter.value();
             //处理列表 已连接
             qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " acitved lan " << wlanListInfo.at(0);
             addLanItem(deviceFrameMap[deviceName], deviceName,  wlanListInfo.at(0), true);
@@ -478,24 +651,9 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     });
 
     lanItem->isAcitve = isActived;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-        } else {
-            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-        }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-        activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-        deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-        deleteOneLan(lanItem->uuid, WIRED_TYPE);
+        openKylinm();
     });
 
     //记录到deviceFrame的itemMap中
@@ -513,26 +671,29 @@ void NetConnect::addDeviceFrame(QString devName)
     qDebug() << "[NetConnect]addDeviceFrame " << devName;
 
     qDebug() << "[NetConnect]call getDeviceListAndEnabled"  << __LINE__;
-    QDBusMessage result = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),0);
+    QDBusReply<QVariantMap> reply = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),0);
     qDebug() << "[NetConnect]call getDeviceListAndEnabled Respond"  << __LINE__;
-    if(result.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "[NetConnect]getWiredDeviceList error:" << result.errorMessage();
+    if(!reply.isValid())    {
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
         return;
     }
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
     QMap<QString,bool> map;
-    dbusArg >> map;
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
 
     bool enable = true;
     if (map.contains(devName)) {
         enable = map[devName];
     }
 
+
     ItemFrame *itemFrame = new ItemFrame(devName, pluginWidget);
     ui->availableLayout->addWidget(itemFrame);
     itemFrame->deviceFrame->deviceLabel->setText(tr("card")+/*QString("%1").arg(count)+*/"："+devName);
-//    itemFrame->deviceFrame->deviceSwitch->setChecked(enable);
+    itemFrame->deviceFrame->deviceSwitch->setChecked(enable);
     if (enable) {
         itemFrame->lanItemFrame->show();
         itemFrame->deviceFrame->dropDownLabel->show();
@@ -548,26 +709,37 @@ void NetConnect::addDeviceFrame(QString devName)
 //        UkccCommon::buriedSettings(QString("netconnect"), "device open", QString("settings"), checked?"true":"fasle");
 //        qDebug() << "[NetConnect]call setDeviceEnable" << devName << checked << __LINE__;
 //        m_interface->call(QStringLiteral("setDeviceEnable"), devName, checked);
+//        if (m_pSysBusIntfs->isValid()) {
+//        }
 //        qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
 //    });
 
-//    connect(itemFrame->deviceFrame->deviceSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
-
-//        if (checked) {
-//            qDebug() << "[NetConnect]set " << devName << "status" << true;
-//            itemFrame->lanItemFrame->show();
-//            itemFrame->deviceFrame->dropDownLabel->show();
-//            itemFrame->addLanWidget->show();
-//            itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
-//            deviceStatusMap[devName] = true;
-//        } else {
-//            qDebug() << "[NetConnect]set " << devName << "status" << false;
-//            itemFrame->lanItemFrame->hide();
-//            itemFrame->deviceFrame->dropDownLabel->hide();
-//            itemFrame->addLanWidget->hide();
-//            deviceStatusMap[devName] = false;
-//        }
-//    });
+    connect(itemFrame->deviceFrame->deviceSwitch, &KSwitchButton::clicked, this, [=] (bool checked) {
+        if (checked) {
+            qDebug() << "[NetConnect]set " << devName << "status" << true;
+            itemFrame->lanItemFrame->show();
+            itemFrame->deviceFrame->dropDownLabel->show();
+            itemFrame->addLanWidget->show();
+            itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
+            deviceStatusMap[devName] = true;
+        } else {
+            qDebug() << "[NetConnect]set " << devName << "status" << false;
+            itemFrame->lanItemFrame->hide();
+            itemFrame->deviceFrame->dropDownLabel->hide();
+            itemFrame->addLanWidget->hide();
+            deviceStatusMap[devName] = false;
+            QMap<QString, LanItem *>::iterator iter;
+            for (iter = deviceFrameMap.value(devName)->itemMap.begin();
+                 iter != deviceFrameMap.value(devName)->itemMap.end();
+                 iter++)
+            {
+                if (iter.value()->isAcitve) {
+                    deActiveConnect(iter.value()->uuid, devName, WIRED_TYPE);
+                }
+            }
+        }
+        m_pSysBusIntfs->call(QStringLiteral("setDeviceSwitch"), devName, checked);
+    });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
         UkccCommon::buriedSettings(pluginName, "Add net", QString("clicked"));
@@ -643,22 +815,22 @@ void NetConnect::onDeviceStatusChanged()
         initNetListFromDevice(addList.at(i));
     }
     deviceStatusMap = map;
-//    if (deviceStatusMap.isEmpty()) {
-//        wiredSwitch->setChecked(false);
-//        wiredSwitch->setCheckable(false);
-//    } else {
-//        wiredSwitch->setCheckable(true);
-//        setSwitchStatus();
-//    }
+    if (deviceStatusMap.isEmpty()) {
+        wiredSwitch->setChecked(false);
+        wiredSwitch->setCheckable(false);
+    } else {
+        wiredSwitch->setCheckable(true);
+        setSwitchStatus();
+    }
 
-//    QMap<QString, ItemFrame *>::iterator iter;
-//    for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
-//        if (deviceStatusMap.contains(iter.key())) {
-//            if (iter.value()->deviceFrame->deviceSwitch->isChecked() != deviceStatusMap[iter.key()]) {
-//                iter.value()->deviceFrame->deviceSwitch->setChecked(deviceStatusMap[iter.key()]);
-//            }
-//        }
-//    }
+    QMap<QString, ItemFrame *>::iterator iter;
+    for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
+        if (deviceStatusMap.contains(iter.key())) {
+            if (iter.value()->deviceFrame->deviceSwitch->isChecked() != deviceStatusMap[iter.key()]) {
+                iter.value()->deviceFrame->deviceSwitch->setChecked(deviceStatusMap[iter.key()]);
+            }
+        }
+    }
 }
 
 void NetConnect::onDeviceNameChanged(QString oldName, QString newName, int type)
@@ -778,24 +950,9 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     });
 
     lanItem->isAcitve = false;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-        } else {
-            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-        }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-        activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-        deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-        deleteOneLan(lanItem->uuid, WIRED_TYPE);
+        openKylinm();
     });
 
     //记录到deviceFrame的itemMap中
@@ -843,6 +1000,9 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             if (iters.value()->itemMap.contains(uuid)) {
                 item = iters.value()->itemMap[uuid];
                 infoList << item->titileLabel->text() << item->uuid << item->dbusPath;
+                //若断开连接，需要把网卡下的item全部赋为未连接
+                item->setConnectivityWarn(ConnectivityType::NoConnectivity);
+                
                 //为断开则重新插入
                 int index = getInsertPos(item->titileLabel->text(), iters.key());
                 qDebug() << "[NetConnect]reinsert" << item->titileLabel->text() << "pos" << index << "in" << iters.key() << "because status changes to deactive";
@@ -889,6 +1049,43 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             }
         }
     }
+    qDebug() << "onActiveConnectionChanged deviceName = " << deviceName;
+    initDeviceConnectivity(deviceName);
+}
+
+void NetConnect::initDeviceConnectivity(QString deviceName)
+{
+    if (!deviceFrameMap.contains(deviceName)) {
+        return;
+    }
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
+
+    QDBusReply<int> reply = m_interface->call(QStringLiteral("getDeviceConnectivity"), deviceName);
+    if (!reply.isValid())
+    {
+        return;
+    }
+    updateDeviceFrameFromConnectivity(deviceFrameMap[deviceName], (ConnectivityType)reply.value());
+}
+
+void NetConnect::updateDeviceFrameFromConnectivity(ItemFrame *frame, ConnectivityType type)
+{
+    if (frame->itemMap.isEmpty()) {
+        return;
+    }
+
+    //modify ui
+    QMap<QString, LanItem *> ::iterator iter;
+    for (iter = frame->itemMap.begin(); iter != frame->itemMap.end(); iter++) {
+        if (iter.value()->isAcitve) {
+            iter.value()->setNetworkCheckFrameHidden(false);
+            iter.value()->setConnectivityWarn(type);
+        } else {
+            iter.value()->setNetworkCheckFrameHidden(true);
+        }
+    }
 }
 
 void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
@@ -914,9 +1111,15 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->isAcitve = false;
         item->statusLabel->setText(tr("not connected"));
     }
-    item->setConnectActionText(item->isAcitve);
-//    QIcon searchIcon = QIcon::fromTheme(iconPath);
-//    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+}
+
+void NetConnect::openKylinm()
+{
+    QDBusInterface sidebarIfc("org.ukui.Sidebar",
+                            "/org/ukui/Sidebar",
+                            "org.ukui.Sidebar",
+                            QDBusConnection::sessionBus());
+    sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
 }
 
 int NetConnect::getInsertPos(QString connName, QString deviceName)
@@ -926,17 +1129,9 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
     if(m_interface == nullptr || !m_interface->isValid()) {
         index = 0;
     } else {
-        qDebug() << "[NetConnect]call getWiredList"  << __LINE__;
-        QDBusMessage result = m_interface->call(QStringLiteral("getWiredList"));
-        qDebug() << "[NetConnect]call getWiredList respond"  << __LINE__;
-        if(result.type() == QDBusMessage::ErrorMessage)
-        {
-            qWarning() << "getWiredList error:" << result.errorMessage();
-            return 0;
-        }
-        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-        QMap<QString, QVector<QStringList>> variantList;
-        dbusArg >> variantList;
+
+        QMap<QString, QList<QStringList>> variantList = getWiredList();
+
         if (!variantList.contains(deviceName)) {
             qDebug() << "[NetConnect] getInsertPos but " << deviceName << "not exist";
             return 0;
@@ -971,30 +1166,33 @@ bool NetConnect::LaunchApp(QString desktopFile)
     }
 }
 
-bool NetConnect::isExitWiredDevice()
+QMap<QString, QList<QStringList>> NetConnect::getWiredList()
 {
-    QDBusInterface *interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
-                                     "com.kylin.network",
-                                     QDBusConnection::sessionBus());
-    if (!interface->isValid()) {
-        qDebug() << "/com/kylin/network is invalid";
-        return false;
+    QMap<QString, QList<QStringList>> map;
+
+    QMap<QString, bool> statusMap;
+    getDeviceStatusMap(statusMap);
+
+    for (int i = 0; i < statusMap.keys().size(); ++i) {
+        qDebug() << "[NetConnect]call getWiredList"  << __LINE__;
+        QDBusReply<QVariantList> reply = m_interface->call(QStringLiteral("getWiredList"), statusMap.keys().at(i));
+        qDebug() << "[NetConnect]call getWiredList respond"  << __LINE__;
+        if(!reply.isValid())
+        {
+            qWarning() << "getWiredList error:" << reply.error().message();
+            break;
+        }
+
+        QList<QStringList> list;
+        for (int j = 0; j < reply.value().size(); ++j) {
+            list << reply.value().at(j).toStringList();
+        }
+        map.insert(statusMap.keys().at(i), list);
     }
+    return map;
+}
 
-    QDBusMessage result = interface->call(QStringLiteral("getDeviceListAndEnabled"),0);
-    if(result.type() == QDBusMessage::ErrorMessage) {
-        qWarning() << "getWiredDeviceList error:" << result.errorMessage();
-        return false;
-    }
-
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-    QMap<QString, bool> deviceListMap;
-    dbusArg >> deviceListMap;
-
-
-    if (deviceListMap.isEmpty()) {
-        qDebug() << "no wired device";
-        return false;
-    }
-    return true;
+void NetConnect::updatePluginShowSettings()
+{
+    isEnable();
 }

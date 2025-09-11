@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,9 +75,9 @@ void KyIpv4Arping::saveMacAddress(const uint8_t *ptr, size_t len)
     char macAddress[64] = {0};
 
     for (index = 0; index < len; index++) {
-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", ptr[index]);
+        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", ptr[index]);
         if (index != len - 1) {
-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
+            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
         }
     }
 

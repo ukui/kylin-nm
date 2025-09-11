@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -30,8 +30,10 @@
 
 Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
 {
+
     initUI();
     initComponent();
+    initNetCtrl();
 }
 
 void Ipv4Page::initUI() {
@@ -48,12 +50,12 @@ void Ipv4Page::initUI() {
     m_configEmptyLabel = new QLabel(this);
     m_configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_addressHintLabel = new QLabel(this);
+    m_addressHintLabel = new KLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
     initConflictHintLable();
 
-    m_maskHintLabel = new QLabel(this);
+    m_maskHintLabel = new KLabel(this);
     m_maskHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_maskHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
@@ -74,10 +76,11 @@ void Ipv4Page::initUI() {
     pPwdLayout->addStretch();
     pPwdLayout->addWidget(m_statusLabel);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_addressHintLabel->setPalette(hintTextColor);
-    m_maskHintLabel->setPalette(hintTextColor);
+    //V11 qlabel 使用调色板颜色显示有问题
+    m_addressHintLabel->setFontColorRole(QPalette::WindowText);
+    m_addressHintLabel->setFontColor(Qt::red);
+    m_maskHintLabel->setFontColorRole(QPalette::WindowText);
+    m_maskHintLabel->setFontColor(Qt::red);
 
     QWidget *addressWidget = new QWidget(this);
     QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);
@@ -97,7 +100,7 @@ void Ipv4Page::initUI() {
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
     Divider* divider = new Divider(false, this);
-    m_dnsWidget = new MultipleDnsWidget(rx, false, this);
+    m_dnsWidget = new MultipleDnsWidget(rx, true, this);
 
     m_detailLayout = new QFormLayout(this);
     m_detailLayout->setVerticalSpacing(0);
@@ -124,6 +127,7 @@ void Ipv4Page::initUI() {
 //    netMaskCombox->addItem("255.255.0.0"); //16
 //    netMaskCombox->addItem("255.0.0.0"); //8
 
+
     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
@@ -142,16 +146,18 @@ void Ipv4Page::initComponent() {
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
     connect(ipv4addressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEditFinished()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(onNetMaskTextChanged()));
+
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+
     connect(m_dnsWidget, &MultipleDnsWidget::scrollToBottom, this, &Ipv4Page::scrollToBottom);
 }
 
 void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)
 {
-    if (ipv4Config ==  CONFIG_IP_MANUAL) {
+    if (ipv4Config == CONFIG_IP_MANUAL) {
         ipv4ConfigCombox->setCurrentIndex(MANUAL_CONFIG);
     } else {
         ipv4ConfigCombox->setCurrentIndex(AUTO_CONFIG);
@@ -194,6 +200,7 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             qDebug() << "ipv4ConfigType change to Manual";
             isChanged =  true;
         } else {
+
             if(info.strIPV4Address != ipv4addressEdit->text()
                     || info.strIPV4NetMask != getNetMaskText(netMaskEdit->text())
                     || info.strIPV4GateWay != gateWayEdit->text()) {
@@ -205,7 +212,7 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 
     QList<QHostAddress> ipv4dnsList;
     ipv4dnsList.clear();
-        ipv4dnsList = m_dnsWidget->getDns();
+    ipv4dnsList = m_dnsWidget->getDns();
     if(info.ipv4DnsList != ipv4dnsList) {
         isChanged = true;
     }
@@ -230,19 +237,27 @@ bool Ipv4Page::checkDnsSettingsIsChanged() {
 bool Ipv4Page::checkConnectBtnIsEnabled()
 {
     qDebug() << "checkConnectBtnIsEnabled currentIndex" << ipv4ConfigCombox->currentIndex();
-    if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
-        return true;
-    } else {
+    if (ipv4ConfigCombox->currentIndex() != AUTO_CONFIG) {
         if (ipv4addressEdit->text().isEmpty() || !getTextEditState(ipv4addressEdit->text())) {
             qDebug() << "ipv4address empty or invalid";
+            m_errorMessage = tr("IPv4 address is empty or invalid");
             return false;
         }
 
         if (netMaskEdit->text().isEmpty() || !netMaskIsValide(netMaskEdit->text())) {
             qDebug() << "ipv4 netMask empty or invalid";
+            m_errorMessage = tr("IPv4 netMask is empty or invalid");
             return false;
         }
+
+        if (/*gateWayEdit->text().isEmpty() ||*/ !getTextEditState(gateWayEdit->text())) {
+            qDebug() << "ipv4 gateway empty or invalid";
+            m_errorMessage = tr("IPv4 gateway is empty or invalid");
+            return false;
+        }
+
     }
+    m_errorMessage.clear();
     return true;
 }
 
@@ -286,6 +301,7 @@ void Ipv4Page::onAddressEditFinished()
 }
 
 void Ipv4Page::setLineEnabled(bool check) {
+
     if (!check) {
         ipv4addressEdit->clear();
         netMaskEdit->clear();
@@ -293,15 +309,15 @@ void Ipv4Page::setLineEnabled(bool check) {
 
         ipv4addressEdit->setPlaceholderText(" ");
         netMaskEdit->setPlaceholderText(" ");
+        gateWayEdit->setPlaceholderText(" ");
 
     } else {
         ipv4addressEdit->setPlaceholderText(tr("Required")); //必填
         netMaskEdit->setPlaceholderText(tr("Required")); //必填
+
     }
 
-    ipv4addressEdit->setEnabled(check);
-    netMaskEdit->setEnabled(check);
-    gateWayEdit->setEnabled(check);
+    updateUi();
 }
 
 void Ipv4Page::setEnableOfSaveBtn() {
@@ -358,13 +374,17 @@ QString Ipv4Page::getNetMaskText(QString text)
     return QString("%1.%2.%3.%4").arg(list[0],list[1],list[2],list[3]);
 }
 
+
 void Ipv4Page::initConflictHintLable()
 {
     QIcon icon = QIcon::fromTheme("dialog-warning");
     m_iconLabel = new QLabel(m_addressHintLabel);
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
-    m_textLabel = new QLabel(m_addressHintLabel);
+    m_textLabel = new KLabel(m_addressHintLabel);
     m_textLabel->setText(tr("Address conflict"));
+    m_textLabel->setFontColorRole(QPalette::WindowText);
+    m_textLabel->setFontColor(Qt::red);
+
     QHBoxLayout *conflictHintLayout = new QHBoxLayout(m_addressHintLabel);
     conflictHintLayout->setContentsMargins(0, 0, 0, 0);
     conflictHintLayout->addWidget(m_iconLabel);
@@ -417,4 +437,123 @@ void Ipv4Page::showIpv4AddressConflict(bool isConflict)
         m_iconLabel->hide();
         m_textLabel->hide();
     }
+}
+
+QString Ipv4Page::getErrorMessage()
+{
+    checkConnectBtnIsEnabled();
+    return m_errorMessage;
+}
+
+void Ipv4Page::updateNetCtrl(QString modName, QVariantMap value)
+{
+    if(modName!="IPV4" && modName!="DNS") return;
+
+    qInfo()<<modName<<value;
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
+        QString key = it.key();
+        QVariant value = it.value();
+        if(key==QString("netIPV4ModifyCtrol")) {
+            m_ipv4addressCtrl=value.toBool();
+        }
+        // 第二次需求修改需要ipv4 ipv6的dns管控分开
+        if(key==QString("netIPV4DNSModifyCtrol")){
+            m_dnsWayCtrl=value.toBool();
+        }
+        if(key==QString("netMaskModifyCtrol")) {
+            m_netMaskCtrl=value.toBool();
+        }
+        if(key==QString("netGwModifyCtrol")) {
+            m_gateWayCtrl=value.toBool();
+        }
+    }
+    updateUi();
+    return;
+}
+
+void Ipv4Page::updateUi()
+{
+    int currentIndex=ipv4ConfigCombox->currentIndex();
+
+    if (m_ipv4addressCtrl || currentIndex==AUTO_CONFIG) {
+        ipv4addressEdit->setEnabled(false);
+    } else {
+        ipv4addressEdit->setEnabled(true);
+    }
+
+    if (m_netMaskCtrl || currentIndex==AUTO_CONFIG) {
+        netMaskEdit->setEnabled(false);
+    } else {
+        netMaskEdit->setEnabled(true);
+    }
+
+    if (m_gateWayCtrl || currentIndex==AUTO_CONFIG) {
+        gateWayEdit->setEnabled(false);
+    } else {
+        gateWayEdit->setEnabled(true);
+    }
+
+    if(m_dnsWayCtrl) {
+        m_dnsWidget->setEnabled(false);
+    } else {
+        m_dnsWidget->setEnabled(true);
+    }
+}
+
+void Ipv4Page::initNetCtrl()
+{
+
+    QVariantMap map;
+    int errCode=0;
+    QString netCtrlIPV4Name="IPV4";
+    QString netCtrlDNSName="DNS";
+
+
+    QDBusInterface dbusInterface("com.kylin.networkCtrol",
+                                 "/com/kylin/networkCtrol",
+                                 "com.kylin.networkCtrol",
+                                 QDBusConnection::systemBus());
+    if (!dbusInterface.isValid()) {
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+    }
+    dbusInterface.setTimeout(2000);
+    QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlIPV4Name);
+    if (result.type() == QDBusMessage::ErrorMessage) {
+        qWarning() << "[mainwindow]getNetContrlRule error:" << result.errorMessage();
+    }
+
+    if ( result.arguments().size()>=2) {
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        dbusArg1st >> map;
+        errCode = result.arguments().at( 1 ).toInt();
+        qInfo()<<"ipv4"<<map<<errCode;
+        if(errCode==0) updateNetCtrl(netCtrlIPV4Name,map);
+        map.clear();
+    }
+
+
+    result = dbusInterface.call("getNetContrlRule",netCtrlDNSName);
+    if(result.type() == QDBusMessage::ErrorMessage) {
+        qWarning() << "[ipv4]getNetContrlRule error:" << result.errorMessage();
+    }
+
+    if (result.arguments().size()>=2) {
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        dbusArg1st >> map;
+        errCode = result.arguments().at( 1 ).toInt();
+        qInfo()<<"ipv4"<<map<<errCode;
+        if(errCode==0) updateNetCtrl(netCtrlDNSName,map);
+        map.clear();
+    }
+
+    QDBusConnection::systemBus().connect("com.kylin.networkCtrol",
+                                         "/com/kylin/networkCtrol",
+                                         "com.kylin.networkCtrol",
+                                         "sigNetContrlRuleChanged",
+                                         this,
+                                         SLOT(updateNetCtrl(QString ,QVariantMap)));
+
+    qInfo()<<"initNetCtrl success";
+
+    return;
 }

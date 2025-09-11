@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,24 +20,34 @@
 #include "firewalldialog.h"
 
 #include <QApplication>
+#include <QToolTip>
+#include "windowmanager/windowmanager.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 #define ICON_SIZE 16,16
 
-FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
+FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent), m_uwin(nullptr)
 {
     initUI();
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
     this->setFixedSize(480, 204);
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     setAttribute(Qt::WA_DeleteOnClose);
 //    centerToScreen();
     connect(qApp, &QApplication::paletteChanged, this, &FirewallDialog::onPaletteChanged);
+    m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setSkipTaskBar(true);
 }
 
 FirewallDialog::~FirewallDialog()
 {
-
+    if (m_uwin)
+    {
+        delete m_uwin;
+    }
 }
 
 void FirewallDialog::initUI()
@@ -127,4 +137,15 @@ void FirewallDialog::onPaletteChanged()
         delete styleGsettings;
         styleGsettings = nullptr;
     }
+}
+
+bool FirewallDialog::event(QEvent *event)
+{
+    if (event->type() == QEvent::Enter || event->type() == QEvent::Paint || event->type() == QEvent::MouseButtonPress) {
+        QPalette tooltipPal = this->palette();
+        tooltipPal.setColor(QPalette::ToolTipBase, this->palette().toolTipBase().color());
+        tooltipPal.setColor(QPalette::ToolTipText, this->palette().toolTipText().color());
+        QToolTip::setPalette(tooltipPal);
+    }
+    return QWidget::event(event);
 }

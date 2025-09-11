@@ -1,5 +1,1 @@
-/usr/share/dbus-1/system.d/com.kylin.network.qt.systemdbus.conf
-etc/xdg/autostart/*
-usr/bin/*
-usr/lib/${DEB_HOST_MULTIARCH}/*
-usr/share/*
+debian/kylin-nm.json /etc/ukui/ukui-notification/default-app/

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,40 +34,50 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
-//    deviceSwitch = new KSwitchButton(this);
+    deviceSwitch = new KSwitchButton(this);
 //    deviceSwitch->installEventFilter(this);
 
     deviceLayout->addWidget(deviceLabel);
     deviceLayout->addStretch();
-    deviceLayout->addWidget(dropDownLabel);/*
-    deviceLayout->addWidget(deviceSwitch);*/
+    deviceLayout->addWidget(dropDownLabel);
+    deviceLayout->addWidget(deviceSwitch);
 }
 
 bool DeviceFrame::eventFilter(QObject *w,QEvent *e)
 {
-//    if (w == deviceSwitch) {
-//        if (e->type() == QEvent::MouseButtonPress) {
-//            emit deviceSwitchClicked(!deviceSwitch->isChecked());
-//            return true;
-//        }
-//    }
+    if (w == deviceSwitch) {
+        if (e->type() == QEvent::MouseButtonPress) {
+            emit deviceSwitchClicked(!deviceSwitch->isChecked());
+            return true;
+        }
+    }
     return QFrame::eventFilter(w, e);
 }
 
 void DeviceFrame::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
-
     QPainter painter(this);
-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    
+    QRect rect = this->rect();
+    const int radius = RADIUS;
+    
+    // 创建单一路径实现上圆角下直角
+    QPainterPath path;
+    path.moveTo(rect.topLeft() + QPointF(0, radius));
+    path.arcTo(rect.left(), rect.top(), radius * 2, radius * 2, 180, -90);
+    path.lineTo(rect.right() - radius, rect.top());
+    path.arcTo(rect.right() - radius * 2, rect.top(), radius * 2, radius * 2, 90, -90);
+    path.lineTo(rect.right(), rect.bottom());
+    path.lineTo(rect.left(), rect.bottom());
+    path.lineTo(rect.left(), rect.top() + radius);
+    
+    // 绘制背景
     painter.setPen(Qt::NoPen);
     painter.setBrush(pal.color(QPalette::Base));
-
-    QRect rect = this->rect();
-    QPainterPath path;
-    path.addRoundedRect (rect, RADIUS, RADIUS);
-    QRect temp_rect(rect.left(), rect.top() + rect.height()/2, rect.width(), rect.height()/2);
-    path.addRect(temp_rect);
     painter.drawPath(path);
+    
+    // 保持基类绘制
     QFrame::paintEvent(event);
 }

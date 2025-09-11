@@ -1,12 +1,22 @@
-// SPDX-License-Identifier: GPL-2.0+
-/* NetworkManager Applet -- allow user control over networking
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
- * Copyright 2004 - 2019 Red Hat, Inc.
- * (C) Copyright 2018 Lubomir Rintel
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
  */
-
 #ifndef KYLIN_VPN_REQUEST_H
 #define KYLIN_VPN_REQUEST_H
 
@@ -33,7 +43,12 @@ struct _SecretsRequest {
 
 
 size_t applet_vpn_request_get_secrets_size(void);
-
+void applet_secrets_request_complete (SecretsRequest *req,
+                                      GVariant *settings,
+                                      GError *error);
+void applet_secrets_request_free (SecretsRequest *req);
+void applet_secrets_request_set_free_func (SecretsRequest *req,
+                                           SecretsRequestFreeFunc free_func);
 gboolean applet_vpn_request_get_secrets(SecretsRequest *req, GError **error);
 
 #endif  /* APPLET_VPN_REQUEST_H */

@@ -15,15 +15,11 @@ CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 #CONFIG += release
 
 PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
-
-exists(/usr/include/kysdk/kysdk-system/libkysysinfo.h) {
-    DEFINES += KY_SDK_SYSINFO
-    PKGCONFIG += kysdk-sysinfo
-}
+PKGCONFIG +=kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysdk-ukuiwindowhelper
 #LIBS  +=  -lkysec
 
 CONFIG(release, debug|release) {
@@ -34,15 +30,15 @@ target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
-gschema.files = org.ukui.kylin-nm.switch.gschema.xml
-gschema.path = /usr/share/glib-2.0/schemas/
-qm_files.path = $${PREFIX}/share/kylin-nm/
+# gschema.files = org.ukui.kylin-nm.switch.gschema.xml
+# gschema.path = /usr/share/glib-2.0/schemas/
+qm_files.path = /usr/share/kylin-nm/kylin-nm/
 qm_files.files = translations/*.qm
 
 INSTALLS += target \
         desktop \
-        gschema \
-        qm_files \
+        # gschema \
+        qm_files
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -77,12 +73,19 @@ unix {
     OBJECTS_DIR = .obj
 }
 
-DISTFILES += \
-    org.ukui.kylin-nm.switch.gschema.xml
+# DISTFILES += \
+#     org.ukui.kylin-nm.switch.gschema.xml
 
 TRANSLATIONS += \
+        translations/kylin-nm_zh_Hant.ts \
         translations/kylin-nm_zh_CN.ts \
+        translations/kylin-nm_ug.ts \
         translations/kylin-nm_tr.ts \
-        translations/kylin-nm_bo.ts \
-        translations/kylin-nm_bo_CN.ts \
-        translations/kylin-nm_mn.ts
+        translations/kylin-nm_mn.ts \
+        translations/kylin-nm_ky.ts \
+        translations/kylin-nm_kk.ts \
+        translations/kylin-nm_fr.ts \
+        translations/kylin-nm_es.ts \
+        translations/kylin-nm_de.ts \
+        translations/kylin-nm_bo.ts\
+        translations/kylin-nm_bo_CN.ts

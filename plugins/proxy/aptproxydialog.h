@@ -27,7 +27,9 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QDialog>
-#include "fixlabel.h"
+#include "klabel.h"
+
+using namespace kdk;
 
 #define APT_PROXY_SCHEMA              "org.ukui.control-center.apt.proxy"
 #define APT_PROXY_ENABLED            "enabled"

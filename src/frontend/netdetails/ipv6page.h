@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -30,6 +30,7 @@
 #include <QSpacerItem>
 #include <QComboBox>
 #include <QLineEdit>
+#include "klabel.h"
 
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
@@ -54,6 +55,8 @@ public:
     void stopLoading();
     void showIpv6AddressConflict(bool isConflict);
 
+    QString getErrorMessage();
+
 private:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
@@ -67,9 +70,9 @@ private:
     QLabel *m_gateWayLabel;
 
     QLabel *m_configEmptyLabel;
-    QLabel *m_addressHintLabel;
+    KLabel *m_addressHintLabel;
     QLabel *m_subnetEmptyLabel;
-    QLabel *m_gateWayHintLabel;
+    KLabel *m_gateWayHintLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
 
@@ -80,6 +83,14 @@ private:
 
     QLabel *m_iconLabel;
     QLabel *m_textLabel;
+
+    QString m_errorMessage;
+
+    //kylin 网络设置控制接口
+    bool m_ipaddressCtrl = false;
+    bool m_netMaskCtrl     = false;
+    bool m_gateWayCtrl     = false;
+    bool m_dnsWayCtrl      = false;
 
 private:
     void initUI();
@@ -92,6 +103,8 @@ private:
 
     void initConflictHintLable();
     void initLoadingIcon();
+    void initNetCtrl();
+    void updateUi();
 
 private Q_SLOTS:
     void configChanged(int index);
@@ -100,6 +113,7 @@ private Q_SLOTS:
     void onGatewayTextChanged();
     void onAddressEidtFinished();
     void updateIcon();
+    void updateNetCtrl(QString modName,QVariantMap value);
 
 Q_SIGNALS:
     void setIpv6PageState(bool);

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,15 +39,14 @@
 #include <QDBusMetaType>
 #include <QScrollArea>
 
-#include "titlelabel.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "kpasswordedit.h"
 #include "connectdevlistitem.h"
 #include "blacklistpage.h"
 #include "connectdevpage.h"
-#include "fixlabel.h"
 #include "ukcccommon.h"
+#include "klabel.h"
 
 using namespace kdk;
 using namespace ukcc;
@@ -69,13 +68,13 @@ private:
 
     KSwitchButton *m_switchBtn;
 
-    TitleLabel *m_hotspotTitleLabel;
+    KLabel *m_hotspotTitleLabel;
     QLabel *m_switchLabel;
     QLabel *m_apNameLabel;
-    QLabel *m_pwdLabel;
+    KLabel *m_pwdLabel;
     QLabel *m_pwdHintLabel;
-    FixLabel *m_freqBandLabel;
-    QLabel *m_interfaceLabel;
+    KLabel *m_freqBandLabel;
+    KLabel *m_interfaceLabel;
 
     QFrame *switchAndApNameLine;
     QFrame *apNameAndPwdLine;
@@ -90,7 +89,7 @@ private:
     QComboBox *m_freqBandComboBox;
     QComboBox *m_interfaceComboBox;
 
-    FixLabel *m_interfaceWarnLabel;
+    KLabel *m_interfaceWarnLabel;
     QWidget* m_warnWidget;
 
     QDBusInterface  *m_interface = nullptr;
@@ -101,6 +100,13 @@ private:
 
     QString m_uuid = "";
     QString m_hostName = "";
+
+
+    QLabel *m_statusLabel;
+    QTimer *m_waitTimer = nullptr;
+    QList<QIcon> m_loadIcons;
+    int m_currentIconIndex=0;
+    void updateLoadingIcon();
 
     void resetFrameSize();
     void initUI();
@@ -145,6 +151,7 @@ private:
     void initBlackListPage();
 
     bool m_isUserSelect = true;  //是否用户操作
+
 signals:
 
 private slots:
@@ -167,6 +174,9 @@ private slots:
     void onPwdTextChanged();
 
     void onInterfaceChanged();
+
+    void startLoading();
+    void stopLoading();
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

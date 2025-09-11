@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -71,6 +71,7 @@ void MultipleDnsWidget::initUI()
     m_dnsListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_dnsListWidget->setFrameShape(QFrame::Shape::StyledPanel);
     m_dnsListWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
+    m_dnsListWidget->setAlternatingRowColors(true);
 
     //item可拖拽
     m_dnsListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -79,7 +80,7 @@ void MultipleDnsWidget::initUI()
     m_dnsListWidget->setDropIndicatorShown(true);
     m_dnsListWidget->setDragDropMode(QAbstractItemView::DragDropMode::InternalMove);
 
-    setDnsListWidgetStyle();
+    setPlaceholderTextColor();
 
     m_buttonBox = new KButtonBox(this);
     m_buttonBox->setExclusive(false);
@@ -104,7 +105,6 @@ void MultipleDnsWidget::initUI()
     btnHLayout->setContentsMargins(0, 0, 0, 0);
     btnHLayout->setSpacing(1);
     btnHLayout->setAlignment(Qt::AlignLeft);
-
     btnHLayout->addWidget(m_buttonBox);
     btnHLayout->addSpacing(23);
     btnHLayout->addWidget(m_settingsLabel);
@@ -124,7 +124,7 @@ void MultipleDnsWidget::initUI()
 
 void MultipleDnsWidget::initComponent()
 {
-    connect(qApp, &QApplication::paletteChanged, this, &MultipleDnsWidget::setDnsListWidgetStyle);
+    connect(qApp, &QApplication::paletteChanged, this, &MultipleDnsWidget::setPlaceholderTextColor);
     connect(m_addDnsBtn, &KPushButton::clicked, this, &MultipleDnsWidget::onAddBtnClicked);
     connect(m_removeDnsBtn, &KPushButton::clicked, this, &MultipleDnsWidget::onRemoveBtnClicked);
     connect(m_dnsListWidget, &QListWidget::itemClicked, this, [=]() {
@@ -163,7 +163,7 @@ QList<QHostAddress> MultipleDnsWidget::getDns() const
     QString aDns;
     while (m_dnsListWidget->count() > row) {
         aDns = m_dnsListWidget->item(row)->text();
-        if (!dnsList.contains(aDns)) {
+        if (!dnsList.contains(aDns) && !aDns.isEmpty()) {
             dnsList << aDns;
             ipv4dnsList << QHostAddress(aDns);
         }
@@ -216,7 +216,6 @@ void MultipleDnsWidget::RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *li
         listWidget->removeItemWidget(aItem);
         delete aItem;
     }
-
     if (m_dnsListWidget->count() == 0) {
         m_emptyWidget->show();
         m_dnsListWidget->hide();
@@ -224,6 +223,7 @@ void MultipleDnsWidget::RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *li
     }
 }
 
+#if 0
 void MultipleDnsWidget::setDnsListWidgetStyle()
 {
     QPalette pal = qApp->palette();
@@ -244,6 +244,7 @@ void MultipleDnsWidget::setDnsListWidgetStyle()
     pal.setColor(QPalette::WindowText, color);
     emptyLabel->setPalette(pal);
 }
+#endif
 
 void MultipleDnsWidget::onAddBtnClicked()
 {
@@ -259,6 +260,7 @@ void MultipleDnsWidget::onAddBtnClicked()
         }
         row --;
     }
+
     m_removeDnsBtn->setEnabled(true);
 }
 
@@ -272,6 +274,14 @@ void MultipleDnsWidget::onRemoveBtnClicked()
     if (m_dnsListWidget->count()< 1) {
         m_removeDnsBtn->setEnabled(false);
     }
+}
+
+void MultipleDnsWidget::setPlaceholderTextColor()
+{
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::PlaceholderText);
+    pal.setColor(QPalette::WindowText, color);
+    emptyLabel->setPalette(pal);
 }
 
 void MultipleDnsWidget::showDnsSettingWidget()

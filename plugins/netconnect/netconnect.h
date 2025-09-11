@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@
 
 #include "interface.h"
 #include "addbtn.h"
-#include "fixlabel.h"
+#include "klabel.h"
 #include "hoverbtn.h"
 #include "lanitem.h"
 #include "deviceframe.h"
@@ -94,7 +94,6 @@ private:
 
     void showDesktopNotify(const QString &message);
 
-
     //开关相关
     void setSwitchStatus();
     void hideLayout(QVBoxLayout * layout);
@@ -105,11 +104,14 @@ private:
     void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);
     void deActiveConnect(QString ssid, QString deviceName, int type);
+    void setDeviceAutoConnectState(QString deviceName, bool state);
 
     //获取设备列表
     void getDeviceStatusMap(QMap<QString, bool> &map);
     void initNet();
     void initNetListFromDevice(QString deviceName);
+    void initDeviceConnectivity(QString deviceName);
+    void updateDeviceFrameFromConnectivity(ItemFrame *frame, ConnectivityType type);
     //处理列表增加
     void addLanItem(ItemFrame *frame, QString devName, QStringList infoList, bool isActived);
     //增加设备
@@ -123,6 +125,9 @@ private:
 
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
+
+    // 打卡托盘网络窗口，后续需要跳转到指定密码框
+    void openKylinm();
 
     bool LaunchApp(QString desktopFile);
 
@@ -139,7 +144,7 @@ private:
     QWidget            *pluginWidget;
 
     QDBusInterface     *m_interface = nullptr;
-    KSwitchButton       *wiredSwitch;
+    KSwitchButton      *wiredSwitch;
 
     bool               mFirstLoad;
     QGSettings         *m_switchGsettings;
@@ -147,7 +152,8 @@ private:
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
 
-    bool               needLoad;
+    QMap<QString, QList<QStringList>> getWiredList();
+    QDBusInterface *m_pSysBusIntfs;
 
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);
@@ -159,6 +165,11 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
+    void renewSwitchLayout(bool enable);
+    void wiredSwitchSLot(bool checked);
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,8 +44,9 @@ ConnectdevPage::ConnectdevPage(QWidget *parent) :
     m_staListLayout->setContentsMargins(0, 0, 0, 0);
     m_staListLayout->setSpacing(0);
 
-    m_titleLabel = new TitleLabel(this);
+    m_titleLabel = new KLabel(this);
     m_titleLabel->setText(tr("Connect device"));
+    m_titleLabel->setContentsMargins(16, 0, 0, 0);
 
     Vlayout->addWidget(m_titleLabel);
     Vlayout->addSpacing(8);

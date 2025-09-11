@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,18 @@
 #include "vpnpage.h"
 #include <QDebug>
 #include <QScrollBar>
+#include <QScreen>
 #include "windowmanager/windowmanager.h"
+
+#define PANEL_SETTINGS "org.ukui.panel.settings"
+#define PANEL_SIZE_KEY "panelsize"
+#define PANEL_POSITION_KEY "panelposition"
+
+#define MARGIN 8
+#define PANEL_TOP 1
+#define PANEL_LEFT 2
+#define PANEL_RIGHT 3
+#define VPN_PAGE_HEIGHT 370
 
 
 VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
@@ -29,6 +40,7 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     m_connectResourse = new KyConnectResourse(this);
     m_vpnConnectOperation = new KyVpnConnectOperation(this);
 
+    initPanelGSettings();
     initUI();
     initVpnArea();
     installEventFilter(this);
@@ -45,11 +57,11 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::activateConnectionError, this, &VpnPage::activateFailed);
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::deactivateConnectionError, this, &VpnPage::deactivateFailed);
 
-//    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
-//        if (activeWindowId != this->winId() && activeWindowId != 0) {
-//            hide();
-//        }
-//    });
+    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
+        if (activeWindowId != this->winId() && activeWindowId != 0) {
+            hide();
+        }
+    });
 }
 
 VpnPage::~VpnPage()
@@ -58,7 +70,7 @@ VpnPage::~VpnPage()
 }
 
 void VpnPage::deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
-                             QListWidget *vpnListWidget, QString uuid)
+                                      QListWidget *vpnListWidget, QString uuid)
 {
     QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
     if (p_listWidgetItem) {
@@ -136,17 +148,6 @@ void VpnPage::constructItemArea()
         }
     }
 
-    if (QGSettings::isSchemaInstalled(GSETTINGS_VPNICON_VISIBLE)) {
-        QGSettings vpnGsettings(GSETTINGS_VPNICON_VISIBLE);
-        if (vpnGsettings.keys().contains(QString(VISIBLE))) {
-            if (!netList.isEmpty()) {
-                vpnGsettings.set(VISIBLE, true);
-            } else {
-                vpnGsettings.set(VISIBLE, false);
-            }
-        }
-    }
-
     resetListWidgetWidth();
 }
 
@@ -159,21 +160,15 @@ void VpnPage::resetPageHeight()
 {
     int height = 0;
     int count = m_listWidget->count();
-    m_listFrame->setFixedHeight((count >= 4) ? (MAX_ITEMS * ITEM_HEIGHT + ITEM_SPACE) : (count * ITEM_HEIGHT + ITEM_SPACE));
+    m_listFrame->setFixedHeight(VPN_PAGE_HEIGHT);
 
-    if (count == 0) {
-        m_listWidget->setHidden(true);
-        m_listFrame->setHidden(true);
-        m_netDivider->setHidden(true);
-    } else {
-        m_listWidget->show();
-        m_listFrame->show();
-        m_netDivider->show();
-    }
+    m_listWidget->show();
+    m_listFrame->show();
+    m_netDivider->show();
 }
 
 bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
-                          QListWidget *vpnListWidget, QString path)
+                                   QListWidget *vpnListWidget, QString path)
 {
     QMap<QString, QListWidgetItem *>::iterator iter;
     for (iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
@@ -252,8 +247,6 @@ void VpnPage::initUI()
 {
     m_titleLabel->setText(tr("VPN"));
 
-//    m_listFrame->setMaximumHeight(MAX_ITEMS * ITEM_HEIGHT + ITEM_SPACE);
-
     m_listWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_listWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
@@ -274,7 +267,7 @@ QListWidgetItem *VpnPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
         VpnListItem *p_vpnItem = (VpnListItem *)m_listWidget->itemWidget(p_listWidgetItem);
         QString name1 = p_vpnItem->getConnectionName();
         QString name2 = itemData->m_connectName;
-        if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+        if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0 && index >= m_activeItemMap.count()) {
             break;
         }
     }
@@ -297,7 +290,11 @@ QListWidgetItem *VpnPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(listWidget->width() - 16, ITEM_HEIGHT));
-    listWidget->addItem(p_listWidgetItem);
+    if (itemData != nullptr && itemData->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
+        listWidget->insertItem(0, p_listWidgetItem);
+    } else {
+        listWidget->addItem(p_listWidgetItem);
+    }
     VpnListItem *p_vpnItem = nullptr;
     if (itemData != nullptr) {
         p_vpnItem = new VpnListItem(itemData);
@@ -324,8 +321,13 @@ void VpnPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
     m_activeItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 
     resetListWidgetWidth();
+    if (m_activeItemMap.count() >= 4) {
+        return;
+    }
 
-    return;
+    resetPageHeight();
+    resetWindowPosition();
+    this->update();
 }
 
 void VpnPage::updateConnectionArea(KyConnectItem *p_newItem)
@@ -340,6 +342,14 @@ void VpnPage::updateConnectionArea(KyConnectItem *p_newItem)
     m_vpnItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 
     resetListWidgetWidth();
+
+    if (m_vpnItemMap.count() >= 4) {
+        return;
+    }
+
+    resetPageHeight();
+    resetWindowPosition();
+    this->update();
 }
 
 void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
@@ -350,7 +360,9 @@ void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap
     QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
     if (p_listWidgetItem) {
         VpnListItem *p_vpnItem = (VpnListItem *)vpnListWidget->itemWidget(p_listWidgetItem);
-        p_vpnItem->updateConnectionState(state);
+        if (p_vpnItem != nullptr) {
+            p_vpnItem->updateConnectionState(state);
+        }
     }
 
 }
@@ -372,7 +384,7 @@ void VpnPage::onConnectionStateChange(QString uuid,
     }
 
     qDebug()<<"[VpnPage] connection uuid"<< uuid
-            << "state change slot:"<< state;
+             << "state change slot:"<< state;
 
     KyConnectItem *p_newItem = nullptr;
     QString deviceName = "";
@@ -543,7 +555,7 @@ void VpnPage::onUpdateConnection(QString uuid)
         p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
         if (nullptr == p_newItem) {
             qWarning()<<"[VpnPage] get item failed, when update activate connection."
-                      <<"connection uuid" << uuid;
+                       <<"connection uuid" << uuid;
             return;
         }
 
@@ -552,7 +564,7 @@ void VpnPage::onUpdateConnection(QString uuid)
         p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
         if (nullptr == p_newItem) {
             qWarning()<<"[VpnPage] get item failed, when update connection."
-                      <<"connection uuid"<<uuid;
+                       <<"connection uuid"<<uuid;
             return;
         }
 
@@ -574,7 +586,7 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
             onShowControlCenter();
         }
     }
-
+    
     if (watched == this) {
         //失焦退出
         if (event->type() == QEvent::ActivationChange) {
@@ -586,6 +598,33 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QWidget::eventFilter(watched, event);
+}
+
+void VpnPage::initPanelGSettings()
+{
+    const QByteArray id(PANEL_SETTINGS);
+    if (QGSettings::isSchemaInstalled(id)) {
+        if (m_panelGSettings == nullptr) {
+            m_panelGSettings = new QGSettings(id, QByteArray(), this);
+        }
+        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
+            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+        }
+        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
+            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+        }
+        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
+            if (key == PANEL_POSITION_KEY) {
+                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+            }
+            if (key == PANEL_SIZE_KEY) {
+                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+            }
+            if (this->isVisible()) {
+                resetWindowPosition();
+            }
+        });
+    }
 }
 
 void VpnPage::deleteVpn(const QString &connUuid)
@@ -638,55 +677,32 @@ void VpnPage::showUI()
 
 void VpnPage::resetWindowPosition()
 {
-#define MARGIN 8
-#define PANEL_TOP 1
-#define PANEL_LEFT 2
-#define PANEL_RIGHT 3
-//#define PANEL_BOTTOM 4
-    if (!m_positionInterface) {
-        m_positionInterface = new QDBusInterface("org.ukui.panel",
-                            "/panel/position",
-                            "org.ukui.panel",
-                            QDBusConnection::sessionBus());
-    }
-    QRect rect;
-    QDBusReply<QVariantList> reply = m_positionInterface->call("GetPrimaryScreenGeometry");
-    //reply获取的参数共5个，分别是 主屏可用区域的起点x坐标，主屏可用区域的起点y坐标，主屏可用区域的宽度，主屏可用区域高度，任务栏位置
-    if (!m_positionInterface->isValid() || !reply.isValid() || reply.value().size() < 5) {
-        qCritical() << QDBusConnection::sessionBus().lastError().message();
-        kdk::WindowManager::setGeometry(this->windowHandle(), QRect(0, 0, this->width(), this->height()));
-        return;
-    }
-    QVariantList position_list = reply.value();
-    int position = position_list.at(4).toInt();
-    switch(position){
+    QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+    int x, y;
+    switch(m_panelPosition){
     case PANEL_TOP:
         //任务栏位于上方
-        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                     position_list.at(1).toInt() + MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+        y = availableGeo.y() + m_panelSize + MARGIN;
         break;
         //任务栏位于左边
     case PANEL_LEFT:
-        rect = QRect(position_list.at(0).toInt() + MARGIN,
-                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + m_panelSize + MARGIN;
+        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
         break;
         //任务栏位于右边
     case PANEL_RIGHT:
-        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + availableGeo.width() - m_panelSize - this->width() - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
         break;
         //任务栏位于下方
     default:
-        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
         break;
     }
-    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
-    qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
+    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
+    qDebug() << " Position of ukui-panel is " << m_panelPosition << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
 }
 
 void VpnPage::resetListWidgetWidth()

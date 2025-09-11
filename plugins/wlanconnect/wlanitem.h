@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +28,12 @@
 #include <QDebug>
 #include <QGSettings>
 #include <QImage>
-#include "fixlabel.h"
+#include "klabel.h"
 //#include "infobutton.h"
 #include "../component/AddBtn/grayinfobutton.h"
+
+using namespace kdk;
+
 
 class WlanItem : public QPushButton
 {
@@ -40,7 +43,7 @@ public:
 public:
     QLabel * iconLabel = nullptr;
     GrayInfoButton * infoLabel = nullptr;
-    FixLabel * titileLabel = nullptr;
+    KLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
     QString uuid = "";
 

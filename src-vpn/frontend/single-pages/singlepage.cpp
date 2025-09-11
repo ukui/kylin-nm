@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,6 @@ void SinglePage::initWindowProperties()
     {
         QPainterPath path;
         auto rect = this->rect();
-        path.addRoundedRect(rect, 12, 12);
         path.addRect(rect);
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
     }
@@ -159,7 +158,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
     QPainterPath rectPath;
 
     col.setAlphaF(m_transparency);
-    rectPath.addRoundedRect(this->rect(),12,12);
+    rectPath.addRect(this->rect());
 
     painter.setBrush(col);
     painter.drawPath(rectPath);

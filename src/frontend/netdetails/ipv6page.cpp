@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -31,6 +31,7 @@ Ipv6Page::Ipv6Page(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
+    initNetCtrl();
 }
 
 void Ipv6Page::setIpv6Config(KyIpConfigType ipv6Config)
@@ -78,6 +79,7 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             qDebug() << "ipv6ConfigType change to Manual";
             isChanged =  true;
         }
+
         if(info.strIPV6Address != ipv6AddressEdit->text()
                 || info.iIPV6Prefix != lengthEdit->text().toInt()
                 || info.strIPV6GateWay != gateWayEdit->text()) {
@@ -118,12 +120,12 @@ void Ipv6Page::initUI() {
     m_configEmptyLabel = new QLabel(this);
     m_configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_addressHintLabel = new QLabel(this);
+    m_addressHintLabel = new KLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
     initConflictHintLable();
 
-    m_gateWayHintLabel = new QLabel(this);
+    m_gateWayHintLabel = new KLabel(this);
     m_gateWayHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_gateWayHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
@@ -141,10 +143,11 @@ void Ipv6Page::initUI() {
     pPwdLayout->addStretch();
     pPwdLayout->addWidget(m_statusLabel);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_addressHintLabel->setPalette(hintTextColor);
-    m_gateWayHintLabel->setPalette(hintTextColor);
+    //V11 qlabel 使用调色板颜色显示有问题
+    m_addressHintLabel->setFontColorRole(QPalette::WindowText);
+    m_addressHintLabel->setFontColor(Qt::red);
+    m_gateWayHintLabel->setFontColorRole(QPalette::WindowText);
+    m_gateWayHintLabel->setFontColor(Qt::red);
 
     QWidget *addressWidget = new QWidget(this);
     QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);
@@ -173,7 +176,6 @@ void Ipv6Page::initUI() {
     m_detailLayout->addRow(m_subnetEmptyLabel);
     m_detailLayout->addRow(m_gateWayLabel,gateWayWidget);
     m_detailLayout->addRow(m_dnsWidget);
-
     m_addressLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);  //解决布局错位问题
     m_gateWayLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);
 
@@ -196,6 +198,7 @@ void Ipv6Page::initComponent() {
         setControlEnabled(true);
     }
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
+
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
     connect(ipv6AddressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEidtFinished()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(onGatewayTextChanged()));
@@ -232,9 +235,7 @@ void Ipv6Page::setControlEnabled(bool check)
         lengthEdit->setPlaceholderText(tr("Required")); //必填
     }
 
-    ipv6AddressEdit->setEnabled(check);
-    lengthEdit->setEnabled(check);
-    gateWayEdit->setEnabled(check);
+    updateUi();
 }
 
 void Ipv6Page::setEnableOfSaveBtn()
@@ -274,19 +275,25 @@ void Ipv6Page::onAddressEidtFinished()
 
 bool Ipv6Page::checkConnectBtnIsEnabled()
 {
-    if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
-        return true;
-    } else {
+    if (ipv6ConfigCombox->currentIndex() != AUTO_CONFIG){
         if (ipv6AddressEdit->text().isEmpty() || !getIpv6EditState(ipv6AddressEdit->text())) {
             qDebug() << "ipv6address empty or invalid";
+            m_errorMessage = tr("IPv6 address is empty or invalid");
             return false;
         }
 
         if (lengthEdit->text().isEmpty()) {
             qDebug() << "ipv6 prefix length empty";
+            m_errorMessage = tr("IPv6 prefix length is empty or invalid");
             return false;
         }
+
+//        if (gateWayEdit->text().isEmpty() || !getIpv6EditState(gateWayEdit->text())) {
+//            qDebug() << "ipv6 gateway empty or invalid";
+//            return false;
+//        }
     }
+    m_errorMessage.clear();
     return true;
 }
 
@@ -385,4 +392,142 @@ void Ipv6Page::showIpv6AddressConflict(bool isConflict)
         m_iconLabel->hide();
         m_textLabel->hide();
     }
+}
+
+QString Ipv6Page::getErrorMessage()
+{
+    checkConnectBtnIsEnabled();
+    return m_errorMessage;
+}
+
+
+void Ipv6Page::updateNetCtrl(QString modName,QVariantMap value)
+{
+    if(modName!="IPV6" && modName!="DNS") return;
+
+    qInfo()<<modName<<value;
+    for (auto it = value.cbegin(); it != value.cend(); ++it)
+    {
+        QString key = it.key();
+        QVariant value = it.value();
+        if(key==QString("netIPV6ModifyCtrol"))
+        {
+            m_ipaddressCtrl=value.toBool();
+        }
+        if(key==QString("netIPV6DNSModifyCtrol"))//管控第二次需求修改需要ipv4 ipv6的dns管控分开
+        {
+            m_dnsWayCtrl=value.toBool();
+        }
+        if(key==QString("netMaskModifyCtrol"))
+        {
+            m_netMaskCtrl=value.toBool();
+        }
+        if(key==QString("netGwModifyCtrol"))
+        {
+            m_gateWayCtrl=value.toBool();
+        }
+    }
+
+    updateUi();
+    //setLineEnabled(false);
+    return;
+}
+
+void Ipv6Page::updateUi()
+{
+    int currentIndex=ipv6ConfigCombox->currentIndex();
+
+    if (m_ipaddressCtrl || currentIndex==AUTO_CONFIG)
+    {
+        ipv6AddressEdit->setEnabled(false);
+    }
+    else
+    {
+        ipv6AddressEdit->setEnabled(true);
+    }
+
+    if (m_netMaskCtrl || currentIndex==AUTO_CONFIG)
+    {
+        lengthEdit->setEnabled(false);
+    }
+    else
+    {
+        lengthEdit->setEnabled(true);
+    }
+
+    if (m_gateWayCtrl || currentIndex==AUTO_CONFIG)
+    {
+        gateWayEdit->setEnabled(false);
+    }
+    else
+    {
+        gateWayEdit->setEnabled(true);
+    }
+
+    if(m_dnsWayCtrl)
+        m_dnsWidget->setEnabled(false);
+    else
+        m_dnsWidget->setEnabled(true);
+}
+
+void Ipv6Page::initNetCtrl()
+{
+    QVariantMap map;
+    int errCode=0;
+    QString netCtrlIPV6Name="IPV6";
+    QString netCtrlDNSName="DNS";
+    QDBusInterface dbusInterface("com.kylin.networkCtrol",
+                                 "/com/kylin/networkCtrol",
+                                 "com.kylin.networkCtrol",
+                              QDBusConnection::systemBus());
+    if (!dbusInterface.isValid()) {
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+    }
+    dbusInterface.setTimeout(2000);
+    QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlIPV6Name);
+    if(result.type() == QDBusMessage::ErrorMessage)
+    {
+        qWarning() << "[ipv6]getNetContrlRule error:" << result.errorMessage();
+    }
+
+   if( result.arguments().size()>=2)
+   {
+       const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+       dbusArg1st >> map;
+       errCode = result.arguments().at( 1 ).toInt();
+       qInfo()<<"ipv6"<<map<<errCode;
+       if(errCode==0) updateNetCtrl(netCtrlIPV6Name,map);
+       map.clear();
+   }
+
+
+   result = dbusInterface.call("getNetContrlRule",netCtrlDNSName);
+   if(result.type() == QDBusMessage::ErrorMessage)
+   {
+       qWarning() << "[ipv6]getNetContrlRule error:" << result.errorMessage();
+   }
+
+  if( result.arguments().size()>=2)
+  {
+      const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+      dbusArg1st >> map;
+      errCode = result.arguments().at( 1 ).toInt();
+      qInfo()<<"ipv6"<<map<<errCode;
+      if(errCode==0) updateNetCtrl(netCtrlDNSName,map);
+      map.clear();
+  }
+
+   // connect(m_interface,SIGNAL(sigNetContrlRuleChanged(QString ,QVariantMap )),this,SLOT(updateNetCtrl(QString ,QVariantMap)),Qt::QueuedConnection);
+
+    QDBusConnection::systemBus().connect("com.kylin.networkCtrol",
+                                         "/com/kylin/networkCtrol",
+                                         "com.kylin.networkCtrol",
+                                         "sigNetContrlRuleChanged",
+                                         this,
+                                         SLOT(updateNetCtrl(QString ,QVariantMap)));
+
+    qInfo()<<"initNetCtrl success";
+
+
+    return;
 }

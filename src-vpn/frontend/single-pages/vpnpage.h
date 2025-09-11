@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,6 @@
 
 #define LOG_FLAG "[VpnPage]"
 
-#define VISIBLE "visible"
-const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
-
 class VpnListItem;
 
 class VpnPage : public SinglePage
@@ -66,6 +63,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
+    void initPanelGSettings();
     void initUI();
     void initVpnArea();
     void resetPageHeight();
@@ -82,7 +80,7 @@ private:
     void updateConnectionArea(KyConnectItem *p_newItem);
     void updateActivatedConnectionArea(KyConnectItem *p_newItem);
     void updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
-                                        QListWidget *vpnListWidget, QString uuid, ConnectState state);
+                               QListWidget *vpnListWidget, QString uuid, ConnectState state);
 
     void updateActiveConnectionProperty(KyConnectItem *p_connectItem);
     void updateConnectionProperty(KyConnectItem *p_connectItem);
@@ -126,8 +124,10 @@ private:
     QMap<QString, QListWidgetItem *> m_vpnItemMap;
     QMap<QString, QListWidgetItem *> m_activeItemMap;
 
-    QDBusInterface * m_positionInterface = nullptr;
-
+    //获取任务栏位置和大小
+    QGSettings *m_panelGSettings = nullptr;
+    int m_panelPosition;
+    int m_panelSize;
 
 
 public Q_SLOTS:

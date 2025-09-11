@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,14 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     lanItemLayout->setSpacing(1);
     addLanWidget = new AddNetBtn(false, this);
 
-    deviceLanLayout->setSpacing(1);
+    deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);
     lanItemFrame->setLayout(lanItemLayout);
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
     deviceLanLayout->addWidget(lanItemFrame);
+    deviceLanLayout->addSpacing(1);
     deviceLanLayout->addWidget(addLanWidget);
 
     //下拉按钮

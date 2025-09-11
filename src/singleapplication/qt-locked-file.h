@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies)
-**               2023 KylinSoft Co., Ltd.
+**               2020 KylinSoft Co., Ltd.
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the Qt Solutions component.

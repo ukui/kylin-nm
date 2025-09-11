@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,13 @@ VpnListItem::VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent):L
     m_deviceResource = new KyNetworkDeviceResourse(this);
 
     connectItemCopy(vpnConnectItem);
+    char *envStr = getenv("LANGUAGE");
+    if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+        this->setFixedWidth(390);
+    }
 
     m_nameLabel->setText(m_vpnConnectItem.m_connectName);
-    m_netButton->setButtonIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
+    m_netButton->setButtonIcon(QIcon::fromTheme("network-vpn-symbolic"));
 
     qDebug() << "VpnListItem init:" << m_vpnConnectItem.m_connectName << m_vpnConnectItem.m_connectState << m_vpnConnectItem.m_ifaceName;
 
@@ -56,7 +60,7 @@ VpnListItem::VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent):L
 VpnListItem::VpnListItem(QWidget *parent) : ListItem(parent)
 {
     m_isActive = false;
-    m_netButton->setButtonIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
+    m_netButton->setButtonIcon(QIcon::fromTheme("network-vpn-symbolic"));
     setIcon(false);
     const QString str=tr("Not connected");
     m_nameLabel->setText(str);

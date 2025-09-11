@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -31,6 +31,7 @@
 #include "kwidget.h"
 #include "kdialog.h"
 #include "kylable.h"
+#include "ukuiwindowhelper/ukuiwindowhelper.h"
 
 using namespace kdk;
 
@@ -56,10 +57,14 @@ private:
     QVBoxLayout *m_dialogLayout = nullptr;
     QPushButton *m_PublicBtn = nullptr;
     QPushButton *m_PrivateBtn = nullptr;
+    UkuiWindowHelper *m_uwin;
 
 Q_SIGNALS:
     void setPublicNetMode();
     void setPrivateNetMode();
+
+protected:
+    bool event(QEvent *event) override;
 
 private Q_SLOTS:
     void onPaletteChanged();

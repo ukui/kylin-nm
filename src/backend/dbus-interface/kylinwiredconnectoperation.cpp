@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -223,6 +223,25 @@ int KyWiredConnectOperation::closeWiredNetworkWithDevice(QString deviceName)
     //wiredDevicePtr->setAutoconnect(false);
     wiredDevicePtr->disconnectInterface();
 
+    return 0;
+}
+
+int KyWiredConnectOperation::setWiredDeviceAutoconnect(QString deviceName,bool autoconnectstate)
+{
+    NetworkManager::Device::Ptr wiredDevicePtr =
+        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (wiredDevicePtr.isNull() || !wiredDevicePtr->isValid()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
+        return -ENXIO;
+    }
+
+    if (NetworkManager::Device::Type::Ethernet != wiredDevicePtr->type()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the device type"
+                   << wiredDevicePtr->type() <<"is not Ethernet.";
+        return -EINVAL;
+    }
+
+    wiredDevicePtr->setAutoconnect(autoconnectstate);
     return 0;
 }
 

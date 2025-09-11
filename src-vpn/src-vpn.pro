@@ -15,11 +15,7 @@ CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 #CONFIG += release
 
 PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
-
-exists(/usr/include/kysdk/kysdk-system/libkysysinfo.h) {
-    DEFINES += KY_SDK_SYSINFO
-    PKGCONFIG += kysdk-sysinfo
-}
+PKGCONFIG +=kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
@@ -74,9 +70,18 @@ DISTFILES += \
     org.ukui.kylin-vpn.switch.gschema.xml
 
 TRANSLATIONS += \
+        translations/kylin-vpn_zh_Hant.ts \
         translations/kylin-vpn_zh_CN.ts \
-        translations/kylin-vpn_bo_CN.ts \
-        translations/kylin-vpn_mn.ts
+        translations/kylin-vpn_ug.ts \
+        translations/kylin-vpn_tr.ts \
+        translations/kylin-vpn_mn.ts \
+        translations/kylin-vpn_ky.ts \
+        translations/kylin-vpn_kk.ts \
+        translations/kylin-vpn_fr.ts \
+        translations/kylin-vpn_es.ts \
+        translations/kylin-vpn_de.ts \
+        translations/kylin-vpn_bo.ts\
+        translations/kylin-vpn_bo_CN.ts
 
 CONFIG(release, debug|release) {
     !system($$PWD/translate_generation.sh): error("Failed to generate translation")

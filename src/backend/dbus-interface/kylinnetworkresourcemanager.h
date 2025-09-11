@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,10 +44,11 @@
 #include <QDBusPendingCallWatcher>
 #include <QInputDialog>
 #include <QMetaEnum>
+#include <QDBusContext>
 
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags);
 
-class KyNetworkResourceManager : public QObject
+class KyNetworkResourceManager : public QObject, public QDBusContext
 {
     Q_OBJECT
 public:
@@ -101,6 +102,7 @@ public:
     NetworkManager::Device::List getNetworkDeviceList();
     bool isActiveConnection(QString uuid);
     bool isActivatingConnection(QString uuid);
+    NetworkManager::ActiveConnection::State getActiveConnectionState(const QString uuid);
 
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
@@ -120,6 +122,7 @@ Q_SIGNALS:
     void deviceCarrierChanage(QString deviceName, bool pluged);
     void deviceBitRateChanage(QString deviceName, int bitRate);
     void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
+    void deviceConnectivityChanged(QString deviceName, const NetworkManager::Connectivity connectivity);
 
     //to KyWirelessNetResource
     void wifiNetworkRemoved(QString, QString);
@@ -129,6 +132,7 @@ Q_SIGNALS:
     void wifiNetworkDeviceDisappear();
     void wifiEnabledChanged(bool);
     void wiredEnabledChanged(bool);
+    void connectivityCheckSpareUriChanged();
 
     void activeConnectionsReset();
     void activeConnectionAdd(QString uuid);
@@ -182,6 +186,7 @@ private Q_SLOTS:
 
     void onWifiNetworkAppeared(QString const & ssid);
     void onWifiNetworkDisappeared(QString const & ssid);
+    void onDevicePropertiesChanged(QString interface, QVariantMap qvm);
 
     //wifi network
     void onUpdateWirelessNet();

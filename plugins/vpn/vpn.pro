@@ -47,10 +47,20 @@ INSTALLS += target \
             trans
 
 TRANSLATIONS += \
+        translations/zh_Hant.ts \
+        translations/zh_HK.ts \
         translations/zh_CN.ts \
-        translations/bo_CN.ts \
+        translations/ug.ts \
+        translations/tr.ts \
+        translations/mn.ts \
+        translations/ky.ts \
+        translations/kk.ts \
+        translations/fr.ts \
+        translations/es.ts \
         translations/en_US.ts \
-        translations/mn.ts
+        translations/de.ts \
+        translations/bo.ts\
+        translations/bo_CN.ts
 
 CONFIG(release, debug|release) {
     !system($$PWD/translate_generation.sh): error("Failed to generate translation")

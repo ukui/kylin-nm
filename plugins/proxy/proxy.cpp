@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,7 +183,8 @@ void Proxy::initUi(QWidget *widget)
     mProxyBtnGroup = new QButtonGroup(this);
     mProxyBtnGroup->setExclusive (false); // 防止互斥
 
-    mTitleLabel = new TitleLabel(widget);
+    mTitleLabel = new KLabel(widget);
+    mTitleLabel->setContentsMargins(16, 0, 0, 0);
 
     mProxyFrame = new QFrame(widget);
     mProxyFrame->setMinimumSize(QSize(550, 0));
@@ -348,7 +349,7 @@ void Proxy::initUi(QWidget *widget)
     mIgnoreLayout->setSpacing(10);
     mIgnoreLayout->setContentsMargins(16, 0, 16, 24);
     mIgnoreLabel = new QLabel(mIgnoreFrame);
-    mIgnoreLabel->setFixedHeight(36);
+    mIgnoreLabel->setWordWrap(true);
     mIgnoreLineEdit = new QTextEdit(mIgnoreFrame);
     mIgnoreLineEdit->setFixedHeight(120);
     mIgnoreLineEdit->setStyleSheet("border-radius:6px;background-color: palette(button)");
@@ -378,7 +379,9 @@ void Proxy::initUi(QWidget *widget)
 //    setAppListFrameUi(widget);
 
     //APT代理模块
-    mAptProxyLabel = new TitleLabel(widget);
+    mAptProxyLabel = new KLabel(widget);
+    mAptProxyLabel->setContentsMargins(16, 0, 0, 0);
+
     mAPTFrame = new QFrame(widget);
     mAPTFrame->setMinimumSize(QSize(550, 0));
     mAPTFrame->setMaximumSize(QSize(16777215, 16777215));

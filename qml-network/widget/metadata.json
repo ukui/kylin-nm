@@ -1,0 +1,25 @@
+{
+  "Authors": [
+    {
+      "Name": "lixiang1",
+      "Email": "lixiang1@kylinos.cn"
+    }
+  ],
+  "Id": "org.ukui.shortcut.network",
+  "Icon": "",
+  "Name": "org-ukui-shortcut-network",
+  "Name[zh_CN]": "快捷面板网络插件",
+  "Tooltip": "network",
+  "Tooltip[zh_CN]": "网络",
+  "Description": "org.ukui.shortcut.network",
+  "Description[zh_CN]": "快捷面板网络插件",
+  "Version": "1.0",
+  "ShowIn": "Shortcut",
+  "WidgetType": "Widget",
+
+  "Contents": {
+    "Main": "ui/main.qml",
+    "I18n": "translations/ukui-shortcut-network"
+  }
+  
+}

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,8 @@ KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyConnectResourse::connectionRemove);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate, this, &KyConnectResourse::connectionUpdate);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityChanged, this, &KyConnectResourse::connectivityChanged);
+
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityCheckSpareUriChanged, this, &KyConnectResourse::connectivityCheckSpareUriChanged);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::needShowDesktop, this, &KyConnectResourse::needShowDesktop);
 }
 
@@ -141,11 +143,12 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
     QString ifaceUni = "";
     for (int index=0; index < interfaces.size(); index++) {
         ifaceUni = interfaces.at(index);
-        NetworkManager::Device:: Ptr devicePtr =
-              m_networkResourceInstance->findDeviceUni(ifaceUni);
-        deviceName = devicePtr->interfaceName();
-        if (deviceName == devName) {
-            return true;
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+        if (!devicePtr.isNull()) {
+            deviceName = devicePtr->interfaceName();
+            if (deviceName == devName) {
+                return true;
+            }
         }
     }
     return false;
@@ -479,6 +482,11 @@ void KyConnectResourse::getIpv6ConnectSetting(
 void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivity)
 {
     m_networkResourceInstance->getConnectivity(connectivity);
+}
+
+NetworkManager::ActiveConnection::State KyConnectResourse::getActiveConnectionState(const QString uuid)
+{
+    return m_networkResourceInstance->getActiveConnectionState(uuid);
 }
 
 void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting)
@@ -894,6 +902,33 @@ bool KyConnectResourse::isWirelessConnection(QString uuid)
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless ==
                 connectPtr->settings()->connectionType()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KyConnectResourse::isPppoeConnection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+        m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        qWarning()<<"[KyConnectResourse]"<<"can not find wireless connection"<<uuid;
+        return false;
+    }
+
+
+    if (connectPtr->isValid()) {
+        NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+
+        if (connectSettingPtr.isNull()) {
+            qWarning()<<"[KyConnectResourse]"<<"get connect setting failed, connect uuid"<<uuid;
+            return false;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Pppoe ==
+            connectPtr->settings()->connectionType()) {
             return true;
         }
     }

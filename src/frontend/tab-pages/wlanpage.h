@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -42,6 +42,9 @@
 #define LAN_PAGE_INDEX 0
 #define WLAN_PAGE_INDEX 1
 
+#define NETWORK_ACCESS_DENIED 68
+#define NETWORK_ACCESS_FULL 69
+
 class WlanListItem;
 
 class WlanPage : public TabPage
@@ -52,7 +55,7 @@ public:
     ~WlanPage() = default;
 
     //for dbus
-    void getWirelessList(QMap<QString, QVector<QStringList> > &map);
+    void getWirelessList(QString devName, QList<QStringList> &list);
     //开启热点
     void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点
@@ -64,11 +67,13 @@ public:
 
     void activateWirelessConnection(const QString& devName, const QString& ssid);
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
-
+    void deactivateWirelessConnectionWithUuid(const QString devName, const QString uuid);
+    void deleteWirelessConnect(const QString &connectUuid);
     void showDetailPage(QString devName, QString uuid);
     void showAddOtherPage(QString devName);
 
     bool checkWlanStatus(NetworkManager::ActiveConnection::State state);
+    bool checkInternetLoading();
 
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
     //无线总开关
@@ -87,6 +92,7 @@ public:
     QString getCurrentDisplayDevice() {
         return m_currentDevice;
     }
+    void getWirelssDeviceConnect(QMap<QString, QString> &map);
 
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
@@ -95,6 +101,8 @@ Q_SIGNALS:
     void wlanActiveConnectionStateChanged(QString interface, QString ssid, QString uuid, int status);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
+    void hotspotDeactivating(QString devName, QString ssid);
+    void hotspotActivating(QString devName, QString ssid);
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
@@ -104,6 +112,7 @@ Q_SIGNALS:
     void showMainWindow(int type);
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+    void connectivityCheckSpareUriChanged();
 
     void wirelessSwitchBtnChanged(bool state);
 
@@ -179,7 +188,7 @@ private:
     void updateWlanItemState(QListWidget *p_wirelessListWidget,
                                        QListWidgetItem *p_listWidgetItem,
                                        ConnectState state);
-    void updateWlanListItem(QString ssid);
+    void updateWlanListItem(QString ssid, bool isConnnectRmove = false);
     void refreshActiveConnectionIcon(QString ssid, const int &signal);
 
     void constructWirelessNetArea();
@@ -197,6 +206,7 @@ private:
 //    void wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::State state,
 //                                  NetworkManager::ActiveConnection::Reason reason);
 
+    void initWirelssDeviceConnectState();
     //是否存在可用的无线网卡
     bool getWirelessDevieceUseable();
     void setWirelessEnable(bool state);
@@ -224,6 +234,7 @@ private:
 
     void checkShowWifi6Plus();
     bool m_showWifi6Plus = true;
+    QDBusInterface *m_usdInterface = nullptr;
 
 private:
     QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;

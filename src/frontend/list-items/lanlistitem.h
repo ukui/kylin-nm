@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -45,6 +45,9 @@ public:
     QString getConnectionPath();
     void updateConnectionPath(QString connectionPath);
 
+    void updateConnectivityText(QString connectivityText);
+    int itemHeight();
+
 protected:
     void setIcon(bool isOn);
     void onRightButtonClicked();
@@ -57,6 +60,7 @@ private:
 private Q_SLOTS:
     void onInfoButtonClicked();
     void onNetButtonClicked();
+    void onNetButtonReleased();
     void onMenuTriggered(QAction *action);
 
 private:

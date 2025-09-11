@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,10 +55,12 @@ public:
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
     bool getInterfaceByUuid(QString &deviceName, const QString connUuid);
     void getConnectivity(NetworkManager::Connectivity &connectivity);
+    NetworkManager::ActiveConnection::State getActiveConnectionState(const QString uuid);
 
     bool isVirtualConncection(QString uuid);
     bool isWiredConnection(QString uuid);
     bool isWirelessConnection(QString uuid);
+    bool isPppoeConnection(QString uuid);
     bool isActivatedConnection(QString uuid);
     bool isApConnection(QString uuid);
 
@@ -86,6 +88,7 @@ Q_SIGNALS:
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+    void connectivityCheckSpareUriChanged();
 
     void needShowDesktop(QString);
 

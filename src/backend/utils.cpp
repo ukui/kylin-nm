@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,12 +126,12 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
             // qDebug()<<"No eth0 keyword to find!";
             continue;
         } else {
-            match = match + strlen(netname) + strlen(":"); //地址偏移到冒号
+            match = match + qstrlen(netname) + qstrlen(":"); //地址偏移到冒号
             sscanf(match,"%ld ",save_rate);
             memset(tmp_value,0,sizeof(tmp_value));
             sscanf(match,"%s ",tmp_value);
-            match = match + strlen(tmp_value);
-            for (size_t i=0;i<strlen(buffer);i++) {
+            match = match + qstrlen(tmp_value);
+            for (size_t i=0;i<qstrlen(buffer);i++) {
                 if (0x20 == *match) {
                     match ++;
                 } else {
@@ -140,7 +140,7 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
                     }
                     memset(tmp_value,0,sizeof(tmp_value));
                     sscanf(match,"%s ",tmp_value);
-                    match = match + strlen(tmp_value);
+                    match = match + qstrlen(tmp_value);
                     counter ++;
                 }
             }

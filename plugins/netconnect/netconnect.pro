@@ -53,9 +53,17 @@ INSTALLS += target \
             trans
 
 TRANSLATIONS += \
+        translations/zh_Hant.ts \
+        translations/zh_HK.ts \
         translations/zh_CN.ts \
+        translations/ug.ts \
         translations/tr.ts \
-        translations/bo.ts \
-        translations/bo_CN.ts \
+        translations/mn.ts \
+        translations/ky.ts \
+        translations/kk.ts \
+        translations/fr.ts \
+        translations/es.ts \
         translations/en_US.ts \
-        translations/mn.ts
+        translations/de.ts \
+        translations/bo.ts\
+        translations/bo_CN.ts

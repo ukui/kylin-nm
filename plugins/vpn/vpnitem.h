@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,10 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QEvent>
-#include "fixlabel.h"
+#include "klabel.h"
 #include "../component/AddBtn/grayinfobutton.h"
+
+using namespace kdk;
 
 class VpnItem : public QPushButton
 {
@@ -43,7 +45,7 @@ public:
 public:
     QLabel * m_iconLabel = nullptr;
     GrayInfoButton * m_infoLabel = nullptr;
-    FixLabel * m_titileLabel = nullptr;
+    KLabel * m_titileLabel = nullptr;
     QLabel * m_statusLabel = nullptr;
     QToolButton* m_moreButton = nullptr;
     QMenu* m_moreMenu = nullptr;

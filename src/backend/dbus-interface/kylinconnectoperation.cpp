@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -243,6 +243,18 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
         }
          watcher->deleteLater();
     });
+
+    //set autoconnect
+    NetworkManager::Connection::Ptr connectPtr =
+        NetworkManager::findConnectionByUuid(activeConnectUuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + activeConnectUuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+    setAutoConnect(connectionSettings,false);
 
     return;
 }

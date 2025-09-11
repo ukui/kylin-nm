@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,8 +217,12 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
         }
 
         QString ifaceUni = interfaces.at(0);
-        NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+
+        if (deviceName.isNull()) {
+            continue;
+        }
+
         if (deviceName != devicePtr->interfaceName()) {
             continue;
         }
@@ -253,6 +257,7 @@ bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirel
         if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
             wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
             updatewirelessItemConnectInfo(wirelessNetItem);
+            m_WifiNetworkList[deviceName].replace(index,wirelessNetItem);
             qDebug()<< LOG_FLAG << "getWifiNetwork success";
             return true;
         }
@@ -292,8 +297,10 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     }
 
     QString ifaceUni = interfaces.at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-                m_networkResourceInstance->findDeviceUni(ifaceUni);
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+    if (devicePtr.isNull()) {
+        return QString();
+    }
 
     return devicePtr->interfaceName();
 }
@@ -330,10 +337,11 @@ void KyWirelessNetResource::getDeviceByUuid(const QString uuid, QString &deviceN
         QStringList interfaces = activeConnectionPtr->devices();
         if (interfaces.size() > 0) {
             QString ifaceUni = interfaces.at(0);
-            NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
-            deviceName = devicePtr->interfaceName();
-            return;
+            NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+            if (!devicePtr.isNull()) {
+                deviceName = devicePtr->interfaceName();
+                return;
+            }
         } else {
             qDebug() << LOG_FLAG << "get device of active connection failed.";
         }
@@ -847,6 +855,7 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
 void KyWirelessNetResource::onConnectionUpdate(QString uuid)
 {
     qDebug()<< LOG_FLAG << "onConnectionUpdate " << uuid;
+    KyWirelessNetItem temp;
     NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
     if (conn.isNull()) {
         qDebug()<< LOG_FLAG  << "onConnectionAdd can not find connection" << uuid;
@@ -877,7 +886,9 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
             if (uuid == itemIter->m_connectUuid) {
                 if (itemIter->m_NetSsid != ssid ||
                         (iter.key() != dev && !dev.isEmpty())) {
-                    updatewirelessItemConnectInfo(*itemIter);
+                    temp=*itemIter;
+                    updatewirelessItemConnectInfoEx(&temp);
+                    *itemIter=temp;
                     Q_EMIT connectionUpdate(iter.key(), itemIter->m_NetSsid);
 
                     //判断netptr是否为空 空返回
@@ -893,7 +904,9 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
             //更新WIFI 的connect相关变量 emit update to ui
             if (ssid == itemIter->m_NetSsid) {
                 if (iter.key() == dev || dev.isEmpty()) {
-                    updatewirelessItemConnectInfo(*itemIter);
+                    temp=*itemIter;
+                    updatewirelessItemConnectInfoEx(&temp);
+                    *itemIter=temp;
                     Q_EMIT connectionUpdate(dev, itemIter->m_NetSsid);
                 }
             }

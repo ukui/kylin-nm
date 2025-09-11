@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
+#include "klabel.h"
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
@@ -28,6 +29,8 @@
 
 #define THEME_QT_SCHEMA  "org.ukui.style"
 #define MODE_QT_KEY      "style-name"
+
+using namespace kdk;
 
 VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     : m_isAcitve(bAcitve), QPushButton(parent)
@@ -40,7 +43,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     mLanLyt->setSpacing(16);
     m_iconLabel = new QLabel(this);
     m_iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    m_titileLabel = new FixLabel(this);
+    m_titileLabel = new KLabel(this);
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_infoLabel = new GrayInfoButton(this);

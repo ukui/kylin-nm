@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -155,6 +155,11 @@ void EnterpriseWlanDialog::initUI()
     m_cancelBtn->setText(tr("Cancel"));
     m_connectBtn->setText(tr("Connect"));
     m_connectBtn->setEnabled(false);
+    m_cancelBtn->setProperty("useButtonPalette", true);
+    m_cancelBtn->setProperty("isImportant", false);
+    m_connectBtn->setProperty("useButtonPalette", false);
+    m_connectBtn->setProperty("isImportant", true);
+
     btnLayout->addStretch();
     btnLayout->addWidget(m_cancelBtn);
     btnLayout->addWidget(m_connectBtn);
@@ -203,7 +208,6 @@ void EnterpriseWlanDialog::initConnections()
     }
 #endif
 }
-
 #if 0
 void EnterpriseWlanDialog::onPaletteChanged()
 {

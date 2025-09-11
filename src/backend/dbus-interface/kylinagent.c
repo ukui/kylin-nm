@@ -1,10 +1,20 @@
-// SPDX-License-Identifier: GPL-2.0+
 /*
- * Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
  *
- * Copyright 2011 - 2014 Red Hat, Inc.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
  */
-
 #include "kylinagent.h"
 #include <string.h>
 
@@ -607,7 +617,7 @@ vpn_secret_iter_cb (const char *key, const char *secret, gpointer user_data)
     const char *service_name, *id;
     char *display_name;
 
-    if (secret && strlen (secret)) {
+    if (secret && strnlen (secret, sizeof(secret))) {
         setting = nm_connection_get_setting (r->connection, NM_TYPE_SETTING_VPN);
         g_assert (setting);
         service_name = nm_setting_vpn_get_service_type (NM_SETTING_VPN (setting));
@@ -650,7 +660,7 @@ write_one_secret_to_keyring (NMSetting *setting,
             return;
         g_return_if_fail (type == G_TYPE_STRING);
         secret = g_value_get_string (value);
-        if (secret && strlen (secret))
+        if (secret && strnlen (secret, sizeof(secret)))
             save_one_secret (r, setting, key, secret, NULL);
     }
 }

@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -42,7 +42,6 @@
 #include <QDBusReply>
 
 #include <interface.h>
-#include "hoverbtn.h"
 #include "itemframe.h"
 #include "wlanitem.h"
 #include "kwidget.h"
@@ -91,7 +90,7 @@ private:
 
     int  sortWlanNet(QString deviceName, QString name, QString signal);
     void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category);
-    void resortWifiList(ItemFrame *frame, QVector<QStringList> list);
+    void resortWifiList(ItemFrame *frame, QList<QStringList> list);
 
 
     //单wifi图标
@@ -118,7 +117,7 @@ private:
     //减少设备
     void removeDeviceFrame(QString devName);
     //增加ap
-    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category);
+    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus);
     //减少ap
     void removeOneWlanFrame(ItemFrame *frame, QString deviceName, QString ssid);
 
@@ -126,31 +125,23 @@ private:
     //单个wifi连接状态变化
     void itemActiveConnectionStatusChanged(WlanItem *item, int status);
 
-    void initSwtichState();
-    inline void setSwitchBtnEnable(bool state) {
-        if (m_wifiSwitch != nullptr) {
-            m_wifiSwitch->setEnabled(state);
-        }
-    }
-    inline bool getSwitchBtnEnable() {
-        if (m_wifiSwitch != nullptr) {
-            return m_wifiSwitch->isEnabled();
-        }
-    }
+    // 打卡托盘网络窗口，后续需要跳转到指定密码框
+    void openKylinm();
 
-    inline void setSwitchBtnState(bool state) {
-        if (m_wifiSwitch != nullptr) {
-            m_wifiSwitch->blockSignals(true);
-            m_wifiSwitch->setChecked(state);
-            m_wifiSwitch->blockSignals(false);
-        }
-    }
-    inline bool getSwitchBtnState() {
-        if (m_wifiSwitch != nullptr) {
-            return m_wifiSwitch->isChecked();
-        }
-    }
+    void initSwtichState();
+    void setSwitchBtnEnable(bool state);
+    bool getSwitchBtnEnable();
+
+    void setSwitchBtnState(bool state);
+    bool getSwitchBtnState();
     bool LaunchApp(QString desktopFile);
+
+    void showNoDeiceInfo(bool visible,QString text);
+    bool getWirelessSwitchBtnState();
+    void setSwitchStatus();
+
+    QMap<QString,QVariant> getModuleHideStatus();
+    bool wlanAdvancedSettings();
 
 protected:
     bool eventFilter(QObject *w,QEvent *e);
@@ -174,6 +165,10 @@ private:
 
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
+
+    QMap<QString, QList<QStringList>> getWirelessList();
+    QLabel *m_wirelessNoDeviceLabel=nullptr;
+    QLabel *m_wirelessNoDeviceIconLabel=nullptr;
 private:
     KSwitchButton      *m_wifiSwitch;
     bool               m_firstLoad;
@@ -192,6 +187,6 @@ private slots:
 
     void reScan();
 
-
+    void switchStatusChanged(bool status);
 };
 #endif // WLANCONNECT_H

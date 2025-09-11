@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 //#include "mainwindow.h"
 #include "mainwindow.h"
-#include "dbusadaptor.h"
+#include "dbus.h"
 #include <QTranslator>
 #include <QLocale>
 #include "qt-single-application.h"
@@ -130,23 +130,30 @@ int main(int argc, char *argv[])
     parser.addOptions({swOption,snOption});
     parser.process(a);
 
+    QString display;
+    QString sessionType;
+    if(QString(getenv("XDG_SESSION_TYPE")) == "wayland") {
+        sessionType = "wayland";
+        display = getenv("WAYLAND_DISPLAY");
+    } else {
+        sessionType = "x11";
+        display = getenv("DISPLAY");
+    }
+    qDebug() << sessionType << display;
+    qApp->setProperty("sessionType", sessionType);
+
     QDBusInterface interface("com.kylin.network",
                              "/com/kylin/network",
                              "com.kylin.network",
                              QDBusConnection::sessionBus());
-    if(interface.isValid()) {
-        if (parser.isSet(swOption))
-        {
-            interface.call(QStringLiteral("showKylinNM"), 1);
-        } else if (parser.isSet(snOption)){
-            interface.call(QStringLiteral("showKylinNM"), 0);
-        } else {
-            const QString serviceName = "com.kylin.network";
-            QDBusConnectionInterface *interface1 = QDBusConnection::sessionBus().interface();
-            QDBusReply<uint> pid = interface1->servicePid(serviceName);
-            qDebug() << "current display " << getenv("DISPLAY") << QApplication::applicationPid()
-                     << "exist kylin-nm display" << displayFromPid(pid.value());
-            if (getenv("DISPLAY") == displayFromPid(pid.value())) {
+
+    if (a.isRunning()) {
+        if(interface.isValid()) {
+            if (parser.isSet(swOption)) {
+                interface.call(QStringLiteral("showKylinNM"), 1);
+            } else if (parser.isSet(snOption)) {
+                interface.call(QStringLiteral("showKylinNM"), 0);
+            } else {
                 interface.call(QStringLiteral("showKylinNM"), 2);
             }
         }
@@ -165,7 +172,7 @@ int main(int argc, char *argv[])
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     qDebug() << "QLocale " << QLocale();
-    if (trans_global.load(QLocale(), "kylin-nm", "_", "/usr/share/kylin-nm/"))
+    if (trans_global.load(QLocale(), "kylin-nm", "_", "/usr/share/kylin-nm/kylin-nm/"))
     {
         a.installTranslator(&trans_global);
         qDebug()<<"Translations load success";
@@ -195,7 +202,7 @@ int main(int argc, char *argv[])
         ::usleep(1000);
     }
 
-    MainWindow w;
+    MainWindow w(display, nullptr);
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
     a.setWindowIcon(QIcon::fromTheme("kylin-network"));
@@ -207,13 +214,11 @@ int main(int argc, char *argv[])
 //    window_hints.decorations = MWM_DECOR_BORDER;
 //    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
 
-    DbusAdaptor adaptor(&w);
-    Q_UNUSED(adaptor);
+//    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint /*| Qt::X11BypassWindowManagerHint*/);
 
-    auto connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
-        qCritical() << "QDbus register service failed reason:" << connection.lastError();
-    }
+
+    DbusAdaptor adaptor(display, &w);
+    Q_UNUSED(adaptor);
 
     return a.exec();
 }

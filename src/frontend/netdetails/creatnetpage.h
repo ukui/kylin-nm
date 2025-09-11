@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -33,6 +33,7 @@
 
 #include "coninfo.h"
 #include "multiplednswidget.h"
+#include "klabel.h"
 
 class CreatNetPage : public QFrame
 {
@@ -41,9 +42,12 @@ public:
     CreatNetPage(QWidget *parent = nullptr);
 
     void constructIpv4Info(KyConnectSetting &setting);
+
     void startLoading();
     void stopLoading();
     void showIpv4AddressConflict(bool isConflict);
+
+    QString getErrorMessage();
 private:
     LineEdit *connNameEdit;
     QComboBox *ipv4ConfigCombox;
@@ -59,8 +63,8 @@ private:
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
 
-    QLabel *m_addressHintLabel;
-    QLabel *m_maskHintLabel;
+    KLabel *m_addressHintLabel;
+    KLabel *m_maskHintLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
 
@@ -70,16 +74,17 @@ private:
     int m_currentIconIndex =0;
 
     QLabel *m_iconLabel;
-    QLabel *m_textLabel;
+    KLabel *m_textLabel;
 
 private:
+    QString m_errorMessage;
+
     void initUI();
     void initComponent();
     void setLineEnabled(bool check);
     void configSave();
     bool getTextEditState(QString text);
     bool checkConnectBtnIsEnabled();
-
     void initConflictHintLable();
     void initLoadingIcon();
 

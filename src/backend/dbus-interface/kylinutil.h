@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@ QString getConnectTypeByDbus(QString &connectPath);
 QString getSsidFromByteArray(QByteArray &rawSsid);
 void setWiredEnabledByGDbus(bool enabled);
 void setDeviceManagedByGDbus(QString dbusPath, bool managed);
+QString getConnectivityCheckSpareUriByGDbus();
+void setConnectivityCheckSpareUriByGDbus(QString str);
 bool getWiredEnabledByGDbus();
 
 #endif // KYLINUTIL_H

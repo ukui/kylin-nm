@@ -43,14 +43,14 @@
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="159"/>
+        <location filename="../netconnect.cpp" line="220"/>
         <source>open</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="156"/>
+        <location filename="../netconnect.cpp" line="217"/>
         <source>Advanced settings</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
@@ -66,26 +66,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="83"/>
-        <location filename="../netconnect.cpp" line="157"/>
+        <location filename="../netconnect.cpp" line="86"/>
+        <location filename="../netconnect.cpp" line="218"/>
+        <location filename="../netconnect.cpp" line="221"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="455"/>
-        <location filename="../netconnect.cpp" line="905"/>
+        <location filename="../netconnect.cpp" line="513"/>
+        <location filename="../netconnect.cpp" line="966"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="457"/>
-        <location filename="../netconnect.cpp" line="757"/>
-        <location filename="../netconnect.cpp" line="915"/>
+        <location filename="../netconnect.cpp" line="515"/>
+        <location filename="../netconnect.cpp" line="818"/>
+        <location filename="../netconnect.cpp" line="976"/>
         <source>not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="534"/>
+        <location filename="../netconnect.cpp" line="595"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

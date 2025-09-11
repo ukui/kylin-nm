@@ -1,6 +1,6 @@
 ﻿/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,8 +48,8 @@ using namespace kdk;
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 
 #define MAX_ITEMS 4
-#define MAX_WIDTH 412
-#define MIN_WIDTH 404
+#define MAX_WIDTH 400
+#define MIN_WIDTH 400
 
 #define SCROLL_STEP 4
 

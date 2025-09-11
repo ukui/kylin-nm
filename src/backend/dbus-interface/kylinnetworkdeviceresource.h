@@ -1,10 +1,10 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
- * Copyright (C) 2023, KylinSoft Co., Ltd.
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -46,6 +46,7 @@ Q_SIGNALS:
     void deviceActiveChanage(QString deviceName, bool deivceActive);
     void deviceManagedChange(QString deviceName, bool managed);
     void stateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
+    void deviceConnectivityChanged(QString deviceName, const NetworkManager::Connectivity connectivity);
 
 public Q_SLOTS:
     void onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);

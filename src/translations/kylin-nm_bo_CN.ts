@@ -177,11 +177,11 @@
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">首选 DNS</translation>
+        <translation>སྔོན་གྲབས་DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">备选 DNS</translation>
+        <translation>ཚབ་བྱེད་རང་བཞིན་གྱི་DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
@@ -590,7 +590,7 @@
     <name>EnterpriseWlanDialog</name>
     <message>
         <source>Connect Enterprise WLAN</source>
-        <translation type="vanished">连接企业网</translation>
+        <translation>ཁེ་ལས་WLANས སྦྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
         <source>Close</source>
@@ -626,19 +626,19 @@
     <name>FirewallDialog</name>
     <message>
         <source>Allow your computer to be discovered by other computers and devices on this network？</source>
-        <translation type="vanished">是否允许你的电脑被此网络上的其他电脑和设备发现？</translation>
+        <translation>ཁྱོད་ཀྱི་གློག་ཀླད་དེ་དྲ་རྒྱའི་སྟེང་གི་གློག་ཀླད་དང་སྒྲིག་ཆས་གཞན་དག་གིས་རྙེད་ཐུབ་བམ།?</translation>
     </message>
     <message>
         <source>It is recommended that you enable this feature on your home and work networks rather than public networks.</source>
-        <translation type="vanished">建议你在家庭和工作网络上而非公共网络上启用此功能。</translation>
+        <translation>ཁྱེད་ཀྱིས་ཁྱིམ་ཚང་དང་བྱ་བའི་དྲ་རྒྱའི་སྟེང་ནས་སྤྱི་སྤྱོད་མིན་པའི་དྲ་རྒྱའི་སྟེང་ནས་བྱེད་ནུས་འདི་སྤྱོད་རྒྱུའི་གྲོས་འགོ་བཏོན།.</translation>
     </message>
     <message>
         <source>Yse</source>
-        <translation type="vanished">是</translation>
+        <translation>དེ་ནི་རེད།</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="vanished">否</translation>
+        <translation>དེ་ལྟར་མ་བྱས་</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
@@ -685,11 +685,11 @@
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">首选 DNS</translation>
+        <translation>སྔོན་གྲབས་DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">备选 DNS</translation>
+        <translation>ཚབ་བྱེད་རང་བཞིན་གྱི་DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="120"/>
@@ -762,11 +762,11 @@
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">首选 DNS</translation>
+        <translation>སྔོན་གྲབས་DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">备选 DNS</translation>
+        <translation>ཚབ་བྱེད་རང་བཞིན་གྱི་DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
@@ -824,7 +824,7 @@
     </message>
     <message>
         <source>Remember the Network</source>
-        <translation type="vanished">记住该网络</translation>
+        <translation>དྲ་རྒྱ་དེ་སེམས་ལ་འཛིན་དགོས།</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="146"/>
@@ -942,7 +942,7 @@
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
-        <translation type="vanished">有线网络已断开</translation>
+        <translation>སྐུད་ཡོད་དྲ་བ་ཆད་སོང་།</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1315"/>
@@ -951,7 +951,7 @@
     </message>
     <message>
         <source>LAN Connected Successfully</source>
-        <translation type="vanished">有线网络已连接</translation>
+        <translation>སྐུད་ཡོད་དྲ་བ་སྦྲེལ་ཡོད།</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1425"/>
@@ -1005,7 +1005,7 @@
     </message>
     <message>
         <source>Show MainWindow</source>
-        <translation type="vanished">打开网络工具</translation>
+        <translation>རླུང་གཙོ་བོ་མངོན་པར་བྱས་ཡོད།</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="478"/>
@@ -1150,19 +1150,19 @@
     </message>
     <message>
         <source>start check ipv4 address conflict</source>
-        <translation type="vanished">开始检测 ipv4 地址冲突</translation>
+        <translation>IPv4ས་གནས་ཀྱི་འགལ་བ་ལ་ཞིབ་བཤེར་བྱེད་འགོ་ཚུགས།</translation>
     </message>
     <message>
         <source>start check ipv6 address conflict</source>
-        <translation type="vanished">开始检测 ipv6 地址冲突</translation>
+        <translation>IPv6གནས་ཡུལ་དང་འགལ་བར་ཞིབ་བཤེར་བྱེད་འགོ་ཚུགས།</translation>
     </message>
     <message>
         <source>ipv4 address conflict!</source>
-        <translation type="vanished">ipv4地址冲突！</translation>
+        <translation>ipv4ཐག་གཅོད་གདོང་གཏུག་བྱུང་བ་རེད།!</translation>
     </message>
     <message>
         <source>ipv6 address conflict!</source>
-        <translation type="vanished">ipv6地址冲突！</translation>
+        <translation>ipv6ཐག་གཅོད་གདོང་གཏུག་བྱུང་བ་རེད།!</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1231"/>
@@ -1498,7 +1498,7 @@
     </message>
     <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="vanished">CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+        <translation>CA དཔང་ཡིག (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
@@ -1544,7 +1544,7 @@
     </message>
     <message>
         <source>PAC Files (*.pac)</source>
-        <translation type="vanished">PAC 文件(*.pac)</translation>
+        <translation>PACཡིག་ཆ།(*.pac)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
@@ -1589,7 +1589,7 @@
     <name>VpnPage</name>
     <message>
         <source>Wired Device not carried</source>
-        <translation type="obsolete">未插入网线</translation>
+        <translation>སྐུད་ཡོད་སྒྲིག་ཆས་འཁྱེར་མེད་པ།</translation>
     </message>
 </context>
 <context>
@@ -1767,7 +1767,7 @@
     </message>
     <message>
         <source>(Limited)</source>
-        <translation type="vanished">(网络受限)</translation>
+        <translation>(དྲ་བར་ཚོད་འཛིན་ཐེབས་པ་རེད།)</translation>
     </message>
 </context>
 <context>

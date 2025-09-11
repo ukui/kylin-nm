@@ -204,10 +204,8 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
 {
     qDebug() << "dddname: " << deviceName << "   info:" << lanInfo;
     QStringList devList = m_deviceList.keys();
-    if (deviceName.isEmpty())
-    {
-        for (int i = 0; i < devList.count(); i++)
-        {
+    if (deviceName.isEmpty()) {
+        for (int i = 0; i < devList.count(); i++) {
             //连接不属于任何设备,任何设备均需要添加该连接
             if (!m_deviceList.value(devList.at(i))->containsConnection(lanInfo.at(1))) {
                 NetDevicePtr dev = m_deviceList.take(devList.at(i));
@@ -218,12 +216,11 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
 
             //连接不属于任何设备,且修改属性
             NetDevicePtr dev = m_deviceList.take(devList.at(i));
-            bool status = false;
+            int status = DEACTIVATED;
             QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
             if(valueMap.value("State").toInt()
-                    && valueMap.value("Uuid").toString() == lanInfo.at(1))
-            {
-                status = true;
+                    && valueMap.value("Uuid").toString() == lanInfo.at(1)) {
+                status =  lanInfo.at(4).toInt();
             }
             dev->removeConnection(lanInfo.at(2));
             dev->addConnection(makeConnectionMap(status, lanInfo));
@@ -253,13 +250,12 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
 
         //连接被修改了名称
         NetDevicePtr dev = m_deviceList.take(devList.at(i));
-        bool status = false;
+        int status = DEACTIVATED;
         QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
 
         if(valueMap.value("State").toInt()
-                && valueMap.value("Uuid").toString() == lanInfo.at(1))
-        {
-            status = true;
+                && valueMap.value("Uuid").toString() == lanInfo.at(1)) {
+            status = lanInfo.at(4).toInt();
         }
         dev->removeConnection(lanInfo.at(2));
         dev->addConnection(makeConnectionMap(status, lanInfo));

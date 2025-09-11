@@ -177,11 +177,11 @@
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">首选 DNS</translation>
+        <translation>ᠳᠡᠷᠢᠬᠦᠨ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">备选 DNS</translation>
+        <translation>ᠪᠡᠯᠡᠳᠬᠡᠯ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
@@ -590,7 +590,7 @@
     <name>EnterpriseWlanDialog</name>
     <message>
         <source>Connect Enterprise WLAN</source>
-        <translation type="vanished">连接企业网</translation>
+        <translation>ᠠᠵᠤ ᠠᠬᠤᠢᠯᠠᠯ ᠤ᠋ᠨ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠴᠦᠷᠬᠡᠯᠡᠬᠦ</translation>
     </message>
     <message>
         <source>Close</source>
@@ -685,11 +685,11 @@
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">首选 DNS</translation>
+        <translation>ᠳᠡᠷᠢᠬᠦᠨ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">备选 DNS</translation>
+        <translation>ᠪᠡᠯᠡᠳᠬᠡᠯ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="120"/>
@@ -709,7 +709,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="249"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation>IPv4 netMaassk ᠨᠢ ᠬᠣᠭᠣᠰᠣᠨ ᠪᠤᠶᠤ ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠃</translation>
+        <translation>IPv4 ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠬᠠᠯᠬᠠᠯᠠᠬᠤ ᠨᠣᠮᠧᠷ ᠨᠢ ᠬᠣᠭᠣᠰᠣᠨ ᠪᠤᠶᠤ ᠬᠦᠴᠦᠨ ᠦᠭᠡᠢ ᠃</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="255"/>
@@ -762,11 +762,11 @@
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">首选 DNS</translation>
+        <translation>ᠳᠡᠷᠢᠬᠦᠨ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">备选 DNS</translation>
+        <translation>ᠪᠡᠯᠡᠳᠬᠡᠯ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
@@ -942,7 +942,7 @@
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
-        <translation type="vanished">有线网络已断开</translation>
+        <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠨᠢᠭᠡᠨᠳᠡ ᠳᠠᠰᠤᠯᠪᠠ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1315"/>
@@ -951,7 +951,7 @@
     </message>
     <message>
         <source>LAN Connected Successfully</source>
-        <translation type="vanished">有线网络已连接</translation>
+        <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠨᠢᠭᠡᠨᠳᠡ ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1425"/>
@@ -1005,7 +1005,7 @@
     </message>
     <message>
         <source>Show MainWindow</source>
-        <translation type="vanished">打开网络工具</translation>
+        <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠪᠠᠭᠠᠵᠢ ᠵᠢ ᠨᠡᠬᠡᠬᠡᠬᠦ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="478"/>
@@ -1150,19 +1150,19 @@
     </message>
     <message>
         <source>start check ipv4 address conflict</source>
-        <translation type="vanished">开始检测 ipv4 地址冲突</translation>
+        <translation>IPv4 ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠢ᠋ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠡᠬᠢᠯᠡᠪᠡ</translation>
     </message>
     <message>
         <source>start check ipv6 address conflict</source>
-        <translation type="vanished">开始检测 ipv6 地址冲突</translation>
+        <translation>IPv6 ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠢ᠋ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠡᠬᠢᠯᠡᠪᠡ</translation>
     </message>
     <message>
         <source>ipv4 address conflict!</source>
-        <translation type="vanished">ipv4地址冲突！</translation>
+        <translation>ipv4 ᠬᠠᠶᠢᠭ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠲᠠᠢ!</translation>
     </message>
     <message>
         <source>ipv6 address conflict!</source>
-        <translation type="vanished">ipv6地址冲突！</translation>
+        <translation>ipv6 ᠬᠠᠶᠢᠭ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠲᠠᠢ!</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1231"/>
@@ -1498,7 +1498,7 @@
     </message>
     <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="vanished">CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+        <translation>CA ᠬᠡᠷᠡᠴᠢᠯᠡᠯ (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
@@ -1544,7 +1544,7 @@
     </message>
     <message>
         <source>PAC Files (*.pac)</source>
-        <translation type="vanished">PAC 文件(*.pac)</translation>
+        <translation>PAC ᠹᠠᠢᠯ (*.pac)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
@@ -1767,7 +1767,7 @@
     </message>
     <message>
         <source>(Limited)</source>
-        <translation type="vanished">(网络受限)</translation>
+        <translation>( ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠭᠳᠠᠪᠠ)</translation>
     </message>
 </context>
 <context>

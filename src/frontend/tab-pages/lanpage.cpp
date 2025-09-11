@@ -1074,8 +1074,12 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
 void LanPage::sendLanUpdateSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
-    info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath
-         << (m_connectResourse->isPppoeConnection(p_connectItem->m_connectUuid) ? "1" : "0");
+    info << p_connectItem->m_connectName
+         << p_connectItem->m_connectUuid
+         << p_connectItem->m_connectPath
+         << (m_connectResourse->isPppoeConnection(p_connectItem->m_connectUuid) ? "1" : "0")
+         << QString::number(m_connectResourse->getActiveConnectionState(p_connectItem->m_connectUuid));
+
     Q_EMIT lanUpdate(p_connectItem->m_ifaceName, info);
 
     return;

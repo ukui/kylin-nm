@@ -253,6 +253,15 @@ external_ui_from_child_response (VpnSecretsInfo *info, GError **error)
     /* If there are any secrets that must be asked to user,
      * create a dialog and display it. */
     if (num_ask > 0) {
+        /* In external UI mode, avoid spawning GTK dialog inside Qt app to prevent crashes.
+         * Defer to upper layer to collect secrets or cancel gracefully. */
+        if (req_data->external_ui_mode) {
+            g_set_error_literal (error,
+                                 NM_SECRET_AGENT_ERROR,
+                                 NM_SECRET_AGENT_ERROR_USER_CANCELED,
+                                 "External UI mode enabled: skip GTK password dialog");
+            return FALSE;
+        }
         dialog = (NMAVpnPasswordDialog *) nma_vpn_password_dialog_new (title, message, NULL);
         g_object_ref_sink (dialog);
 

@@ -226,7 +226,7 @@ void MainWindow::firstlyStart()
     m_networkMode->initWirelessNetworkMode();
 
     //加载key ring
-    agent_init();
+    kylinAgentInit();
 }
 
 /**
@@ -1424,11 +1424,13 @@ void MainWindow::passwordConnect(QString devName, QString ssid, QString type, QS
 void MainWindow::keyRingInit()
 {
     agent_init();
+    qDebug()<<Q_FUNC_INFO<<__LINE__<<"agent_init!";
 }
 
 void MainWindow::keyRingClear()
 {
     agent_clear();
+    qDebug()<<Q_FUNC_INFO<<__LINE__<<"agent_clear!";
 }
 
 void MainWindow::onShowKylinNMSlot(QString display, int type)
@@ -1472,6 +1474,52 @@ void MainWindow::showControlCenter()
         process.startDetached("ukui-control-center -m netconnect");
     }
 }
+
+/*弹窗时机应该自洽，原方案两个包之间会通过dbus交互，登录锁屏前端容易崩，直接使用后端锁屏与否的信号来决定是否在桌面注册弹窗*/
+void MainWindow::kylinAgentInit()
+{
+    bool lockState = false;
+
+    QDBusInterface dbusInterface("org.ukui.ScreenSaver",
+                                 "/",
+                                 "org.ukui.ScreenSaver",
+                                 QDBusConnection::sessionBus());
+    if (!dbusInterface.isValid()) {
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+        lockState=false;
+    } else {
+        dbusInterface.setTimeout(2000);
+        QDBusMessage result = dbusInterface.call("GetLockState");
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[mainwindow]GetLockState error:" << result.errorMessage();
+            lockState=false;
+        } else {
+            lockState = result.arguments().at( 0 ).toBool();
+        }
+    }
+
+    if(lockState) {
+        keyRingClear();
+    } else {
+        keyRingInit();
+    }
+
+    QDBusConnection::sessionBus().connect("org.ukui.ScreenSaver",
+                                          "/",
+                                          "org.ukui.ScreenSaver",
+                                          "lock",
+                                          this,
+                                          SLOT(keyRingClear()));
+
+    QDBusConnection::sessionBus().connect("org.ukui.ScreenSaver",
+                                          "/",
+                                          "org.ukui.ScreenSaver",
+                                          "unlock",
+                                          this,
+                                          SLOT(keyRingInit()));
+    qDebug()<<Q_FUNC_INFO<<__LINE__<<"kylin agent init success!"<<lockState;
+}
+
 
 /*禁止双跨连接断开优先级排序
  * 有线>无线 后面拓展

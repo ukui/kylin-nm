@@ -79,6 +79,10 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_waitTimer = new QTimer(this);
     connect(m_waitTimer, &QTimer::timeout, this, &VpnItem::updateIcon);
 
+    m_iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    m_titileLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    m_statusLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
     connect(m_connectAction, &QAction::triggered, this, &VpnItem::onConnectTriggered);
     connect(m_deleteAction, &QAction::triggered, this, &VpnItem::onDeletetTriggered);
     connect(m_moreButton, &QPushButton::clicked, this, &VpnItem::onMoreButtonClicked);

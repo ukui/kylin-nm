@@ -13,12 +13,6 @@ RestartSec=5
 User=root
 Group=root
 
-# Security settings
-NoNewPrivileges=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=/etc/var
-
 [Install]
 WantedBy=multi-user.target
 

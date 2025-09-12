@@ -975,7 +975,7 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="181"/>
         <source>Kylin NM</source>
-        <translation>ཅིན་ལིན་NM</translation>
+        <translation>ཅིན་ལིན་</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="184"/>
@@ -1058,7 +1058,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="130"/>
         <source>Kylin NM</source>
-        <translation>ཅིན་ལིན་NM</translation>
+        <translation>ཅིན་ལིན་</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="133"/>
@@ -1572,7 +1572,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="421"/>
         <source>Kylin NM</source>
-        <translation>ཅིན་ལིན་NM</translation>
+        <translation>ཅིན་ལིན་</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="424"/>

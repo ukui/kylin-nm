@@ -261,20 +261,23 @@ ListView {
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 8
                             Layout.bottomMargin: 0
+                            Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)  // 限制最大宽度，为其他元素预留空间
+                            Layout.maximumWidth: listItem.width - 250  // 确保不会挤压其他元素
                             text: model.ssid
                             elide: Text.ElideRight
                         }
 
                         Rectangle {
                             id: roundedRect
+                            Layout.alignment: Qt.AlignLeft
                             Layout.bottomMargin: 0
+                            width: textMetrics.tightBoundingRect.width + 6
+                            height: textMetrics.tightBoundingRect.height + 6
 
                             // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
                             property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
 
                             color: "transparent"
-                            width: textMetrics.tightBoundingRect.width + 6
-                            height: textMetrics.tightBoundingRect.height + 6
                             radius: 4
 
                             border {

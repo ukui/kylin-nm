@@ -219,7 +219,7 @@ void KnmInterface::rebuildCurrentWirelessList()
         QMap<QString, NetDevicePtr>devMap=KNMDC::getInstance()->wirelessDeviceList();
         if(!devMap.isEmpty()) m_currentWirelessDevice=devMap.first()->devName();
         qWarning() << Q_FUNC_INFO <<__LINE__ << "set currentdevice"<<m_currentWirelessDevice;
-     }
+    }
     m_wirelessDevConnList.clear();
     m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(m_currentWirelessDevice);
     mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
@@ -436,7 +436,7 @@ bool KnmInterface::getCableStatusByDev(const QString &devName)
     return false;
 }
 
-QString KnmInterface::fontSize() 
+QString KnmInterface::fontSize()
 {
-    return m_fontSize; 
-}   
+    return m_fontSize;
+}

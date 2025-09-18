@@ -1530,6 +1530,8 @@ void LanPage::showBallonTip()
         m_netTip = nullptr;
     }
     m_netTip = new KBallonTip();
+    m_netTip->setWindowFlags(Qt::FramelessWindowHint);
+
     QPushButton *btn = new QPushButton(m_netTip);
     btn->setText(tr("Network Check"));
     connect(btn, &QPushButton::clicked, m_netTip, [=]() {

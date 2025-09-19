@@ -10,3 +10,7 @@ dpkg-divert --package kylin-nm  --rename --divert "$path2"".old" --add $path2
 
 path3="/usr/lib/`/usr/bin/dpkg-architecture -qDEB_TARGET_MULTIARCH`/ukui-control-center/libvpn.so"
 dpkg-divert --package kylin-nm  --rename --divert "$path3"".old" --add $path3
+
+
+pkill -f "kylin-nm-sysdbus" || true
+exit 0

@@ -268,6 +268,8 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
     setAutoConnect(connectionSettings,false);
+    // 保存autoconnect设置到配置文件
+    connectPtr->update(connectionSettings->toMap());
 
     return;
 }

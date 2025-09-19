@@ -158,7 +158,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation>IPv4 netMask 為空或無效</translation>
+        <translation>IPv4子網掩碼為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>

@@ -282,6 +282,7 @@ void WlanConnect::initComponent() {
     setSwitchStatus();
 
     initNet();
+    wlanComponnetSettings();
 
     if (!getSwitchBtnState() || deviceList.isEmpty() || !m_interface->isValid()) {
         hideLayout(ui->availableLayout);
@@ -307,8 +308,6 @@ void WlanConnect::initComponent() {
         UkccCommon::buriedSettings(QString("wlanconnect"), QString("Advanced settings"), QString("clicked"));
         runExternalApp();
     });
-
-    ui->detailBtn->setVisible(wlanAdvancedSettings());
 
     //定时20s扫描
     m_scanTimer = new QTimer(this);
@@ -426,7 +425,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
 
 void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category)
 {
-    qDebug() << "updateIcon" << item->titileLabel->text();
+    qDebug() << "updateIcon" << item->titileLabel->text()<<" security:"<<security;
 
     int sign = setSignal(signalStrength);
     bool isLock = true;
@@ -1265,19 +1264,25 @@ QMap<QString, QVariant> WlanConnect::getModuleHideStatus()
     return reply_res.value();
 }
 
-bool WlanConnect::wlanAdvancedSettings()
+void WlanConnect::wlanComponnetSettings()
 {
     QMap<QString,QVariant> configData = getModuleHideStatus();
-    if (configData.contains("wlanconnectSettings")) {
-        QString strWlanconnectSettings = configData["wlanconnectSettings"].toString();
-        if (strWlanconnectSettings.contains("wlanAdvanced")) {
-            if (strWlanconnectSettings.contains("wlanAdvanced:true")) {
-                return true;
-            } else {
-                qInfo() << Q_FUNC_INFO << __LINE__ << "wlanAdvanced:false";
-                return false ;
-            }
+    QString moduleSettings = configData.value("wlanconnectSettings").toString();
+    QStringList setItems = moduleSettings.split(",");
+
+    foreach (QString setItem, setItems) {
+        QStringList item = setItem.split(":");
+        if (item.at(0) == "wlanAdvanced") {
+            ui->detailBtn->setVisible(item.at(1) == "true");
         }
     }
-    return true;
+
+    QString moduleEnable = configData.value("wlanconnectEnable").toString();
+    QStringList enableItems = moduleEnable.split(",");
+    foreach (QString setItem, enableItems) {
+        QStringList item = setItem.split(":");
+        if (item.at(0) == "wlanAdvanced") {
+            ui->detailBtn->setEnabled(item.at(1) == "true");
+        }
+    }
 }

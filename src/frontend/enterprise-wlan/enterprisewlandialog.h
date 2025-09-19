@@ -29,7 +29,10 @@
 #include "kywirelessnetitem.h"
 #include "coninfo.h"
 
-class EnterpriseWlanDialog : public QWidget
+#include <kdialog.h>
+using namespace kdk;
+
+class EnterpriseWlanDialog : public KDialog
 {
     Q_OBJECT
 public:

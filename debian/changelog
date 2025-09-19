@@ -1,8 +1,17 @@
+kylin-nm (4.20.0.0-ok0.7) nile-sp2; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明:修改部分bug，更新上游代码；
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Fri, 19 Sep 2025 14:08:14 +0800
+
 kylin-nm (4.20.0.0-ok0.6) nile-sp2; urgency=medium
 
   * Bug号:无
   * 需求号:无
-  * 其他改动说明:同步v11-2603-preview代码
+  * 其他改动说明:更新上游代码
   * 其他改动影响域:无
 
  -- dengtuo <dengtuo@kylinos.cn>  Mon, 25 Aug 2025 15:33:28 +0800

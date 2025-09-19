@@ -80,30 +80,31 @@ void AddNetBtn::leaveEvent(QEvent *event){
 void AddNetBtn::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
 
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
+
     QRect rect = this->rect();
     QPainterPath path;
-    const qreal radius = 6.0;
 
-    if (m_cornerType == All) {
-        path.addRoundedRect(rect, radius, radius);
-    } else if (m_cornerType == BottomRight) {
-        // 只绘制右下两个圆角
-        path.moveTo(rect.topLeft());
-        path.lineTo(rect.topRight());
-        path.lineTo(rect.bottomRight() - QPointF(0, radius));
-        path.quadTo(rect.bottomRight(), rect.bottomRight() - QPointF(radius, 0));
-        path.lineTo(rect.bottomLeft() + QPointF(radius, 0));
-        path.quadTo(rect.bottomLeft(), rect.bottomLeft() - QPointF(0, radius));
-        path.lineTo(rect.topLeft());
-    } else {
-        path.addRect(rect);
-    }
+    //设置起点
+    path.moveTo(rect.topLeft().x(), rect.topLeft().y());
+    path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
+    //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
+    path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
+    path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
+    //画圆弧
+    path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
+    path.lineTo(rect.topRight());
+    path.lineTo(rect.topLeft());
 
-    painter.fillPath(path, this->palette().base().color());
+    painter.drawPath(path);
     QPushButton::paintEvent(event);
 }
 

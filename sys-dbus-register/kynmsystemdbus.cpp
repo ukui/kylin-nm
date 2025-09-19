@@ -32,21 +32,24 @@
 
 KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
 {
+    qDBusRegisterMetaType<QMap<QString, QString>>();
+
     QString switchSettingFile = "/etc/kylin-nm/netSwitch.conf";
     m_kylinNmSettings = new QSettings(switchSettingFile, QSettings::IniFormat);
     QStringList groups = m_kylinNmSettings->childGroups();
-    if (groups.indexOf("conf") == -1)
-    {
+    if (groups.indexOf("conf") == -1) {
         qDebug() << Q_FUNC_INFO << __LINE__;
         m_kylinNmSettings->beginGroup("conf");
-        init_conf();
-    }
-    else
-    {
+        initConf();
+    } else {
         m_kylinNmSettings->beginGroup("conf");
-        init_conf();
+        initConf();
     }
-    qDBusRegisterMetaType<QMap<QString, QString>>();
+    // 检查开关状态，如果为false则断开有线设备
+    bool wiredMainSwitch = m_kylinNmSettings->value(KYLIN_NM_WIRED_MAIN_SWITCH).toBool();
+    if (!wiredMainSwitch) {
+        disconnectWiredDevices();
+    }
 }
 
 KynmSystemDbus::~KynmSystemDbus()
@@ -55,12 +58,48 @@ KynmSystemDbus::~KynmSystemDbus()
 }
 
 
-void KynmSystemDbus::init_conf()
+void KynmSystemDbus::initConf()
 {
     if (!m_kylinNmSettings->contains(KYLIN_NM_WIRED_MAIN_SWITCH))
         m_kylinNmSettings->setValue(KYLIN_NM_WIRED_MAIN_SWITCH, true);
 }
 
+void KynmSystemDbus::disconnectWiredDevices()
+{
+    qDebug() << Q_FUNC_INFO << "Starting wired device disconnection using NetworkManagerQt API";
+    try {
+        // 获取所有设备
+        NetworkManager::Device::List devices = NetworkManager::networkInterfaces();
+        qDebug() << Q_FUNC_INFO << "Found" << devices.size() << "network devices";
+
+        for (const NetworkManager::Device::Ptr &device : devices) {
+            // 检查是否为有线设备
+            if (device->type() == NetworkManager::Device::Ethernet) {
+                NetworkManager::WiredDevice::Ptr wiredDevice = device.staticCast<NetworkManager::WiredDevice>();
+
+                if (wiredDevice) {
+                    QString interfaceName = wiredDevice->interfaceName();
+                    qDebug() << Q_FUNC_INFO << interfaceName << wiredDevice->state();
+
+                    // 检查设备状态
+                    if (wiredDevice->state() >= NetworkManager::Device::Preparing &&
+                            wiredDevice->state() <= NetworkManager::Device::Activated) {
+                        qDebug() << Q_FUNC_INFO << "Disconnecting wired device:" << interfaceName;
+                        NetworkManager::deactivateConnection(wiredDevice->activeConnection()->path());
+                    }
+                    wiredDevice->setAutoconnect(false);
+                }
+            }
+        }
+
+        qDebug() << Q_FUNC_INFO << "Wired device disconnection process completed";
+
+    } catch (const std::exception &e) {
+        qWarning() << Q_FUNC_INFO << "Exception occurred:" << e.what();
+    } catch (...) {
+        qWarning() << Q_FUNC_INFO << "Unknown exception occurred";
+    }
+}
 bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ipv4Address, QStringList macList)
 {
 #if 0

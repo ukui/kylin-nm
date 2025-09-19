@@ -29,7 +29,6 @@
 #include <QGSettings>
 #include <QImage>
 #include <QPainter>
-#include <QToolButton>
 #include <QMenu>
 #include <QEvent>
 #include "klabel.h"
@@ -47,7 +46,7 @@ public:
     GrayInfoButton * m_infoLabel = nullptr;
     KLabel * m_titileLabel = nullptr;
     QLabel * m_statusLabel = nullptr;
-    QToolButton* m_moreButton = nullptr;
+    QPushButton* m_moreButton = nullptr;
     QMenu* m_moreMenu = nullptr;
     QAction* m_connectAction = nullptr;
     QAction* m_deleteAction = nullptr;
@@ -86,6 +85,7 @@ private slots:
     void updateIcon();
     void onConnectTriggered();
     void onDeletetTriggered();
+    void onMoreButtonClicked();
 
 Q_SIGNALS:
     void connectActionTriggered();

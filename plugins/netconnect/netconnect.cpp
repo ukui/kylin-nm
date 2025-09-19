@@ -140,6 +140,7 @@ QWidget *NetConnect::pluginUi() {
 
         initSearchText();
         initComponent();
+        netComponnetSettings();
     }
     return pluginWidget;
 }
@@ -1131,6 +1132,38 @@ void NetConnect::openKylinm()
                             "org.ukui.Sidebar",
                             QDBusConnection::sessionBus());
     sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
+}
+
+void NetConnect::netComponnetSettings()
+{
+    QDBusInterface m_interface( "org.ukui.ukcc.session",
+                               "/",
+                               "org.ukui.ukcc.session.interface",
+                               QDBusConnection::sessionBus());
+
+    QDBusReply<QVariantMap> reply = m_interface.call("getModuleHideStatus");
+    if (!reply.isValid()) {
+        qDebug()<<"execute dbus method getModuleHideStatus failed";
+    }
+    QMap<QString,QVariant> configData = reply.value();
+    QString moduleSettings = configData.value("netconnctSettings").toString();
+    QStringList setItems = moduleSettings.split(",");
+
+    foreach (QString setItem, setItems) {
+        QStringList item = setItem.split(":");
+        if (item.at(0) == "wlanAdvanced") {
+            ui->detailBtn->setVisible(item.at(1) == "true");
+        }
+    }
+
+    QString moduleEnable = configData.value("netconnctEnable").toString();
+    QStringList enableItems = moduleEnable.split(",");
+    foreach (QString setItem, enableItems) {
+        QStringList item = setItem.split(":");
+        if (item.at(0) == "wlanAdvanced") {
+            ui->detailBtn->setEnabled(item.at(1) == "true");
+        }
+    }
 }
 
 int NetConnect::getInsertPos(QString connName, QString deviceName)

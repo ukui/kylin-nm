@@ -13,6 +13,29 @@ ListView {
     visible: true
     model: KInterface.wirelessConLists
     spacing: 0
+    property int baseItemHeight: 56
+    property int expandedItemHeight: 145
+    Component.onCompleted: {
+        // map font size to heights (simple scaling)
+        function updateHeights(fontSize) {
+            var size = parseInt(fontSize)
+            if (!isNaN(size)) {
+                baseItemHeight = Math.round(56 * size / 10)
+                expandedItemHeight = Math.round(145 * size / 10)
+            }
+        }
+        updateHeights(KInterface.fontSize)
+    }
+    Connections {
+        target: KInterface
+        function onFontSizeChanged(fontSize) {
+            var size = parseInt(fontSize)
+            if (!isNaN(size)) {
+                wlanlistView.baseItemHeight = Math.round(56 * size / 10)
+                wlanlistView.expandedItemHeight = Math.round(145 * size / 10)
+            }
+        }
+    }
     property bool connectMac : false
     property int detailShowIndex : -1
     property var currentOpenMenu: null
@@ -42,9 +65,13 @@ ListView {
         id: listItem
         highlighted: enteritem && wlanlistView.currentIndex === index
         width: parent.width
-        height: 56
+        height: wlanlistView.baseItemHeight
         property bool enteritem : false
         property bool conConnected:   model.status === 2
+        property bool menuLoaded: false
+        property bool textEditLoaded: false
+        property bool pwdConnectBtnLoaded: false
+        property bool autoConnectCheckBoxLoaded: false
         onConConnectedChanged: {
             updateMacConnAttr(index, conConnected)
         }
@@ -55,12 +82,41 @@ ListView {
 
         function hideDetail() {
             if (textEditLayout.visible) {
-                listItem.height = 56
+                listItem.height = wlanlistView.baseItemHeight
                 textEditLayout.visible = false
             }
-            autoConnectCheckBox.visible = false
+            if (autoConnectCheckBoxLoader.item) {
+                autoConnectCheckBoxLoader.item.visible = false
+            }
         }
 
+        function loadMenu() {
+            if (!menuLoaded) {
+                menuLoader.active = true
+                menuLoaded = true
+            }
+        }
+
+        function loadTextEdit() {
+            if (!textEditLoaded) {
+                textEditLoader.active = true
+                textEditLoaded = true
+            }
+        }
+
+        function loadPwdConnectBtn() {
+            if (!pwdConnectBtnLoaded) {
+                pwdConnectBtnLoader.active = true
+                pwdConnectBtnLoaded = true
+            }
+        }
+
+        function loadAutoConnectCheckBox() {
+            if (!autoConnectCheckBoxLoaded) {
+                autoConnectCheckBoxLoader.active = true
+                autoConnectCheckBoxLoaded = true
+            }
+        }
 
         //嵌套MouseArea最好统一顶层调度
         MouseArea {
@@ -97,18 +153,24 @@ ListView {
                 mouse.accepted = false
 
                 if (model.status !== 2 ) {
-                    if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X") || model.security.includes("NONE") ) {
-                        listItem.height = 56
+                    console.log("model.security:", model.security, model.security.length)
+                    if (listItem.height == wlanlistView.expandedItemHeight ||  model.Configured || model.security.includes("802.1X") || !model.security) {
+                        listItem.height = wlanlistView.baseItemHeight
                     } else {
-                        listItem.height = 145
+                        listItem.height = wlanlistView.expandedItemHeight
                     }
 
                     if(textEditLayout.visible) {
-                        listItem.height = 56
+                        listItem.height = wlanlistView.baseItemHeight
                         textEditLayout.visible = false
                         connectBtn.visible = true
                     } else {
-                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && !model.security.includes("NONE"))
+                        // 动态加载textEdit和pwdConnectBtn
+                        if (!textEditLoaded) {
+                            loadTextEdit()
+                            loadPwdConnectBtn()
+                        }
+                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && model.security)
                         connectBtn.visible = !textEditLayout.visible
                     }
                 } else if ((model.status === 2) && (mouse.button == Qt.LeftButton) ) {
@@ -125,21 +187,28 @@ ListView {
                     } else if (model.status === 4) {
                         KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                     }
-
                     return
                 }
 
-                if(autoConnectCheckBox.visible) {
-                    autoConnectCheckBox.visible = false
+                if(autoConnectCheckBoxLoader.item && autoConnectCheckBoxLoader.item.visible) {
+                    autoConnectCheckBoxLoader.item.visible = false
                 } else if (model.status !== 2){
-                    autoConnectCheckBox.visible=(textEditLayout.visible || model.Configured)
+                    if (!autoConnectCheckBoxLoaded) {
+                        loadAutoConnectCheckBox()
+                    }
+                    autoConnectCheckBoxLoader.item.visible = (textEditLayout.visible || model.Configured)
                 }
 
                 if (mouse.button == Qt.LeftButton) {
-                    if(textEditLayout.visible)  textEdit.forceActiveFocus()
+                    if(textEditLayout.visible && textEditLoader.item) textEditLoader.item.forceActiveFocus()
                 } else if (mouse.button == Qt.RightButton) {
-                    propertyMenu.popup()
-                    wlanlistView.currentOpenMenu = propertyMenu;
+                    if (!menuLoaded) {
+                        loadMenu()
+                    }
+                    if (menuLoader.item) {
+                        menuLoader.item.popup()
+                        wlanlistView.currentOpenMenu = menuLoader.item;
+                    }
                 }
             }
         }
@@ -150,40 +219,45 @@ ListView {
             RowLayout {
                 id: itemRowLayout
 
-                Menu {
-                    id: propertyMenu
+                // 动态加载Menu
+                Loader {
+                    id: menuLoader
+                    active: false
+                    sourceComponent: Menu {
+                        id: propertyMenu
 
-                    MenuItem {//connect/disconnect
-                        text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
-                        onTriggered: {
-                            console.log("connect/disconnect network")
-                            typeicon.visible = false;
-                            loadingicon.visible = true;
-                            if (model.status === 2) {
-                                KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
-                            } else if (model.status === 4) {
-                                KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                        MenuItem {//connect/disconnect
+                            text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
+                            onTriggered: {
+                                console.log("connect/disconnect network")
+                                typeicon.visible = false;
+                                loadingicon.visible = true;
+                                if (model.status === 2) {
+                                    KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                                } else if (model.status === 4) {
+                                    KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                                }
                             }
                         }
-                    }
 
-                    MenuItem {//property
-                        text:qsTr("Network property")
-                        visible: model.status === 2
-                        onTriggered: {
-                            console.log("network property")
-                            console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
+                        MenuItem {//property
+                            text:qsTr("Network property")
+                            visible: model.status === 2
+                            onTriggered: {
+                                console.log("network property")
+                                console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
 
-                            KInterface.showPropertyWidget(wlanDeviceComboBox.currentText, model.ssid)
+                                KInterface.showPropertyWidget(wlanDeviceComboBox.currentText, model.ssid)
+                            }
                         }
-                    }
 
-                    MenuItem {
-                        text:qsTr("Forget the network")
-                        visible: model.status === 2
-                        onTriggered: {
-                            console.log("Forget the network",model.uuid)
-                            KInterface.deleteConnect(1,model.uuid)
+                        MenuItem {
+                            text:qsTr("Forget the network")
+                            visible: model.status === 2
+                            onTriggered: {
+                                console.log("Forget the network",model.uuid)
+                                KInterface.deleteConnect(1,model.uuid)
+                            }
                         }
                     }
                 }
@@ -237,19 +311,23 @@ ListView {
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 8
                             Layout.bottomMargin: 0
+                            Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)  // 限制最大宽度，为其他元素预留空间
+                            Layout.maximumWidth: listItem.width - 250  // 确保不会挤压其他元素
                             text: model.ssid
+                            elide: Text.ElideRight
                         }
 
                         Rectangle {
                             id: roundedRect
+                            Layout.alignment: Qt.AlignLeft
                             Layout.bottomMargin: 0
+                            width: textMetrics.tightBoundingRect.width + 6
+                            height: textMetrics.tightBoundingRect.height + 6
 
                             // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
-                            property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
+                            property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
 
                             color: "transparent"
-                            width: wlan_type === 0 ? 56 : wlan_type === 1 ? 24 : 34;
-                            height: 16
                             radius: 4
 
                             border {
@@ -257,9 +335,16 @@ ListView {
                                 width: 1
                             }
 
+                            TextMetrics {
+                                id: textMetrics
+                                font: dtThemeText.font
+                                text: dtThemeText.text
+                            }
+
                             UkuiItems.DtThemeText {
+                                id: dtThemeText
                                 anchors.centerIn: parent
-                                property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
+                                property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
                                 text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"
                                 textColor: Platform.GlobalTheme.kFontPlaceholderText
                             }
@@ -271,85 +356,105 @@ ListView {
                         id: textEditLayout
                         Layout.topMargin: 10
 
-                        TextField {
-                            id: textEdit
-                            width: 208
-                            height: 36
-                            Layout.leftMargin: 10
-                            echoMode: TextInput.Password
-                            property bool passMode: true
-                            property int textLength: textEdit.text.length
-                            onTextLengthChanged: {
-                                if(textLength>=8) {
-                                    pwdConnectBtn.enabled = true
-                                } else {
-                                    pwdConnectBtn.enabled = false
+                        // 动态加载TextField
+                        Loader {
+                            id: textEditLoader
+                            active: false
+                            sourceComponent: TextField {
+                                id: textEdit
+                                width: 208
+                                height: 36
+                                Layout.leftMargin: 10
+                                echoMode: TextInput.Password
+                                property bool passMode: true
+                                property int textLength: textEdit.text.length
+                                onTextLengthChanged: {
+                                    if(textLength>=8) {
+                                        if (pwdConnectBtnLoader.item) {
+                                            pwdConnectBtnLoader.item.enabled = true
+                                        }
+                                    } else {
+                                        if (pwdConnectBtnLoader.item) {
+                                            pwdConnectBtnLoader.item.enabled = false
+                                        }
+                                    }
+                                }
+                                onAccepted: {
+                                    typeicon.visible = false;
+                                    loadingicon.visible = true;
+
+                                    KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text,
+                                                               autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
                                 }
                             }
-                            onAccepted: {
-                                typeicon.visible = false;
-                                loadingicon.visible = true;
-
-                                KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text, autoConnectCheckBox.checkState)
-                            }
                         }
-                        Button {
-                            id: pwdConnectBtn
-                            highlighted: true
-                            //enabled: true
-                            width: 88
-                            height: 36
-                            Layout.rightMargin: 24
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                            text: qsTr("connect")
-                            onClicked: {
-                                typeicon.visible = false;
-                                loadingicon.visible = true;
+                        // 动态加载Button
+                        Loader {
+                            id: pwdConnectBtnLoader
+                            active: false
+                            sourceComponent: Button {
+                                id: pwdConnectBtn
+                                highlighted: true
+                                width: 88
+                                height: 36
+                                Layout.rightMargin: 24
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                text: qsTr("connect")
+                                onClicked: {
+                                    typeicon.visible = false;
+                                    loadingicon.visible = true;
 
-                                KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text, autoConnectCheckBox.checkState)
-                            }
+                                    KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security,
+                                                               textEditLoader.item ? textEditLoader.item.text : "",
+                                                               autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
+                                }
 
-                            Component.onCompleted: {
-                                pwdConnectBtn.enabled = (textEdit.textLength>=8 ? true : false)
+                                Component.onCompleted: {
+                                    pwdConnectBtn.enabled = (textEditLoader.item && textEditLoader.item.textLength>=8 ? true : false)
+                                }
                             }
                         }
                     }
                     RowLayout {
                         UkuiItems.DtThemeText {
                             visible: model.status === 2
-                            anchors.centerIn: parent
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.topMargin: 0
                             Layout.leftMargin: 12
 
                             text: {
                                 const signal = parseInt(model.signal);
                                 return signal > 80 ? qsTr("Connected,network is very good") :
-                                    signal > 55 ? qsTr("Connected,network is good") :
-                                    signal > 30 ? qsTr("Connected,network is average") :
-                                    signal > 5  ? qsTr("Connected,network weak") :
-                                                    qsTr("Connected,network is weak");
+                                                     signal > 55 ? qsTr("Connected,network is good") :
+                                                                   signal > 30 ? qsTr("Connected,network is average") :
+                                                                                 signal > 5  ? qsTr("Connected,network weak") :
+                                                                                               qsTr("Connected,network is weak");
                             }
 
                             textColor: Platform.GlobalTheme.kFontPlaceholderText
                             height: 16
+                            elide: Text.ElideRight
                         }
-                        CheckBox {
-                            id: autoConnectCheckBox
-                            Layout.alignment: Qt.AlignLeft
-                            width: 16
-                            height: 16
-                            visible: false
-                            Layout.leftMargin: 8
-                            Layout.topMargin: 0
-                            text: qsTr("AutoConnect")
-                            checked: true
-                            onClicked: {
-                                mouse.accepted = true
-                            }
+                        // 动态加载CheckBox
+                        Loader {
+                            id: autoConnectCheckBoxLoader
+                            active: false
+                            sourceComponent: CheckBox {
+                                id: autoConnectCheckBox
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                visible: false
+                                Layout.leftMargin: 8
+                                Layout.topMargin: 0
+                                text: qsTr("AutoConnect")
+                                checked: true
+                                onClicked: {
+                                    mouse.accepted = true
+                                }
 
-                            onVisibleChanged: {
-                                if (visible) {
-                                    updateShowDetailIndex(index)
+                                onVisibleChanged: {
+                                    if (visible) {
+                                        updateShowDetailIndex(index)
+                                    }
                                 }
                             }
                         }

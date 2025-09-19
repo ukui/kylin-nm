@@ -34,6 +34,7 @@ class KnmInterface : public QObject
     Q_PROPERTY(QString downwareRate READ downwareRateDate WRITE setDownwareRateData  NOTIFY updateDownLoadWiredStr)
     Q_PROPERTY(WirelessConnectionModel* wirelessConLists READ wirelessConLists NOTIFY wirelessConListChanged)
     Q_PROPERTY(bool cableStatus READ getCableStatus NOTIFY updateCable)
+    Q_PROPERTY(QString fontSize READ fontSize NOTIFY fontSizeChanged)
 
 public:
     KnmInterface();
@@ -117,6 +118,7 @@ public:
     ConnectStatus getConnectionStatus();
     bool getCableStatusByDev(const QString &devName);
     bool getCableStatus();
+    QString fontSize();
 
 signals:
     void updateWiredDeviceList();
@@ -145,6 +147,8 @@ signals:
 
     void updateCable(bool status);
 
+    void fontSizeChanged(QString fontSize);
+
 private:
     QVariantList m_wiredDevConnList;
 
@@ -162,6 +166,9 @@ private:
     QProcess * m_pProcess = nullptr;
     WirelessConnectionModel mWirelessConnecModel;//显示模型使用QAbstractListModel 可控制显示区域与数据变化。基于object的qvariantlist数据变化或项变化都会引起界面的全量更新
     friend class SingleTon<KnmInterface>;
+    
+    QString m_fontSize;
+    class QGSettings *m_fontSettings = nullptr;
 };
 
 typedef SingleTon<KnmInterface>  KInterface;

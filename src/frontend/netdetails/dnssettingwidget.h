@@ -7,10 +7,13 @@
 #include <QComboBox>
 #include <QDBusInterface>
 #include <QPushButton>
+#include <kdialog.h>
 
 #include "divider.h"
 
-class DnsSettingWidget : public QDialog
+using namespace kdk;
+
+class DnsSettingWidget : public KDialog
 {
     Q_OBJECT
 public:
@@ -42,7 +45,6 @@ private:
 
     Divider *m_bottomDivider = nullptr;
 
-    QPushButton *m_closeBtn;
     QPushButton *m_cancelBtn;
     QPushButton *m_confirmBtn;
 

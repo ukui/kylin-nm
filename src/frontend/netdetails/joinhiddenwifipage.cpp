@@ -249,7 +249,12 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
 
 void JoinHiddenWiFiPage::onBtnShowListClicked()
 {
-    Q_EMIT showWlanList(1); //WLAN_PAGE_INDEX
+    QDBusInterface sidebarIfc("org.ukui.Sidebar",
+                              "/org/ukui/Sidebar",
+                              "org.ukui.Sidebar",
+                              QDBusConnection::sessionBus());
+    sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
+
 }
 
 void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)

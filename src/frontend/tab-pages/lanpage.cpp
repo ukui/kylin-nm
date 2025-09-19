@@ -1074,8 +1074,12 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
 void LanPage::sendLanUpdateSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
-    info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath
-         << (m_connectResourse->isPppoeConnection(p_connectItem->m_connectUuid) ? "1" : "0");
+    info << p_connectItem->m_connectName
+         << p_connectItem->m_connectUuid
+         << p_connectItem->m_connectPath
+         << (m_connectResourse->isPppoeConnection(p_connectItem->m_connectUuid) ? "1" : "0")
+         << QString::number(m_connectResourse->getActiveConnectionState(p_connectItem->m_connectUuid));
+
     Q_EMIT lanUpdate(p_connectItem->m_ifaceName, info);
 
     return;
@@ -1324,7 +1328,7 @@ void LanPage::onLanStateChanged(NetworkManager::Device::State newstate, NetworkM
     if (newstate == NetworkManager::Device::Failed) {
         if (reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason) {
             if (!m_showedNetTipFlag) {
-                //showBallonTip();//暂时屏蔽这里，热点第一次打开时会触发这个弹窗。轻量级弹窗需要同步后端的reason code所以可以暂时屏蔽不影响
+                showBallonTip();
                 m_showedNetTipFlag = true;
             }
         }
@@ -1526,6 +1530,8 @@ void LanPage::showBallonTip()
         m_netTip = nullptr;
     }
     m_netTip = new KBallonTip();
+    m_netTip->setWindowFlags(Qt::FramelessWindowHint);
+
     QPushButton *btn = new QPushButton(m_netTip);
     btn->setText(tr("Network Check"));
     connect(btn, &QPushButton::clicked, m_netTip, [=]() {

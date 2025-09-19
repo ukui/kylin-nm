@@ -310,8 +310,7 @@ void MultipleDnsWidget::showDnsSettingWidget()
     retry = !originRetry.isEmpty() ? map.value(STR_ATTEMPTS).toString() : "2";
     tactic = !originType.isEmpty() ? map.value(STR_TYPE).toString() : "order";
 
-    DnsSettingWidget* dialog = new DnsSettingWidget(timeout, retry, tactic);
-    kdk::UkuiStyleHelper::self()->removeHeader(dialog);
+    DnsSettingWidget* dialog = new DnsSettingWidget(timeout, retry, tactic, this);
     if (dialog->exec() == QDialog::Accepted) {
         QString timeout, retry, tactic;
         dialog->getDnsSettings(timeout, retry, tactic);

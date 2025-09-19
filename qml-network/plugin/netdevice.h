@@ -51,6 +51,8 @@ public:
 
     void clearConnections();
 
+    QMap<QString, QVariant> updateConnectivity(QString uuid, int status, int connectivity);
+
 private:
     QString     m_Name;
     bool        m_Available;

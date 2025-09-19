@@ -129,6 +129,8 @@ private:
     // 打卡托盘网络窗口，后续需要跳转到指定密码框
     void openKylinm();
 
+    void netComponnetSettings();
+
     bool LaunchApp(QString desktopFile);
 
     bool isExitWiredDevice();

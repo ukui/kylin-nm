@@ -141,3 +141,28 @@ QMap<QString, QVariant> NetDevice::getConnectionByName(QString connName)
     }
     return ret;
 }
+
+QMap<QString, QVariant> NetDevice::updateConnectivity(QString uuid, int status, int connectivity)
+{
+    int i = 0;
+    QMap<QString, QVariant> conn;
+    while (i < m_connectionsList.count()) {
+        QMap<QString, QVariant> valueMap = m_connectionsList.at(i).toMap();
+        if (valueMap.value("Uuid").toString() == uuid) {
+            conn = m_connectionsList.takeAt(i).toMap();
+            conn.remove("State");
+            conn.insert("State", status);
+            conn.remove("Connectivity");
+            conn.insert("Connectivity", connectivity);
+            
+            if (status == ACTIVATED) {
+                m_connectionsList.push_front(conn);
+            } else {
+                m_connectionsList.insert(i, conn);
+            }
+            break;
+        }
+        i++;
+    }
+    return conn;
+}

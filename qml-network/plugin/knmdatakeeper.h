@@ -9,6 +9,7 @@
 #include <QList>
 #include <QStringList>
 #include <QTimer>
+#include <QtCore/qglobal.h>
 
 #include "netdevice.h"
 

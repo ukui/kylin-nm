@@ -25,6 +25,7 @@ signals:
 
 private:
     QMap<QString, QVariant> makeConnectionMap(int status, QStringList conPath);
+    bool isDslConnection(const QString &uuid);
 
 private slots:
     //已激活连接状态更新

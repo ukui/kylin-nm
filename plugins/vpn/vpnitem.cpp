@@ -136,7 +136,7 @@ void VpnItem::onDeletetTriggered()
 void VpnItem::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setRenderHint(QPainter::Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
 
@@ -147,30 +147,23 @@ void VpnItem::paintEvent(QPaintEvent *event)
     this->setPalette(pal);
 
     QRect rect = this->rect();
+    QPainterPath path;
+    const qreal radius = 8.0;
 
-#if 0
-    if (!m_useHalfFillet) {
-        painter.drawRect(rect);
+    if (m_cornerType == Top) {
+        // 左上右上圆角
+        path.moveTo(rect.left() + radius, rect.top());
+        path.lineTo(rect.right() - radius, rect.top());
+        path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);
+        path.lineTo(rect.right(), rect.bottom());
+        path.lineTo(rect.left(), rect.bottom());
+        path.lineTo(rect.left(), rect.top() + radius);
+        path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());
     } else {
-        QPainterPath path;
-//        path.addRoundedRect (rect, RADIUS, RADIUS);
-//        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
-//        path.addRect(temp_rect);
-        //设置起点
-        path.moveTo(rect.topLeft().x(), rect.topLeft().y());
-        path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
-        //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
-        path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
-        path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
-        //画圆弧
-        path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
-        path.lineTo(rect.topRight());
-        path.lineTo(rect.topLeft());
-        painter.drawPath(path);
+        path.addRect(rect);
     }
-#endif
 
-    painter.drawRect(rect);
+    painter.fillPath(path, this->palette().base().color());
     QPushButton::paintEvent(event);
 }
 
@@ -187,4 +180,10 @@ bool VpnItem::eventFilter(QObject *watched, QEvent *event)
         return true;
     }
     return false;
+}
+
+void VpnItem::setCornerType(CornerType type) 
+{
+    m_cornerType = type; 
+    update(); 
 }

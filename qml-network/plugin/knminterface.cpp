@@ -37,6 +37,9 @@ QString KnmInterface::getIconData(QString name, int size /*= 24*/)
     return "data:image/png;base64," + data.toBase64();
 }
 
+//这里是返回给qml连接信息
+//fixbug 377873,已经连接的网卡需要在第一个显示
+//遍历连接列表，将已经连接的网卡swap到第0个位置
 QVariantList KnmInterface::wiredDeviceList()
 {
     QVariantList list;
@@ -136,12 +139,16 @@ bool KnmInterface::getNetMacConnectStatus(QString devmac)
     return false;
 }
 
+//网络托盘-更多网络设置的跳转问题：
+//1、若连接了无线网络且没有连接有线网络 跳转至无线网络
+//2、否则跳转有线网络
 void KnmInterface::openNetworkSetting()
 {
     if(m_pProcess) {
          m_pProcess->deleteLater();
     }
 
+    //获取当前的网络状态
     ConnectStatus connect_status = getConnectionStatus();
 
     QProcess process;

@@ -133,6 +133,8 @@ private:
 
     bool isExitWiredDevice();
 
+    bool isDslConnection(const QString &uuid);
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 

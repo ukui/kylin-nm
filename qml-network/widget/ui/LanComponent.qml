@@ -81,8 +81,15 @@ ListView {
 
                 UkuiItems.IconButton {
                     id: typeicon
+                    //这里添加拨号的类型
                     visible: modelData.State === 2 || modelData.State === 4
-                    iconSource: (modelData.State === 2) ? ("network-wired-connected-symbolic") : ("network-wired-disconnected-symbolic")
+                    iconSource: {
+                        if (modelData.IsDSL) { // 假设modelData中有Type属性表示连接类型
+                            ("ukui-dial-up-symbolic")
+                        } else {
+                            (modelData.State === 2) ? ("network-wired-connected-symbolic") : ("network-wired-disconnected-symbolic")
+                        }
+                    }
                     anchors.fill: parent
                     radius: 19
                     isHighLight: modelData.State === 2

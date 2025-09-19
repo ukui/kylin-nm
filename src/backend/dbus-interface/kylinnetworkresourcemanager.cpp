@@ -1072,7 +1072,7 @@ void KyNetworkResourceManager::onActiveConnectionAdded(QString const & path)
         return;
     }
 
-    qDebug()<<"add active connect"<<activeConnectPtr->connection()->name();
+    qDebug()<<"add active connect"<<activeConnectPtr->connection()->name() << " " << activeConnectPtr->connection()->uuid();
 
     if (0 > m_activeConns.indexOf(activeConnectPtr)) {
         addActiveConnection(activeConnectPtr);

@@ -64,6 +64,14 @@ public:
     bool m_isAcitve = false;
     bool m_loading = false;
 
+    enum CornerType {
+        None,
+        Top
+    };
+    void setCornerType(CornerType type);
+private:
+    CornerType m_cornerType = None;
+
 protected:
     void paintEvent(QPaintEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);

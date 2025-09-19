@@ -156,11 +156,11 @@ void KyWiredConnectOperation::activateWiredConnection(const QString connectUuid,
     return ;
 }
 
-void KyWiredConnectOperation::deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid)
+void KyWiredConnectOperation::deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise,  QString devName)
 {
     qDebug()<<"deactivetate connect name"<<activeConnectName<<"uuid"<<activeConnectUuid;
 
-    deactivateConnection(activeConnectName, activeConnectUuid);
+    deactivateConnection(activeConnectName, activeConnectUuid, concise, devName);
 
     return;
 }

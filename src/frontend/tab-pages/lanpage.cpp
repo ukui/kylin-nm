@@ -1693,19 +1693,26 @@ void LanPage::onSysWiredMainSwitchChanged(bool state)
 
         if (interface.isValid())
         {
-            QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+            QDBusReply<QVariantMap> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
 
-            QMap<QString, QString> connectMap = reply.value();
+            if (!reply.isValid()) {
+                qWarning() << "Call failed:" << reply.error().name() << reply.error().message();
+                return;
+            }
+
+            QVariantMap connectMap = reply.value();
+            qWarning() << "Connect map:" << connectMap;
 
             for (auto iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
                 QString deviceName = iter.key();
-                QString connectUuid = iter.value();
-                
-                if (deviceName == "" || connectUuid == "")
-                {
+                // 使用 QVariant 转换值
+                QString connectUuid = iter.value().toString();
+                qWarning() << "deviceName:" << deviceName << "connectUuid:" << connectUuid;
+
+                if (deviceName.isEmpty() || connectUuid.isEmpty()) {
                     continue;
                 }
-                interface.call(QStringLiteral("activateConnect"), 0, deviceName, connectUuid);
+                interface.call("activateConnect", 0, deviceName, connectUuid);
             }
         }
         else

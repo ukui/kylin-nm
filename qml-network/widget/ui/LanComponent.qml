@@ -82,7 +82,7 @@ ListView {
                 UkuiItems.IconButton {
                     id: typeicon
                     //这里添加拨号的类型
-                    visible: modelData.State === 2 || modelData.State === 4
+                    visible: modelData.State === 0 || modelData.State === 2 || modelData.State === 4
                     iconSource: {
                         if (modelData.IsDSL) { // 假设modelData中有Type属性表示连接类型
                             ("ukui-dial-up-symbolic")
@@ -228,13 +228,22 @@ ListView {
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 text: (modelData.State === 2) ? qsTr("disconnect") : qsTr("connect")
                 highlighted: (modelData.State === 2) ? 0 : 1
+
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
                         // // 设置当前选中项
                         if (modelData.State === 2)
                             KInterface.deActivateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
-                        else if (modelData.State === 4)
+                        else if (modelData.State === 4 || modelData.State === 0) //状态为0或者4时发起连接
                             KInterface.activateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
 
                         //typeicon.visible = false;

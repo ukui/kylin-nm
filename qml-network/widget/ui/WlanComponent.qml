@@ -400,6 +400,15 @@ ListView {
                                 Layout.rightMargin: 24
                                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                 text: qsTr("connect")
+
+                                contentItem: Text {
+                                    text: parent.text
+                                    font: parent.font
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
                                 onClicked: {
                                     typeicon.visible = false;
                                     loadingicon.visible = true;
@@ -421,6 +430,7 @@ ListView {
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.topMargin: 0
                             Layout.leftMargin: 12
+                            Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
 
                             text: {
                                 const signal = parseInt(model.signal);
@@ -439,14 +449,33 @@ ListView {
                         Loader {
                             id: autoConnectCheckBoxLoader
                             active: false
+
                             sourceComponent: CheckBox {
                                 id: autoConnectCheckBox
                                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                width: Math.min(implicitWidth, listItem.width - 250)
                                 visible: false
                                 Layout.leftMargin: 8
                                 Layout.topMargin: 0
                                 text: qsTr("AutoConnect")
                                 checked: true
+
+                                // 使用TextMetrics来准确测量文本宽度
+                                TextMetrics {
+                                    id: checkboxTextMetrics
+                                    font: autoConnectCheckBox.font
+                                    text: autoConnectCheckBox.text
+                                }
+
+                                // 自定义contentItem以支持省略号
+                                contentItem: Text {
+                                    text: autoConnectCheckBox.text
+                                    font: autoConnectCheckBox.font
+                                    verticalAlignment: Text.AlignVCenter
+                                    leftPadding: autoConnectCheckBox.indicator.width + autoConnectCheckBox.spacing
+                                    elide: Text.ElideRight  // 文本省略号
+                                }
+
                                 onClicked: {
                                     mouse.accepted = true
                                 }
@@ -528,6 +557,14 @@ ListView {
                     text: (model.status === 2) ? qsTr("disconnect") : qsTr("connect")
                     highlighted: (model.status === 2) ? 0 : 1
 
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
                     MouseArea {
                         id: connectBtnHandler
                         propagateComposedEvents: true
@@ -572,6 +609,7 @@ ListView {
             anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
             anchors.left: parent.left
             anchors.leftMargin: 26
+            elide: Text.ElideRight
         }
 
         onClicked: {

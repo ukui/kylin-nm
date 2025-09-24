@@ -271,8 +271,10 @@ bool KynmSystemDbus::writeNmConfig(const QString& filePath, const QString& featu
  *  filePath：文件路径
  *  feature：节点名
  */
-QMap<QString, QString> KynmSystemDbus::getNmConfig(const QString& filePath, const QString& feature)
+QVariantMap KynmSystemDbus::getNmConfig(const QString& filePath, const QString& feature)
 {
+    qWarning() << Q_FUNC_INFO << __LINE__ << filePath << feature;
+
     QSettings settings(filePath, QSettings::IniFormat);
     QMap<QString, QString> configMap;
 
@@ -284,8 +286,14 @@ QMap<QString, QString> KynmSystemDbus::getNmConfig(const QString& filePath, cons
         configMap.insert(key, value);
     }
     settings.endGroup();
-    
-    return configMap;
+
+    qWarning() << Q_FUNC_INFO << __LINE__ << configMap;
+    QVariantMap variantMap;
+    for (auto it = configMap.begin(); it != configMap.end(); ++it) {
+        variantMap[it.key()] = it.value();
+    }
+
+    return variantMap;
 }
 
 /*

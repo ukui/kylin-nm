@@ -1053,9 +1053,13 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
     m_activeResourse->getActiveConnectionList(devName,NetworkManager::ConnectionSettings::Wired,activedList);
     m_activeResourse->getActiveConnectionList(devName,NetworkManager::ConnectionSettings::Pppoe,activedList);
     if (!activedList.isEmpty()) {
-        list.append(QStringList() << activedList.at(0)->m_connectName << activedList.at(0)->m_connectUuid << activedList.at(0)->m_connectPath
-                << (m_connectResourse->isPppoeConnection(activedList.at(0)->m_connectUuid) ? "1" : "0")
-                << QString::number(m_connectResourse->getActiveConnectionState(activedList.at(0)->m_connectUuid)));
+        list.append(
+                    QStringList() << activedList.at(0)->m_connectName
+                                  << activedList.at(0)->m_connectUuid
+                                  << activedList.at(0)->m_connectPath
+                                  << (m_connectResourse->isPppoeConnection(activedList.at(0)->m_connectUuid) ? "1" : "0")
+                                  << QString::number(m_connectResourse->getActiveConnectionState(activedList.at(0)->m_connectUuid))
+                    );
     } else {
         list.append(QStringList()<<("--"));
     }
@@ -1064,9 +1068,13 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
     m_connectResourse->getConnectionList(devName, NetworkManager::ConnectionSettings::Pppoe, deactivedList);
     if (!deactivedList.isEmpty()) {
         for (int i = 0; i < deactivedList.size(); i++) {
-            list.append(QStringList() << deactivedList.at(i)->m_connectName << deactivedList.at(i)->m_connectUuid << deactivedList.at(i)->m_connectPath
-                    << (m_connectResourse->isPppoeConnection(deactivedList.at(i)->m_connectUuid) ? "1" : "0")
-                    << QString::number(m_connectResourse->getActiveConnectionState(deactivedList.at(i)->m_connectUuid)));
+            list.append(
+                        QStringList() << deactivedList.at(i)->m_connectName
+                                      << deactivedList.at(i)->m_connectUuid
+                                      << deactivedList.at(i)->m_connectPath
+                                      << (m_connectResourse->isPppoeConnection(deactivedList.at(i)->m_connectUuid) ? "1" : "0")
+                                      << QString::number(m_connectResourse->getActiveConnectionState(deactivedList.at(i)->m_connectUuid))
+                        );
         }
     }
 }
@@ -1690,6 +1698,7 @@ void LanPage::onSysWiredMainSwitchChanged(bool state)
                                   "/com/kylin/network",
                                   "com.kylin.network",
                                   QDBusConnection::sessionBus());
+        qWarning() << Q_FUNC_INFO << __LINE__ << interface.isValid();
 
         if (interface.isValid())
         {

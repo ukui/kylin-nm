@@ -140,7 +140,7 @@ void KyConnectOperation::deleteConnect(const QString &connectUuid)
     return ;
 }
 
-void KyConnectOperation::activateConnection(const QString connectUuid, const QString deviceName)
+void KyConnectOperation::activateConnection(const QString connectUuid, const QString deviceName,bool autoconnect)
 {
     QString connectPath = "";
     QString deviceIdentifier = "";
@@ -199,6 +199,15 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
              << "device name" << deviceName
              << "specific parameter"<< specificObject;
 
+    //set autoconnect
+    if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
+    {
+        NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+        setAutoConnect(connectionSettings,true);
+        // 保存autoconnect设置到配置文件
+        connectPtr->update(connectionSettings->toMap());
+    }
+
     QDBusPendingCallWatcher * watcher;
     watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
     connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {
@@ -220,7 +229,11 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
 {
     NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
 
-    qDebug()<<"deactivetate connect name"<<activeConnectName<<"uuid"<<activeConnectUuid;
+    qWarning() << Q_FUNC_INFO << __LINE__
+            << "deactivetate connect name" << activeConnectName
+            <<" uuid" << activeConnectUuid
+            <<" concise :" << concise
+            <<" devName:" << devName;
 
     activateConnectPtr = m_networkResourceInstance->getActiveConnect(activeConnectUuid);
     if (nullptr == activateConnectPtr) {

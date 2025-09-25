@@ -126,6 +126,8 @@ private:
     void showBallonTip();
     void connectFontGsetting();
 
+    QMap<QString,QString> convertVariantMapToStringMap(const QVariantMap &variantMap);
+
 public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);
 

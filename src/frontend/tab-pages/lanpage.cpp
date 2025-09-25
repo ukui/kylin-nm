@@ -1350,7 +1350,7 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
         qDebug() << LOG_FLAG << devName << "is not carried, so can not activate connection";
         this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
     } else {
-        m_wiredConnectOperation->activateConnection(connUuid, devName);
+        m_wiredConnectOperation->activateConnection(connUuid, devName,true);
     }
 }
 
@@ -1650,6 +1650,16 @@ void LanPage::getWiredDeviceConnect(QMap<QString, QString> &map)
         }
     }
 }
+QMap<QString, QString> LanPage::convertVariantMapToStringMap(const QVariantMap &variantMap)
+{
+     QMap<QString, QString> result;
+
+     for (const auto &key : variantMap.keys()) {
+         result[key] = variantMap.value(key).toString();
+     }
+
+     return result;
+ }
 
 //自动连接有线网络
 //连接有线网络时，将连接信息写入/etc/kylin-nm/netSwitch.conf文件的Lan_Connect节点中
@@ -1664,14 +1674,23 @@ void LanPage::onSysDeviceSwitchChanged(const QString& devName)
 
     if (interface.isValid())
     {
-        QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+        QDBusReply<QVariantMap> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
 
-        QMap<QString, QString> connectMap = reply.value();
+        if (!reply.isValid()) {
+            qWarning() << "Call failed:" << reply.error().name() << reply.error().message();
+            return;
+        }
 
-        QString connectUuid = connectMap[devName];
+        QVariantMap connectMap = reply.value();
+        qWarning() << "Connect map:" << connectMap;
+        QMap<QString, QString> stringMap = convertVariantMapToStringMap(connectMap);
+        qWarning() << "stringMap:" << stringMap;
 
-        if (connectUuid == "")
-        {
+        QString connectUuid="";
+        if (stringMap.contains(devName))
+            connectUuid = stringMap[devName];
+
+        if (connectUuid == "") {
             return;
         }
 
@@ -1723,9 +1742,7 @@ void LanPage::onSysWiredMainSwitchChanged(bool state)
                 }
                 interface.call("activateConnect", 0, deviceName, connectUuid);
             }
-        }
-        else
-        {
+        } else {
             qDebug() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
     }

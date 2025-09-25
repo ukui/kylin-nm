@@ -363,7 +363,6 @@ ListView {
                             sourceComponent: TextField {
                                 id: textEdit
                                 width: 208
-                                height: 36
                                 Layout.leftMargin: 10
                                 echoMode: TextInput.Password
                                 property bool passMode: true

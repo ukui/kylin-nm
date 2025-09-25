@@ -36,7 +36,7 @@ public:
     void  createConnect(KyConnectSetting &connectSettingsInfo);
     void  updateConnect(NetworkManager::ConnectionSettings::Ptr connectionSettings, const KyConnectSetting &connectSettingsInfo);
     void  deleteConnect(const QString &connectUuid);
-    void  activateConnection(const QString connectUuid, const QString deviceName);
+    void  activateConnection(const QString connectUuid, const QString deviceName,bool autoconnect = false);
     void  deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise = false, QString devName = "");
 
 public:

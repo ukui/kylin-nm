@@ -1457,11 +1457,9 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
 
     QString activeSsid ;
     //先是已连接
-    if (m_wirelessNetResource->getActiveWirelessNetItem(devName, data)) {
+    if (m_wirelessNetResource->getActiveWifiNetwork(devName, data)) {
         qDebug() << "find " << devName;
-        QString ssid ="";
-        m_wirelessNetResource->getSsidByUuid(data.m_connectUuid, ssid);
-        if (m_wirelessNetResource->getWifiNetwork(devName, ssid, data)) {
+
             int category = 0;
             int signalStrength;
             QString uni,secuType;
@@ -1486,9 +1484,6 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
 
             //
             activeSsid = data.m_NetSsid;
-        } else {
-            list.append(QStringList("--"));
-        }
     } else {
         list.append(QStringList("--"));
     }
@@ -1612,9 +1607,7 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
 
         m_inactivatedNetListWidget->scrollToItem(p_listWidgetItem, QAbstractItemView::EnsureVisible);
 
-
-        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::postEvent(p_wlanItem, event);
+        p_wlanItem->onNetButtonClicked();
     } else {
         qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;
     }

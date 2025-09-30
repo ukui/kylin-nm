@@ -67,6 +67,7 @@ private:
 
 bool updatewirelessItemConnectInfo(KyWirelessNetItem& item);
 void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item);
+int updateKylinWirelessItemInfo(KyWirelessNetItem& item);
 
 
 #endif // KYWIRELESSNETITEM_H

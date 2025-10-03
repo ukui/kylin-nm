@@ -957,8 +957,12 @@ void WlanConnect::activeConnect(QString netName, QString deviceName, int type)
     if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
+    QVariantMap value;
+    value.insert("ssid",netName);
+    value.insert("device",deviceName);
+    value.insert("type",type);
     qDebug() << "[WlanConnect]call activateConnect" << __LINE__;
-    m_interface->call("activateConnect",type, deviceName, netName);
+    m_interface->call("requestInputPasswdAgent",value);
     qDebug() << "[WlanConnect]call activateConnect respond" << __LINE__;
 }
 
@@ -1093,6 +1097,13 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
 
     connect(wlanItem, &QPushButton::clicked, this, [=] {
         openKylinm();
+        QTimer::singleShot(100,this,[=](){
+            if (wlanItem->isAcitve) {
+                deActiveConnect(name, deviceName, type);
+            } else {
+                activeConnect(name, deviceName, type);
+            }
+        });
     });
     //记录到deviceFrame的itemMap中
     deviceFrameMap[deviceName]->itemMap.insert(name, wlanItem);

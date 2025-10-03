@@ -50,6 +50,8 @@ private slots:
     //更新连接列表顺序
     void updateList();
 
+    void onRequestInputPasswdAgent(QString agentName, QVariantMap parm);
+
 private:
     QDBusInterface      *m_pInterface = nullptr;
 };

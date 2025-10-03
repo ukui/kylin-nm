@@ -1,6 +1,7 @@
-    #include "knmdbuscaller.h"
+#include "knmdbuscaller.h"
 #include "knminterface.h"
 
+#define KYLIN_QML_INPUTAGENT_NAME "KYLIN-QML-INPUT-AGENT"
 KnmDBusCaller::KnmDBusCaller(QObject *parent)
     : QObject{parent}
 {
@@ -15,7 +16,7 @@ KnmDBusCaller::KnmDBusCaller(QObject *parent)
     if(!m_pInterface->isValid()) {
         qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
     }
-
+    registerInputPasswdAgent();//注册输入代理
     qDBusRegisterMetaType<QVector<QStringList>>();
 
     this->connect(lanDataKeeper.data(), &KnmLanDataKeeper::onDeviceStatusChanged, this, &KnmDBusCaller::updateWiredDeviceMap);
@@ -560,5 +561,18 @@ void KnmDBusCaller::updateCableState(QDBusPendingCallWatcher *watcher)
         KInterface::getInstance()->updateCable(ret);
     } else {
         qWarning() << reply.isError();
+    }
+}
+
+
+void KnmDBusCaller::registerInputPasswdAgent()
+{
+    QList<QVariant> list;
+    QVariantMap map;//预留参数不赋值 后端不检查
+    list.append(KYLIN_QML_INPUTAGENT_NAME);
+    list.append(map);
+    QDBusPendingCallWatcher * watcher = this->asyncCall("registerInputPasswdAgent", list);
+    if(!watcher) {
+        qWarning() << "registerInputPasswdAgent pending";
     }
 }

@@ -96,6 +96,15 @@ KnmWlanDataKeeper::KnmWlanDataKeeper(QObject *parent) : KnmDataKeeper(parent)
     //无线开关处理
     connect(m_pInterface, SIGNAL(wirelessSwitchBtnChanged(bool)), this, SLOT(onSwitchBtnChanged(bool)), Qt::QueuedConnection);
 
+    //输入接管请求 使用object connect对于QVariantMap可能不识别，需使用QDBusConnection connect
+    //connect(m_pInterface, SIGNAL(sigRequestInputPasswdAgent(QString ,QVariantMap )), this, SLOT(onRequestInputPasswdAgent(QString ,QVariantMap )), Qt::QueuedConnection);
+    QDBusConnection::sessionBus().connect("com.kylin.network",
+                                         "/com/kylin/network",
+                                         "com.kylin.network",
+                                         "sigRequestInputPasswdAgent",
+                                         this,
+                                         SLOT(onRequestInputPasswdAgent(QString ,QVariantMap)));
+
     //更新列表顺序
     //对部分QML功能有影响，待完善
 //    connect(m_pInterface, SIGNAL(timeToUpdate()), this, SLOT(updateList()), Qt::QueuedConnection);
@@ -386,4 +395,12 @@ void KnmWlanDataKeeper::updateList()
         return;
 
 //    emit onDeviceStatusChanged();
+}
+
+void KnmWlanDataKeeper::onRequestInputPasswdAgent(QString agentName,QVariantMap parm)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ << agentName<<parm;
+    KInterface::getInstance()->onRequestInputPasswdAgent(agentName,parm);
+
+    return ;
 }

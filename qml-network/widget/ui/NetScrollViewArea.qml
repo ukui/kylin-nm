@@ -41,6 +41,7 @@ UkuiItems.DtThemeBackground {
             clip: true
 
             Flickable {
+                id: outerFlickable
                 anchors.fill: parent
                 contentWidth : parent.width
                 contentHeight: wlanTop.height + lanTop.height + (lanDeviceComboBox.visible ? lanDeviceComboBox.height : 0) + (lanContentArea.visible ? lanContentArea.height : 0) + (wlanDeviceComboBox.visible ? wlanDeviceComboBox.height : 0) + (wlanContentArea.visible ? wlanContentArea.height : 0) + 40
@@ -52,7 +53,7 @@ UkuiItems.DtThemeBackground {
                         id : lanTop
                         width: parent.width
                         Layout.alignment: Qt.AlignTop
-                        visible: lanDeviceComboBox.count >= 1
+                        visible: true//lanDeviceComboBox.count >= 1
 
                         UkuiItems.DtThemeText {
                             text: qsTr("Wired network")
@@ -62,7 +63,7 @@ UkuiItems.DtThemeBackground {
 
                         UkuiItems.Icon {
                             id: lanVisibleButton
-                            visible: KInterface.wiredMainSwitch
+                            visible: KInterface.wiredMainSwitch && lanDeviceComboBox.count >= 1
                             source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/ukui-up-symbolic.svg"
                             width: 16
                             height: 16
@@ -95,7 +96,7 @@ UkuiItems.DtThemeBackground {
                         SwitchDelegate {
                             id: lanswitchBtn
                             checked: KInterface.wiredMainSwitch
-                            enabled: (lanDeviceComboBox.count !== 0)
+                            enabled: true//(lanDeviceComboBox.count !== 0)
                             onClicked: {
                                 KInterface.wiredMainSwitch = lanswitchBtn.checked
 
@@ -182,6 +183,7 @@ UkuiItems.DtThemeBackground {
                         interactive: false
                         implicitHeight: lanContentArea.contentHeight
                         width: 396
+                        visible: lanDeviceComboBox.count && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
                     }
 
                     MenuSeparator {
@@ -302,6 +304,16 @@ UkuiItems.DtThemeBackground {
                                 }
                                 KInterface.getWirelessDevConnList(wlanDeviceComboBox.currentText);
                             }
+                        }
+
+                        Connections {
+                            target: KInterface
+                            function onChangeSelectWirelessDevice(index) {
+                                 if(wlanDeviceComboBox.currentIndex !== index) {
+                                     console.log("mqtest change device",wlanDeviceComboBox.currentIndex,index)
+                                     wlanDeviceComboBox.currentIndex = index
+                                 }
+                             }
                         }
                     }
 

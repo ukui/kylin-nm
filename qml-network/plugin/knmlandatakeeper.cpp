@@ -235,6 +235,8 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
         //连接被修改为不属于列表第i个设备,故而删除
         if (devList.at(i) != deviceName) {
             NetDevicePtr dev = m_deviceList.take(devList.at(i));
+            if(dev.isNull() || lanInfo.at(2).isEmpty())
+                continue;
             dev->removeConnection(lanInfo.at(2));
             m_deviceList.insert(devList.at(i), dev);
             continue;

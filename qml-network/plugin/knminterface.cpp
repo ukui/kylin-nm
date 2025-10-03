@@ -440,3 +440,47 @@ QString KnmInterface::fontSize()
 {
     return m_fontSize;
 }
+
+int KnmInterface::changeSelectDevice(QString deviceName)
+{
+    int index=0;
+    if(deviceName.isEmpty()) return -1;
+    auto dev = KNMDC::getInstance()->wirelessDeviceList();
+
+    for (auto it = dev.begin(); it != dev.end(); ++it) {
+        if (it.key() == deviceName) {
+            qDebug() << Q_FUNC_INFO <<__LINE__ << deviceName<<index;
+            emit changeSelectWirelessDevice(index);
+            return index;
+        }
+        ++index;
+    }
+
+    return -1;
+}
+
+void KnmInterface::onRequestInputPasswdAgent(QString agentName,QVariantMap parm)
+{
+    QString inputSsid="";
+    QString inputDevice="";
+
+    if(parm.contains("ssid") && parm.contains("device")) {
+        inputSsid=parm.value("ssid").toString();
+        inputDevice=parm.value("device").toString();
+        if(changeSelectDevice(inputDevice)<0){
+            qDebug() << Q_FUNC_INFO <<__LINE__ << "no inputDevice , invalid request";
+            return;
+        }
+        QTimer::singleShot(1000,this,[=](){
+            int index=0;
+            index=mWirelessConnecModel.getConButtonFromSsid(inputSsid);
+            if(index>=0) {
+                emit triggerButtonRequested(index);
+            }
+        });
+    } else {
+        qDebug() << Q_FUNC_INFO <<__LINE__ << "no ssid , invalid request";
+    }
+
+    return ;
+}

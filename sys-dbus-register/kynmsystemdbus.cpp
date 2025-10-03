@@ -302,6 +302,7 @@ QVariantMap KynmSystemDbus::getNmConfig(const QString& filePath, const QString& 
 */
 void KynmSystemDbus::setDeviceSwitch(const QString& devName, bool checked)
 {
+    Q_EMIT sysWiredDevSwitchChanged(devName, checked);
     if (checked && !devName.isEmpty())
     {
         Q_EMIT sysDeviceSwitchChanged(devName);

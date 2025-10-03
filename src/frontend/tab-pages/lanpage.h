@@ -127,6 +127,7 @@ private:
     void connectFontGsetting();
 
     QMap<QString,QString> convertVariantMapToStringMap(const QVariantMap &variantMap);
+    void updateDeviceState(const QString &devName, bool enable);/* 更新有线网卡设备状态 */
 
 public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);
@@ -169,6 +170,8 @@ private Q_SLOTS:
 
     void onSysWiredMainSwitchChanged(bool);
     void onSysDeviceSwitchChanged(const QString&);
+    void onSysWiredDevSwitchChanged(QString devName, bool enable);/* 处理单个有线网卡设备开关状态变化 */
+
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
     QListWidget * m_inactivatedLanListWidget = nullptr;

@@ -110,6 +110,9 @@ public slots:
 
     void showAddOtherWlanPage(QString devName);
 
+    void onRequestInputPasswdAgent(QString agentName,QVariantMap parm);
+
+    int changeSelectDevice(QString deviceName);
 private slots:
 
     void slotRefreshTimeout();
@@ -149,6 +152,9 @@ signals:
 
     void fontSizeChanged(QString fontSize);
 
+    void triggerButtonRequested(int index);
+
+    void changeSelectWirelessDevice(int index);
 private:
     QVariantList m_wiredDevConnList;
 

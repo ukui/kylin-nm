@@ -182,7 +182,7 @@ ListView {
                 id: nameLabel
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 8
-                Layout.preferredWidth: 150
+                Layout.maximumWidth: 150
                 text: modelData.Name
                 elide: Text.ElideRight
                 property bool elideAndToolTip: true

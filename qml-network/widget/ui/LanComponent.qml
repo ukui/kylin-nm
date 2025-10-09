@@ -284,11 +284,27 @@ ListView {
                 id: connectBtn
                 visible: false
                 width: 88
+                Layout.preferredWidth: 88  /* 在布局中的首选宽度 */
+                Layout.maximumWidth: 88
                 height: 36
                 Layout.rightMargin: 24
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 text: (modelData.State === 2) ? qsTr("disconnect") : qsTr("connect")
                 highlighted: (modelData.State === 2) ? 0 : 1
+
+                /* 在连接按钮文本缩略情况下，添加tooltip显示完整的文本 */
+                ToolTip.visible: connectBtnHandler.containsMouse && contentItem.truncated
+                ToolTip.text: text
+                ToolTip.delay: 500
+
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight  /* 文本过长时显示省略号 */
+                }
+
                 MouseArea {
                     id: connectBtnHandler
                     propagateComposedEvents: true

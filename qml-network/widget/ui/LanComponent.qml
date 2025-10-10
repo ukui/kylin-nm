@@ -178,25 +178,38 @@ ListView {
                 }
             }
 
-            Label {
+         Label {
                 id: nameLabel
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 8
                 Layout.maximumWidth: 150
                 text: modelData.Name
                 elide: Text.ElideRight
-                property bool elideAndToolTip: true
+
+                // 使用TextMetrics检测文本截断
+                TextMetrics {
+                    id: textMetrics
+                    font: nameLabel.font
+                    text: nameLabel.text
+                    elide: nameLabel.elide
+                    elideWidth: nameLabel.width
+                }
+
+                // 根据TextMetrics结果显示ToolTip
+                ToolTip.visible: nameLabelHandler.containsMouse && (textMetrics.elidedText !== nameLabel.text)
+                ToolTip.text: nameLabel.text
+                ToolTip.delay: 500
 
                 MouseArea {
+                    id: nameLabelHandler
                     anchors.fill: parent
+                    hoverEnabled: true
 
                     onReleased: {
-                        console.log("onReleased:------------------- " )
-
+                        console.log("onReleased:-------------------")
                         nameLabel.visible = false
                         nameStateLabel.visible = true
                     }
-
                 }
             }
 

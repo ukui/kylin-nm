@@ -1,0 +1,11 @@
+com:kylin:network:qt:systemdbus:
+  1.0.0.1:
+    audit:
+      _type: b
+      _default: false
+    whitelist:
+      _type: as
+      _default: '["/usr/bin/kylin-nm","/usr/bin/hedron-client","/usr/sbin/NetworkManager","/usr/bin/nm-connection-editor","/usr/sbin/kim-domain","/usr/sbin/kim-client"]'
+    rootcontrol:
+      _type: s
+      _default: 'off'

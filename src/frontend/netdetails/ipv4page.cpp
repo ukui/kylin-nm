@@ -507,7 +507,7 @@ void Ipv4Page::initNetCtrl()
     int errCode=0;
     QString netCtrlIPV4Name="IPV4";
     QString netCtrlDNSName="DNS";
-
+    QDBusMessage result;
 
     QDBusInterface dbusInterface("com.kylin.networkCtrol",
                                  "/com/kylin/networkCtrol",
@@ -515,36 +515,37 @@ void Ipv4Page::initNetCtrl()
                                  QDBusConnection::systemBus());
     if (!dbusInterface.isValid()) {
         qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
-    }
-    dbusInterface.setTimeout(2000);
-    QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlIPV4Name);
-    if (result.type() == QDBusMessage::ErrorMessage) {
-        qWarning() << "[mainwindow]getNetContrlRule error:" << result.errorMessage();
-    }
+    } else {
+        dbusInterface.setTimeout(2000);
+        result = dbusInterface.call("getNetContrlRule",netCtrlIPV4Name);
+        if (result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[mainwindow]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if ( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"ipv4"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlIPV4Name,map);
+                map.clear();
+            }
+        }
 
-    if ( result.arguments().size()>=2) {
-        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-        dbusArg1st >> map;
-        errCode = result.arguments().at( 1 ).toInt();
-        qInfo()<<"ipv4"<<map<<errCode;
-        if(errCode==0) updateNetCtrl(netCtrlIPV4Name,map);
-        map.clear();
-    }
+        result = dbusInterface.call("getNetContrlRule",netCtrlDNSName);
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[ipv4]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if (result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"ipv4"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlDNSName,map);
+                map.clear();
+            }
+        }
+	}
 
-
-    result = dbusInterface.call("getNetContrlRule",netCtrlDNSName);
-    if(result.type() == QDBusMessage::ErrorMessage) {
-        qWarning() << "[ipv4]getNetContrlRule error:" << result.errorMessage();
-    }
-
-    if (result.arguments().size()>=2) {
-        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-        dbusArg1st >> map;
-        errCode = result.arguments().at( 1 ).toInt();
-        qInfo()<<"ipv4"<<map<<errCode;
-        if(errCode==0) updateNetCtrl(netCtrlDNSName,map);
-        map.clear();
-    }
 
     QDBusConnection::systemBus().connect("com.kylin.networkCtrol",
                                          "/com/kylin/networkCtrol",

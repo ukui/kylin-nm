@@ -212,6 +212,7 @@ void MainWindow::firstlyStart()
     initTrayIcon();
 //    initPlatform();
     installEventFilter(this);
+    initNetCtrl();
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
         m_secondaryStartTimer->stop();
@@ -1534,44 +1535,35 @@ void MainWindow::netCtrlDiscon(QMap<QString, QString> lanMap,QMap<QString, QStri
     QString maxUuid;
     int  fristFlag=1,haveWireCon=0;
     /*多连接有线只保留优先级最高的一个连接*/
-    if(lanMap.size())
-    {
-        for (auto itLan=lanMap.cbegin();itLan != lanMap.cend(); ++itLan)
-        {
+    if(lanMap.size()) {
+        for (auto itLan=lanMap.cbegin();itLan != lanMap.cend(); ++itLan) {
             QString key = itLan.key();
             QString uuid = itLan.value();
             connectPtr =NetworkManager::findConnectionByUuid(uuid);
-            if(connectPtr.isNull() ||  connectPtr->settings().isNull())
-            {
+            if(connectPtr.isNull() ||  connectPtr->settings().isNull()) {
                 continue;
             }
             priority = connectPtr->settings()->autoconnectPriority();
 
             /*缓存连接*/
-            if(fristFlag)
-            {
+            if(fristFlag) {
                 maxDevName=key;
                 maxUuid=uuid;
                 maxPriority=priority;
                 fristFlag=0;
                 continue;
             }
-            if(maxPriority<priority)
-            {
+            if(maxPriority<priority) {
                 m_lanWidget->deactivateWired(maxDevName,maxUuid);
                 maxDevName=key;
                 maxUuid=uuid;
                 maxPriority=priority;
-            }
-            else
-            {
+            } else {
                 m_lanWidget->deactivateWired(key,uuid);
             }
         }
         haveWireCon=1;//有有线连接需要全部关掉
-    }
-    else
-    {
+    } else {
         haveWireCon=0;//无有线连接需要保留一个无线
     }
     maxDevName.clear();
@@ -1579,28 +1571,23 @@ void MainWindow::netCtrlDiscon(QMap<QString, QString> lanMap,QMap<QString, QStri
     maxPriority=0;
     fristFlag=1;
 
-    if(wlanMap.size())
-    {
-        for (auto itWlan = wlanMap.cbegin(); itWlan != wlanMap.cend(); ++itWlan)
-        {
+    if(wlanMap.size()) {
+        for (auto itWlan = wlanMap.cbegin(); itWlan != wlanMap.cend(); ++itWlan) {
             QString key = itWlan.key();
             QString uuid = itWlan.value();
             connectPtr =NetworkManager::findConnectionByUuid(uuid);
-            if(connectPtr.isNull() ||  connectPtr->settings().isNull())
-            {
+            if(connectPtr.isNull() ||  connectPtr->settings().isNull()) {
                 continue;
             }
             priority = connectPtr->settings()->autoconnectPriority();
 
-            if(haveWireCon)
-            {
+            if(haveWireCon) {
                 m_wlanWidget->deactivateWirelessConnectionWithUuid(key,uuid);
                 continue;
             }
 
             /*缓存连接*/
-            if(fristFlag)
-            {
+            if(fristFlag) {
                 maxDevName=key;
                 maxUuid=uuid;
                 maxPriority=priority;
@@ -1608,15 +1595,12 @@ void MainWindow::netCtrlDiscon(QMap<QString, QString> lanMap,QMap<QString, QStri
                 continue;
             }
 
-            if(maxPriority<priority)
-            {
+            if(maxPriority<priority) {
                 m_wlanWidget->deactivateWirelessConnectionWithUuid(maxDevName,maxUuid);
                 maxDevName=key;
                 maxUuid=uuid;
                 maxPriority=priority;
-            }
-            else
-            {
+            } else {
                 m_wlanWidget->deactivateWirelessConnectionWithUuid(key,uuid);
             }
         }
@@ -1635,14 +1619,11 @@ void MainWindow::updateNetCtrl(QString modName,QVariantMap value)
     if(modName!="Connect") return;
 
     qInfo()<<modName<<value;
-    for (auto it = value.cbegin(); it != value.cend(); ++it)
-    {
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
         QString key = it.key();
         QVariant value = it.value();
-        if(key==QString("netWireWirelessSyncConnectCtrol"))
-        {
+        if(key==QString("netWireWirelessSyncConnectCtrol")) {
             enable=value.toBool();
-
         }
     }
 
@@ -1662,37 +1643,28 @@ void MainWindow::initNetCtrl()
     QVariantMap map;
     int errCode=0;
     QString netCtrlConnectName="Connect";
-    /*
-    QDBusReply<ST_NtCtDbusReturnParm> reply = m_interface->call(QStringLiteral("getNetContrlRule"),netCtrlConnectName);//不能使用该接口，获取不到数据
-    if (!reply.isValid())
-    {
-            qWarning() << "D-Bus call failed:" << reply.error().message();
-    }
-*/
-
     QDBusInterface dbusInterface("com.kylin.networkCtrol",
                                  "/com/kylin/networkCtrol",
                                  "com.kylin.networkCtrol",
                                  QDBusConnection::systemBus());
     if (!dbusInterface.isValid()) {
         qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
-    }
-    dbusInterface.setTimeout(2000);
-    QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlConnectName);
-    if(result.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "[mainwindow]getNetContrlRule error:" << result.errorMessage();
-    }
-
-    if( result.arguments().size()>=2)
-    {
-        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-        dbusArg1st >> map;
-        errCode = result.arguments().at( 1 ).toInt();
-        qInfo()<<"mainwindows"<<map<<errCode;
-        if(errCode==0) updateNetCtrl(netCtrlConnectName,map);
-        map.clear();
-    }
+    } else {
+        dbusInterface.setTimeout(2000);
+        QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlConnectName);
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[mainwindow]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"mainwindows"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlConnectName,map);
+                map.clear();
+            }
+        }
+	}
 
     //connect(m_interface,SIGNAL(sigNetContrlRuleChanged(QString ,QVariantMap )),this,SLOT(updateNetCtrl(QString ,QVariantMap)),Qt::QueuedConnection);//使用该接口连接不到信号
     QDBusConnection::systemBus().connect("com.kylin.networkCtrol",

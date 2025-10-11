@@ -32,8 +32,10 @@ include(kyarping/kyarping.pri)
 
 SOURCES += \
         kynmsystemdbus.cpp \
+        proxyServer/proxyapphandler.cpp\
         main.cpp
 
 HEADERS += \
         authority-base.h \
-        kynmsystemdbus.h
+        kynmsystemdbus.h \
+        proxyServer/proxyapphandler.h

@@ -86,6 +86,7 @@ Q_DECLARE_METATYPE(GSData)
 namespace Ui {
 class Proxy;
 }
+class TextEdit;
 
 class Proxy : public QObject, CommonInterface
 {
@@ -119,10 +120,13 @@ public:
     void initIgnoreHostStatus();
     void initDbus();
     void initAppProxyStatus();
-
     void manualProxyTextChanged(QString txt);
+    void manualProxyTextChanged();
     int _getCurrentProxyMode();
     void _setSensitivity();
+    bool isManualProxyEnable();
+    void refreshSystemProxyState(bool isChecked);
+
     bool getAptProxyInfo(bool status);
     static void setAptProxy(QString host ,QString port ,bool status); //  apt代理对应的配置文件的写入或删除
     static QHash<QString, QVariant> getAptProxy();
@@ -139,6 +143,11 @@ public:
     static QMap<QString, QStringList> getAppListProxy();
 //    bool checkIsChanged(QStringList info);
     void setUkccProxySettings();  // 设置控制面板代理模块显示/隐藏
+
+    static void sendAppProxyNetCtlLog(const QStringList& preAppInfo, bool preStatus, const QStringList& currAppInfo, bool status, bool addApp = true, const QString& appName =QString());
+    static void sendAptProxyNetCtlLog(const QHash<QString, QVariant>& preAptInfo, QString host, QString port, bool status);
+    static void sendProxyNetCtlLog(const QString& logMessage);
+
 private:
     void setAppProxyFrameUi(QWidget *widget);
     void setAppListFrameUi(QWidget *widget);
@@ -149,6 +158,7 @@ private:
     void setAppProxyFrameHidden(bool state);
     void setAPTProxyFrameHidden(bool state);
 
+private:
     QFrame *m_sysSpacerFrame;
     QFrame *m_appListSpacerFrame;
     QFrame *m_appSpacerFrame;
@@ -261,7 +271,7 @@ private:
     QListWidget *m_appListWidget = nullptr;
     QWidget *m_appProxyInfoWidget;
 
-    QTextEdit *mIgnoreLineEdit;
+    TextEdit *mIgnoreLineEdit;
 
     QGSettings * proxysettings;
     QGSettings * httpsettings;
@@ -279,6 +289,7 @@ private:
     bool isExistSettings = false;
     bool settingsCreate;
     bool mFirstLoad;
+    bool m_isPreviousManualProxy = false;
     QStringList m_appProxyInfo;
     QStringList m_appCheckedList;
 
@@ -294,4 +305,16 @@ private slots:
 //    void setBtnEnable();
 };
 
+class TextEdit : public QTextEdit {
+    Q_OBJECT
+public:
+    using QTextEdit::QTextEdit;
+Q_SIGNALS:
+    void editingFinished(); /* 自定义信号 */
+protected:
+    void focusOutEvent(QFocusEvent* e) override {
+        QTextEdit::focusOutEvent(e);
+        emit editingFinished(); /* 失去焦点时触发 */
+    }
+};
 #endif // PROXY_H

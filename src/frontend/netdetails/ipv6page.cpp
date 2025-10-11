@@ -476,46 +476,44 @@ void Ipv6Page::initNetCtrl()
     int errCode=0;
     QString netCtrlIPV6Name="IPV6";
     QString netCtrlDNSName="DNS";
+    QDBusMessage result;
     QDBusInterface dbusInterface("com.kylin.networkCtrol",
                                  "/com/kylin/networkCtrol",
                                  "com.kylin.networkCtrol",
                               QDBusConnection::systemBus());
     if (!dbusInterface.isValid()) {
         qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+    } else {
+        dbusInterface.setTimeout(2000);
+        result = dbusInterface.call("getNetContrlRule",netCtrlIPV6Name);
+        if(result.type() == QDBusMessage::ErrorMessage)
+        {
+            qWarning() << "[ipv6]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"ipv6"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlIPV6Name,map);
+                map.clear();
+            }
+        }
+
+        result = dbusInterface.call("getNetContrlRule",netCtrlDNSName);
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[ipv6]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"ipv6"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlDNSName,map);
+                map.clear();
+            }
+        }
     }
-    dbusInterface.setTimeout(2000);
-    QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlIPV6Name);
-    if(result.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "[ipv6]getNetContrlRule error:" << result.errorMessage();
-    }
-
-   if( result.arguments().size()>=2)
-   {
-       const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-       dbusArg1st >> map;
-       errCode = result.arguments().at( 1 ).toInt();
-       qInfo()<<"ipv6"<<map<<errCode;
-       if(errCode==0) updateNetCtrl(netCtrlIPV6Name,map);
-       map.clear();
-   }
-
-
-   result = dbusInterface.call("getNetContrlRule",netCtrlDNSName);
-   if(result.type() == QDBusMessage::ErrorMessage)
-   {
-       qWarning() << "[ipv6]getNetContrlRule error:" << result.errorMessage();
-   }
-
-  if( result.arguments().size()>=2)
-  {
-      const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-      dbusArg1st >> map;
-      errCode = result.arguments().at( 1 ).toInt();
-      qInfo()<<"ipv6"<<map<<errCode;
-      if(errCode==0) updateNetCtrl(netCtrlDNSName,map);
-      map.clear();
-  }
 
    // connect(m_interface,SIGNAL(sigNetContrlRuleChanged(QString ,QVariantMap )),this,SLOT(updateNetCtrl(QString ,QVariantMap)),Qt::QueuedConnection);
 

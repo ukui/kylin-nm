@@ -388,6 +388,7 @@ Q_SIGNALS: // SIGNALS
 private:
     MainWindow *m_mainWindow;
     QString m_display;
+    QStringList m_proxyDesktopList;
     QDBusServiceWatcher *m_watcher = nullptr;
     QDBusInterface *m_pSysBusInterfaces;
 

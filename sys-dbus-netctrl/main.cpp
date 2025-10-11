@@ -16,32 +16,24 @@
  *
  */
 
-#include "kynmsystemdbus.h"
-#include "proxyServer/proxyapphandler.h"
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QDebug>
 
+#include <syslog.h>
+#include "kylin_netctrol_server_interface.h"
+
 int main(int argc, char *argv[]){
 
     QCoreApplication app(argc, argv);
-
-    QDBusConnection systemBus = QDBusConnection::systemBus();
-    if (!systemBus.registerService("com.kylin.network.qt.systemdbus")){
-        qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
-        exit(1);
-    }
-
-    if (!systemBus.registerObject("/", new KynmSystemDbus(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
-        qCritical() << "QDbus network interface register object failed reason:" << systemBus.lastError();
-        exit(2);
-    }
-
-    if (!systemBus.registerObject("/com/kylin/proxy", new ProcAddServer(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
-        qCritical() << "QDbus proxy interface register object failed reason:" << systemBus.lastError();
-        exit(2);
-    }
+    openlog("sys-dbus-netctrl", LOG_PID | LOG_NDELAY, LOG_USER);
+	
+	QThread *threadNetCt = new QThread;
+    NetCtrlAdaptor *netCtAdaptor=NetCtrlAdaptor::getNetContrlInstance();
+    netCtAdaptor->moveToThread(threadNetCt);
+    QObject::connect(threadNetCt, &QThread::started, netCtAdaptor, &NetCtrlAdaptor::initServer);
+    threadNetCt->start();
 
     return app.exec();
 }

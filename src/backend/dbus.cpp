@@ -19,6 +19,7 @@
  */
 
 #include "dbus.h"
+#include "proxyservicemanager.h"
 #include <QtCore/QMetaObject>
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
@@ -108,6 +109,11 @@ bool DbusAdaptor::registerService()
     bool res = QDBusConnection::sessionBus().registerObject("/com/kylin/network", this,QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals);
     if (!res) {
         QDBusConnection::sessionBus().interface()->unregisterService(QStringLiteral("com.kylin.network"));
+    }
+
+    if (!QDBusConnection::sessionBus().registerObject("/com/kylin/proxy", new ProxyServiceManager(this), QDBusConnection::ExportAllContents)) {
+        QDBusConnection::sessionBus().interface()->unregisterService(QStringLiteral("com.kylin.network"));
+        res = false;
     }
     return res;
 }

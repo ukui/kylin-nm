@@ -21,6 +21,7 @@
 
 #include <gtk/gtk.h>
 #include <libnma/nma-wifi-dialog.h>
+#include <syslog.h>
 
 GSList *        secrets_reqs;
 #if 0
@@ -127,6 +128,33 @@ applet_secrets_request_complete (SecretsRequest *req,
 }
 
 static void
+delete_connection_by_uuid (const char *uuid)
+{
+    /* 检查 UUID 是否有效 */
+    if (!uuid || strlen(uuid) == 0) {
+        syslog(LOG_WARNING, "Invalid UUID provided");
+        return;
+    }
+
+    GError *error = NULL;
+    gchar *command;
+    gint exit_status;
+
+    /* 使用 nmcli 命令删除连接 */
+    command = g_strdup_printf ("nmcli connection delete uuid %s", uuid);
+    if (!g_spawn_command_line_sync (command, NULL, NULL, &exit_status, &error)) {
+        syslog(LOG_ERR, "%s: Failed to execute nmcli delete for UUID %s - Error: %s", __func__, uuid, error->message);
+        g_error_free (error);
+    } else if (exit_status != 0) {
+        syslog(LOG_WARNING, "%s: nmcli failed with exit status %d for UUID %s", __func__, exit_status, uuid);
+    } else {
+        syslog(LOG_INFO, "%s: Connection with UUID %s successfully deleted via nmcli", __func__, uuid);
+    }
+
+    g_free (command);
+}
+
+static void
 get_secrets_dialog_response_cb (GtkDialog *foo,
                                 gint response,
                                 gpointer user_data)
@@ -142,6 +170,11 @@ get_secrets_dialog_response_cb (GtkDialog *foo,
     GError *error = NULL;
 
     if (response != GTK_RESPONSE_OK) {
+        if(req->connection){/* 用户点击取消或关闭，删除此网络连接, link bug#424881 */
+            const char *uuid = nm_connection_get_uuid(req->connection);
+            delete_connection_by_uuid(uuid);
+        }
+
         g_set_error (&error,
                      NM_SECRET_AGENT_ERROR,
                      NM_SECRET_AGENT_ERROR_USER_CANCELED,

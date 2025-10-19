@@ -1,0 +1,31 @@
+From: "2324445816@gq.com" <2324445816@gq.com>
+Date: Sun, 19 Oct 2025 08:03:27 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 14.2% (2 of 14 strings)
+
+Translation: openkylin-nile-new/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/netconnect/ar/
+---
+ plugins/netconnect/translations/ar.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/netconnect/translations/ar.ts b/plugins/netconnect/translations/ar.ts
+index 18beb11..638650d 100644
+--- a/plugins/netconnect/translations/ar.ts
++++ b/plugins/netconnect/translations/ar.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>إضافة شبكة أخرى</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>إضافة شبكة سلكية</translation>
+     </message>
+ </context>
+ <context>

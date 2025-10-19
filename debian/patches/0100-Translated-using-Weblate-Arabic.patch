@@ -1,0 +1,121 @@
+From: "2324445816@gq.com" <2324445816@gq.com>
+Date: Sun, 19 Oct 2025 08:03:27 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 18.1% (2 of 11 strings)
+
+Translation: openkylin-nile-new/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/wlanconnect/ar/
+---
+ plugins/vpn/translations/ar.ts         | 22 +++++++++++-----------
+ plugins/wlanconnect/translations/ar.ts |  4 ++--
+ 2 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/plugins/vpn/translations/ar.ts b/plugins/vpn/translations/ar.ts
+index fc0cbd4..32613dc 100644
+--- a/plugins/vpn/translations/ar.ts
++++ b/plugins/vpn/translations/ar.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>إضافة شبكة أخرى</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation></translation>
++        <translation>إضافة شبكة سلكية</translation>
+     </message>
+ </context>
+ <context>
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../itemframe.cpp" line="38"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>إضافة VPN</translation>
+     </message>
+ </context>
+ <context>
+@@ -33,32 +33,32 @@
+     <message>
+         <location filename="../vpn.ui" line="68"/>
+         <source>import</source>
+-        <translation></translation>
++        <translation>استيراد</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="157"/>
+         <location filename="../vpn.cpp" line="284"/>
+         <source>Show on Taskbar</source>
+-        <translation type="unfinished"></translation>
++        <translation>إظهار على شريط المهام</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="286"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>إضافة شبكة إفتراضية خاصة</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="372"/>
+         <location filename="../vpn.cpp" line="479"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>متصل</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="489"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>غير متصل</translation>
+     </message>
+ </context>
+ <context>
+@@ -66,19 +66,19 @@
+     <message>
+         <location filename="../vpnitem.cpp" line="55"/>
+         <source>Delete</source>
+-        <translation type="unfinished"></translation>
++        <translation>حذف</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="107"/>
+         <location filename="../vpnitem.cpp" line="120"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>قطع الاتصال</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="109"/>
+         <location filename="../vpnitem.cpp" line="118"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>الاتصال</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/wlanconnect/translations/ar.ts b/plugins/wlanconnect/translations/ar.ts
+index e0b48b0..c8d6894 100644
+--- a/plugins/wlanconnect/translations/ar.ts
++++ b/plugins/wlanconnect/translations/ar.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>إضافة شبكة أخرى</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>إضافة شبكة سلكية</translation>
+     </message>
+ </context>
+ <context>

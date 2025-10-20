@@ -13,8 +13,8 @@ CONFIG += plugin \
 
 include(../component/addbtn.pri)
 
-PKGCONFIG   += gsettings-qt \
-             kysdk-qtwidgets \
+PKGCONFIG   += gsettings-qt6 \
+             kysdk-applications \
 
 TARGET = $$qtLibraryTarget(vpn)
 DESTDIR = ../..

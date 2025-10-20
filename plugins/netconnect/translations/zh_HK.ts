@@ -43,14 +43,14 @@
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="227"/>
+        <location filename="../netconnect.cpp" line="225"/>
         <source>open</source>
         <translation>開啟</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="224"/>
+        <location filename="../netconnect.cpp" line="222"/>
         <source>Advanced settings</source>
         <translation>高級設置</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
@@ -68,7 +68,7 @@
         <translation type="vanished">連線連接</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="343"/>
+        <location filename="../netconnect.cpp" line="341"/>
         <source>No ethernet device avaliable</source>
         <translation>未檢測到有線設備</translation>
     </message>
@@ -84,26 +84,26 @@
     </message>
     <message>
         <location filename="../netconnect.cpp" line="91"/>
-        <location filename="../netconnect.cpp" line="225"/>
-        <location filename="../netconnect.cpp" line="228"/>
+        <location filename="../netconnect.cpp" line="223"/>
+        <location filename="../netconnect.cpp" line="226"/>
         <source>LAN</source>
         <translation>有線網路</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="609"/>
-        <location filename="../netconnect.cpp" line="1091"/>
+        <location filename="../netconnect.cpp" line="629"/>
+        <location filename="../netconnect.cpp" line="1113"/>
         <source>connected</source>
         <translation>已連接</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="611"/>
-        <location filename="../netconnect.cpp" line="910"/>
-        <location filename="../netconnect.cpp" line="1101"/>
+        <location filename="../netconnect.cpp" line="631"/>
+        <location filename="../netconnect.cpp" line="935"/>
+        <location filename="../netconnect.cpp" line="1123"/>
         <source>not connected</source>
         <translation>未連接</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="676"/>
+        <location filename="../netconnect.cpp" line="701"/>
         <source>card</source>
         <translation>網卡</translation>
     </message>

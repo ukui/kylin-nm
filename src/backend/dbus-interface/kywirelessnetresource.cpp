@@ -43,7 +43,7 @@ static bool subWifiListSort(const KyWirelessNetItem info1, const KyWirelessNetIt
 
 static void wifiListSort(QList<KyWirelessNetItem> &list)
 {
-    qSort(list.begin(), list.end(), subWifiListSort);
+    std::sort(list.begin(), list.end(), subWifiListSort);
 }
 
 KyWirelessNetResource::KyWirelessNetResource(QObject *parent)

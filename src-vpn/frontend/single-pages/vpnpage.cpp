@@ -17,6 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
+#include <KX11Extras>
+#include <KWindowInfo>
 #include "vpnpage.h"
 #include <QDebug>
 #include <QScrollBar>
@@ -57,7 +59,7 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::activateConnectionError, this, &VpnPage::activateFailed);
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::deactivateConnectionError, this, &VpnPage::deactivateFailed);
 
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
+    connect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, [&](WId activeWindowId){
         if (activeWindowId != this->winId() && activeWindowId != 0) {
             hide();
         }
@@ -661,10 +663,12 @@ void VpnPage::showDetailPage(QString uuid)
 void VpnPage::showUI()
 {
     //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
+
     const KWindowInfo info(this->winId(), NET::WMState);
     if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+        KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);//mqtest qt6移除该接口
     }
+
 
     resetPageHeight();
 

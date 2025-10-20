@@ -97,7 +97,7 @@ void Ipv4Page::initUI() {
     maskLayout->addWidget(m_maskHintLabel);
 
     // IP的正则格式限制
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    QRegularExpression rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
     Divider* divider = new Divider(false, this);
     m_dnsWidget = new MultipleDnsWidget(rx, true, this);
@@ -128,9 +128,9 @@ void Ipv4Page::initUI() {
 //    netMaskCombox->addItem("255.0.0.0"); //8
 
 
-    ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
-    gateWayEdit->setValidator(new QRegExpValidator(rx, this));
-    netMaskEdit->setValidator(new QRegExpValidator(rx, this));
+    ipv4addressEdit->setValidator(new QRegularExpressionValidator(rx, this));
+    gateWayEdit->setValidator(new QRegularExpressionValidator(rx, this));
+    netMaskEdit->setValidator(new QRegularExpressionValidator(rx, this));
 
     initLoadingIcon();
 }
@@ -329,12 +329,13 @@ bool Ipv4Page::getTextEditState(QString text)
     if (text.isEmpty()) {
         return true;
     }
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
-    bool match = false;
-    match = rx.exactMatch(text);
+    // IP地址正则表达式，包含开始和结束锚点确保完全匹配
+    QRegularExpression rx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    return match;
+    // 进行匹配并返回结果
+    QRegularExpressionMatch match = rx.match(text);
+    return match.hasMatch();
 }
 
 bool Ipv4Page::netMaskIsValide(QString text)

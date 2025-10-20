@@ -20,7 +20,6 @@
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QPainterPath>
-#include <QSvgRenderer>
 #include <QApplication>
 #include <QStyle>
 #include <QDebug>
@@ -222,7 +221,7 @@ void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
     return QPushButton::mouseReleaseEvent(event);
 }
 
-void RadioItemButton::enterEvent(QEvent *event)
+void RadioItemButton::enterEvent(QEnterEvent *event)
 {
     if (m_isActivated) {
         m_backgroundColor = COLOR_HIGH_LIGHT;

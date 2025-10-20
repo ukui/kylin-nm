@@ -28,7 +28,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QVariantMap>
-#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QScreen>
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>

@@ -103,7 +103,7 @@ QString FixPushButton::getText(){
 
 void FixPushButton::changedLabelSlot() {
     QFontMetrics  fontMetrics(this->font());
-    int fontSize = fontMetrics.width(mStr);
+    int fontSize = fontMetrics.horizontalAdvance(mStr);
     if (fontSize > 65) {
         setText(fontMetrics.elidedText(mStr, Qt::ElideRight, 65));
         setToolTip(mStr);
@@ -429,13 +429,13 @@ void NameLabel::changedLabelSlot()
     this->setMinimumHeight(NAME_LABEL_MIN_HEIGHT);
     this->setMaximumHeight(NAME_LABEL_MAX_HEIGHT);
     QFontMetrics  fontMetrics(this->font());
-    int fontSize = fontMetrics.width(m_name);
+    int fontSize = fontMetrics.horizontalAdvance(m_name);
     if (fontSize > m_maximumWidth) {
         this->setFixedWidth(m_maximumWidth);
         setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
         setToolTip(m_name);
     } else {
-        this->setFixedWidth(fontMetrics.width(m_name) + 2);
+        this->setFixedWidth(fontMetrics.horizontalAdvance(m_name) + 2);
         setText(m_name);
         setToolTip("");
     }

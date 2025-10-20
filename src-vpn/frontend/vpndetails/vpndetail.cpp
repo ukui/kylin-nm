@@ -87,7 +87,7 @@ void VpnDetail::initTabBar()
     int tabCount = m_vpnTabBar->count();
     for (int i = 0; i< tabCount; ++i) {
         QFontMetrics fontMetrics(m_vpnTabBar->font());
-        int fontSize = fontMetrics.width(m_vpnTabBar->tabText(i));
+        int fontSize = fontMetrics.horizontalAdvance(m_vpnTabBar->tabText(i));
         if (fontSize > MAX_TAB_TEXT_LENGTH) {
             m_vpnTabBar->setTabToolTip(i, m_vpnTabBar->tabText(i));
         } else {
@@ -255,8 +255,14 @@ void VpnDetail::initConnection()
 
 void VpnDetail::centerToScreen()
 {
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    QRect desk_rect;
+
+    QScreen *currentScreen = QGuiApplication::screenAt(QCursor::pos());
+    if (currentScreen) {
+        desk_rect = currentScreen->geometry();
+    } else {
+        desk_rect=QGuiApplication::primaryScreen()->geometry();
+    }
     int desk_x = desk_rect.width();
     int desk_y = desk_rect.height();
     int x = this->width();

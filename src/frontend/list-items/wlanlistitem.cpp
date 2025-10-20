@@ -290,8 +290,8 @@ void WlanListItem::initWlanUI()
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
 //    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/ ]+$");
-    QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+    QRegularExpression rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/ ]+$");
+    QRegularExpressionValidator *latitude = new QRegularExpressionValidator(rx, this);
     m_pwdLineEdit->setValidator(latitude);
     m_pwdLineEdit->setMaxLength(PWD_LENGTH_MAX);
 
@@ -524,17 +524,18 @@ void WlanListItem::onNetButtonClicked()
     }
 
     qWarning() << Q_FUNC_INFO << __LINE__ << m_wirelessNetItem.m_secuType;
-    if (!this->m_connectButton->isVisible() && !m_wirelessNetItem.m_secuType.contains("NONE")) {
+    if (!this->m_connectButton->isVisible() && !m_wirelessNetItem.m_secuType.isEmpty()) {
         if (m_wirelessNetItem.m_secuType.contains("802.1x", Qt::CaseInsensitive)) {
             if (isEnterpriseWlanDialogShow && enterpriseWlanDialog != nullptr) {
                 qDebug() <<  LOG_FLAG <<"EnterpriseWlanDialog is show do not show again!";
-                KWindowSystem::activateWindow(enterpriseWlanDialog->winId());
-                KWindowSystem::raiseWindow(enterpriseWlanDialog->winId());
+                enterpriseWlanDialog->show();
+                enterpriseWlanDialog->activateWindow();
                 return;
             } else {
                 enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice);
                 connect(enterpriseWlanDialog, &EnterpriseWlanDialog::enterpriseWlanDialogClose, this, &WlanListItem::onEnterpriseWlanDialogClose);
                 enterpriseWlanDialog->show();
+                enterpriseWlanDialog->activateWindow();
                 isEnterpriseWlanDialogShow = true;
             }
         } else {

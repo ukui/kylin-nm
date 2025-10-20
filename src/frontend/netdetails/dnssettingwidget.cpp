@@ -32,11 +32,9 @@
 #define  LAYOUT_SPACING  16
 
 DnsSettingWidget::DnsSettingWidget(QString timeout, QString retry, QString tactic, QWidget *parent)
-    :m_timeout(timeout), m_retry(retry), m_tactic(tactic), QDialog(parent)
+    :m_timeout(timeout), m_retry(retry), m_tactic(tactic), KDialog(parent)
 {
     this->setFixedSize(420, 420);
-    setAttribute(Qt::WA_DeleteOnClose, false);
-    setProperty("useStyleWindowManager", false);
     initUi();
     initConnect();
     onPaletteChanged();
@@ -81,24 +79,11 @@ void DnsSettingWidget::initUi()
 
     m_bottomDivider = new Divider(false, this);
 
-    m_closeBtn = new QPushButton(this);
-    m_closeBtn->setFixedSize(32,32);
-    m_closeBtn->setIcon(QIcon::fromTheme("application-exit-symbolic"));
-    m_closeBtn->setProperty("useButtonPalette", true);
-    m_closeBtn->setFlat(true);
-    m_closeBtn->setToolTip(tr("Close"));
-
     m_cancelBtn = new QPushButton(this);
     m_cancelBtn->setText(tr("Cancel"));
 
     m_confirmBtn = new QPushButton(this);
     m_confirmBtn->setText(tr("Confirm"));
-
-
-    QHBoxLayout* titleLayout = new QHBoxLayout(m_titleWidget);
-    titleLayout->setContentsMargins(0,4,3,0);
-    titleLayout->addStretch();
-    titleLayout->addWidget(m_closeBtn);
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
@@ -109,7 +94,8 @@ void DnsSettingWidget::initUi()
     mainLayout->addSpacing(115);
     mainLayout->addWidget(m_bottomDivider);
     mainLayout->addWidget(m_bottomWidget);
-    this->setLayout(mainLayout);
+
+    this->mainWidget()->setLayout(mainLayout);
 
     //中间页面
     QFormLayout* centerLayout = new QFormLayout(m_centerWidget);
@@ -132,9 +118,6 @@ void DnsSettingWidget::initUi()
 
 void DnsSettingWidget::initConnect()
 {
-    connect(m_closeBtn, &QPushButton::released, this, [=](){
-        reject();
-    });
     connect(m_cancelBtn, &QPushButton::released, this, [=](){
         reject();
     });

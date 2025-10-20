@@ -34,17 +34,26 @@ public:
     AddNetBtn(bool isWlan, QWidget *parent = nullptr);
     ~AddNetBtn();
 
-    void setTextLabel(const QString str) {
-        m_textLabel->setText(str);
-    }
+    void setTextLabel(const QString str);
+    
+    enum CornerType {
+        All,
+        BottomRight
+    };
+
+    // 设置是否使用圆角
+    void setUseRoundedCorners(bool useRounded);
+    void setCornerType(CornerType type);
 
 protected:
     virtual void leaveEvent(QEvent * event);
-    virtual void enterEvent(QEvent * event);
+    virtual void enterEvent(QEnterEvent * event);
     void paintEvent(QPaintEvent *event);
 
 private:
     QLabel *m_textLabel;
+    bool m_useRoundedCorners = true; // 默认使用圆角
+    CornerType m_cornerType = All;
 
 Q_SIGNALS:
     void enterWidget();

@@ -23,7 +23,7 @@
 //#include "utils.h"
 
 #include <QDebug>
-#include <QRegExpValidator>
+#include <QRegularExpressionValidator>
 #include <QApplication>
 #include <QTranslator>
 
@@ -264,7 +264,7 @@ void Proxy::initUi(QWidget *widget)
     mHTTPLineEdit_1->resize(300, 36);
     mHTTPLineEdit_2 = new QLineEdit(mHTTPFrame);
     mHTTPLineEdit_2->setFixedHeight(36);
-    mHTTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
+    mHTTPLineEdit_2->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*") , this));
     mHTTPLayout_1->addWidget(mHTTPLabel);
     mHTTPLayout_1->addWidget(mHTTPLineEdit_1);
     mHTTPLayout_1->addWidget(mHTTPPortLabel);
@@ -287,7 +287,7 @@ void Proxy::initUi(QWidget *widget)
     mHTTPSLineEdit_1->resize(300, 36);
     mHTTPSLineEdit_2 = new QLineEdit(mHTTPSFrame);
     mHTTPSLineEdit_2->setFixedHeight(36);
-    mHTTPSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
+    mHTTPSLineEdit_2->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*") , this));
     mHTTPSLayout->addWidget(mHTTPSLabel);
     mHTTPSLayout->addWidget(mHTTPSLineEdit_1);
     mHTTPSLayout->addWidget(mHTTPSPortLabel);
@@ -310,7 +310,7 @@ void Proxy::initUi(QWidget *widget)
     mFTPLineEdit_1->resize(300, 36);
     mFTPLineEdit_2 = new QLineEdit(mFTPFrame);
     mFTPLineEdit_2->setFixedHeight(36);
-    mFTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
+    mFTPLineEdit_2->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*") , this));
     mFTPLayout->addWidget(mFTPLabel);
     mFTPLayout->addWidget(mFTPLineEdit_1);
     mFTPLayout->addWidget(mFTPPortLabel);
@@ -333,7 +333,7 @@ void Proxy::initUi(QWidget *widget)
     mSOCKSLineEdit_1->resize(300, 36);
     mSOCKSLineEdit_2 = new QLineEdit(mSOCKSFrame);
     mSOCKSLineEdit_2->setFixedHeight(36);
-    mSOCKSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
+    mSOCKSLineEdit_2->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*") , this));
     mSOCKSLayout->addWidget(mSOCKSLabel);
     mSOCKSLayout->addWidget(mSOCKSLineEdit_1);
     mSOCKSLayout->addWidget(mSOCKSPortLabel);
@@ -1109,8 +1109,8 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     ipAddressLayout->addRow(m_ipAddressLabel, ipInputWidget);
 
     // IP的正则格式限制
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    m_ipAddressLineEdit->setValidator(new QRegExpValidator(rx, this));
+    QRegularExpression rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    m_ipAddressLineEdit->setValidator(new QRegularExpressionValidator(rx, this));
     //无效的IP地址提示
     QPalette hintTextColor;
     hintTextColor.setColor(QPalette::WindowText, Qt::red);
@@ -1126,7 +1126,7 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     m_portLabel->setFixedWidth(LABEL_WIDTH);
     m_portLineEdit = new QLineEdit(m_portFrame);
     m_portLineEdit->setPlaceholderText(tr("Required")); //必填
-    m_portLineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
+    m_portLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*") , this));
     QHBoxLayout *portLayout = new QHBoxLayout(m_portFrame);
     portLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
     portLayout->setSpacing(FRAME_LAYOUT_SPACING);
@@ -1162,8 +1162,8 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     pwdLayout->addWidget(m_pwdLabel);
     pwdLayout->addWidget(m_pwdLineEdit);
 
-    QRegExp rxPwd("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
-    QRegExpValidator *latitude = new QRegExpValidator(rxPwd, this);
+    QRegularExpression rxPwd("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+    QRegularExpressionValidator *latitude = new QRegularExpressionValidator(rxPwd, this);
     m_pwdLineEdit->setValidator(latitude);
 
 #if 0
@@ -1311,12 +1311,13 @@ bool Proxy::getipEditState(QString text)
     if (text.isEmpty()) {
         return true;
     }
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+     // IP地址正则表达式，包含开始和结束锚点确保完全匹配
+    QRegularExpression rx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    bool match = false;
-    match = rx.exactMatch(text);
+    // 进行匹配并返回结果
+    QRegularExpressionMatch match = rx.match(text);
+    return match.hasMatch();
 
-    return match;
 }
 
 void Proxy::setSystemProxyFrameHidden(bool state)

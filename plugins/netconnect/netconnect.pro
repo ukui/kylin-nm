@@ -22,13 +22,13 @@ INCLUDEPATH   +=  \
                  /usr/include/ukcc/interface \
                  /usr/include/ukcc/widgets
 
-LIBS          +=  -L$$[QT_INSTALL_LIBS] -lgsettings-qt -lukcc
+LIBS          +=  -L$$[QT_INSTALL_LIBS] -lukcc
 
 CONFIG += c++11 \
           link_pkgconfig \
 
-PKGCONFIG += gsettings-qt \
-             kysdk-qtwidgets \
+PKGCONFIG += gsettings-qt6 \
+             kysdk-applications \
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 

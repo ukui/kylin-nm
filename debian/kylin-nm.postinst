@@ -1,7 +1,18 @@
 #!/bin/sh
+#DEBHELPER#
  
 set -e
- 
+
+# Handle systemd service
+if [ "$1" = "configure" ]; then
+    # Enable and start the systemd service
+    if command -v systemctl >/dev/null 2>&1; then
+        systemctl daemon-reload
+        systemctl enable kylin-nm-sysdbus.service
+        systemctl start kylin-nm-sysdbus.service
+    fi
+fi
+
 PROGRAM=$(dpkg-divert --truename /usr/bin/kylin-nm)
 
 if setcap cap_net_raw+ep $PROGRAM; then

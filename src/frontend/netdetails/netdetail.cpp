@@ -30,7 +30,7 @@
 #include <QScrollBar>
 
 #include "windowmanager/windowmanager.h"
-#include "kwindowsystem.h"
+#include <KX11Extras>
 #include "kwindowsystem_export.h"
 
 #define  WINDOW_WIDTH  520
@@ -201,7 +201,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      mCategory(category),
      KDialog(parent)
 {
-    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
     setWindowIcon("kylin-network");
@@ -249,7 +249,7 @@ NetDetail::~NetDetail()
 void NetDetail::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
-    pal.setColor(QPalette::Background, pal.base().color());
+    pal.setColor(QPalette::WindowText, pal.base().color());
     this->setPalette(pal);
 
 #if 0
@@ -262,7 +262,7 @@ void NetDetail::onPaletteChanged()
            pal = lightPalette(this);
        }
     }
-    pal.setColor(QPalette::Background, pal.base().color());
+    pal.setColor(QPalette::WindowText, pal.base().color());
     this->setPalette(pal);
 
     setFramePalette(detailPage, pal);
@@ -313,8 +313,14 @@ void NetDetail::closeEvent(QCloseEvent *event)
 
 void NetDetail::centerToScreen()
 {
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    QRect desk_rect;
+
+    QScreen *currentScreen = QGuiApplication::screenAt(QCursor::pos());
+    if (currentScreen) {
+        desk_rect = currentScreen->geometry();
+    } else {
+        desk_rect=QGuiApplication::primaryScreen()->geometry();
+    }
     int desk_x = desk_rect.width();
     int desk_y = desk_rect.height();
     int x = this->width();
@@ -1073,7 +1079,7 @@ bool NetDetail::createWirelessConnect()
     connetSetting.m_ssid = ssid;
 //    connetSetting.m_secretFlag = NetworkManager::Setting::None;
     //由于X.h的None与此处的None有歧义，此处直接使用值
-    connetSetting.m_secretFlag = 0;
+    connetSetting.m_secretFlag = NetworkManager::Setting::None;
 
     //ipv4 & ipv6
     bool ipv4Change = ipv4Page->checkIsChanged(m_info, connetSetting);
@@ -1271,7 +1277,7 @@ void NetDetail::setNetTabToolTip()
     int tabCount = m_netTabBar->count();
     for (int i = 0; i< tabCount; ++i) {
         QFontMetrics fontMetrics(m_netTabBar->font());
-        int fontSize = fontMetrics.width(m_netTabBar->tabText(i));
+        int fontSize = fontMetrics.horizontalAdvance(m_netTabBar->tabText(i));
         if (fontSize > MAX_TAB_TEXT_LENGTH) {
             m_netTabBar->setTabToolTip(i, m_netTabBar->tabText(i));
         } else {

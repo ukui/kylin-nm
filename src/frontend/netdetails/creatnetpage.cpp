@@ -47,7 +47,7 @@ void CreatNetPage::initUI()
     m_gateWayLabel = new QLabel(this);
 
     // IP的正则格式限制
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    QRegularExpression rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
     m_dnsWidget = new MultipleDnsWidget(rx, false, this);
 
     QLabel *nameEmptyLabel = new QLabel(this);
@@ -117,13 +117,13 @@ void CreatNetPage::initUI()
     ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"自动(DHCP)"
     ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"手动"
 
-    QRegExp nameRx("^.{0,32}$");
-    QValidator *validator = new QRegExpValidator(nameRx, this);
+    QRegularExpression nameRx("^.{0,32}$");
+    QValidator *validator = new QRegularExpressionValidator(nameRx, this);
 
     connNameEdit->setValidator(validator);
-    ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
-    gateWayEdit->setValidator(new QRegExpValidator(rx, this));
-    netMaskEdit->setValidator(new QRegExpValidator(rx, this));
+    ipv4addressEdit->setValidator(new QRegularExpressionValidator(rx, this));
+    gateWayEdit->setValidator(new QRegularExpressionValidator(rx, this));
+    netMaskEdit->setValidator(new QRegularExpressionValidator(rx, this));
 
     initLoadingIcon();
 }
@@ -246,12 +246,13 @@ bool CreatNetPage::getTextEditState(QString text)
     if (text.isEmpty()) {
         return true;
     }
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
-    bool match = false;
-    match = rx.exactMatch(text);
+    // IP地址正则表达式，包含开始和结束锚点确保完全匹配
+    QRegularExpression rx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    return match;
+    // 进行匹配并返回结果
+    QRegularExpressionMatch match = rx.match(text);
+    return match.hasMatch();
 }
 
 void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)

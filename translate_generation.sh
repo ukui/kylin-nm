@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export PATH="/usr/lib/qt6/bin:$PATH"
 ts_list=(`ls translations/*.ts`)
 source /etc/os-release
 version=(`echo $ID`)

@@ -1,9 +1,11 @@
 TEMPLATE = lib
 TARGET = ukui-shortcut-network
 QT += quick dbus core
-CONFIG += plugin c++11
+CONFIG += plugin c++11 link_pkgconfig
 
 DEFINES += QT_DEPRECATED_WARNINGS
+
+PKGCONFIG += gsettings-qt6
 
 LIBS += -lpthread
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -46,6 +48,10 @@ inst2.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
 qm_files.files += translations/*.qm
 qm_files.path = /usr/share/ukui/widgets/org.ukui.shortcut.network/translations
 
+ts_files.files += translations/*.ts
+ts_files.path = /usr/share/ukui/widgets/org.ukui.shortcut.network/translations
+
+
 target.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
 
 TRANSLATIONS += \
@@ -62,6 +68,7 @@ TRANSLATIONS += \
 INSTALLS += inst1 \
             inst2 \
             qm_files \
+            ts_files \
             target
 
 OBJECTS_DIR = ./obj/

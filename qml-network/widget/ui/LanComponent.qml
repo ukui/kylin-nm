@@ -81,8 +81,15 @@ ListView {
 
                 UkuiItems.IconButton {
                     id: typeicon
+                    //这里添加拨号的类型
                     visible: modelData.State === 2 || modelData.State === 4
-                    iconSource: (modelData.State === 2) ? ("network-wired-connected-symbolic") : ("network-wired-disconnected-symbolic")
+                    iconSource: {
+                        if (modelData.IsDSL) { // 假设modelData中有Type属性表示连接类型
+                            ("ukui-dial-up-symbolic")
+                        } else {
+                            (modelData.State === 2) ? ("network-wired-connected-symbolic") : ("network-wired-disconnected-symbolic")
+                        }
+                    }
                     anchors.fill: parent
                     radius: 19
                     isHighLight: modelData.State === 2
@@ -123,6 +130,7 @@ ListView {
                 Layout.leftMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
+                elide: Text.ElideRight
                 MouseArea {
                     onClicked: {
                         nameLabel.visible = false
@@ -130,7 +138,7 @@ ListView {
                     }
                 }
             }
-
+                
             UkuiItems.DtThemeText {
                 id: nameStateLabel
                 visible: false
@@ -139,13 +147,18 @@ ListView {
                 Layout.topMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
+                elide: Text.ElideRight
                 UkuiItems.DtThemeText {
                     id: stateLabel
                     Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     Layout.leftMargin: 8
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
-                    text: (modelData.State === 2) ? qsTr("connected") : qsTr("Not connected")
+                    text: modelData.State === 2 
+                            ? (modelData.Connectivity === 3 
+                                ? qsTr("connected") + "，" + qsTr("(network restricted)") 
+                                : qsTr("connected"))
+                            : qsTr("Not connected")
                 }
             }
 

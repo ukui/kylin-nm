@@ -55,7 +55,7 @@ void DetailPage::setSSID(const QString &ssid) {
     }
     m_formerSSID = ssid;
     QFontMetrics fontMetrics(m_SSIDLabel->font());
-    int fontSize = fontMetrics.width(ssid);
+    int fontSize = fontMetrics.horizontalAdvance(ssid);
     if (fontSize > MAX_SSID_WIDTH) {
         this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, MAX_SSID_WIDTH));
         this->setToolTip(ssid);
@@ -212,7 +212,7 @@ void DetailPage::initUI() {
         m_netCopyButton->setToolTip(tr("Copy all"));
         //设置按钮背景颜色-透明
         QPalette btnPal = m_netCopyButton->palette();
-        QColor color = qApp->palette().color(QPalette::Background);
+        QColor color = qApp->palette().color(QPalette::WindowText);
         color.setAlphaF(0);
         btnPal.setColor(QPalette::Button, color);
         m_netCopyButton->setPalette(btnPal);
@@ -230,8 +230,8 @@ void DetailPage::initUI() {
         m_SSIDEdit->setAlignment(Qt::AlignRight);
         m_SSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         m_SSIDEdit->setPlaceholderText(tr("Please input SSID:"));
-        QRegExp nameRx("^.{0,32}$");
-        QValidator *validator = new QRegExpValidator(nameRx, this);
+        QRegularExpression nameRx("^.{0,32}$");
+        QValidator *validator = new QRegularExpressionValidator(nameRx, this);
 
         m_SSIDEdit->setValidator(validator);
         m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(m_SSIDEdit), m_listWidget);

@@ -163,7 +163,7 @@ void WirelessConnectionModel::updateConnectionStrength(const QString &connection
 {
     int index = findIndexById(connectionId);
     if (index != -1) {
-        m_connections[index].signal = newStrength;
+        m_connections[index].signal = QString::number(newStrength);
         QModelIndex modelIndex = createIndex(index, 0);
         emit dataChanged(modelIndex, modelIndex, {StrengthRole});
     }
@@ -188,7 +188,7 @@ WirelessConnectionModel::ST_ConnectionInfo WirelessConnectionModel::mapToConnect
     connect.security=value.value("Security").toString();
     connect.uuid=value.value("Uuid").toString();
     connect.isApConn=value.value("isApConn").toString();
-    connect.category=value.value("category").toString();
+    connect.category=value.value("category").toUInt();
     connect.frequency=value.value("frequency").toUInt();
 
     connect.status=value.value("State").toInt();

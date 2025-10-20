@@ -88,7 +88,7 @@ public:
 
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
-    void deactivateWired(const QString& devName, const QString& connUuid);
+    void deactivateWired(const QString& devName, const QString& connUuid, bool concise = false);
     void deleteWiredConnect(int type, const QString& connUuid);
     void setWiredDeviceAutoconnect(const QString& devName, bool state);
     //无线连接断开
@@ -113,9 +113,6 @@ public:
 
     void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect);
     void rescan();
-
-    void keyRingInit();
-    void keyRingClear();
 
     bool getWirelessSwitchBtnState();
     bool getWiredEnabledState();
@@ -189,6 +186,7 @@ private:
     void initNetCtrl();
     void netCtrlDiscon(QMap<QString, QString> lanMap,QMap<QString, QString> wlanMap);
 
+    void kylinAgentInit();
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
@@ -263,6 +261,8 @@ private:
 public Q_SLOTS:
     void onShowMainWindow(int type);
     void updateNetCtrl(QString modName,QVariantMap value);
+    void keyRingInit();
+    void keyRingClear();
 
 private Q_SLOTS:
     void onTransChanged();

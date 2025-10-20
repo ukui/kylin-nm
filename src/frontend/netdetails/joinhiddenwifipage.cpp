@@ -20,7 +20,7 @@
 #include "joinhiddenwifipage.h"
 
 #include <QApplication>
-#include "kwindowsystem.h"
+#include <KX11Extras>
 #include "kwindowsystem_export.h"
 
 #define THEME_SCHAME "org.ukui.style"
@@ -50,7 +50,7 @@ JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     initComponent();
 
     setAttribute(Qt::WA_DeleteOnClose);
-    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     setJoinBtnEnable();
 }
@@ -139,7 +139,7 @@ void JoinHiddenWiFiPage::initUI()
     //请输入您想要加入的网络信息
    m_descriptionLabel->setLabelText(tr("Please enter the network information"));
    QFont font = m_descriptionLabel->font();
-   font.setWeight(MEDIUM_WEIGHT_VALUE);
+   font.setWeight(QFont::Medium);//qt6使用枚举
    m_descriptionLabel->setFont(font);
 
    m_nameLabel->setLabelText(tr("Network name(SSID)")); //网络名(SSID)
@@ -151,8 +151,8 @@ void JoinHiddenWiFiPage::initUI()
    m_cancelBtn->setProperty("useButtonPalette", true);
    m_cancelBtn->setProperty("isImportant", false);
 
-   QRegExp nameRx("^.{0,32}$");
-   QValidator *validator = new QRegExpValidator(nameRx, this);
+   QRegularExpression nameRx("^.{0,32}$");
+   QValidator *validator = new QRegularExpressionValidator(nameRx, this);
    m_nameEdit->setValidator(validator);
    m_nameEdit->setPlaceholderText(tr("Required")); //必填
 
@@ -212,7 +212,7 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
     connSettingInfo.m_ssid = m_nameEdit->text();
     connSettingInfo.setConnectName(connSettingInfo.m_ssid);
     connSettingInfo.setIfaceName(m_devName);
-    connSettingInfo.m_secretFlag = 0;
+    connSettingInfo.m_secretFlag =NetworkManager::Setting::SecretFlagType::None;
 
     KySecuType secuType;
     KyEapMethodType eapType;
@@ -249,7 +249,12 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
 
 void JoinHiddenWiFiPage::onBtnShowListClicked()
 {
-    Q_EMIT showWlanList(1); //WLAN_PAGE_INDEX
+    QDBusInterface sidebarIfc("org.ukui.Sidebar",
+                              "/org/ukui/Sidebar",
+                              "org.ukui.Sidebar",
+                              QDBusConnection::sessionBus());
+    sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
+
 }
 
 void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)

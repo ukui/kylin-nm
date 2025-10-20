@@ -61,6 +61,12 @@ void NetworkAdaptor::deActivateConnect(int type, const QString &devName, const Q
     QMetaObject::invokeMethod(parent(), "deActivateConnect", Q_ARG(int, type), Q_ARG(QString, devName), Q_ARG(QString, ssid));
 }
 
+void NetworkAdaptor::deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid)
+{
+    // handle method call com.kylin.network.deActivateConnect
+    QMetaObject::invokeMethod(parent(), "deActivateConnectConcise", Q_ARG(int, type), Q_ARG(bool, concise), Q_ARG(QString, devName), Q_ARG(QString, ssid));
+}
+
 void NetworkAdaptor::deleteConnect(int type, const QString &ssid)
 {
     // handle method call com.kylin.network.deleteConnect

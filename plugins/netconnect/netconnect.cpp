@@ -140,6 +140,7 @@ QWidget *NetConnect::pluginUi() {
 
         initSearchText();
         initComponent();
+        netComponnetSettings();
     }
     return pluginWidget;
 }
@@ -563,7 +564,7 @@ void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
         return;
     }
     qDebug() << "[NetConnect]call deActivateConnect" << __LINE__;
-    m_interface->call(QStringLiteral("deActivateConnect"),type, deviceName, ssid);
+    m_interface->call(QStringLiteral("deActivateConnectConcise"),type, true, deviceName, ssid);
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
 }
 
@@ -624,6 +625,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 
     LanItem * lanItem = new LanItem(isActived, pluginWidget);
     QString iconPath = KLanSymbolic;
+    // 判断是否为pppoe
     if (isActived) {
         lanItem->statusLabel->setText(tr("connected"));
     } else {
@@ -633,6 +635,11 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
 //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
 //    }
+
+    if(isDslConnection(infoList.at(1))){
+        searchIcon = QIcon::fromTheme("ukui-dial-up-symbolic");
+    }
+
     lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     lanItem->titileLabel->setText(infoList.at(0));
 
@@ -932,6 +939,11 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
 //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
 //    }
+
+    if(isDslConnection(connUuid)){
+        searchIcon = QIcon::fromTheme("ukui-dial-up-symbolic");
+    }
+
     lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     lanItem->titileLabel->setText(connName);
 
@@ -1122,6 +1134,38 @@ void NetConnect::openKylinm()
     sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
 }
 
+void NetConnect::netComponnetSettings()
+{
+    QDBusInterface m_interface( "org.ukui.ukcc.session",
+                               "/",
+                               "org.ukui.ukcc.session.interface",
+                               QDBusConnection::sessionBus());
+
+    QDBusReply<QVariantMap> reply = m_interface.call("getModuleHideStatus");
+    if (!reply.isValid()) {
+        qDebug()<<"execute dbus method getModuleHideStatus failed";
+    }
+    QMap<QString,QVariant> configData = reply.value();
+    QString moduleSettings = configData.value("netconnctSettings").toString();
+    QStringList setItems = moduleSettings.split(",");
+
+    foreach (QString setItem, setItems) {
+        QStringList item = setItem.split(":");
+        if (item.at(0) == "wlanAdvanced") {
+            ui->detailBtn->setVisible(item.at(1) == "true");
+        }
+    }
+
+    QString moduleEnable = configData.value("netconnctEnable").toString();
+    QStringList enableItems = moduleEnable.split(",");
+    foreach (QString setItem, enableItems) {
+        QStringList item = setItem.split(":");
+        if (item.at(0) == "wlanAdvanced") {
+            ui->detailBtn->setEnabled(item.at(1) == "true");
+        }
+    }
+}
+
 int NetConnect::getInsertPos(QString connName, QString deviceName)
 {
     qDebug() << "[NetConnect]getInsertPos" << connName << deviceName;
@@ -1195,4 +1239,14 @@ QMap<QString, QList<QStringList>> NetConnect::getWiredList()
 void NetConnect::updatePluginShowSettings()
 {
     isEnable();
+}
+
+bool NetConnect::isDslConnection(const QString &uuid)
+{
+    QProcess process;
+    process.start("nmcli", {"-g", "connection.type", "con", "show", uuid});
+    process.waitForFinished();
+    
+    QString output = process.readAllStandardOutput().trimmed();
+    return (output == "pppoe");  // 如果是pppoe类型则返回true
 }

@@ -25,7 +25,6 @@
 #include <QVBoxLayout>
 #include <QCheckBox>
 #include <QScrollArea>
-#include <QDesktopWidget>
 #include <QApplication>
 #include <QPainter>
 

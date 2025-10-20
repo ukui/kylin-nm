@@ -28,7 +28,7 @@ class ListItemEdit: public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    ListItemEdit(const QRegExp &rx, QObject *parent = nullptr);
+    ListItemEdit(const QRegularExpression &rx, QObject *parent = nullptr);
     ~ListItemEdit() = default;
 
     //创建一个控件
@@ -42,7 +42,7 @@ public:
                               const QStyleOptionViewItem &option,
                               const QModelIndex &index) const override;
 private:
-    QRegExp m_regExp;
+    QRegularExpression m_regExp;
 
 };
 

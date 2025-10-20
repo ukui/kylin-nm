@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus KWindowSystem svg concurrent network
+QT       += core gui dbus concurrent network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,12 +14,12 @@ TEMPLATE = app
 CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 #CONFIG += release
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
-PKGCONFIG +=kysdk-sysinfo
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt6 libcap kysdk-applications
+PKGCONFIG +=kysdk-sysinfo KF6WindowSystem
 
-INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+INCLUDEPATH += /usr/include/KF6/NetworkManagerQt \
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
+LIBS    +=  -L/usr/lib/ -lX11 -lKF6NetworkManagerQt -lukui-log4qt
 #LIBS    += -lkysec
 
 target.path = /usr/bin

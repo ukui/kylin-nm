@@ -47,7 +47,7 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     rect.adjust(1, 1, -1, -1);
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    KWindowEffects::enableBlurBehind(this->windowHandle(), true, QRegion(path.toFillPolygon().toPolygon()));
 
     ui->lbTitle->setText(tr("Input WLAN Information Please")); //输入Wi-Fi名称和密码后点击确定
     ui->lbWifiId->setText(tr("WLAN ID：")); //Wi-Fi连接名称：
@@ -82,7 +82,7 @@ void WiFiConfigDialog::paintEvent(QPaintEvent *event)
     double trans = this->getTransparentData();
 
     QStyleOption opt;
-    opt.init(this);
+    opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 

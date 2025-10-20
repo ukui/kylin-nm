@@ -24,22 +24,31 @@
 #define LOG_FLAG "[KynmSystemDbus]"
 
 #define KYLIN_NM_WIRED_MAIN_SWITCH "wired_main_switch"
+#define EXTRA_DNS_CONF_FILE "/etc/nm_enhance/"
+#define NM_ENHANCE_DNS "-nm_enhance_dns.conf"
+#define STR_ATTEMPTS "attempts"
+#define STR_TIMEOUT "timeout"
+#define STR_TYPE "type"
 
 KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
 {
+    qDBusRegisterMetaType<QMap<QString, QString>>();
+
     QString switchSettingFile = "/etc/kylin-nm/netSwitch.conf";
     m_kylinNmSettings = new QSettings(switchSettingFile, QSettings::IniFormat);
     QStringList groups = m_kylinNmSettings->childGroups();
-    if (groups.indexOf("conf") == -1)
-    {
+    if (groups.indexOf("conf") == -1) {
         qDebug() << Q_FUNC_INFO << __LINE__;
         m_kylinNmSettings->beginGroup("conf");
-        init_conf();
-    }
-    else
-    {
+        initConf();
+    } else {
         m_kylinNmSettings->beginGroup("conf");
-        init_conf();
+        initConf();
+    }
+    // 检查开关状态，如果为false则断开有线设备
+    bool wiredMainSwitch = m_kylinNmSettings->value(KYLIN_NM_WIRED_MAIN_SWITCH).toBool();
+    if (!wiredMainSwitch) {
+        disconnectWiredDevices();
     }
 }
 
@@ -49,12 +58,48 @@ KynmSystemDbus::~KynmSystemDbus()
 }
 
 
-void KynmSystemDbus::init_conf()
+void KynmSystemDbus::initConf()
 {
     if (!m_kylinNmSettings->contains(KYLIN_NM_WIRED_MAIN_SWITCH))
         m_kylinNmSettings->setValue(KYLIN_NM_WIRED_MAIN_SWITCH, true);
 }
 
+void KynmSystemDbus::disconnectWiredDevices()
+{
+    qDebug() << Q_FUNC_INFO << "Starting wired device disconnection using NetworkManagerQt API";
+    try {
+        // 获取所有设备
+        NetworkManager::Device::List devices = NetworkManager::networkInterfaces();
+        qDebug() << Q_FUNC_INFO << "Found" << devices.size() << "network devices";
+
+        for (const NetworkManager::Device::Ptr &device : devices) {
+            // 检查是否为有线设备
+            if (device->type() == NetworkManager::Device::Ethernet) {
+                NetworkManager::WiredDevice::Ptr wiredDevice = device.staticCast<NetworkManager::WiredDevice>();
+
+                if (wiredDevice) {
+                    QString interfaceName = wiredDevice->interfaceName();
+                    qDebug() << Q_FUNC_INFO << interfaceName << wiredDevice->state();
+
+                    // 检查设备状态
+                    if (wiredDevice->state() >= NetworkManager::Device::Preparing &&
+                            wiredDevice->state() <= NetworkManager::Device::Activated) {
+                        qDebug() << Q_FUNC_INFO << "Disconnecting wired device:" << interfaceName;
+                        NetworkManager::deactivateConnection(wiredDevice->activeConnection()->path());
+                    }
+                    wiredDevice->setAutoconnect(false);
+                }
+            }
+        }
+
+        qDebug() << Q_FUNC_INFO << "Wired device disconnection process completed";
+
+    } catch (const std::exception &e) {
+        qWarning() << Q_FUNC_INFO << "Exception occurred:" << e.what();
+    } catch (...) {
+        qWarning() << Q_FUNC_INFO << "Unknown exception occurred";
+    }
+}
 bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ipv4Address, QStringList macList)
 {
 #if 0
@@ -159,3 +204,98 @@ bool KynmSystemDbus::getWiredDeviceSwitch(QString devName)
         return true;//111
 }
 
+//移植kylin-network-manager-enhance-dameon包内的dbus内容
+//将 策略、超时时间、重试次数 写入nm_enhance_dns.conf文件
+bool KynmSystemDbus::setOptionsEnhance(const QString& name, const QString& timeout, const QString& attempts, const QString& type)
+{
+    QString filePath = EXTRA_DNS_CONF_FILE + name + NM_ENHANCE_DNS;
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadWrite))
+    {
+        return false;
+    }
+
+    QSettings settings(filePath, QSettings::IniFormat);
+    settings.setValue("/options/timeout", timeout);
+    settings.setValue("/options/attempts", attempts);
+    settings.setValue("/options/type", type);
+    settings.sync();
+
+    file.close();
+    return true;
+}
+
+//移植kylin-network-manager-enhance-dameon包内的dbus内容
+//读取nm_enhance_dns.conf文件的 策略、超时时间、重试次数
+QVariantMap KynmSystemDbus::getExtraDnsEnhance(const QString& name)
+{
+    QString filePath = EXTRA_DNS_CONF_FILE + name + NM_ENHANCE_DNS;
+    QSettings settings(filePath, QSettings::IniFormat);
+
+    QVariantMap map;
+    map[STR_ATTEMPTS] = settings.value("/options/attempts").toString();
+    map[STR_TIMEOUT] = settings.value("/options/timeout").toString();
+    map[STR_TYPE] = settings.value("/options/type").toString();
+
+    return map;
+}
+
+/*
+ * 【较为通用的写配置文件接口】:
+ *
+ *  filePath：文件路径
+ *  feature：节点名
+ *  key:键
+ *  value:值
+ */
+bool KynmSystemDbus::writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadWrite)){
+        return false;
+    }
+
+    QSettings settings(filePath, QSettings::IniFormat);
+    QString jointKey = "/" + feature + "/" + key;
+    settings.setValue(jointKey, value);
+
+    settings.sync();
+    file.close();
+    return true;
+}
+
+/*
+ * 【较为通用的读配置文件接口】:
+ *
+ *  filePath：文件路径
+ *  feature：节点名
+ */
+QMap<QString, QString> KynmSystemDbus::getNmConfig(const QString& filePath, const QString& feature)
+{
+    QSettings settings(filePath, QSettings::IniFormat);
+    QMap<QString, QString> configMap;
+
+    settings.beginGroup(feature);
+
+    QStringList keys = settings.childKeys();
+    for (const QString &key : keys) {
+        QString value = settings.value(key).toString();
+        configMap.insert(key, value);
+    }
+    settings.endGroup();
+    
+    return configMap;
+}
+
+/*
+ * devName = 网卡名
+ * checked = 打开或关闭
+*/
+void KynmSystemDbus::setDeviceSwitch(const QString& devName, bool checked)
+{
+    if (checked && !devName.isEmpty())
+    {
+        Q_EMIT sysDeviceSwitchChanged(devName);
+    }
+}

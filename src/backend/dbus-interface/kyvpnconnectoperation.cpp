@@ -1495,7 +1495,7 @@ void KyVpnConnectOperation::activateVpnConnection(const QString connectUuid)
         && NetworkManager::ConnectionSettings::ConnectionType::IpTunnel != connectPtr->settings()->connectionType()
         && NetworkManager::ConnectionSettings::ConnectionType::Wired != connectPtr->settings()->connectionType()) {
         QString errorMessage = tr("the connect type is")
-                                + connectPtr->settings()->connectionType()
+                               + NetworkManager::ConnectionSettings::typeAsString(connectPtr->settings()->connectionType())
                                 + tr(", but it is not vpn");
         qWarning()<<errorMessage;
         Q_EMIT activateConnectionError(errorMessage);

@@ -46,7 +46,7 @@
 #include <QCoreApplication>
 #include <QDataStream>
 #include <QTime>
-
+#include <QRegularExpressionValidator>
 #if defined(Q_OS_UNIX)
 #include <sys/types.h>
 #include <time.h>
@@ -70,7 +70,7 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
 #endif
         prefix = id.section(QLatin1Char('/'), -1); //完整路径按‘/’分隔后取最后一个字段
     }
-    prefix.remove(QRegExp("[^a-zA-Z]")); //去掉名称中的非字母
+    prefix.remove(QRegularExpression("[^a-zA-Z]")); //去掉名称中的非字母
     prefix.truncate(6); //取前六位
 
     QByteArray idc = id.toUtf8();

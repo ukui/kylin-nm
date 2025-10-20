@@ -107,4 +107,4 @@ private:
     Atom m_ukuiDecorationAtion = None;
 };
 
-#endif // XATOMHELPER_H
+#endif

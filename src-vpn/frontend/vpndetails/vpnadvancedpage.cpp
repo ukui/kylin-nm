@@ -849,9 +849,9 @@ void VpnAdvancedPage::initDefaultAdiaFrame()
     m_mppeECombox->addItem(tr("40-bit"), KYMPPE_REQUIRE40); //40位
 
     //控件输入格式限制
-    QRegExp rxNumber("^[0-9]+$");
-    m_mruEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_mtuEdit->setValidator(new QRegExpValidator(rxNumber, this));
+    QRegularExpression rxNumber("^[0-9]+$");
+    m_mruEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_mtuEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
     m_mruEdit->setMaxLength(MAX_MRU_LENGTH);
     m_mtuEdit->setMaxLength(MAX_MRU_LENGTH);
 }
@@ -1147,18 +1147,18 @@ void VpnAdvancedPage::initOpenVpnAdiaFrame()
     m_hmacAuthCombox->addItem("RIPEMD-160", KYHMACAUTH_RIPEMD160);
 
     //控件输入格式限制
-    QRegExp rxNumber("^[0-9]+$");
-    m_gatewayPortEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_renogotiaInrEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_customMtuEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_customUdpFragSizeEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_specPingInrEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_specExRePingEdit->setValidator(new QRegExpValidator(rxNumber, this));
-    m_specMaxRouteEdit->setValidator(new QRegExpValidator(rxNumber, this));
+    QRegularExpression rxNumber("^[0-9]+$");
+    m_gatewayPortEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_renogotiaInrEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_customMtuEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_customUdpFragSizeEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_specPingInrEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_specExRePingEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
+    m_specMaxRouteEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
 
     // IP的正则格式限制
-    QRegExp rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    m_proxyServerAddEdit->setValidator(new QRegExpValidator(rxIp, this));
+    QRegularExpression rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    m_proxyServerAddEdit->setValidator(new QRegularExpressionValidator(rxIp, this));
 
     //default
     m_gatewayPortEdit->setText("1194");
@@ -1518,10 +1518,11 @@ bool VpnAdvancedPage::getTextEditState(QString text)
     if (text.isEmpty()) {
         return true;
     }
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
-    bool match = false;
-    match = rx.exactMatch(text);
+    // IP地址正则表达式，包含开始和结束锚点确保完全匹配
+    QRegularExpression rx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    return match;
+    // 进行匹配并返回结果
+    QRegularExpressionMatch match = rx.match(text);
+    return match.hasMatch();
 }

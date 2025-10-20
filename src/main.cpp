@@ -23,7 +23,6 @@
 #include <QLocale>
 #include "qt-single-application.h"
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QFile>
 #include <KWindowSystem>
 #include <ukui-log4qt.h>

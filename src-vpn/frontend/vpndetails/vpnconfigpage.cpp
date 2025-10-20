@@ -388,12 +388,12 @@ void VpnConfigPage::initUI()
     m_userPwdEdit->setClearButtonEnabled(false);
 
     //控件输入格式限制
-    QRegExp rxNumber("^[0-9]+$");
-    m_pinEdit->setValidator(new QRegExpValidator(rxNumber, this));
+    QRegularExpression rxNumber("^[0-9]+$");
+    m_pinEdit->setValidator(new QRegularExpressionValidator(rxNumber, this));
     m_pinEdit->setMaxLength(PIN_MAX_LENGTH);
     // IP的正则格式限制
-    QRegExp rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    QRegExpValidator *ipExpVal = new QRegExpValidator(rxIp, this);
+    QRegularExpression rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    QRegularExpressionValidator *ipExpVal = new QRegularExpressionValidator(rxIp, this);
     m_serverAddressEdit->setValidator(ipExpVal);
     m_localIpEdit->setValidator(ipExpVal);
     m_remoteIpEdit->setValidator(ipExpVal);
@@ -584,12 +584,13 @@ bool VpnConfigPage::getTextEditState(QString text)
     if (text.isEmpty()) {
         return true;
     }
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
-    bool match = false;
-    match = rx.exactMatch(text);
+    // IP地址正则表达式，包含开始和结束锚点确保完全匹配
+    QRegularExpression rx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    return match;
+    // 进行匹配并返回结果
+    QRegularExpressionMatch match = rx.match(text);
+    return match.hasMatch();
 }
 
 bool VpnConfigPage::checkConfirmBtnIsEnabled()

@@ -18,8 +18,7 @@
  *
  */
 #include "kylinutil.h"
-#include <QTextCodec>
-
+#include <QStringConverter>
 #include <dbus/dbus.h>
 #include <glib-2.0/glib.h>
 #include <dbus/dbus-glib.h>
@@ -78,16 +77,19 @@ QString getSsidFromByteArray(QByteArray &rawSsid)
 //    QTextCodec *p_textGBK = QTextCodec::codecForName("GB2312");
 //    wifiSsid = p_textGBK->toUnicode(rawSsid);
 
-    QTextCodec::ConverterState state;
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    codec->toUnicode( rawSsid.constData(), rawSsid.size(), &state);
-    if (state.invalidChars > 0)
-    {
-        wifiSsid = QTextCodec::codecForName("GBK")->toUnicode(rawSsid);
-    }
-    else
-    {
-        wifiSsid = rawSsid;
+    QStringDecoder utf8Decoder(QStringDecoder::Utf8);
+    wifiSsid = utf8Decoder(rawSsid);
+
+    // 如果解码出错或包含替换字符，尝试GBK
+    if (utf8Decoder.hasError() || wifiSsid.contains(QChar::ReplacementCharacter)) {
+        QStringDecoder gbkDecoder("GBK");
+        if(gbkDecoder.isValid()){
+            wifiSsid = gbkDecoder(rawSsid);
+        }
+        //gbk不行回退到latin
+        if(gbkDecoder.hasError()){
+            return QString::fromLatin1(rawSsid);
+        }
     }
 
     return wifiSsid;

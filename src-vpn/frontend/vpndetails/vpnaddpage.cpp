@@ -43,8 +43,14 @@ vpnAddPage::vpnAddPage(QWidget *parent) : QWidget(parent)
 
 void vpnAddPage::centerToScreen()
 {
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    QRect desk_rect;
+
+    QScreen *currentScreen = QGuiApplication::screenAt(QCursor::pos());
+    if (currentScreen) {
+        desk_rect = currentScreen->geometry();
+    } else {
+        desk_rect=QGuiApplication::primaryScreen()->geometry();
+    }
     int desk_x = desk_rect.width();
     int desk_y = desk_rect.height();
     int x = this->width();
@@ -151,8 +157,8 @@ void vpnAddPage::initVpnServerFrame()
     m_vpnServerFrame->setLayout(serverLayout);
 
     // IP的正则格式限制
-    QRegExp rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    QRegExpValidator *ipExpVal = new QRegExpValidator(rxIp, this);
+    QRegularExpression rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    QRegularExpressionValidator *ipExpVal = new QRegularExpressionValidator(rxIp, this);
     m_vpnServerLineEdit->setValidator(ipExpVal);
 }
 

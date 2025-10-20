@@ -11,7 +11,8 @@ ComboBox {
     id: comboBoxOrigin
     Layout.alignment: Qt.AlignVCenter
     visible: true
-    Layout.maximumHeight: 36
+    Layout.maximumHeight: 50
+    Layout.minimumHeight: 36
     Layout.fillWidth: true
     Layout.leftMargin: 24
     Layout.rightMargin: 24

@@ -179,8 +179,8 @@ void VpnIpv4Page::initUI()
     m_ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"手动"
 
     // IP的正则格式限制
-    QRegExp rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    QRegExpValidator *ipExpVal = new QRegExpValidator(rxIp, this);
+    QRegularExpression rxIp("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    QRegularExpressionValidator *ipExpVal = new QRegularExpressionValidator(rxIp, this);
     m_ipv4addressEdit->setValidator(ipExpVal);
     m_netMaskEdit->setValidator(ipExpVal);
     m_gateWayEdit->setValidator(ipExpVal);
@@ -219,12 +219,13 @@ bool VpnIpv4Page::getTextEditState(QString text)
     if (text.isEmpty()) {
         return true;
     }
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
-    bool match = false;
-    match = rx.exactMatch(text);
+    // IP地址正则表达式，包含开始和结束锚点确保完全匹配
+    QRegularExpression rx("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    return match;
+    // 进行匹配并返回结果
+    QRegularExpressionMatch match = rx.match(text);
+    return match.hasMatch();
 }
 
 bool VpnIpv4Page::netMaskIsValide(QString text)

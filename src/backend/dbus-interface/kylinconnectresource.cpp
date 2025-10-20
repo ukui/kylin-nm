@@ -64,12 +64,12 @@ static bool subVpnListSort(const KyConnectItem* info1, const KyConnectItem* info
 
 static void lanListSort(QList<KyConnectItem *> &list)
 {
-    qSort(list.begin(), list.end(), subLanListSort);
+    std::sort(list.begin(), list.end(), subLanListSort);
 }
 
 static void vpnListSort(QList<KyConnectItem *> &list)
 {
-    qSort(list.begin(), list.end(), subVpnListSort);
+    std::sort(list.begin(), list.end(), subVpnListSort);
 }
 
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
@@ -455,6 +455,12 @@ void KyConnectResourse::getIpv4ConnectSetting(
                         NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
                         KyConnectSetting &connectSetting)
 {
+    if (ipv4Setting.isNull()) {
+        connectSetting.m_ipv4Dns.clear();
+        connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
+        connectSetting.m_ipv4Address.clear();
+        return;
+    }
     connectSetting.m_ipv4Dns = ipv4Setting->dns();
     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
         connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
@@ -469,6 +475,12 @@ void KyConnectResourse::getIpv6ConnectSetting(
                         NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                         KyConnectSetting &connectSetting)
 {
+    if (ipv6Setting.isNull()) {
+        connectSetting.m_ipv6Dns.clear();
+        connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
+        connectSetting.m_ipv6Address.clear();
+        return;
+    }
     connectSetting.m_ipv6Dns = ipv6Setting->dns();
     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
         connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;

@@ -24,7 +24,8 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QLabel>
-#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QScreen>
 #include <QApplication>
 
 #include "coninfo.h"

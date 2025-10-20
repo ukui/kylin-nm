@@ -14,12 +14,13 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
+#include <QStringList>
+
 QT_BEGIN_NAMESPACE
 class QByteArray;
 template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;
-class QStringList;
 class QVariant;
 QT_END_NAMESPACE
 
@@ -163,6 +164,13 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"b\" name=\"state\"/>\n"
 "      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
 "    </method>\n"
+"    <method name=\"deActivateConnectConcise\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"concise\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
 "    <method name=\"getDeviceListAndEnabled\">\n"
 "      <arg direction=\"out\" type=\"a{sv}\"/>\n"
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
@@ -251,6 +259,7 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid);
     void activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice);
     Q_NOREPLY void deActivateConnect(int type, const QString &devName, const QString &ssid);
+    Q_NOREPLY void deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid);
     Q_NOREPLY void deleteConnect(int type, const QString &ssid);
     Q_NOREPLY void setDeviceAutoConnectState(const QString &deviceName, bool state);
     void deactiveWirelessAp(const QString &apName, const QString &uuid);

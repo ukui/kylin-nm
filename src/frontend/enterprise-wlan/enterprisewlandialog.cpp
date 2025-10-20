@@ -19,8 +19,11 @@
  */
 #include "enterprisewlandialog.h"
 #include <QApplication>
-#include <QDesktopWidget>
-#include "xatom-helper.h"
+#include <QGuiApplication>
+#include <QScreen>
+#include <networkmanagerqt/setting.h>
+#include <KX11Extras>
+
 #include "kwindowsystem.h"
 #include "kwindowsystem_export.h"
 
@@ -38,25 +41,10 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
-EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : QWidget(parent)
+EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : KDialog(parent)
 {
-//    //设置窗口无边框，阴影
-//#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
-//    MotifWmHints window_hints;
-//    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
-//    window_hints.functions = MWM_FUNC_ALL;
-//    window_hints.decorations = MWM_DECOR_BORDER;
-//    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
-//#else
-//    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-//#endif
-    this->setAttribute(Qt::WA_DeleteOnClose);
-//    this->setWindowFlag(Qt::Window);
-    this->setWindowFlags(Qt::Dialog);
-//    this->setWindowTitle(tr("Connect Enterprise WLAN"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
-
+    KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     m_wirelessNetItem = wirelessNetItem;
     m_deviceName = device;
     m_connectOperation = new KyWirelessConnectOperation();
@@ -92,7 +80,7 @@ void EnterpriseWlanDialog::paintEvent(QPaintEvent *event)
     if (this->isActiveWindow()) {
         color = pal.color(QPalette::Base);
     } else {
-        color = pal.color(QPalette::Background);
+        color = pal.color(QPalette::Window);
     }
     painter.setBrush(color);
     painter.drawRect(this->rect());
@@ -104,7 +92,6 @@ void EnterpriseWlanDialog::paintEvent(QPaintEvent *event)
 void EnterpriseWlanDialog::initUI()
 {
     m_mainLayout = new QVBoxLayout(this);
-    this->setLayout(m_mainLayout);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
 
@@ -116,7 +103,7 @@ void EnterpriseWlanDialog::initUI()
     m_descriptionLabel = new QLabel(this);
     m_descriptionLabel->setText(tr("Wi-Fi network requires authentication")); //Wi-Fi网络要求认证
     QFont font = m_descriptionLabel->font();
-    font.setWeight(MEDIUM_WEIGHT_VALUE);
+    font.setWeight(QFont::Medium);
     m_descriptionLabel->setFont(font);
     m_ssidLabel = new QLabel(this);
     QString str = tr("Access to Wi-Fi network \""); //访问Wi-Fi网络
@@ -168,6 +155,8 @@ void EnterpriseWlanDialog::initUI()
     m_mainLayout->addWidget(m_bottomDivider);
     m_mainLayout->addWidget(bottomWidget);
 
+    this->mainWidget()->setLayout(m_mainLayout);
+
     this->setFixedSize(MAIN_SIZE_EXPAND);
     this->setWindowTitle(m_wirelessNetItem.m_NetSsid);
     initConnections();
@@ -175,8 +164,14 @@ void EnterpriseWlanDialog::initUI()
 
 void EnterpriseWlanDialog::centerToScreen()
 {
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    QRect desk_rect;
+
+    QScreen *currentScreen = QGuiApplication::screenAt(QCursor::pos());
+    if (currentScreen) {
+        desk_rect = currentScreen->geometry();
+    } else {
+        desk_rect=QGuiApplication::primaryScreen()->geometry();
+    }
     int desk_x = desk_rect.width();
     int desk_y = desk_rect.height();
     int x = this->width();
@@ -222,7 +217,7 @@ void EnterpriseWlanDialog::onPaletteChanged()
            pal = lightPalette(this);
        }
     }
-    pal.setColor(QPalette::Background, pal.base().color());
+    pal.setColor(QPalette::Window, pal.base().color());
     this->setPalette(pal);
 
     setFramePalette(m_securityPage, pal);
@@ -261,7 +256,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     connetSetting.isAutoConnect = m_securityPage->getAutoConnectState(); //ZJP_TODO 自动连接选项
     connetSetting.m_type = KyKeyMgmt::WpaEap;
     connetSetting.m_ssid = m_wirelessNetItem.m_NetSsid;
-    connetSetting.m_secretFlag = 0;
+    connetSetting.m_secretFlag = NetworkManager::Setting::SecretFlagType::None;
     connetSetting.dumpInfo();
 
     if (eapType  == KyEapMethodType::TLS) {

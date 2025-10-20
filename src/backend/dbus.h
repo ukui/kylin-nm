@@ -15,6 +15,8 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusMetaType>
+#include <QStringList>
+
 #include "dbus_adaptor.h"
 #include "dbus_interface.h"
 
@@ -25,9 +27,7 @@ class QByteArray;
 //template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;
-class QStringList;
 class QVariant;
-template<class T> class QVector;
 QT_END_NAMESPACE
 
 /*
@@ -68,6 +68,10 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
+
+    //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数2 true:只断开 false:断开并清除连接的网络信息 参数3 为ssid/uuid
+    Q_NOREPLY void deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid);
+
     //delete network connect
     Q_NOREPLY void deleteConnect(int type,QString Uuid);
     //dev autoconnect

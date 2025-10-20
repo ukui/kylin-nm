@@ -44,7 +44,7 @@ class MultipleDnsWidget: public QWidget
     Q_OBJECT
 
 public:
-    MultipleDnsWidget(const QRegExp &rx, bool settingShow = true, QWidget *parent = nullptr);
+    MultipleDnsWidget(const QRegularExpression &rx, bool settingShow = true, QWidget *parent = nullptr);
     ~MultipleDnsWidget() = default;
     void setEditEnabled(bool state);
     QList<QHostAddress> getDns() const;
@@ -71,7 +71,7 @@ private:
     KPushButton *m_removeDnsBtn;
     KButtonBox *m_buttonBox;
     KBorderlessButton* m_settingsLabel;
-    QRegExp m_regExp;
+    QRegularExpression m_regExp;
     QString m_uuid;
     bool m_settingShow;
     bool m_dnsSettingChanged = false;

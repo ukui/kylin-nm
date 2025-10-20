@@ -30,7 +30,6 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QFormLayout>
-#include <QDesktopWidget>
 #include <QApplication>
 #include <QPainter>
 

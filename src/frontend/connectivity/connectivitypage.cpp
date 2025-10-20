@@ -24,11 +24,12 @@
 #include <QApplication>
 #include <QGSettings>
 #include <QDebug>
-#include <QRegExpValidator>
-#include <QDesktopWidget>
-
+#include <QRegularExpressionValidator>
+#include <QGuiApplication>
+#include <QScreen>
+#include <KWindowSystem>
+#include <KX11Extras>
 #include "windowmanager/windowmanager.h"
-#include "kwindowsystem.h"
 #include "kwindowsystem_export.h"
 #include "kylinutil.h"
 
@@ -45,7 +46,7 @@ ConnectivityPage::ConnectivityPage(QString uri, QWidget *parent)
     this->setFixedSize(380, 369);
     this->setWindowTitle(tr("Network connectivity detection"));
     setAttribute(Qt::WA_DeleteOnClose, false);
-    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     centerToScreen();
     m_connectResource = new KyConnectResourse(this);
     initUi();
@@ -190,8 +191,14 @@ void ConnectivityPage::initConnect()
 
 void ConnectivityPage::centerToScreen()
 {
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    QRect desk_rect;
+
+    QScreen *currentScreen = QGuiApplication::screenAt(QCursor::pos());
+    if (currentScreen) {
+        desk_rect = currentScreen->geometry();
+    } else {
+        desk_rect=QGuiApplication::primaryScreen()->geometry();
+    }
     int desk_x = desk_rect.width();
     int desk_y = desk_rect.height();
     int x = this->width();
@@ -226,11 +233,11 @@ void ConnectivityPage::checkUri()
     }
     int pos = 0;
 
-    QRegExp rx;
+    QRegularExpression rx;
     //url regular expression
     rx.setPattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
-    QRegExpValidator rv;
-    rv.setRegExp(rx);
+    QRegularExpressionValidator rv;
+    rv.setRegularExpression(rx);
     //Test for a match between the url and the regular expression
     QValidator::State rvState = rv.validate(text, pos);
     if (rvState == QValidator::Acceptable) {

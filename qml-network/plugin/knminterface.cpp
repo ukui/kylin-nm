@@ -1,5 +1,6 @@
 #include "knminterface.h"
 #include "knmdbuscaller.h"
+#include <QGSettings>
 
 KnmInterface::KnmInterface()
 {
@@ -16,6 +17,25 @@ KnmInterface::KnmInterface()
     m_pRefreshTimer = new QTimer(this);
     m_pRefreshTimer->start(20000);
     connect(m_pRefreshTimer, &QTimer::timeout, this,&KnmInterface::slotRefreshTimeout);
+
+    // init font settings from org.ukui.style
+    if (QGSettings::isSchemaInstalled("org.ukui.style")) {
+        m_fontSettings = new QGSettings("org.ukui.style", QByteArray(), this);
+        QVariant val = m_fontSettings->get("systemFontSize");
+        if (val.isValid()) {
+            m_fontSize = val.toString();
+            emit fontSizeChanged(m_fontSize);
+        }
+        connect(m_fontSettings, &QGSettings::changed, this, [this](const QString &key) {
+            if (key == "systemFontSize") {
+                QString fontSize = m_fontSettings->get(key).toString();
+                if (m_fontSize != fontSize) {
+                    m_fontSize = fontSize;
+                    emit fontSizeChanged(m_fontSize);
+                }
+            }
+        });
+    }
 }
 
 KnmInterface::~KnmInterface()
@@ -37,6 +57,9 @@ QString KnmInterface::getIconData(QString name, int size /*= 24*/)
     return "data:image/png;base64," + data.toBase64();
 }
 
+//这里是返回给qml连接信息
+//fixbug 377873,已经连接的网卡需要在第一个显示
+//遍历连接列表，将已经连接的网卡swap到第0个位置
 QVariantList KnmInterface::wiredDeviceList()
 {
     QVariantList list;
@@ -61,7 +84,7 @@ QVariantList KnmInterface::wiredDeviceList()
     }
 
     if (connect_id != -1) {
-        list.swap(0, connect_id);
+        list.swapItemsAt(0, connect_id);
     }
 
     return list;
@@ -136,12 +159,16 @@ bool KnmInterface::getNetMacConnectStatus(QString devmac)
     return false;
 }
 
+//网络托盘-更多网络设置的跳转问题：
+//1、若连接了无线网络且没有连接有线网络 跳转至无线网络
+//2、否则跳转有线网络
 void KnmInterface::openNetworkSetting()
 {
     if(m_pProcess) {
          m_pProcess->deleteLater();
     }
 
+    //获取当前的网络状态
     ConnectStatus connect_status = getConnectionStatus();
 
     QProcess process;
@@ -192,7 +219,7 @@ void KnmInterface::rebuildCurrentWirelessList()
         QMap<QString, NetDevicePtr>devMap=KNMDC::getInstance()->wirelessDeviceList();
         if(!devMap.isEmpty()) m_currentWirelessDevice=devMap.first()->devName();
         qWarning() << Q_FUNC_INFO <<__LINE__ << "set currentdevice"<<m_currentWirelessDevice;
-     }
+    }
     m_wirelessDevConnList.clear();
     m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(m_currentWirelessDevice);
     mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
@@ -407,4 +434,9 @@ bool KnmInterface::getCableStatusByDev(const QString &devName)
 {
     KNMDC::getInstance()->getCableStateByDevice(devName);
     return false;
+}
+
+QString KnmInterface::fontSize()
+{
+    return m_fontSize;
 }

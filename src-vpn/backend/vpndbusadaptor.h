@@ -15,7 +15,8 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusMetaType>
-
+#include <QStringList>
+#include <QVector>
 #include "singlepage.h"
 #include "kylinnetworkdeviceresource.h"
 #include "kyvpnconnectoperation.h"
@@ -24,9 +25,7 @@ QT_BEGIN_NAMESPACE
 class QByteArray;
 template<class Key, class Value> class QMap;
 class QString;
-class QStringList;
 class QVariant;
-template<class T> class QVector;
 QT_END_NAMESPACE
 
 #include "vpnobject.h"

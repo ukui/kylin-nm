@@ -105,7 +105,7 @@ void SinglePage::initWindowProperties()
         QPainterPath path;
         auto rect = this->rect();
         path.addRect(rect);
-        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+        KWindowEffects::enableBlurBehind(this->windowHandle(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
     }
 }
 
@@ -162,7 +162,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
 
     painter.setBrush(col);
     painter.drawPath(rectPath);
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(rectPath.toFillPolygon().toPolygon()));   //背景模糊
+    KWindowEffects::enableBlurBehind(this->windowHandle(), true, QRegion(rectPath.toFillPolygon().toPolygon()));   //背景模糊
 }
 
 void SinglePage::initTransparency()
@@ -207,7 +207,7 @@ void SinglePage::setThemePalette()
            pal = themePalette(true, this);
        }
     }
-    pal.setColor(QPalette::Background, pal.base().color());
+    pal.setColor(QPalette::Window, pal.base().color());
     this->setPalette(pal);
 }
 

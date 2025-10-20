@@ -1,15 +1,21 @@
 #!/usr/bin/make -f
 
-export QT_SELECT=5
+#export PATH="/usr/lib/qt6/bin:$PATH"
+#export QT_SELECT=qt6
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 QMAKE_OPTS = DEFINES+=NO_DEBUG_ON_CONSOLE
-MAKE_OPTS  = PREFIX=/usr QMAKE=qmake LRELEASE=lrelease QMAKE_OPTS="$(QMAKE_OPTS)"
+MAKE_OPTS  = PREFIX=/usr QMAKE=qmake6 LRELEASE=lrelease QMAKE_OPTS="$(QMAKE_OPTS)"
 
 override_dh_auto_configure:
-	QT_SELECT=qt5 dh_auto_configure \
-                -- "QMAKE_CXXFLAGS=$(CFLAGS)" \
-                kylin-nm.pro
+	#QT_SELECT=qt6 dh_auto_configure \
+	#--"QMAKE_CXXFLAGS=$(CFLAGS)" \
+	#kylin-nm.pro
+	#qmake6 kylin-nm.pro
+	# dh_auto_configure -- \
+#	@echo $PATH
+	qmake6	"QMAKE_CXXFLAGS=$(CFLAGS)" \
+	kylin-nm.pro
 
 %:
 	dh $@
@@ -24,6 +30,8 @@ override_dh_auto_clean:
 	[ ! -d .moc ] || $(RM) -r .moc
 	[ ! -d .obj ] || $(RM) -r .obj
 	[ ! -d .ui ] || $(RM) -r .ui
+	@echo "清理所有 .qm 翻译文件..."
+	find . -type f -name "*.qm" -delete
 	[ ! -f Makefile ] || dh_auto_clean
 
 override_dh_auto_build:
@@ -31,4 +39,7 @@ override_dh_auto_build:
 
 override_dh_shlibdeps:
 	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
+
+override_dh_systemd_enable:
+	dh_systemd_enable
 

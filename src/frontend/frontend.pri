@@ -1,6 +1,6 @@
 INCLUDEPATH += $$PWD
 include(tools/tools.pri)
-include(xatom/xatom.pri)
+include(xatom/xatom.pri) #没有使用 注销
 include(tab-pages/tab-pages.pri)
 include(list-items/list-items.pri)
 include(netdetails/netdetails.pri)

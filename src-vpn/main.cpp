@@ -23,8 +23,9 @@
 #include <QLocale>
 #include "qt-single-application.h"
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QFile>
+#include <QGuiApplication>
+#include <QScreen>
 #include <ukui-log4qt.h>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"

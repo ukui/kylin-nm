@@ -20,7 +20,7 @@
  */
 #include "listitemedit.h"
 
-ListItemEdit::ListItemEdit(const QRegExp &rx, QObject *parent)
+ListItemEdit::ListItemEdit(const QRegularExpression &rx, QObject *parent)
     : m_regExp(rx),
       QStyledItemDelegate(parent)
 {
@@ -30,7 +30,7 @@ ListItemEdit::ListItemEdit(const QRegExp &rx, QObject *parent)
 QWidget *ListItemEdit::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QLineEdit *editor = new QLineEdit(parent);
-    editor->setValidator(new QRegExpValidator(m_regExp, parent));
+    editor->setValidator(new QRegularExpressionValidator(m_regExp, parent));
     return editor;
 }
 

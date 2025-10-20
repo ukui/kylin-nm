@@ -234,7 +234,7 @@ wifi_get_secrets (SecretsRequest *req, GError **error)
 #else
          int argc = 0;
          char ***argv = NULL;
-         gtk_init (&argc, &argv);
+         gtk_init (&argc, argv);
 #endif
 
     NMClient *nm_client = nm_client_new (NULL, NULL);

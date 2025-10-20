@@ -288,8 +288,8 @@ void SecurityPage::initUI()
     clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
     userPwdEdit->setClearButtonEnabled(false);
 
-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/ ]+$");
-    QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+    QRegularExpression rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/ ]+$");
+    QRegularExpressionValidator *latitude = new QRegularExpressionValidator(rx, this);
     pwdEdit->setValidator(latitude);
     clientPrivateKeyPwdEdit->setValidator(latitude);
     userPwdEdit->setValidator(latitude);
@@ -316,10 +316,11 @@ void SecurityPage::initConnect()
     connect(clientCertPathCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onClientCertPathComboxIndexChanged);
 
     connect(clientPrivateKeyCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onClientPrivateKeyComboxIndexChanged);
-
+/*
     connect(pwdOptionCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
             this, &SecurityPage::onPwdOptionComboxIndexChanged);
-
+*/ //早期版本实现 现currentTextChanged mqtest
+    connect(pwdOptionCombox, &QComboBox::currentTextChanged,this, &SecurityPage::onPwdOptionComboxIndexChanged);
     connect(secuTypeCombox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(pwdEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
     connect(eapTypeCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));

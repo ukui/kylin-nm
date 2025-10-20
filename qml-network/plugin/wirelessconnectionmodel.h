@@ -50,7 +50,7 @@ public:
         QString security;   // 安全类型
         QString uuid;       // 网络名称
         QString isApConn;
-        QString category;
+        uint category;
         uint frequency;  //
 
         int status;     //

@@ -22,15 +22,15 @@ INCLUDEPATH   +=  \
                  /usr/include/ukcc/interface \
                  /usr/include/ukcc/widgets
 
-LIBS          += -L$$[QT_INSTALL_LIBS] -lgsettings-qt -lukcc
+LIBS          += -L$$[QT_INSTALL_LIBS] -lukcc
 
 ##加载gio库和gio-unix库，用于获取和设置enum类型的gsettings
 CONFIG        += link_pkgconfig \
                  C++11
 PKGCONFIG     += gio-2.0 \
                  gio-unix-2.0 \
-                 gsettings-qt \
-                 kysdk-qtwidgets
+                 gsettings-qt6 \
+                 kysdk-applications
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 

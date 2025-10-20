@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QToolTip>
 #include "windowmanager/windowmanager.h"
-#include "kwindowsystem.h"
+#include <KX11Extras>
 #include "kwindowsystem_export.h"
 
 #define THEME_SCHAME "org.ukui.style"
@@ -34,7 +34,7 @@ FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent), m_uwin(nullptr
     initUI();
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
     this->setFixedSize(480, 204);
-    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     setAttribute(Qt::WA_DeleteOnClose);
 //    centerToScreen();
     connect(qApp, &QApplication::paletteChanged, this, &FirewallDialog::onPaletteChanged);
@@ -89,7 +89,7 @@ void FirewallDialog::initUI()
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
 
     QFont font = m_contentLabel->font();
-    font.setWeight(57);
+    font.setWeight(QFont::Medium);
     m_contentLabel->setFont(font);
     //是否允许此网络上的其他设备发现这台电脑？
     m_contentLabel->setLabelText(tr("Allow other devices on this network to discover this computer?"));
@@ -109,8 +109,14 @@ void FirewallDialog::initUI()
 
 void FirewallDialog::centerToScreen()
 {
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    QRect desk_rect;
+
+    QScreen *currentScreen = QGuiApplication::screenAt(QCursor::pos());
+    if (currentScreen) {
+        desk_rect = currentScreen->geometry();
+    } else {
+        desk_rect=QGuiApplication::primaryScreen()->geometry();
+    }
     int desk_x = desk_rect.width();
     int desk_y = desk_rect.height();
     int x = this->width();

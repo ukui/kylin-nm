@@ -20,11 +20,11 @@
  *
  */
 
-#include "xatom-helper.h"
+#include <QGuiApplication>
 #include <limits.h>
-#include <QX11Info>
 #include <X11/X.h>
 #include <X11/Xatom.h>
+#include "xatom-helper.h"
 
 static XAtomHelper *global_instance = nullptr;
 
@@ -74,15 +74,17 @@ bool XAtomHelper::isUKUIDecorationWindow(int winId)
     ulong nitems;
     ulong bytes_after;
     uchar *data;
-
+    Display *display=nullptr;
     bool isUKUIDecoration = false;
 
-    XGetWindowProperty(QX11Info::display(), winId, m_ukuiDecorationAtion,
-                       0, LONG_MAX, false,
-                       m_ukuiDecorationAtion, &type,
-                       &format, &nitems,
-                       &bytes_after, &data);
-
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+        XGetWindowProperty(display, winId, m_ukuiDecorationAtion,
+                           0, LONG_MAX, false,
+                           m_ukuiDecorationAtion, &type,
+                           &format, &nitems,
+                           &bytes_after, &data);
+    }
     if(type == m_ukuiDecorationAtion) {
         if(nitems == 1) {
             isUKUIDecoration = data[0];
@@ -101,22 +103,25 @@ UnityCorners XAtomHelper::getWindowBorderRadius(int winId)
     ulong nitems;
     ulong bytes_after;
     uchar *data;
-
+    Display *display=nullptr;
     if(m_unityBorderRadiusAtom != None) {
-        XGetWindowProperty(QX11Info::display(), winId, m_unityBorderRadiusAtom,
-                           0, LONG_MAX, false,
-                           XA_CARDINAL, &type,
-                           &format, &nitems,
-                           &bytes_after, &data);
+        if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+            display=x11Application->display();
+            XGetWindowProperty(display, winId, m_unityBorderRadiusAtom,
+                               0, LONG_MAX, false,
+                               XA_CARDINAL, &type,
+                               &format, &nitems,
+                               &bytes_after, &data);
 
-        if(type == XA_CARDINAL) {
-            if(nitems == 4) {
-                corners.topLeft = static_cast<ulong>(data[0]);
-                corners.topRight = static_cast<ulong>(data[1 * sizeof(ulong)]);
-                corners.bottomLeft = static_cast<ulong>(data[2 * sizeof(ulong)]);
-                corners.bottomRight = static_cast<ulong>(data[3 * sizeof(ulong)]);
+            if(type == XA_CARDINAL) {
+                if(nitems == 4) {
+                    corners.topLeft = static_cast<ulong>(data[0]);
+                    corners.topRight = static_cast<ulong>(data[1 * sizeof(ulong)]);
+                    corners.bottomLeft = static_cast<ulong>(data[2 * sizeof(ulong)]);
+                    corners.bottomRight = static_cast<ulong>(data[3 * sizeof(ulong)]);
+                }
+                XFree(data);
             }
-            XFree(data);
         }
     }
 
@@ -125,47 +130,59 @@ UnityCorners XAtomHelper::getWindowBorderRadius(int winId)
 
 void XAtomHelper::setWindowBorderRadius(int winId, const UnityCorners &data)
 {
+    Display *display=nullptr;
     if(m_unityBorderRadiusAtom == None)
         return;
 
     ulong corners[4] = {data.topLeft, data.topRight, data.bottomLeft, data.bottomRight};
-
-    XChangeProperty(QX11Info::display(), winId, m_unityBorderRadiusAtom, XA_CARDINAL,
-                    32, XCB_PROP_MODE_REPLACE, (const unsigned char *) &corners, sizeof(corners) / sizeof(corners[0]));
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+        XChangeProperty(display, winId, m_unityBorderRadiusAtom, XA_CARDINAL,
+                        32, XCB_PROP_MODE_REPLACE, (const unsigned char *) &corners, sizeof(corners) / sizeof(corners[0]));
+    }
 }
 
 void XAtomHelper::setWindowBorderRadius(int winId, int topLeft, int topRight, int bottomLeft, int bottomRight)
 {
+    Display *display=nullptr;
     if(m_unityBorderRadiusAtom == None)
         return;
 
     ulong corners[4] = {(ulong)topLeft, (ulong)topRight, (ulong)bottomLeft, (ulong)bottomRight};
-
-    XChangeProperty(QX11Info::display(), winId, m_unityBorderRadiusAtom, XA_CARDINAL,
-                    32, XCB_PROP_MODE_REPLACE, (const unsigned char *) &corners, sizeof(corners) / sizeof(corners[0]));
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+        XChangeProperty(display, winId, m_unityBorderRadiusAtom, XA_CARDINAL,
+                        32, XCB_PROP_MODE_REPLACE, (const unsigned char *) &corners, sizeof(corners) / sizeof(corners[0]));
+    }
 }
 
 void XAtomHelper::setUKUIDecoraiontHint(int winId, bool set)
 {
+    Display *display=nullptr;
     if(m_ukuiDecorationAtion == None)
         return;
-
-    XChangeProperty(QX11Info::display(), winId, m_ukuiDecorationAtion, m_ukuiDecorationAtion, 32, XCB_PROP_MODE_REPLACE, (const unsigned char *) &set, 1);
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+        XChangeProperty(display, winId, m_ukuiDecorationAtion, m_ukuiDecorationAtion, 32, XCB_PROP_MODE_REPLACE, (const unsigned char *) &set, 1);
+    }
 }
 
 void XAtomHelper::setWindowMotifHint(int winId, const MotifWmHints &hints)
 {
+    Display *display=nullptr;
     if(m_unityBorderRadiusAtom == None)
         return;
-
-    XChangeProperty(QX11Info::display(), winId, m_motifWMHintsAtom, m_motifWMHintsAtom,
-                    32, XCB_PROP_MODE_REPLACE, (const unsigned char *)&hints, sizeof(MotifWmHints) / sizeof(ulong));
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+        XChangeProperty(display, winId, m_motifWMHintsAtom, m_motifWMHintsAtom,
+                        32, XCB_PROP_MODE_REPLACE, (const unsigned char *)&hints, sizeof(MotifWmHints) / sizeof(ulong));
+    }
 }
 
 MotifWmHints XAtomHelper::getWindowMotifHint(int winId)
 {
     MotifWmHints hints;
-
+    Display *display=nullptr;
     if(m_unityBorderRadiusAtom == None)
         return hints;
 
@@ -174,10 +191,12 @@ MotifWmHints XAtomHelper::getWindowMotifHint(int winId)
     int format;
     ulong nitems;
     ulong bytes_after;
-
-    XGetWindowProperty(QX11Info::display(), winId, m_motifWMHintsAtom,
-                       0, sizeof(MotifWmHints) / sizeof(long), false, AnyPropertyType, &type,
-                       &format, &nitems, &bytes_after, &data);
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+        XGetWindowProperty(display, winId, m_motifWMHintsAtom,
+                           0, sizeof(MotifWmHints) / sizeof(long), false, AnyPropertyType, &type,
+                           &format, &nitems, &bytes_after, &data);
+    }
 
     if(type == None) {
         return hints;
@@ -190,12 +209,13 @@ MotifWmHints XAtomHelper::getWindowMotifHint(int winId)
 
 XAtomHelper::XAtomHelper(QObject *parent) : QObject(parent)
 {
-    if(!QX11Info::isPlatformX11())
-        return;
-
-    m_motifWMHintsAtom = XInternAtom(QX11Info::display(), "_MOTIF_WM_HINTS", true);
-    m_unityBorderRadiusAtom = XInternAtom(QX11Info::display(), "_UNITY_GTK_BORDER_RADIUS", false);
-    m_ukuiDecorationAtion = XInternAtom(QX11Info::display(), "_KWIN_UKUI_DECORAION", false);
+    Display *display=nullptr;
+    if(auto *x11Application=qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display=x11Application->display();
+    m_motifWMHintsAtom = XInternAtom(display, "_MOTIF_WM_HINTS", true);
+    m_unityBorderRadiusAtom = XInternAtom(display, "_UNITY_GTK_BORDER_RADIUS", false);
+    m_ukuiDecorationAtion = XInternAtom(display, "_KWIN_UKUI_DECORAION", false);
+    }
 }
 
 Atom XAtomHelper::registerUKUICsdNetWmSupportAtom()

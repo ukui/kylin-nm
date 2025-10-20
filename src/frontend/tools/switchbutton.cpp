@@ -111,7 +111,7 @@ void SwitchButton::mousePressEvent(QMouseEvent *event) {
     return QWidget::mousePressEvent(event);
 }
 
-void SwitchButton::enterEvent(QEvent *event)
+void SwitchButton::enterEvent(QEnterEvent *event)
 {
     if (m_enabled && m_bIsOn) {
         m_colorActive = COLOR_ACTIVE_HOVER;

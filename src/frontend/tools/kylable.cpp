@@ -80,7 +80,7 @@ QString FixLabel::getText(){
 
 void FixLabel::changedLabelSlot() {
     QFontMetrics  fontMetrics(this->font());
-    int fontSize = fontMetrics.width(mStr);
+    int fontSize = fontMetrics.horizontalAdvance(mStr);
     if (fontSize > this->width()) {
         setText(fontMetrics.elidedText(mStr, Qt::ElideRight, this->width()));
         setToolTip(mStr);

@@ -27,7 +27,7 @@
 #include <QApplication>
 
 #include <QNetworkInterface>
-#include <QtNetwork/QNetworkConfigurationManager>
+#include <QtNetwork/QNetworkInformation>
 #include <QtNetwork/QtNetwork>
 
 #include <QTimer>
@@ -129,9 +129,13 @@ private:
     // 打卡托盘网络窗口，后续需要跳转到指定密码框
     void openKylinm();
 
+    void netComponnetSettings();
+
     bool LaunchApp(QString desktopFile);
 
     bool isExitWiredDevice();
+
+    bool isDslConnection(const QString &uuid);
 
 protected:
     bool eventFilter(QObject *w,QEvent *e);

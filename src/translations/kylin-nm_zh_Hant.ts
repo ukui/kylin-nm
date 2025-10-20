@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh" sourcelanguage="en">
+<TS version="2.1" language="zh_Hant" sourcelanguage="en">
 <context>
     <name>ConfForm</name>
     <message>
@@ -60,22 +60,22 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="46"/>
         <source>Network connectivity detection</source>
-        <translation>網絡連接檢測</translation>
+        <translation>網路連通性檢測</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="77"/>
         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
-        <translation>如果訪問Internet受到限制，請切換網絡IP連接檢測方法，然後重試。</translation>
+        <translation>如訪問 Internet 受限，請切換網路 IP 連通性檢測方式後再試。</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="86"/>
         <source>Public network (default)</source>
-        <translation>公用網絡（默認）</translation>
+        <translation>公網（預設）</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
         <source>Local area network (intranet)</source>
-        <translation>局域網（內網）</translation>
+        <translation>區域網（內網）</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="107"/>
@@ -85,17 +85,17 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="207"/>
         <source>The network is connected and can access the Internet normally.</source>
-        <translation>網絡已連接，可以正常訪問互聯網。</translation>
+        <translation>網路已連接，可正常存取 Internet 。</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="212"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation>網絡已連接，對Internet的訪問受到限制。</translation>
+        <translation>網路已連接，訪問 Internet 受限。</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="223"/>
         <source>Please enter the local area network (intranet) detection address</source>
-        <translation>請輸入局域網（內網）檢測地址</translation>
+        <translation>請輸入局域網（內網）檢測位址</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="242"/>
@@ -148,27 +148,27 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
         <source>Connection name is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>連接名稱為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished">Ipv4地址爲空或非法</translation>
+        <translation>Ipv4位址為空或非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 netMask 為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 閘道為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
@@ -704,17 +704,17 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="243"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished">Ipv4地址爲空或非法</translation>
+        <translation>Ipv4位址為空或非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="249"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 netMask 為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="255"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 閘道為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="279"/>
@@ -797,12 +797,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
         <source>IPv6 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 位址為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
         <source>IPv6 prefix length is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 前置綴長度為空或無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
@@ -913,7 +913,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="418"/>
         <source>No wired network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>未檢測到有線網卡</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="766"/>
@@ -928,17 +928,17 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1483"/>
         <source>Connected, restricting access</source>
-        <translation type="unfinished"></translation>
+        <translation>連接，限制訪問</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1493"/>
         <source>No internet access. Please click Network Check to specific reasons.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法訪問互聯網。 請點擊網路檢查以瞭解具體原因。</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1501"/>
         <source>Network Check</source>
-        <translation type="unfinished"></translation>
+        <translation>網路檢查</translation>
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
@@ -1005,7 +1005,7 @@
     </message>
     <message>
         <source>Show MainWindow</source>
-        <translation type="vanished">打開網路工具</translation>
+        <translation type="vanished">打开网络工具</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="478"/>
@@ -1016,7 +1016,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="479"/>
         <source>Network Connectivity Detection</source>
-        <translation>網絡連接檢測</translation>
+        <translation>網路連通性檢測</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="817"/>
@@ -1088,12 +1088,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="969"/>
         <source>start check IPv4 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>開始檢查 IPv4 位址衝突</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="986"/>
         <source>start check IPv6 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>開始檢查 IPv6 位址衝突</translation>
     </message>
     <message>
         <source>Close</source>
@@ -1150,11 +1150,11 @@
     </message>
     <message>
         <source>start check ipv4 address conflict</source>
-        <translation type="vanished">開始檢測 ipv4 位址衝突</translation>
+        <translation type="vanished">开始检测 ipv4 地址冲突</translation>
     </message>
     <message>
         <source>start check ipv6 address conflict</source>
-        <translation type="vanished">開始檢測 ipv6 位址衝突</translation>
+        <translation type="vanished">开始检测 ipv6 地址冲突</translation>
     </message>
     <message>
         <source>ipv4 address conflict!</source>
@@ -1446,43 +1446,43 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="992"/>
         <source>Wifi password length less than 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Wifi密碼長度小於8</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1000"/>
         <source>TLS identity is empty</source>
-        <translation type="unfinished">TLS匿名身份為空</translation>
+        <translation>TLS匿名身份為空</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
         <source>CA cert filepath is invalid</source>
-        <translation type="unfinished">CA證書文件路徑非法</translation>
+        <translation>CA證書檔路徑非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1013"/>
         <source>Client cert filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>用戶端證書檔路徑無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1020"/>
         <source>Client private key filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>用戶端私鑰檔案路徑無效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
         <source>Client private key password is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>用戶端私鑰密碼為空</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
         <source>User name or user password is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>使用者名或用戶密碼為空</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1039"/>
         <source>No PAC file is selected </source>
-        <translation type="unfinished"></translation>
+        <translation>未選擇 PAC 檔 </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1143"/>
@@ -1494,11 +1494,11 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1246"/>
         <source>PAC Files ( *.pac)</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC 檔案 （ *.pac）</translation>
     </message>
     <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="vanished">CA 憑證 （*.pem *.der *.p12 *.crt *.cer *.pfx）</translation>
+        <translation type="vanished">CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
@@ -1535,7 +1535,7 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1169"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1191"/>
         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>CA 檔 （ *.pem *.der *.p12 *.crt *.cer *.pfx）</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1245"/>
@@ -1544,7 +1544,7 @@
     </message>
     <message>
         <source>PAC Files (*.pac)</source>
-        <translation type="vanished">PAC 檔（*.pac）</translation>
+        <translation type="vanished">PAC 文件(*.pac)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
@@ -1582,7 +1582,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="618"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>連接</translation>
     </message>
 </context>
 <context>
@@ -1597,30 +1597,35 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
         <source>Unable to save modifications</source>
-        <translation type="unfinished">無法儲存修改</translation>
+        <translation>無法儲存修改</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
         <source>Confirm</source>
-        <translation type="unfinished">確定</translation>
+        <translation>確定</translation>
     </message>
 </context>
 <context>
     <name>WiFiConfigDialog</name>
     <message>
+        <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>對話</translation>
+    </message>
+    <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
-        <translation>無線局域網認證</translation>
+        <translation>WLAN 身份驗證</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
-        <translation>請輸入無線域網資訊</translation>
+        <translation>請輸入 WLAN 資訊</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
-        <translation>無線區域網ID：</translation>
+        <translation>無線區域網 ID：</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
@@ -1630,22 +1635,17 @@
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
-        <translation>金鑰：</translation>
+        <translation>密碼：</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation>取消</translation>
+        <translation>坎克爾</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation>確認</translation>
-    </message>
-    <message>
-        <location filename="../frontend/wificonfigdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>還行</translation>
     </message>
 </context>
 <context>
@@ -1743,17 +1743,17 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="930"/>
         <source>The routing end rejects the access of the device</source>
-        <translation type="unfinished"></translation>
+        <translation>路由端拒絕設備的訪問</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="932"/>
         <source>The network access at the routing end is full</source>
-        <translation type="unfinished"></translation>
+        <translation>路由端網路訪問已滿</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1323"/>
         <source>usd set offline mode failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>USD 設定離線模式失敗： </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1836"/>
@@ -1767,7 +1767,7 @@
     </message>
     <message>
         <source>(Limited)</source>
-        <translation type="vanished">（有限）</translation>
+        <translation type="vanished">(网络受限)</translation>
     </message>
 </context>
 <context>
@@ -1830,17 +1830,17 @@
     <message>
         <location filename="../main.cpp" line="123"/>
         <source>kylinnm</source>
-        <translation>麒麟網路工具</translation>
+        <translation>麒麟</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="127"/>
         <source>show kylin-nm wifi page</source>
-        <translation>顯示麒麟網路wifi頁面</translation>
+        <translation>顯示麒麟-NM WiFi頁面</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
         <source>show kylin-nm lan page</source>
-        <translation>顯示麒麟網路局域網頁面</translation>
+        <translation>顯示 kylin-nm 局域網頁面</translation>
     </message>
 </context>
 </TS>

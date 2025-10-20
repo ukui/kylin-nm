@@ -25,7 +25,7 @@
 #include <QtPlugin>
 
 #include <QNetworkInterface>
-#include <QtNetwork/QNetworkConfigurationManager>
+#include <QtNetwork/QNetworkInformation>
 #include <QtNetwork/QtNetwork>
 
 #include <QTimer>
@@ -141,7 +141,7 @@ private:
     void setSwitchStatus();
 
     QMap<QString,QVariant> getModuleHideStatus();
-    bool wlanAdvancedSettings();
+    void wlanComponnetSettings();
 
 protected:
     bool eventFilter(QObject *w,QEvent *e);

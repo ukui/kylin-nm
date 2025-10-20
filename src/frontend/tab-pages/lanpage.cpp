@@ -18,7 +18,7 @@
  *
  */
 #include "lanpage.h"
-#include "kwindowsystem.h"
+#include <KX11Extras>
 #include "kwindowsystem_export.h"
 #include <QDebug>
 #include <QScrollBar>
@@ -69,6 +69,15 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
                                              "sysWiredMainSwitchChanged",
                                              this,
                                              SLOT(onSysWiredMainSwitchChanged(bool)));
+
+        QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
+                                             SYSTEM_DBUS_PATH,
+                                             SYSTEM_DBUS_INTERFACE,
+                                             "sysDeviceSwitchChanged",
+                                             this,
+                                             SLOT(onSysDeviceSwitchChanged(const QString&)));
+
+                                             
     }
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::onConnectionStateChange);
@@ -110,6 +119,8 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     });
     connectFontGsetting();
     m_lanPagePtrMap.clear();
+
+    qDBusRegisterMetaType<QMap<QString, QString>>();
 }
 
 LanPage::~LanPage()
@@ -976,9 +987,17 @@ void LanPage::onConnectionStateChange(QString uuid,
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
             return;
         }
+        deviceName = p_newItem->m_ifaceName;
+        // add by cyf
+        //连接后将信息写入配置文件
+        QDBusInterface iface(SYSTEM_DBUS_SERVICE, SYSTEM_DBUS_PATH, SYSTEM_DBUS_INTERFACE, QDBusConnection::systemBus());
+        if (iface.isValid()) {
+            iface.call("writeNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect", deviceName, uuid);
+        }
+    
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
-        deviceName = p_newItem->m_ifaceName;
+        
         if (deviceName == m_currentDeviceName) {
             updateActivatedNetFrame(deviceName);
             setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
@@ -1055,8 +1074,12 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
 void LanPage::sendLanUpdateSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
-    info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath
-         << (m_connectResourse->isPppoeConnection(p_connectItem->m_connectUuid) ? "1" : "0");
+    info << p_connectItem->m_connectName
+         << p_connectItem->m_connectUuid
+         << p_connectItem->m_connectPath
+         << (m_connectResourse->isPppoeConnection(p_connectItem->m_connectUuid) ? "1" : "0")
+         << QString::number(m_connectResourse->getActiveConnectionState(p_connectItem->m_connectUuid));
+
     Q_EMIT lanUpdate(p_connectItem->m_ifaceName, info);
 
     return;
@@ -1305,7 +1328,7 @@ void LanPage::onLanStateChanged(NetworkManager::Device::State newstate, NetworkM
     if (newstate == NetworkManager::Device::Failed) {
         if (reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason) {
             if (!m_showedNetTipFlag) {
-                //showBallonTip();//暂时屏蔽这里，热点第一次打开时会触发这个弹窗。轻量级弹窗需要同步后端的reason code所以可以暂时屏蔽不影响
+                showBallonTip();
                 m_showedNetTipFlag = true;
             }
         }
@@ -1323,11 +1346,11 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
     }
 }
 
-void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
+void LanPage::deactivateWired(const QString& devName, const QString& connUuid, bool concise)
 {
     qDebug() << "[LanPage] deactivateWired" << devName << connUuid;
     QString name("");
-    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
+    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid, concise, devName);
 }
 
 void LanPage::setWiredDeviceAutoconnect(const QString&  devName,bool state)
@@ -1507,6 +1530,8 @@ void LanPage::showBallonTip()
         m_netTip = nullptr;
     }
     m_netTip = new KBallonTip();
+    m_netTip->setWindowFlags(Qt::FramelessWindowHint);
+
     QPushButton *btn = new QPushButton(m_netTip);
     btn->setText(tr("Network Check"));
     connect(btn, &QPushButton::clicked, m_netTip, [=]() {
@@ -1535,7 +1560,8 @@ void LanPage::showBallonTip()
 
     //set position
     m_netTip->adjustSize();
-    KWindowSystem::setState(m_netTip->winId(), NET::SkipTaskbar | NET::SkipPager);
+
+    KX11Extras::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     QRect rect = caculatePositionWithPanel(m_netTip->width() - 8, m_netTip->height() - 4);
     m_netTip->setGeometry(rect);
     m_netTip->showInfo();
@@ -1618,9 +1644,75 @@ void LanPage::getWiredDeviceConnect(QMap<QString, QString> &map)
     }
 }
 
+//自动连接有线网络
+//连接有线网络时，将连接信息写入/etc/kylin-nm/netSwitch.conf文件的Lan_Connect节点中
+//断开有线网络时，清除对应连接的信息
+//检查到网卡打开时，传入网卡信息，寻找该网卡信息是否需要重连（网络信息还存在说明没有断开网络，而是直接关闭的网卡。需要自动连接）
+void LanPage::onSysDeviceSwitchChanged(const QString& devName)
+{
+    QDBusInterface interface ("com.kylin.network",
+                              "/com/kylin/network",
+                              "com.kylin.network",
+                              QDBusConnection::sessionBus());
+
+    if (interface.isValid())
+    {
+        QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+
+        QMap<QString, QString> connectMap = reply.value();
+
+        QString connectUuid = connectMap[devName];
+
+        if (connectUuid == "")
+        {
+            return;
+        }
+
+        interface.call(QStringLiteral("activateConnect"), 0, devName, connectUuid);
+    }
+    else
+    {
+        qDebug() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
+}
+
+//自动连接有线网络
+//连接有线网络时，将连接信息写入/etc/kylin-nm/netSwitch.conf文件的Lan_Connect节点中
+//断开有线网络时，清除对应连接的信息
+//检查到有线开关打开时，自动连接所有还存在的网络信息（网络信息还存在说明没有断开网络，而是直接关闭的开关。需要自动连接）
 void LanPage::onSysWiredMainSwitchChanged(bool state)
 {
     qWarning() << Q_FUNC_INFO << __LINE__ << state;
     Q_EMIT wiredMainSwitchBtnChanged(state);
-}
 
+    if (state)
+    {
+        QDBusInterface interface ("com.kylin.network",
+                                  "/com/kylin/network",
+                                  "com.kylin.network",
+                                  QDBusConnection::sessionBus());
+
+        if (interface.isValid())
+        {
+            QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+
+            QMap<QString, QString> connectMap = reply.value();
+
+            for (auto iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
+                QString deviceName = iter.key();
+                QString connectUuid = iter.value();
+                
+                if (deviceName == "" || connectUuid == "")
+                {
+                    continue;
+                }
+                interface.call(QStringLiteral("activateConnect"), 0, deviceName, connectUuid);
+            }
+        }
+        else
+        {
+            qDebug() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+        }
+    }
+}
+ 

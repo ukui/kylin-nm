@@ -21,7 +21,6 @@ ListView {
             var size = parseInt(fontSize)
             if (!isNaN(size)) {
                 baseItemHeight = Math.round(56 * size / 10)
-                expandedItemHeight = Math.round(145 * size / 10)
             }
         }
         updateHeights(KInterface.fontSize)
@@ -32,9 +31,33 @@ ListView {
             var size = parseInt(fontSize)
             if (!isNaN(size)) {
                 wlanlistView.baseItemHeight = Math.round(56 * size / 10)
-                wlanlistView.expandedItemHeight = Math.round(145 * size / 10)
             }
         }
+    }
+    Connections {
+        target: KInterface
+    function onTriggerButtonRequested(index) {
+                console.log("Triggering button for index:", index)
+                const delegate = wlanlistView.itemAtIndex(index)
+                if (delegate) {
+                    // 滚动到视图中间
+                    Qt.callLater(function() {
+
+                               // 计算在外部滚动视图中的位置
+                               var itemPos = delegate.mapToItem(outerFlickable, 0, 0);
+
+                               // 计算目标位置
+                               var targetY = itemPos.y-(outerFlickable.height - delegate.height) / 2;
+
+                               // 边界检查
+                               targetY = Math.max(0, Math.min(targetY, outerFlickable.contentHeight - outerFlickable.height));
+
+                               // 应用滚动位置
+                               outerFlickable.contentY = targetY;
+                        })
+                    delegate.triggerButtonClick();
+                }
+            }
     }
     property bool connectMac : false
     property int detailShowIndex : -1
@@ -118,6 +141,56 @@ ListView {
             }
         }
 
+        //改函数逻辑待梳理优化点击事件后可合并为公共方法 暂不处理
+        function triggerButtonClick(){
+
+            if (model.status !== 2 ) {
+                console.log("model.security:", model.security, model.security.length)
+                if (listItem.height == wlanlistView.expandedItemHeight ||  model.Configured || model.security.includes("802.1X") || !model.security) {
+                    listItem.height = wlanlistView.baseItemHeight
+                } else {
+                    listItem.height = wlanlistView.expandedItemHeight
+                }
+
+                if(textEditLayout.visible) {
+                    listItem.height = wlanlistView.baseItemHeight
+                    textEditLayout.visible = false
+                    connectBtn.visible = true
+                } else {
+                    // 动态加载textEdit和pwdConnectBtn
+                    if (!textEditLoaded) {
+                        loadTextEdit()
+                        loadPwdConnectBtn()
+                    }
+                    textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && model.security)
+                    connectBtn.visible = !textEditLayout.visible
+                }
+            }
+
+            if(!textEditLayout.visible) {
+                typeicon.visible = false;
+                loadingicon.visible = true;
+                if (model.status === 2) {
+                    KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                } else if (model.status === 4) {
+                    KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                    connectBtn.visible=false
+                }
+                return
+            } else {
+                if(textEditLoader.item) textEditLoader.item.forceActiveFocus()
+            }
+
+            if(autoConnectCheckBoxLoader.item && autoConnectCheckBoxLoader.item.visible) {
+                autoConnectCheckBoxLoader.item.visible = false
+            } else if (model.status !== 2){
+                if (!autoConnectCheckBoxLoaded) {
+                    loadAutoConnectCheckBox()
+                }
+                autoConnectCheckBoxLoader.item.visible = (textEditLayout.visible || model.Configured)
+            }
+        }
+
         //嵌套MouseArea最好统一顶层调度
         MouseArea {
             anchors.fill: listItem
@@ -179,7 +252,6 @@ ListView {
                 }
 
                 if(connectBtnHandler.containsMouse) {
-                    console.log("in connectBtn return")
                     typeicon.visible = false;
                     loadingicon.visible = true;
                     if (model.status === 2) {
@@ -363,7 +435,6 @@ ListView {
                             sourceComponent: TextField {
                                 id: textEdit
                                 width: 208
-                                height: 36
                                 Layout.leftMargin: 10
                                 echoMode: TextInput.Password
                                 property bool passMode: true
@@ -400,6 +471,15 @@ ListView {
                                 Layout.rightMargin: 24
                                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                 text: qsTr("connect")
+
+                                contentItem: Text {
+                                    text: parent.text
+                                    font: parent.font
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
                                 onClicked: {
                                     typeicon.visible = false;
                                     loadingicon.visible = true;
@@ -421,6 +501,7 @@ ListView {
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.topMargin: 0
                             Layout.leftMargin: 12
+                            Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
 
                             text: {
                                 const signal = parseInt(model.signal);
@@ -439,14 +520,33 @@ ListView {
                         Loader {
                             id: autoConnectCheckBoxLoader
                             active: false
+
                             sourceComponent: CheckBox {
                                 id: autoConnectCheckBox
                                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                width: Math.min(implicitWidth, listItem.width - 250)
                                 visible: false
                                 Layout.leftMargin: 8
                                 Layout.topMargin: 0
                                 text: qsTr("AutoConnect")
                                 checked: true
+
+                                // 使用TextMetrics来准确测量文本宽度
+                                TextMetrics {
+                                    id: checkboxTextMetrics
+                                    font: autoConnectCheckBox.font
+                                    text: autoConnectCheckBox.text
+                                }
+
+                                // 自定义contentItem以支持省略号
+                                contentItem: Text {
+                                    text: autoConnectCheckBox.text
+                                    font: autoConnectCheckBox.font
+                                    verticalAlignment: Text.AlignVCenter
+                                    leftPadding: autoConnectCheckBox.indicator.width + autoConnectCheckBox.spacing
+                                    elide: Text.ElideRight  // 文本省略号
+                                }
+
                                 onClicked: {
                                     mouse.accepted = true
                                 }
@@ -522,11 +622,26 @@ ListView {
                     id: connectBtn
                     visible: false
                     width: 88
+                    Layout.preferredWidth: 88  /* 在布局中的首选宽度 */
+                    Layout.maximumWidth: 88
                     height: 36
                     Layout.rightMargin: 24
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     text: (model.status === 2) ? qsTr("disconnect") : qsTr("connect")
                     highlighted: (model.status === 2) ? 0 : 1
+
+                    /* 在连接按钮文本缩略情况下，添加tooltip显示完整的文本 */
+                    ToolTip.visible: connectBtnHandler.containsMouse && contentItem.truncated
+                    ToolTip.text: text
+                    ToolTip.delay: 500
+
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
 
                     MouseArea {
                         id: connectBtnHandler
@@ -572,6 +687,7 @@ ListView {
             anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
             anchors.left: parent.left
             anchors.leftMargin: 26
+            elide: Text.ElideRight
         }
 
         onClicked: {

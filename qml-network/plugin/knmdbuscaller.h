@@ -67,6 +67,8 @@ public:
 
     void updateWirelessConListSync(QString dev);
     void getCableStateByDevice(const QString &dev);
+
+    void registerInputPasswdAgent();
 //用于调用kylin-nm的dbus
 protected:
     QDBusPendingCallWatcher * asyncCall(const QString & methed, const QList<QVariant> & params);

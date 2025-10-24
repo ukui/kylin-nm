@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.kylin.networkCtrol
+Exec=/usr/bin/kylin-nm-netctrl
+User=root

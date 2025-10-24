@@ -130,8 +130,11 @@ private:
 protected Q_SLOTS:
     void onInfoButtonClicked();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void onNetButtonClicked();
+
+private Q_SLOTS:
+
     void onNetButtonReleased();
     void onPwdEditorTextChanged();
     void onConnectButtonClicked();

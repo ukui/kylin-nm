@@ -51,7 +51,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE bool setOptionsEnhance(const QString&, const QString&, const QString&, const QString&);
     Q_SCRIPTABLE QVariantMap getExtraDnsEnhance(const QString&); 
     Q_SCRIPTABLE bool writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value);
-    Q_SCRIPTABLE QMap<QString, QString> getNmConfig(const QString& filePath, const QString& feature);
+    Q_SCRIPTABLE QVariantMap getNmConfig(const QString& filePath, const QString& feature);
 
     //开关网卡会被调用
     Q_SCRIPTABLE void setDeviceSwitch(const QString& devName, bool checked);

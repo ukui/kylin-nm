@@ -704,17 +704,17 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="243"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished">Ipv4地址为空或非法</translation>
+        <translation>Ipv4地址为空或非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="249"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4子网掩码为空或无效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="255"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4网关为空或无效</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="279"/>
@@ -1455,12 +1455,12 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1000"/>
         <source>TLS identity is empty</source>
-        <translation type="unfinished">TLS匿名身份为空</translation>
+        <translation>TLS匿名身份为空</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
         <source>CA cert filepath is invalid</source>
-        <translation type="unfinished">CA证书文件路径非法</translation>
+        <translation>CA证书文件路径非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1013"/>
@@ -1498,7 +1498,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1246"/>
         <source>PAC Files ( *.pac)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
@@ -1601,12 +1601,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
         <source>Unable to save modifications</source>
-        <translation type="unfinished">无法保存修改</translation>
+        <translation>无法保存修改</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
         <source>Confirm</source>
-        <translation type="unfinished">确定</translation>
+        <translation>确定</translation>
     </message>
 </context>
 <context>

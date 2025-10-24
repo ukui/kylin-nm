@@ -384,9 +384,12 @@ void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString 
         return;
     }
 
+    /*//热点能力获取耗时较长不适宜在此处阻塞获取也不必获取，可能造成用户困惑热点能力一会消失一会又行了
     if (m_interfaceComboBox && status == 2) {
         onInterfaceChanged();
+        qWarning() << "mqtest onActiveConnectionChanged"<<deviceName<<status;
     }
+    */
 }
 
 void MobileHotspotWidget::onWirelessBtnChanged(bool state)

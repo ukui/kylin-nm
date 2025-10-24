@@ -19,6 +19,7 @@
  */
 
 #include "dbus.h"
+#include "proxyservicemanager.h"
 #include <QtCore/QMetaObject>
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
@@ -77,7 +78,6 @@ DbusAdaptor::DbusAdaptor(QString display, MainWindow *m, QObject *parent)
 
 DbusAdaptor::~DbusAdaptor()
 {
-    if(mNetworkAdaptor) delete mNetworkAdaptor;
 
 }
 
@@ -98,8 +98,6 @@ void DbusAdaptor::onServiceOwnerChanged(const QString &service, const QString &o
 
 bool DbusAdaptor::registerService()
 {
-    mNetworkAdaptor=new NetworkAdaptor(this);
-
     QDBusConnection conn = QDBusConnection::sessionBus();
     auto reply = conn.interface()->registerService(QStringLiteral("com.kylin.network"),
                                                           QDBusConnectionInterface::ReplaceExistingService,
@@ -108,9 +106,14 @@ bool DbusAdaptor::registerService()
         return false;
     }
 
-    bool res = QDBusConnection::sessionBus().registerObject("/com/kylin/network", this);
+    bool res = QDBusConnection::sessionBus().registerObject("/com/kylin/network", this,QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals);
     if (!res) {
         QDBusConnection::sessionBus().interface()->unregisterService(QStringLiteral("com.kylin.network"));
+    }
+
+    if (!QDBusConnection::sessionBus().registerObject("/com/kylin/proxy", new ProxyServiceManager(this), QDBusConnection::ExportAllContents)) {
+        QDBusConnection::sessionBus().interface()->unregisterService(QStringLiteral("com.kylin.network"));
+        res = false;
     }
     return res;
 }
@@ -182,7 +185,7 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
     if (!enable) {
         // int devType 0:lan 1:wlan  
         int devType = 0;
-        const auto devList = mNetworkAdaptor->getDeviceListAndEnabled(devType);
+        const auto devList = getDeviceListAndEnabled(devType);
         for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
             const QString &devName = it.key();
             const auto connections = getWiredList(devName);
@@ -197,7 +200,7 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
         }
     } else {
         int devType = 0;
-        const auto devList = mNetworkAdaptor->getDeviceListAndEnabled(devType);
+        const auto devList = getDeviceListAndEnabled(devType);
         for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
             const QString &devName = it.key();
             setDeviceAutoConnectState(devName,true);
@@ -557,3 +560,24 @@ void DbusAdaptor::onWiredMainSwitchBtnChanged(bool state)
     Q_EMIT DbusAdaptor::wiredMainSwitchBtnChanged(state);
 }
 
+
+/*注册密码输入代理 当有请求密码输入时发送信号给代理对象*/
+int DbusAdaptor::registerInputPasswdAgent(QString agentName,QVariantMap value)
+{
+    (void)value;//接口参数预留
+    m_agentName=agentName;//不检查 可以清空 可以覆盖
+    return 0;
+}
+
+/*请求代理接管输入*/
+int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
+{
+    if(m_agentName.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << __LINE__<<"agent is empty,no register agent";
+        return -1;
+    } else {
+        Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
+        qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
+    }
+    return  0;
+}

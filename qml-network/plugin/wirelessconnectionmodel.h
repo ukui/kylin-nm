@@ -26,7 +26,7 @@
 class WirelessConnectionModel : public QAbstractListModel
 {
     Q_OBJECT
-   //Q_PROPERTY(WirelessConnectionModel wirelessConList READ wirelessConList NOTIFY updateWirelessDevConnList)
+
 
 public:
     enum Roles {
@@ -83,7 +83,7 @@ public slots:
     // 批量添加/更新
     void refreshConnections(const QVariantList newList);
 
-
+    int getConButtonFromSsid(const QString itemId);
 private:
     /*makeConnectionMap*/
 

@@ -77,6 +77,14 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
                                              this,
                                              SLOT(onSysDeviceSwitchChanged(const QString&)));
 
+        /* 添加有线网卡设备状态变化的信号连接 */
+        QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
+                                             SYSTEM_DBUS_PATH,
+                                             SYSTEM_DBUS_INTERFACE,
+                                             "sysWiredDevSwitchChanged",
+                                             this,
+                                             SLOT(onSysWiredDevSwitchChanged(QString, bool)));
+
                                              
     }
 
@@ -1053,9 +1061,13 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
     m_activeResourse->getActiveConnectionList(devName,NetworkManager::ConnectionSettings::Wired,activedList);
     m_activeResourse->getActiveConnectionList(devName,NetworkManager::ConnectionSettings::Pppoe,activedList);
     if (!activedList.isEmpty()) {
-        list.append(QStringList() << activedList.at(0)->m_connectName << activedList.at(0)->m_connectUuid << activedList.at(0)->m_connectPath
-                << (m_connectResourse->isPppoeConnection(activedList.at(0)->m_connectUuid) ? "1" : "0")
-                << QString::number(m_connectResourse->getActiveConnectionState(activedList.at(0)->m_connectUuid)));
+        list.append(
+                    QStringList() << activedList.at(0)->m_connectName
+                                  << activedList.at(0)->m_connectUuid
+                                  << activedList.at(0)->m_connectPath
+                                  << (m_connectResourse->isPppoeConnection(activedList.at(0)->m_connectUuid) ? "1" : "0")
+                                  << QString::number(m_connectResourse->getActiveConnectionState(activedList.at(0)->m_connectUuid))
+                    );
     } else {
         list.append(QStringList()<<("--"));
     }
@@ -1064,9 +1076,13 @@ void LanPage::getWiredList(QString devName, QList<QStringList> &list)
     m_connectResourse->getConnectionList(devName, NetworkManager::ConnectionSettings::Pppoe, deactivedList);
     if (!deactivedList.isEmpty()) {
         for (int i = 0; i < deactivedList.size(); i++) {
-            list.append(QStringList() << deactivedList.at(i)->m_connectName << deactivedList.at(i)->m_connectUuid << deactivedList.at(i)->m_connectPath
-                    << (m_connectResourse->isPppoeConnection(deactivedList.at(i)->m_connectUuid) ? "1" : "0")
-                    << QString::number(m_connectResourse->getActiveConnectionState(deactivedList.at(i)->m_connectUuid)));
+            list.append(
+                        QStringList() << deactivedList.at(i)->m_connectName
+                                      << deactivedList.at(i)->m_connectUuid
+                                      << deactivedList.at(i)->m_connectPath
+                                      << (m_connectResourse->isPppoeConnection(deactivedList.at(i)->m_connectUuid) ? "1" : "0")
+                                      << QString::number(m_connectResourse->getActiveConnectionState(deactivedList.at(i)->m_connectUuid))
+                        );
         }
     }
 }
@@ -1342,7 +1358,7 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
         qDebug() << LOG_FLAG << devName << "is not carried, so can not activate connection";
         this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
     } else {
-        m_wiredConnectOperation->activateConnection(connUuid, devName);
+        m_wiredConnectOperation->activateConnection(connUuid, devName,true);
     }
 }
 
@@ -1642,6 +1658,16 @@ void LanPage::getWiredDeviceConnect(QMap<QString, QString> &map)
         }
     }
 }
+QMap<QString, QString> LanPage::convertVariantMapToStringMap(const QVariantMap &variantMap)
+{
+     QMap<QString, QString> result;
+
+     for (const auto &key : variantMap.keys()) {
+         result[key] = variantMap.value(key).toString();
+     }
+
+     return result;
+ }
 
 //自动连接有线网络
 //连接有线网络时，将连接信息写入/etc/kylin-nm/netSwitch.conf文件的Lan_Connect节点中
@@ -1656,14 +1682,23 @@ void LanPage::onSysDeviceSwitchChanged(const QString& devName)
 
     if (interface.isValid())
     {
-        QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+        QDBusReply<QVariantMap> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
 
-        QMap<QString, QString> connectMap = reply.value();
+        if (!reply.isValid()) {
+            qWarning() << "Call failed:" << reply.error().name() << reply.error().message();
+            return;
+        }
 
-        QString connectUuid = connectMap[devName];
+        QVariantMap connectMap = reply.value();
+        qWarning() << "Connect map:" << connectMap;
+        QMap<QString, QString> stringMap = convertVariantMapToStringMap(connectMap);
+        qWarning() << "stringMap:" << stringMap;
 
-        if (connectUuid == "")
-        {
+        QString connectUuid="";
+        if (stringMap.contains(devName))
+            connectUuid = stringMap[devName];
+
+        if (connectUuid == "") {
             return;
         }
 
@@ -1690,28 +1725,117 @@ void LanPage::onSysWiredMainSwitchChanged(bool state)
                                   "/com/kylin/network",
                                   "com.kylin.network",
                                   QDBusConnection::sessionBus());
+        qWarning() << Q_FUNC_INFO << __LINE__ << interface.isValid();
 
         if (interface.isValid())
         {
-            QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+            QDBusReply<QVariantMap> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
 
-            QMap<QString, QString> connectMap = reply.value();
+            if (!reply.isValid()) {
+                qWarning() << "Call failed:" << reply.error().name() << reply.error().message();
+                return;
+            }
+
+            QVariantMap connectMap = reply.value();
+            qWarning() << "Connect map:" << connectMap;
 
             for (auto iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
                 QString deviceName = iter.key();
-                QString connectUuid = iter.value();
-                
-                if (deviceName == "" || connectUuid == "")
-                {
+                // 使用 QVariant 转换值
+                QString connectUuid = iter.value().toString();
+                qWarning() << "deviceName:" << deviceName << "connectUuid:" << connectUuid;
+
+                if (deviceName.isEmpty() || connectUuid.isEmpty()) {
                     continue;
                 }
-                interface.call(QStringLiteral("activateConnect"), 0, deviceName, connectUuid);
+
+                /* 添加网卡状态检查：只有当网卡是启用状态时才进行自动连接 */
+                if (m_deviceResource->getDeviceManaged(deviceName)) {
+                    qDebug() << "Device" << deviceName << "is enabled, activating connection:" << connectUuid;
+                    interface.call("activateConnect", 0, deviceName, connectUuid);
+                } else {
+                    qDebug() << "Device" << deviceName << "is disabled, skipping auto-connect for connection:" << connectUuid;
+                }
             }
-        }
-        else
-        {
+        } else {
             qDebug() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
     }
 }
- 
+
+/* 处理单个有线网卡设备开关状态变化 */
+void LanPage::onSysWiredDevSwitchChanged(QString devName, bool enable)
+{
+    qDebug() << "[LanPage] Device switch changed:" << devName << enable<<m_devList;
+
+    /* 如果禁用设备，先断开该有线网卡上的所有连接 */
+    if (!enable) {
+        /* 获取该有线网卡上的所有活动连接 */
+        QList<KyConnectItem *> activedList;
+        m_activeResourse->getActiveConnectionList(devName, NetworkManager::ConnectionSettings::Wired, activedList);
+        m_activeResourse->getActiveConnectionList(devName, NetworkManager::ConnectionSettings::Pppoe, activedList);
+
+        /* 断开所有活动连接 */
+        for (KyConnectItem *activeConn : activedList) {
+            qDebug() << "[LanPage] Deactivating connection on device" << devName << ":" << activeConn->m_connectName;
+            deactivateWired(devName, activeConn->m_connectUuid, true);
+        }
+
+        /* 清理内存 */
+        qDeleteAll(activedList);
+        activedList.clear();
+
+        /* 延迟一下确保连接断开完成 */
+        QTimer::singleShot(500, [this, devName, enable]() {
+            updateDeviceState(devName, enable);
+        });
+    } else {
+        /* 启用设备，直接更新状态 */
+        updateDeviceState(devName, enable);
+    }
+}
+
+void LanPage::updateDeviceState(const QString &devName, bool enable)
+{
+    /* 更新设备管理状态*/
+    if (m_devList.contains(devName)) {
+        m_deviceResource->setDeviceManaged(devName, enable);
+        qDebug() << "[LanPage] Device managed state updated:" << devName << enable<< m_currentDeviceName;
+
+        /* 更新设备列表状态 */
+        if (enable) {
+            if (!m_enableDeviceList.contains(devName)) {
+                m_enableDeviceList << devName;
+            }
+            if (m_disableDeviceList.contains(devName)) {
+                m_disableDeviceList.removeOne(devName);
+            }
+        } else {
+            if (!m_disableDeviceList.contains(devName)) {
+                m_disableDeviceList << devName;
+            }
+            if (m_enableDeviceList.contains(devName)) {
+                m_enableDeviceList.removeOne(devName);
+            }
+        }
+
+        /* 重新初始化设备组合框 */
+        initDeviceCombox();
+
+        /* 如果当前设备被禁用，需要更新界面 */
+        if (m_currentDeviceName == devName && !enable) {
+            /* 寻找新的当前设备 */
+            if (!m_enableDeviceList.isEmpty()) {
+                m_currentDeviceName = m_enableDeviceList.first();
+                setDefaultDevice(WIRED, m_currentDeviceName);
+            } else {
+                m_currentDeviceName = "";
+            }
+            qDebug() << "[LanPage] Current device changed to:" << m_currentDeviceName;
+        }
+        initLanArea();
+
+        /* 发出有线网卡设备状态变化信号 */
+        Q_EMIT deviceStatusChanged();
+    }
+}

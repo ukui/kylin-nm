@@ -661,6 +661,13 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         openKylinm();
+		 QTimer::singleShot(100,this,[=](){
+        if (lanItem->isAcitve || lanItem->loading) {
+            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
+        } else {
+            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
+        }
+		});
     });
 
     //记录到deviceFrame的itemMap中
@@ -965,6 +972,13 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         openKylinm();
+        QTimer::singleShot(100,this,[=](){
+            if (lanItem->isAcitve || lanItem->loading) {
+                deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+            } else {
+                activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+            }
+        });
     });
 
     //记录到deviceFrame的itemMap中

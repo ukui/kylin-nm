@@ -336,3 +336,34 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
         item->m_isConfigured = false;
     }
 }
+
+/*根据连接只更新必要的连接信息*/
+int updateKylinWirelessItemInfo(KyWirelessNetItem& item)
+{
+    KyNetworkResourceManager *networkResourceInstance = KyNetworkResourceManager::getInstance();
+
+    for (auto const & conn : networkResourceInstance->m_connections) {
+        NetworkManager::ConnectionSettings::Ptr settings = conn->settings();
+        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless) {
+            continue;
+        }
+
+        if (settings->uuid() == item.m_connectUuid) {
+                item.m_connName    = conn->name();
+                item.m_connDbusPath = conn->path();
+                NetworkManager::WirelessSetting::Ptr wifi_sett
+                    = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+                QByteArray rawSsid = wifi_sett->ssid();
+                QString wifiSsid = getSsidFromByteArray(rawSsid);
+                /*如果配置修改了ssid，再次激活连接时应要求重新建立配置*/
+                if(wifiSsid!=item.m_NetSsid) {
+                    item.m_isConfigured = false;
+                } else {
+                    item.m_isConfigured = true;
+                }
+                return 0;
+        }
+    }
+
+    return -1;
+}

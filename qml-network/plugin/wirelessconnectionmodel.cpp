@@ -229,3 +229,13 @@ QString WirelessConnectionModel::generateUniqueId() const
     return QString("conn_%1_%2").arg(QDateTime::currentMSecsSinceEpoch())
                                 .arg(QRandomGenerator::global()->generate() % 10000);
 }
+
+int WirelessConnectionModel::getConButtonFromSsid(const QString itemId)
+{
+    for (int i = 0; i < m_connections.size(); ++i) {
+        if (m_connections[i].ssid == itemId) {
+            return i;
+        }
+    }
+    return -1;
+}

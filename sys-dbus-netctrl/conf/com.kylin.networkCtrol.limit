@@ -1,0 +1,11 @@
+[whitelist]
+key1=/usr/bin/kylin-nm
+key2=/usr/bin/hedron-client
+key3=/usr/sbin/NetworkManager
+key4=/usr/bin/nm-connection-editor
+key5=/usr/sbin/kim-domain
+key6=/usr/sbin/kim-client
+
+[rootcontrol]
+status=off
+

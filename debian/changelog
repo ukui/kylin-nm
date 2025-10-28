@@ -1,3 +1,12 @@
+kylin-nm (4.20.0.0-ok0.9) nile-sp2; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明：修复kylin-nm-qml界面打开无显示的问题
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Tue, 28 Oct 2025 10:42:25 +0800
+
 kylin-nm (4.20.0.0-ok0.8) nile-sp2; urgency=medium
 
   * Bug号:无

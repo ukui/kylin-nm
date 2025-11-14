@@ -290,12 +290,16 @@ void MultipleDnsWidget::setPlaceholderTextColor()
 
 void MultipleDnsWidget::showDnsSettingWidget()
 {
-    QDBusInterface iface(SYSTEM_DBUS_SERVICE, SYSTEM_DBUS_PATH, SYSTEM_DBUS_INTERFACE, QDBusConnection::systemBus());
+    QDBusInterface iface("com.kylin.network.enhancement.optimization",
+                         "/com/kylin/network/enhancement/optimization/DNS",
+                         "com.kylin.network.enhancement.optimization.DNS",
+                         QDBusConnection::systemBus());
+
     if (!iface.isValid()) {
         return;
     }
 
-    QDBusMessage result = iface.call("getExtraDnsEnhance", m_uuid);
+    QDBusMessage result = iface.call("GetExtraDns", m_uuid);
     const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
     QVariantMap map = result.arguments().at(0).toMap();
     QString timeout, retry, tactic;
@@ -315,7 +319,7 @@ void MultipleDnsWidget::showDnsSettingWidget()
         QString timeout, retry, tactic;
         dialog->getDnsSettings(timeout, retry, tactic);
         if (iface.isValid()) {
-            iface.call("setOptionsEnhance", m_uuid, timeout, retry, tactic);
+            iface.call("SetOptions", m_uuid, timeout, retry, tactic);
         }
         if (timeout != originTimeout || retry != originRetry || tactic != originType) {
             m_dnsSettingChanged = true;

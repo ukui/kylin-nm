@@ -117,6 +117,7 @@ public slots:
 
     void setWirelessScanState(bool state);
 
+    void passwdAgentChangeSelectSsid();
 private slots:
 
     void slotRefreshTimeout();
@@ -179,6 +180,7 @@ private:
     
     QString m_fontSize;
     class QGSettings *m_fontSettings = nullptr;
+    QString m_inputSsid="";
 };
 
 typedef SingleTon<KnmInterface>  KInterface;

@@ -474,6 +474,7 @@ int KnmInterface::changeSelectDevice(QString deviceName)
     for (auto it = dev.begin(); it != dev.end(); ++it) {
         if (it.key() == deviceName) {
             qDebug() << Q_FUNC_INFO <<__LINE__ << deviceName<<index;
+            connect(this, &KnmInterface::wirelessConListChanged, this,&KnmInterface::passwdAgentChangeSelectSsid);
             emit changeSelectWirelessDevice(index);
             return index;
         }
@@ -491,20 +492,34 @@ void KnmInterface::onRequestInputPasswdAgent(QString agentName,QVariantMap parm)
     if(parm.contains("ssid") && parm.contains("device")) {
         inputSsid=parm.value("ssid").toString();
         inputDevice=parm.value("device").toString();
-        if(changeSelectDevice(inputDevice)<0){
-            qDebug() << Q_FUNC_INFO <<__LINE__ << "no inputDevice , invalid request";
-            return;
-        }
-        QTimer::singleShot(1000,this,[=](){
-            int index=0;
-            index=mWirelessConnecModel.getConButtonFromSsid(inputSsid);
-            if(index>=0) {
-                emit triggerButtonRequested(index);
+        m_inputSsid=inputSsid;
+        //多网卡需要切换的网卡为当前网卡则不需要等待网卡切换完毕直接跳到ssid 否则需要等切换完毕信号
+        if(inputDevice!=m_currentWirelessDevice){
+            if(changeSelectDevice(inputDevice)<0){
+                qDebug() << Q_FUNC_INFO <<__LINE__ << "no inputDevice , invalid request";
+                return;
             }
-        });
+        } else {
+            passwdAgentChangeSelectSsid();
+        }
+
     } else {
         qDebug() << Q_FUNC_INFO <<__LINE__ << "no ssid , invalid request";
     }
 
+    return ;
+}
+
+void KnmInterface::passwdAgentChangeSelectSsid()
+{
+    int index=0;
+    index=mWirelessConnecModel.getConButtonFromSsid(m_inputSsid);
+    if(index>=0) {
+        emit triggerButtonRequested(index);
+    } else {
+        qDebug() << Q_FUNC_INFO <<__LINE__ << "no ssid , changeSelectSsid failed"<<m_inputSsid;
+    }
+    disconnect(this, &KnmInterface::wirelessConListChanged, this,&KnmInterface::passwdAgentChangeSelectSsid);
+    m_inputSsid="";
     return ;
 }

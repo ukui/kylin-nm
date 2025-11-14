@@ -927,16 +927,36 @@ void MainWindow::onRefreshTrayIcon()
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
-    } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
-//        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
-        signalStrength = m_wlanWidget->getActivateWifiSignal(m_wlanWidget->getCurrentDisplayDevice());
-        if (signalStrength == -1) {
-            signalStrength = m_wlanWidget->getActivateWifiSignal();
-        }
-        iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
-        iconStatus = IconActiveType::NOT_CONNECTED;
+        // wired dial-up (DSL/PPPoE) connections may not be recognized ,treat as wired connected.
+        QMap<QString, QString> wiredStateMap;
+        bool wiredActive = false;
+        if (m_lanWidget) {
+            m_lanWidget->getWiredDeviceConnectState(wiredStateMap);
+            for (auto it = wiredStateMap.cbegin(); it != wiredStateMap.cend(); ++it) {
+                const QString stateStr = it.value();
+                if (stateStr.contains(QStringLiteral("Connected"), Qt::CaseInsensitive) ||
+                    stateStr.contains(QStringLiteral("connected"), Qt::CaseInsensitive)) {
+                    wiredActive = true;
+                    break;
+                }
+            }
+        }
+        if (wiredActive) {
+            qDebug() << "Treating wired device as connected via fallback detection.";
+            m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+            iconStatus = IconActiveType::LAN_CONNECTED;
+        } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
+    //        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
+            signalStrength = m_wlanWidget->getActivateWifiSignal(m_wlanWidget->getCurrentDisplayDevice());
+            if (signalStrength == -1) {
+                signalStrength = m_wlanWidget->getActivateWifiSignal();
+            }
+            iconStatus = IconActiveType::WLAN_CONNECTED;
+        } else {
+            m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+            iconStatus = IconActiveType::NOT_CONNECTED;
+        }
     }
 
     NetworkManager::Connectivity connecttivity;

@@ -509,6 +509,7 @@ void MainWindow::initTrayIcon()
         if (m_connectivityPage != nullptr) {
             KWindowSystem::forceActiveWindow(m_connectivityPage->winId());
             KWindowSystem::raiseWindow(m_connectivityPage->winId());
+            m_connectivityPage->activateWindow();/* 激活窗口；hotfix bug#433661 网络连通性检测界面最小化之后再也无法打开 */
             return;
         }
         QString uri = getConnectivityCheckSpareUriByGDbus();

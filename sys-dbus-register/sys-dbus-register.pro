@@ -15,6 +15,9 @@ inst2.files += conf/com.kylin.network.qt.systemdbus.conf
 inst2.path = /etc/dbus-1/system.d/
 inst3.files += conf/kylin-nm-sysdbus.service
 inst3.path = /etc/systemd/system/
+#服务集管控 配置.yaml
+inst4.files += conf/com.kylin.network.qt.systemdbus.yaml
+inst4.path = /etc/kylin-config/basic/
 target.source += $$TARGET
 target.path = /usr/bin
 
@@ -26,7 +29,8 @@ INSTALLS += \
          target \
          inst1 \
          inst2 \
-         inst3
+         inst3 \
+         inst4
 
 include(kyarping/kyarping.pri)
 

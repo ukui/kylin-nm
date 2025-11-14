@@ -666,6 +666,8 @@ void VpnPage::showUI()
         KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     }
 
+    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
+
     resetPageHeight();
 
     showNormal();

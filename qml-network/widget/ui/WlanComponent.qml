@@ -36,7 +36,7 @@ ListView {
     }
     Connections {
         target: KInterface
-    function onTriggerButtonRequested(index) {
+        function onTriggerButtonRequested(index) {
                 console.log("Triggering button for index:", index)
                 const delegate = wlanlistView.itemAtIndex(index)
                 if (delegate) {
@@ -57,7 +57,7 @@ ListView {
                         })
                     delegate.triggerButtonClick();
                 }
-            }
+         }
     }
     property bool connectMac : false
     property int detailShowIndex : -1
@@ -378,10 +378,10 @@ ListView {
                     spacing: 0
 
                     RowLayout {
+                        Layout.leftMargin: 7
                         Label {
                             id: nameLabel
                             Layout.alignment: Qt.AlignLeft
-                            Layout.leftMargin: 8
                             Layout.bottomMargin: 0
                             Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)  // 限制最大宽度，为其他元素预留空间
                             Layout.maximumWidth: listItem.width - 250  // 确保不会挤压其他元素
@@ -427,18 +427,21 @@ ListView {
                         visible: false
                         id: textEditLayout
                         Layout.topMargin: 10
+                        Layout.leftMargin: 6
 
                         // 动态加载TextField
                         Loader {
                             id: textEditLoader
                             active: false
                             sourceComponent: TextField {
+                                Layout.leftMargin: 0
                                 id: textEdit
                                 width: 208
-                                Layout.leftMargin: 10
                                 echoMode: TextInput.Password
                                 property bool passMode: true
                                 property int textLength: textEdit.text.length
+                                validator: RegExpValidator { regExp: /^[a-zA-Z0-9\s\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^_\`\{\|\}\~]*$/}
+
                                 onTextLengthChanged: {
                                     if(textLength>=8) {
                                         if (pwdConnectBtnLoader.item) {
@@ -500,7 +503,7 @@ ListView {
                             visible: model.status === 2
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.topMargin: 0
-                            Layout.leftMargin: 12
+                            Layout.leftMargin: 7
                             Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
 
                             text: {
@@ -520,13 +523,11 @@ ListView {
                         Loader {
                             id: autoConnectCheckBoxLoader
                             active: false
-
                             sourceComponent: CheckBox {
                                 id: autoConnectCheckBox
                                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                                 width: Math.min(implicitWidth, listItem.width - 250)
                                 visible: false
-                                Layout.leftMargin: 8
                                 Layout.topMargin: 0
                                 text: qsTr("AutoConnect")
                                 checked: true

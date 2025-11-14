@@ -878,6 +878,11 @@ void MobileHotspotWidget::setUiEnabled(bool enable)
         m_interfaceComboBox->setEnabled(true);
         m_apNameLine->setEnabled(true);
     }
+
+    // When hotspot is off (enable == false) do not show the blacklist page.
+    if (m_blacklistPage) {
+        m_blacklistPage->setVisible(enable);
+    }
 }
 
 void MobileHotspotWidget::setWidgetHidden(bool isHidden)
@@ -1084,6 +1089,10 @@ void MobileHotspotWidget::initBlackListPage()
     m_blacklistPage = new BlacklistPage(this);
     m_Vlayout->addSpacing(32);
     m_Vlayout->addWidget(m_blacklistPage);
+
+    // Ensure initial visibility follows the hotspot switch state:
+    // when the hotspot switch is off, do not display the blacklist page.
+    m_blacklistPage->setVisible(m_switchBtn ? m_switchBtn->isChecked() : false);
 }
 
 

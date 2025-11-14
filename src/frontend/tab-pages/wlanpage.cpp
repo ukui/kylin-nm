@@ -241,9 +241,9 @@ void WlanPage::initTimer()
     m_scanTimer = new QTimer(this);
     connect(m_scanTimer, &QTimer::timeout, this, &WlanPage::requestScan);
 
-    m_refreshIconTimer = new QTimer(this);
-    connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
-    m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
+    //m_refreshIconTimer = new QTimer(this);
+    //connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
+    //m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
 }
 
 /**

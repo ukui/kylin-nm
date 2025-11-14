@@ -35,6 +35,7 @@ class KnmInterface : public QObject
     Q_PROPERTY(WirelessConnectionModel* wirelessConLists READ wirelessConLists NOTIFY wirelessConListChanged)
     Q_PROPERTY(bool cableStatus READ getCableStatus NOTIFY updateCable)
     Q_PROPERTY(QString fontSize READ fontSize NOTIFY fontSizeChanged)
+    Q_PROPERTY(bool wirelessScanState WRITE setWirelessScanState) //wifi scan 事件
 
 public:
     KnmInterface();
@@ -113,6 +114,9 @@ public slots:
     void onRequestInputPasswdAgent(QString agentName,QVariantMap parm);
 
     int changeSelectDevice(QString deviceName);
+
+    void setWirelessScanState(bool state);
+
 private slots:
 
     void slotRefreshTimeout();

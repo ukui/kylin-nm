@@ -366,6 +366,11 @@ UkuiItems.DtThemeBackground {
                 }
             }
 		}
+
+        Component.onDestruction: {
+            console.log("Rectangle is about to be destroyed.")
+            KInterface.wirelessScanState = false
+        }
     }
 }
 

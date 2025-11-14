@@ -555,6 +555,13 @@ ListView {
                                 onVisibleChanged: {
                                     if (visible) {
                                         updateShowDetailIndex(index)
+                                        if (index == (wlanlistView.count - 1)) {
+                                            if (outerFlickable.contentHeight > outerFlickable.contentY + listItem.height) {
+                                                outerFlickable.contentY += listItem.height
+                                            } else {
+                                                outerFlickable.contentY = outerFlickable.contentHeight
+                                            }
+                                        }
                                     }
                                 }
                             }

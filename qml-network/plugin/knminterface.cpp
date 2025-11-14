@@ -40,10 +40,18 @@ KnmInterface::KnmInterface()
 
 KnmInterface::~KnmInterface()
 {
+    qDebug() << Q_FUNC_INFO << __LINE__ ;
     if (nullptr != loadTimer) {
         delete loadTimer ;
         loadTimer = nullptr;
     }
+
+    if (nullptr != m_pRefreshTimer) {
+        delete m_pRefreshTimer ;
+        m_pRefreshTimer = nullptr;
+    }
+
+
 }
 
 QString KnmInterface::getIconData(QString name, int size /*= 24*/)
@@ -318,6 +326,21 @@ void KnmInterface::setWirelessSwitch(bool switched)
     KNMDC::getInstance()->setWirelessSwitchEnable(switched);
 }
 
+void KnmInterface::setWirelessScanState(bool state)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << state;
+    if (state) {
+        if(m_pRefreshTimer && !m_pRefreshTimer->isActive())
+            m_pRefreshTimer->start();
+    } else {
+        if(m_pRefreshTimer && m_pRefreshTimer->isActive()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "========= m_pRefreshTimer set stop";
+
+            m_pRefreshTimer->stop();
+        }
+    }
+}
+
 void KnmInterface::setUpwareRateData(QString str)
 {
     qDebug() << Q_FUNC_INFO <<__LINE__ << str;
@@ -421,6 +444,7 @@ ConnectStatus KnmInterface::getConnectionStatus()
 
 void KnmInterface::slotRefreshTimeout()
 {
+    qWarning() << Q_FUNC_INFO << __LINE__ << "timeout..." ;
     rescanWirelessConn();
 }
 

@@ -80,6 +80,9 @@ TRANSLATIONS += \
         translations/kylin-vpn_fr.ts \
         translations/kylin-vpn_es.ts \
         translations/kylin-vpn_de.ts \
+        translations/kylin-vpn_vi.ts \
+        translations/kylin-vpn_th.ts \
+        translations/kylin-vpn_ms.ts \
         translations/kylin-vpn_bo.ts\
         translations/kylin-vpn_bo_CN.ts
 

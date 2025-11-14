@@ -64,5 +64,8 @@ TRANSLATIONS += \
         translations/es.ts \
         translations/en_US.ts \
         translations/de.ts \
+        translations/vi.ts \
+        translations/ms.ts \
+        translations/th.ts \
         translations/bo.ts\
         translations/bo_CN.ts

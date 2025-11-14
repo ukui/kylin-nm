@@ -935,8 +935,8 @@ void MainWindow::onRefreshTrayIcon()
             m_lanWidget->getWiredDeviceConnectState(wiredStateMap);
             for (auto it = wiredStateMap.cbegin(); it != wiredStateMap.cend(); ++it) {
                 const QString stateStr = it.value();
-                if (stateStr.contains(QStringLiteral("Connected"), Qt::CaseInsensitive) ||
-                    stateStr.contains(QStringLiteral("connected"), Qt::CaseInsensitive)) {
+                // Use i18n-aware string for detecting "connected" state so translations are handled
+                if (stateStr.contains(tr("Connected"), Qt::CaseInsensitive)) {
                     wiredActive = true;
                     break;
                 }

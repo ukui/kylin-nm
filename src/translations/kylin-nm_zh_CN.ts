@@ -1034,6 +1034,11 @@
         <translation>网卡</translation>
     </message>
     <message>
+        <location filename="../frontend/mainwindow.cpp" line="939"/>
+        <source>Connected</source>
+        <translation>已连接</translation>
+    </message>
+    <message>
         <location filename="../frontend/mainwindow.cpp" line="1219"/>
         <source>Not connected to the network</source>
         <translation>未连接网络</translation>

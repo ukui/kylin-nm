@@ -33,12 +33,19 @@ MobileHotspot::MobileHotspot() :  mFirstLoad(true) {
     QApplication::installTranslator(translator);
 
     pluginName = tr("MobileHotspot");
-    qDebug() << pluginName;
+    qDebug() << Q_FUNC_INFO << __LINE__ << pluginName;
     pluginType = NETWORK;
 
     qDBusRegisterMetaType<QMap<QString, bool> >();
     qDBusRegisterMetaType<QMap<QString, int> >();
     needLoad = isExitWirelessDevice();
+    //规避控制面板逻辑问题，isEnable状态改变时，需要组件自己更新显示的gsetting
+    if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+        ukccGsetting = new QGSettings(GSETTING_SCHEMA_UKCC,GSETTING_PATH_UKCC);
+        ukccGsetting->set("show",needLoad);
+    }
 }
 
 MobileHotspot::~MobileHotspot()

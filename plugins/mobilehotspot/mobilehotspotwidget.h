@@ -149,7 +149,7 @@ private:
     void deleteSettingPathInterface();
     void initConnectDevPage();
     void initBlackListPage();
-
+    void judgeNoticeInfoShow(QString deviceName , bool isActived);
     bool m_isUserSelect = true;  //是否用户操作
 
 signals:

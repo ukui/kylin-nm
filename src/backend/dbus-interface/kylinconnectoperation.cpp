@@ -200,7 +200,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
              << "specific parameter"<< specificObject;
 
     //set autoconnect
-    if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
+    //if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
     {
         NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
         setAutoConnect(connectionSettings,true);

@@ -43,23 +43,16 @@ ListView {
 
             onReleased: {
                 mouse.accepted = true  // 右键菜单自己处理
-
-                console.log("onReleased:------------------- " )
-
                 nameLabel.visible = false
                 nameStateLabel.visible = true
             }
 
             onEntered: {
-                console.log("onEntered:------------------- " )
-
                 enteritem = true
                 connectBtn.visible = true
                 speedLabel.visible = false
             }
             onExited: {
-                console.log("onExited:------------------- " )
-
                 lanlistView.currentIndex = -1
                 enteritem = false
                 connectBtn.visible = false
@@ -69,8 +62,6 @@ ListView {
             }
 
             onClicked: {
-                console.log("onClicked:------------------- " )
-
                 // 只处理右键，左键允许传播
                 if (mouse.button == Qt.RightButton) {
                     propertyMenu.popup()
@@ -206,7 +197,6 @@ ListView {
                     hoverEnabled: true
 
                     onReleased: {
-                        console.log("onReleased:-------------------")
                         nameLabel.visible = false
                         nameStateLabel.visible = true
                     }
@@ -228,6 +218,7 @@ ListView {
                     Layout.leftMargin: 8
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
+                    textColor: Platform.GlobalTheme.kFontPlaceholderText
                     text: modelData.State === 2 
                             ? (modelData.Connectivity === 3 
                                 ? qsTr("connected") + "，" + qsTr("(network restricted)") 

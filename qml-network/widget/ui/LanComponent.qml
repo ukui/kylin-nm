@@ -219,9 +219,10 @@ ListView {
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
                     textColor: Platform.GlobalTheme.kFontPlaceholderText
-                    text: modelData.State === 2 
-                            ? (modelData.Connectivity === 3 
-                                ? qsTr("connected") + "，" + qsTr("(network restricted)") 
+                    // 当 Connectivity 为 2（captive portal / 需要认证）或 3（受限）或 0 （未知）时都视为 “network restricted”
+                    text: modelData.State === 2
+                            ? ((modelData.Connectivity !=4 )
+                                ? qsTr("connected") + "，" + qsTr("(network restricted)")
                                 : qsTr("connected"))
                             : qsTr("Not connected")
                 }

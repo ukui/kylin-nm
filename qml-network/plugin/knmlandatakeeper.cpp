@@ -55,8 +55,8 @@ QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringL
         isDSL = true;
     }
     connectionMap.insert("IsDSL", isDSL);
-    // 默认设置为完全连通
-    connectionMap.insert("Connectivity", 4);
+    // 默认设置为 UNKNOWN（0），避免把未查询的连接误判为完全连通
+    connectionMap.insert("Connectivity", 0);
 
     return connectionMap;
 }

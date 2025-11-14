@@ -314,7 +314,7 @@ ListView {
 
                         MenuItem {//property
                             text:qsTr("Network property")
-                            visible: model.status === 2
+                            visible: model.Configured
                             onTriggered: {
                                 console.log("network property")
                                 console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
@@ -325,7 +325,7 @@ ListView {
 
                         MenuItem {
                             text:qsTr("Forget the network")
-                            visible: model.status === 2
+                            visible: model.Configured
                             onTriggered: {
                                 console.log("Forget the network",model.uuid)
                                 KInterface.deleteConnect(1,model.uuid)

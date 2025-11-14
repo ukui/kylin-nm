@@ -1157,38 +1157,35 @@ NetworkManager::ConnectionSettings::Ptr
     return connectionSettings;
 }
 
-QStringList KyWirelessConnectOperation::getBlackListHostName(QString apConnectPath)
+int KyWirelessConnectOperation::getBlackListHostName(QString apConnectPath,QStringList &hostBlackList,QStringList &macBlackList)
 {
-    QStringList blackList;
-    blackList.clear();
-
+    hostBlackList.clear();
+    macBlackList.clear();
     QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
                               apConnectPath,
                               "org.freedesktop.NetworkManager.Settings.Connection",
                               QDBusConnection::systemBus());
     if (!dbusInterface.isValid()) {
         qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error! apConnectPath:"<<apConnectPath;
-        return blackList;
+        return -1;
     }
 
-    QDBusMessage result = dbusInterface.call("GetSettings");
-    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-    QMap<QString, QMap<QString, QVariant>> map;
-    dbusArg1st >> map;
-    if (map.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << __LINE__ <<"map is empty!";
-        return blackList;
+    QDBusMessage reply = dbusInterface.call("Getblacklist");
+    if(reply.type() == QDBusMessage::ErrorMessage)
+    {
+        qWarning() << Q_FUNC_INFO << __LINE__  << "Getblacklist error:" << reply.errorMessage();
+        return -1;
     }
+    if (reply.arguments().isEmpty()
+        || reply.arguments().at(0).toString() == ""
+        || reply.arguments().at(1).toString() == "") {
+        qDebug() << Q_FUNC_INFO << __LINE__  << "Dbus interface call Getblacklist return is empty!";
+        return -2;
+    }
+     macBlackList = reply.arguments().at(0).toString().split(";");
+     hostBlackList = reply.arguments().at(1).toString().split(";",QString::SkipEmptyParts);
 
-    QMap<QString,QVariant> wirelessMap = map.value(KEY_802_11_WIRELESS);
-    if (wirelessMap.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << __LINE__ <<"wirelessMap is empty!";
-        return blackList;
-    }
-    if (wirelessMap.contains(KEY_BLACKLIST_HOSTNAME)) {
-        blackList = wirelessMap.value(KEY_BLACKLIST_HOSTNAME).toStringList();
-    }
-    return blackList;
+    return 0;
 }
 
 void KyWirelessConnectOperation::updateWirelessApSetting(
@@ -1197,6 +1194,8 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         const QString apDevice, const QString wirelessBand)
 
 {
+    QStringList hostBlackList;
+    QStringList macBlackList;
     NetworkManager::ConnectionSettings::Ptr apConnectSettingPtr = apConnectPtr->settings();
     apConnectSettingPtr->setId(apName);
     apConnectSettingPtr->setInterfaceName(apDevice);
@@ -1224,18 +1223,18 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
-    apConnectPtr->update(apConnectSettingPtr->toMap());
 
-    QStringList blackList = getBlackListHostName(apConnectPtr->path());
+    getBlackListHostName(apConnectPtr->path(),hostBlackList,macBlackList);
+    qDebug() << Q_FUNC_INFO << __LINE__ <<hostBlackList<<macBlackList;
     NMVariantMapMap newMap = apConnectSettingPtr->toMap();
     if (newMap.contains(KEY_802_11_WIRELESS)) {
-        newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, blackList);
+        newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, hostBlackList);
+        newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_MAC, macBlackList);
         if (wirelessBand == WIFI_BAND_2_4GHZ) {
             newMap[KEY_802_11_WIRELESS].remove("channel");
         }
     }
     apConnectPtr->update(newMap);
-    usleep(100*1000);
 }
 
 void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,

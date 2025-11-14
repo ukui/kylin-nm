@@ -238,6 +238,23 @@ public Q_SLOTS: // METHODS
         return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getCableStateByDevice"), argumentList);
     }
 
+    inline Q_NOREPLY void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool autoConnect)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(netType)
+                     << QVariant::fromValue(uuid)
+                     << QVariant::fromValue(autoConnect);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setNetworkConnectionAutoConnectState"), argumentList);
+    }
+
+    inline QDBusPendingReply<QVariantList> getNetworkDeviceData(int devType)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devType);
+        return asyncCallWithArgumentList(QStringLiteral("getNetworkDeviceData"), argumentList);
+    }
+
+
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);

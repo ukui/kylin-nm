@@ -278,3 +278,19 @@ int KyWiredConnectOperation::openWiredNetworkWithDevice(QString deviceName)
 
     return 0;
 }
+
+void KyWiredConnectOperation::setWiredAutoConnect(const QString &uuid, bool bAutoConnect)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(uuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + uuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+    setAutoConnect(connectionSettings, bAutoConnect);
+    connectPtr->update(connectionSettings->toMap());
+    return;
+}

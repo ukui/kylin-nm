@@ -483,6 +483,12 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
 {
     //for dbus
     qDebug() << "[LanPage] Q_EMIT lanRemove because onRemoveConnection " << path;
+
+    if (m_devList.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ <<  "[LanPage] m_devList.isEmpty ";
+        return;
+    }
+
     Q_EMIT lanRemove(path);
 
     if (m_lanPagePtrMap.contains(path)) {
@@ -1375,6 +1381,12 @@ void LanPage::setWiredDeviceAutoconnect(const QString&  devName,bool state)
     m_wiredConnectOperation->setWiredDeviceAutoconnect(devName, state);
 }
 
+void LanPage::setWiredConnectAutoconnect(const QString& uuid,bool state)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__ << uuid << state;
+    m_wiredConnectOperation->setWiredAutoConnect(uuid, state);
+}
+
 void LanPage::deleteWiredConnect(const QString& connUuid)
 {
     qDebug() << "[LanPage] deactivateWired" << connUuid;
@@ -1838,4 +1850,10 @@ void LanPage::updateDeviceState(const QString &devName, bool enable)
         /* 发出有线网卡设备状态变化信号 */
         Q_EMIT deviceStatusChanged();
     }
+}
+
+//获取有线默认设备
+QString LanPage::getWiredDefaultDeviceName(void)
+{
+    return getDefaultDeviceName(WIRED);
 }

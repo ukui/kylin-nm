@@ -91,10 +91,13 @@ public:
     void deactivateWired(const QString& devName, const QString& connUuid, bool concise = false);
     void deleteWiredConnect(int type, const QString& connUuid);
     void setWiredDeviceAutoconnect(const QString& devName, bool state);
+    void setWiredConnectAutoconnect(const QString& uuid, bool state);
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
     void deleteWireleeConnect(int type, const QString& connUuid);
+    void setWirelessConnectAutoconnect(const QString& uuid, bool state);
+
     //无线总开关
     void setWirelessSwitchEnable(bool enable);
 
@@ -118,6 +121,7 @@ public:
     bool getWiredEnabledState();
     int getDeviceConnectivity(const QString deviceName);
     bool getCableStateByDevice(const QString &deviceName);
+    QString getDefaultDeviceName(int type);
 
 Q_SIGNALS:
     //设备插拔

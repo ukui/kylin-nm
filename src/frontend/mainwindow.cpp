@@ -1392,6 +1392,10 @@ void MainWindow::setWiredDeviceAutoconnect(const QString& devName, bool state)
 {
     m_lanWidget->setWiredDeviceAutoconnect(devName, state);
 }
+void MainWindow::setWiredConnectAutoconnect(const QString& uuid, bool state)
+{
+    m_lanWidget->setWiredConnectAutoconnect(uuid, state);
+}
 
 void MainWindow::deleteWiredConnect(int type, const QString& connUuid)
 {
@@ -1417,6 +1421,11 @@ void MainWindow::deleteWireleeConnect(int type, const QString& connUuid)
     qDebug() << Q_FUNC_INFO << __LINE__ << type << connUuid;
     if (type == 1)
         m_wlanWidget->deleteWirelessConnect(connUuid);
+}
+
+void MainWindow::setWirelessConnectAutoconnect(const QString& uuid, bool state)
+{
+    m_wlanWidget->setWirelessConnectAutoConnectState(uuid, state);
 }
 
 void MainWindow::rescan()
@@ -1697,4 +1706,15 @@ void MainWindow::initNetCtrl()
 
     qInfo()<<"initNetCtrl success";
     return;
+}
+
+QString MainWindow::getDefaultDeviceName(int type)
+{
+    QString devName = QString("");
+
+    if (0 == type)
+        devName = m_lanWidget->getWiredDefaultDeviceName();
+    else
+        devName = m_wlanWidget->getWirelessDefaultDeviceName();
+    return devName;
 }

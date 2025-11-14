@@ -267,6 +267,18 @@ class DbusAdaptor: public QObject, protected QDBusContext
 "      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
 "      <arg direction=\"out\" type=\"b\"/>\n"
 "    </method>\n"
+"    <method name=\"setNetworkConnectionAutoConnectState\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"netType\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"state\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getNetworkDeviceData\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\"/>\n"
+"      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"in\" type=\"i\" name=\"devType\"/>\n"
+"    </method>\n"
+
 
 "  </interface>\n"
         "")
@@ -303,6 +315,8 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void deleteConnect(int type,QString Uuid);
     //dev autoconnect
     Q_NOREPLY void setDeviceAutoConnectState(QString devName, bool state);
+    //networkconnect autoconnect
+    Q_NOREPLY void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool state);
 
     //获取设备列表和启用/禁用状态
     QVariantMap getDeviceListAndEnabled(int devType);
@@ -343,6 +357,8 @@ public Q_SLOTS: // METHODS
 
     int registerInputPasswdAgent(QString agentName,QVariantMap value);
     int requestInputPasswdAgent(QVariantMap value);
+
+    QVariantList getNetworkDeviceData(int devType);
 
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);

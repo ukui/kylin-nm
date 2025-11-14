@@ -1889,3 +1889,15 @@ void WlanPage::deleteWirelessConnect(const QString &connectUuid)
 {
     m_wirelessConnectOpreation->deleteWirelessConnect(connectUuid);
 }
+
+void WlanPage::setWirelessConnectAutoConnectState(const QString &connectUuid,bool state)
+{
+    m_wirelessConnectOpreation->setWirelessAutoConnect(connectUuid,state);
+}
+
+//获取无线默认设备
+QString WlanPage::getWirelessDefaultDeviceName(void)
+{
+    return getDefaultDeviceName(WIRELESS);
+}
+

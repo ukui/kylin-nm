@@ -360,6 +360,24 @@ int updateKylinWirelessItemInfo(KyWirelessNetItem& item)
                     item.m_isConfigured = false;
                 } else {
                     item.m_isConfigured = true;
+                    NetworkManager::ActiveConnection::Ptr activeConn = networkResourceInstance->getActiveConnect(item.m_connectUuid);
+                    if (!activeConn.isNull()) {
+                        QStringList devices = activeConn->devices();
+                        if (!devices.isEmpty()) {
+                            QString devUni = devices.at(0);
+                            NetworkManager::Device::Ptr devPtr = networkResourceInstance->findDeviceUni(devUni);
+                            if (!devPtr.isNull() && devPtr->type() == NetworkManager::Device::Wifi) {
+                                NetworkManager::WirelessDevice *wdev = qobject_cast<NetworkManager::WirelessDevice *>(devPtr.data());
+                                if (wdev) {
+                                    NetworkManager::AccessPoint::Ptr ap = wdev->activeAccessPoint();
+                                    if (!ap.isNull()) {
+                                        item.m_frequency = ap->frequency();
+                                        item.m_channel = NetworkManager::findChannel(item.m_frequency);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 return 0;
         }

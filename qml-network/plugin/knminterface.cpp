@@ -180,9 +180,9 @@ void KnmInterface::openNetworkSetting()
     ConnectStatus connect_status = getConnectionStatus();
 
     QProcess process;
-    if (connect_status == ConnectStatus::Wireless){
+    if (connect_status == ConnectStatus::Wireless) {
         process.startDetached("ukui-control-center -m wlanconnect");
-    } else {
+    } else if (connect_status == ConnectStatus::Wire || connect_status == ConnectStatus::All) {
         process.startDetached("ukui-control-center -m netconnect");
     }
 }
@@ -431,13 +431,18 @@ ConnectStatus KnmInterface::getConnectionStatus()
         }
     }
 
-    if (wiredConnect && wirelessConnect){
+    if (wiredConnect && wirelessConnect) {
         return ConnectStatus::All;
     } else if (wiredConnect) {
         return ConnectStatus::Wire;
     } else if (wirelessConnect) {
         return ConnectStatus::Wireless;
     } else {
+        if (wiredDev.count() > 0)
+            return ConnectStatus::Wire;
+        else if (wirelessDev.count() > 0)
+            return ConnectStatus::Wireless;
+
         return ConnectStatus::NoConnect;
     }
 }

@@ -91,6 +91,8 @@ ListView {
         height: wlanlistView.baseItemHeight
         property bool enteritem : false
         property bool conConnected:   model.status === 2
+        property int freqForDisplay: (model.frequency === 0 && model.ssid && model.ssid.toUpperCase().indexOf("5G") !== -1) ? 5200 : model.frequency
+        property int signalForDisplay: (isNaN(parseInt(model.signal)) ? -1 : (parseInt(model.signal) === 0 ? (model.status === 2 ? 100 : -1) : parseInt(model.signal)))
         property bool menuLoaded: false
         property bool textEditLoaded: false
         property bool pwdConnectBtnLoaded: false
@@ -314,7 +316,7 @@ ListView {
 
                         MenuItem {//property
                             text:qsTr("Network property")
-                            visible: model.Configured
+                            visible: model.status === 2
                             onTriggered: {
                                 console.log("network property")
                                 console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
@@ -325,7 +327,7 @@ ListView {
 
                         MenuItem {
                             text:qsTr("Forget the network")
-                            visible: model.Configured
+                            visible: model.status === 2
                             onTriggered: {
                                 console.log("Forget the network",model.uuid)
                                 KInterface.deleteConnect(1,model.uuid)
@@ -344,7 +346,8 @@ ListView {
                     UkuiItems.IconButton {
                         id: typeicon
                         visible: model.status === 2 || model.status === 4
-                        iconSource: KInterface.getWiFiIcon(model.signal, model.security, model.isApConn, model.category)
+                        // use signalForDisplay for icon selection; when unknown (-1) fall back to 0
+                        iconSource: KInterface.getWiFiIcon(signalForDisplay === -1 ? 0 : signalForDisplay, model.security, model.isApConn, model.category)
                         anchors.fill: parent
                         radius: 19
                         isHighLight: model.status === 2
@@ -397,7 +400,7 @@ ListView {
                             height: textMetrics.tightBoundingRect.height + 6
 
                             // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
-                            property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
+                            property int wlan_type : model.isMix ? 0 : freqForDisplay > 5000 ? 1 : 2;
 
                             color: "transparent"
                             radius: 4
@@ -416,7 +419,7 @@ ListView {
                             UkuiItems.DtThemeText {
                                 id: dtThemeText
                                 anchors.centerIn: parent
-                                property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
+                                property int wlan_type : model.isMix ? 0 : freqForDisplay > 5000 ? 1 : 2;
                                 text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"
                                 textColor: Platform.GlobalTheme.kFontPlaceholderText
                             }
@@ -507,7 +510,9 @@ ListView {
                             Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
 
                             text: {
-                                const signal = parseInt(model.signal);
+                                // use signalForDisplay: -1 means unknown/not-yet-available (hide detailed status)
+                                const signal = signalForDisplay;
+                                if (signal === -1) return qsTr("Connected");
                                 return signal > 80 ? qsTr("Connected,network is very good") :
                                                      signal > 55 ? qsTr("Connected,network is good") :
                                                                    signal > 30 ? qsTr("Connected,network is average") :

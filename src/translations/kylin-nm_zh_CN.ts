@@ -70,7 +70,7 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="86"/>
         <source>Public network (default)</source>
-        <translation>公网（默认）</translation>
+        <translation>互联网（默认）</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>

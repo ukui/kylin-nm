@@ -599,6 +599,15 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
     setSwitchBtnState(wiredSwitch);
     if (m_devList.isEmpty()) {
         m_currentDeviceName = deviceName;
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings * ukccGsettingLan = new QGSettings(GSETTING_SCHEMA_UKCC,GSETTING_PATH_UKCC_NETCONNECT);
+            ukccGsettingLan->set("show",true);
+            // 使用完后释放
+            delete ukccGsettingLan;
+            ukccGsettingLan = nullptr;
+        }
     }
 
     qDebug() << "[LanPage] Begin add device:" << deviceName << m_currentDeviceName;
@@ -687,6 +696,15 @@ void LanPage::onDeviceRemove(QString deviceName)
         setSwitchBtnState(false);
         setSwitchBtnEnable(false);
         qDebug() << "[wiredSwitch]set not enable after device remove";
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings * ukccGsettingLan = new QGSettings(GSETTING_SCHEMA_UKCC,GSETTING_PATH_UKCC_NETCONNECT);
+            ukccGsettingLan->set("show",false);
+            // 使用完后释放
+            delete ukccGsettingLan;
+            ukccGsettingLan = nullptr;
+        }
     }
 
     QString nowDevice = m_currentDeviceName;

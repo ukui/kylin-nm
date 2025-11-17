@@ -807,6 +807,20 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
 
     if (m_devList.isEmpty()) {
         m_currentDevice=deviceName;
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings* mobileHotspotSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
+            mobileHotspotSetting->set("show", true);
+            delete mobileHotspotSetting;
+            mobileHotspotSetting = nullptr;
+
+            QGSettings* wlanConnectSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_WLANCONNECT);
+            wlanConnectSetting->set("show", true);
+            delete wlanConnectSetting;
+            wlanConnectSetting = nullptr;
+
+        }
     }
     m_devList << deviceName;
     setSwitchBtnEnable(true);
@@ -874,6 +888,21 @@ void WlanPage::onDeviceRemove(QString deviceName)
     if (m_devList.isEmpty()) {
         setSwitchBtnState(false);
         setSwitchBtnEnable(false);
+        //设置控制面板热点界面 和 控制面板无线界面
+        qWarning() << Q_FUNC_INFO << __LINE__ << "deviceRemove" << deviceName;
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings* mobileHotspotSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
+            mobileHotspotSetting->set("show", false);
+            delete mobileHotspotSetting;
+            mobileHotspotSetting = nullptr;
+
+            QGSettings* wlanConnectSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_WLANCONNECT);
+            wlanConnectSetting->set("show", false);
+            delete wlanConnectSetting;
+            wlanConnectSetting = nullptr;
+        }
     }
 
     if (originalDeviceName == deviceName || m_devList.isEmpty()) {

@@ -167,7 +167,7 @@ UkuiItems.DtThemeBackground {
                                 if (lanDeviceComboBox.count <= 1) {
                                     lanDeviceComboBox.ishide = true
                                     lanDeviceComboBox.visible = false
-                                    lanDeviceComboBox.visible = lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
+                                    lanContentArea.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
                                 } else {
                                     lanDeviceComboBox.ishide = false
                                     lanContentArea.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible

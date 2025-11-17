@@ -166,3 +166,49 @@ QMap<QString, QVariant> NetDevice::updateConnectivity(QString uuid, int status, 
     }
     return conn;
 }
+
+void NetDevice::updateConnectionProp(QVariantMap parm)
+{
+    int i = 0;
+
+    QMap<QString, QVariant> conn;
+    while (i < m_connectionsList.count()) {
+        QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+         if (valueMap.value("Name").toString() == parm.value("Name").toString()) {
+            conn = m_connectionsList.takeAt(i).toMap();
+            if(parm.contains("Signal")){
+                conn.remove("Signal");
+                conn.insert("Signal", parm.value("Signal"));
+            }
+            if(parm.contains("Security")){
+                conn.remove("Security");
+                conn.insert("Security", parm.value("Security"));
+            }
+            if(parm.contains("Uuid")){
+                conn.remove("Uuid");
+                conn.insert("Uuid", parm.value("Uuid"));
+            }
+            if(parm.contains("frequency")){
+                conn.remove("frequency");
+                conn.insert("frequency", parm.value("frequency"));
+            }
+            if(parm.contains("Configured")){
+                conn.remove("Configured");
+                conn.insert("Configured", parm.value("Configured"));
+            }
+            if(parm.contains("isMix")){
+                conn.remove("isMix");
+                conn.insert("isMix", parm.value("isMix"));
+            }
+            if(parm.contains("State")){
+                conn.remove("State");
+                conn.insert("State", parm.value("State"));
+            }
+
+            m_connectionsList.insert(i, conn);
+            break;
+        }
+        i++;
+    }
+    return ;
+}

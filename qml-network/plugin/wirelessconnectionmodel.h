@@ -84,6 +84,7 @@ public slots:
     void refreshConnections(const QVariantList newList);
 
     int getConButtonFromSsid(const QString itemId);
+    void replaceConnection(struct ST_ConnectionInfo *pConnection);
 private:
     /*makeConnectionMap*/
 

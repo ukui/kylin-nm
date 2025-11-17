@@ -118,6 +118,7 @@ Q_SIGNALS:
     void connectivityCheckSpareUriChanged();
 
     void wirelessSwitchBtnChanged(bool state);
+    void sigNetworkPropChanged(QVariantMap parm);
 
 public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);

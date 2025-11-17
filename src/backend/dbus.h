@@ -137,6 +137,9 @@ class DbusAdaptor: public QObject, protected QDBusContext
 "      <arg direction=\"out\" type=\"s\" name=\"display\"/>\n"
 "      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
 "    </signal>\n"
+"    <signal name=\"sigNetworkPropChanged\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"parm\"/>\n"
+"    </signal>\n"
 "    <method name=\"getWirelessList\">\n"
 "      <arg direction=\"out\" type=\"av\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
@@ -401,6 +404,8 @@ Q_SIGNALS: // SIGNALS
     //需要用户输入
     void sigRequestInputPasswdAgent(QString agentName,QVariantMap value);
 
+    //无线列表各项属性更新 未来使用该信号更新就行 其他冗余信号与更新逻辑应该删掉
+    void sigNetworkPropChanged(QVariantMap parm);
 private:
     MainWindow *m_mainWindow;
     QString m_display;

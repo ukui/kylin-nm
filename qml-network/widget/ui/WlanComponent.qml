@@ -170,8 +170,6 @@ ListView {
             }
 
             if(!textEditLayout.visible) {
-                typeicon.visible = false;
-                loadingicon.visible = true;
                 if (model.status === 2) {
                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                 } else if (model.status === 4) {
@@ -254,8 +252,6 @@ ListView {
                 }
 
                 if(connectBtnHandler.containsMouse) {
-                    typeicon.visible = false;
-                    loadingicon.visible = true;
                     if (model.status === 2) {
                         KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                     } else if (model.status === 4) {
@@ -304,8 +300,6 @@ ListView {
                             text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
                             onTriggered: {
                                 console.log("connect/disconnect network")
-                                typeicon.visible = false;
-                                loadingicon.visible = true;
                                 if (model.status === 2) {
                                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                                 } else if (model.status === 4) {
@@ -457,8 +451,6 @@ ListView {
                                     }
                                 }
                                 onAccepted: {
-                                    typeicon.visible = false;
-                                    loadingicon.visible = true;
 
                                     KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text,
                                                                autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
@@ -487,8 +479,6 @@ ListView {
                                 }
 
                                 onClicked: {
-                                    typeicon.visible = false;
-                                    loadingicon.visible = true;
 
                                     KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security,
                                                                textEditLoader.item ? textEditLoader.item.text : "",

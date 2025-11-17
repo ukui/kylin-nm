@@ -505,6 +505,7 @@ void DbusAdaptor::connectToMainwindow()
     connect(m_mainWindow, &MainWindow::signalStrengthChange, this, &DbusAdaptor::signalStrengthChange);
     connect(m_mainWindow, &MainWindow::secuTypeChange, this, &DbusAdaptor::secuTypeChange);
     connect(m_mainWindow, &MainWindow::timeToUpdate, this, &DbusAdaptor::timeToUpdate);
+    connect(m_mainWindow, &MainWindow::sigNetworkPropChanged, this, &DbusAdaptor::sigNetworkPropChanged);
 }
 
 QString DbusAdaptor::checkDisplay()
@@ -560,6 +561,7 @@ int DbusAdaptor::registerInputPasswdAgent(QString agentName,QVariantMap value)
 /*请求代理接管输入*/
 int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
 {
+#if 0
     if(m_agentName.isEmpty()) {
         qWarning() << Q_FUNC_INFO << __LINE__<<"agent is empty,no register agent";
         return -1;
@@ -567,6 +569,10 @@ int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
         Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
         qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
     }
+#endif
+    //防止kylin-nm崩溃导致的未注册
+    Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
+    qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
     return  0;
 }
 

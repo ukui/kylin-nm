@@ -528,3 +528,41 @@ void KnmInterface::passwdAgentChangeSelectSsid()
     m_inputSsid="";
     return ;
 }
+
+/*属性更新*/
+void KnmInterface::wirelessDevConnListPropUpdate(QString devName,QString ssid)
+{
+    QVariantList conList;
+
+    if(devName!=m_currentWirelessDevice && !m_currentWirelessDevice.isEmpty()) {
+        qWarning() << Q_FUNC_INFO <<__LINE__ << devName << m_currentWirelessDevice;
+        return;
+     }
+
+    if(m_wirelessDevConnList.isEmpty()) {
+        m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(devName);
+        mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
+        emit updateWirelessDevConnList();
+        emit wirelessConListChanged();
+        return;
+    }
+
+    conList = KNMDC::getInstance()->wirelessDeviceConnList(devName);
+
+    for(int i=0;i<conList.count();i++){
+        if (conList.at(i).toMap().value("Name").toString() == ssid){
+            for(int j=0;j<m_wirelessDevConnList.count();j++){
+                if (m_wirelessDevConnList.at(j).toMap().value("Name").toString() == ssid){
+                    m_wirelessDevConnList.replace(j,conList.at(i));
+                    WirelessConnectionModel::ST_ConnectionInfo con;
+                    con=mWirelessConnecModel.mapToConnectionInfo(conList.at(i).toMap());
+
+                    mWirelessConnecModel.replaceConnection(&con);
+                    qDebug() << Q_FUNC_INFO <<__LINE__ << "replaceConnection"<<devName<<ssid;
+                    break;
+                }
+            }
+        }
+    }
+    emit updateWirelessDevConnList();
+}

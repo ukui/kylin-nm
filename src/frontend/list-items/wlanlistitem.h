@@ -95,10 +95,12 @@ protected:
 
 Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
+    void sigNetworkPropChanged(QVariantMap parm);
 
 private:
     void initWlanUI();
     void refreshIcon(bool isActivated);
+    void requestInputPasswdAgent(QString netName, QString deviceName, int type);
 
 private:
     KyWirelessNetItem m_wirelessNetItem;

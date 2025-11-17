@@ -558,6 +558,8 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
     connect(m_wlanWidget, &WlanPage::connectivityCheckSpareUriChanged, this, &MainWindow::onConnectivityCheckSpareUriChanged);
+    connect(m_wlanWidget, &WlanPage::sigNetworkPropChanged, this, &MainWindow::sigNetworkPropChanged);
+
 
     connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIconTooltip);
     connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::onRefreshTrayIconTooltip);

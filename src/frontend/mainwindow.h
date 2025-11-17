@@ -155,6 +155,7 @@ Q_SIGNALS:
     //列表排序
     void timeToUpdate();
     void deviceConnectivityChanged(QString devName, int connectivity);
+    void sigNetworkPropChanged(QVariantMap parm);
 
 public Q_SLOTS:
 

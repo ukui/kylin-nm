@@ -53,6 +53,7 @@ public:
 
     QMap<QString, QVariant> updateConnectivity(QString uuid, int status, int connectivity);
 
+    void updateConnectionProp(QVariantMap parm);
 private:
     QString     m_Name;
     bool        m_Available;

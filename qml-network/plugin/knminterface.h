@@ -118,6 +118,8 @@ public slots:
     void setWirelessScanState(bool state);
 
     void passwdAgentChangeSelectSsid();
+
+    void wirelessDevConnListPropUpdate(QString devName,QString ssid);
 private slots:
 
     void slotRefreshTimeout();

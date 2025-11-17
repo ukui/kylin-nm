@@ -344,6 +344,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
         m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+    connect(p_wlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
@@ -360,6 +361,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+    connect(p_wlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
@@ -376,6 +378,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
     WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+    connect(p_sortWlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
     p_sortListWidgetItem->setSizeHint(QSize(p_ListWidget->width(), p_sortWlanItem->height()));
@@ -746,6 +749,23 @@ void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuT
 
     if (nullptr != p_wlanItem) {
         p_wlanItem->updateWirelessNetSecurity(ssid, secuType);
+
+        QVariantMap value;
+        value.insert("Name",ssid);
+        //value.insert("Signal",p_wlanItem->getSignalStrength());
+        value.insert("Security",secuType);
+        //value.insert("Uuid",p_wlanItem->getUuid());
+        //value.insert("isApConn",(m_connectResource->isApConnection(wirelessNetItem.m_connectUuid) ? IsApConnection : NotApConnection));
+        //value.insert("category");
+        //value.insert("frequency",p_wlanItem->m_frequency);
+        //value.insert("State");
+        //value.insert("Loading");
+        //value.insert("Configured",false);
+        //value.insert("isMix",p_wlanItem->m_isMix);
+        value.insert("DeviceName",devName);
+         qDebug() << LOG_FLAG << "emit sigNetworkPropChanged " << value;
+        Q_EMIT sigNetworkPropChanged(value);//只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
+
     }
 
     Q_EMIT secuTypeChange(devName, ssid, secuType);
@@ -1457,6 +1477,7 @@ void WlanPage::onRefreshIconTimer()
                 WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice, m_showWifi6Plus);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
                 connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+                connect(p_sortWlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
                 m_inactivatedNetListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
                 updateWlanItemState(m_inactivatedNetListWidget, p_sortListWidgetItem, Deactivated);
@@ -1917,6 +1938,7 @@ void WlanPage::deactivateWirelessConnectionWithUuid(const QString devName, const
 void WlanPage::deleteWirelessConnect(const QString &connectUuid)
 {
     m_wirelessConnectOpreation->deleteWirelessConnect(connectUuid);
+    //Q_EMIT sigNetworkPropChanged(value);//建议重新更新属性
 }
 
 void WlanPage::setWirelessConnectAutoConnectState(const QString &connectUuid,bool state)

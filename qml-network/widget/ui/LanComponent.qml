@@ -331,7 +331,7 @@ ListView {
                     }
 
                     onClicked: {
-                        mouse.accepted = false
+                        mouse.accepted = true
 
                         // // 设置当前选中项
                         if (modelData.State === 2)

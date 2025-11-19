@@ -627,13 +627,12 @@ void MobileHotspotWidget::setPasswordFrame()
     m_pwdNameLine = new KPasswordEdit(this);
     m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
-    m_pwdHintLabel= new QLabel(this);
+    m_pwdHintLabel= new KLabel(this);
     m_pwdHintLabel->setFixedHeight(20);
     m_pwdHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_pwdHintLabel->setPalette(hintTextColor);
+    m_pwdHintLabel->setFontColorRole(QPalette::WindowText);
+    m_pwdHintLabel->setFontColor(Qt::red);
     m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
 
     QGridLayout *pwdLayout = new QGridLayout(m_passwordFrame);

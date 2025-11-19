@@ -333,6 +333,7 @@ ListView {
 
                 Item {
                     Layout.alignment: Qt.AlignLeft
+                    enabled: false
                     Layout.leftMargin: 26
                     width: 36
                     height: 36

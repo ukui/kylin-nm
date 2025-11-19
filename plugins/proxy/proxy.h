@@ -193,7 +193,7 @@ private:
     QLabel *m_appEnableLabel;
     QLabel *m_proxyTypeLabel;
     QLabel *m_ipAddressLabel;
-    QLabel *m_ipHintsLabel;
+    KLabel *m_ipHintsLabel;
     QLabel *m_portLabel;
     QLabel *m_userNameLabel;
     QLabel *m_pwdLabel;

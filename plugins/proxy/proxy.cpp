@@ -1201,7 +1201,7 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     m_ipAddressFrame->setFrameShape(QFrame::NoFrame);
     m_ipAddressLabel = new QLabel(tr("IP address"), m_ipAddressFrame);
     m_ipAddressLabel->setFixedWidth(LABEL_WIDTH);
-    m_ipHintsLabel = new QLabel(m_ipAddressFrame);
+    m_ipHintsLabel = new KLabel(m_ipAddressFrame);
     m_ipHintsLabel->setContentsMargins(8, 0, 0, 0);
     m_ipAddressLineEdit = new QLineEdit(m_ipAddressFrame);
     m_ipAddressLineEdit->setFixedHeight(LINE_EDIT_HEIGHT);
@@ -1223,9 +1223,8 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
     m_ipAddressLineEdit->setValidator(new QRegExpValidator(rx, this));
     //无效的IP地址提示
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_ipHintsLabel->setPalette(hintTextColor);
+    m_ipHintsLabel->setFontColorRole(QPalette::WindowText);
+    m_ipHintsLabel->setFontColor(Qt::red);
     m_ipHintsLabel->setText(tr("Invalid IP Address"));
     m_ipHintsLabel->hide();
 

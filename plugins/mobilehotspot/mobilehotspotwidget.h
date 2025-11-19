@@ -72,7 +72,7 @@ private:
     QLabel *m_switchLabel;
     QLabel *m_apNameLabel;
     KLabel *m_pwdLabel;
-    QLabel *m_pwdHintLabel;
+    KLabel *m_pwdHintLabel;
     KLabel *m_freqBandLabel;
     KLabel *m_interfaceLabel;
 

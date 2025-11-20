@@ -471,7 +471,7 @@ ListView {
                                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                 text: qsTr("connect")
 
-                                contentItem: Text {
+                                contentItem: Label {
                                     text: parent.text
                                     font: parent.font
                                     horizontalAlignment: Text.AlignHCenter
@@ -536,7 +536,7 @@ ListView {
                                 }
 
                                 // 自定义contentItem以支持省略号
-                                contentItem: Text {
+                                contentItem: Label {
                                     text: autoConnectCheckBox.text
                                     font: autoConnectCheckBox.font
                                     verticalAlignment: Text.AlignVCenter
@@ -639,7 +639,7 @@ ListView {
                     ToolTip.text: text
                     ToolTip.delay: 500
 
-                    contentItem: Text {
+                    contentItem: Label {
                         text: parent.text
                         font: parent.font
                         horizontalAlignment: Text.AlignHCenter

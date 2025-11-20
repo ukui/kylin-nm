@@ -18,6 +18,8 @@
  *
  */
 #include "wlanitem.h"
+#include <kysdk/applications/accessinfohelper.h>
+
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
@@ -46,6 +48,7 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(infoLabel, "WlanConnect", "", "details button of wireless network");
 
     iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     titileLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);

@@ -19,6 +19,7 @@
  */
 #include "vpn.h"
 #include "ui_vpn.h"
+#include <kysdk/applications/accessinfohelper.h>
 
 #include <QProcess>
 #include <QMouseEvent>
@@ -157,6 +158,7 @@ void Vpn::initComponent(){
     m_showLabel = new QLabel(tr("Show on Taskbar"), m_showFrame);
     m_showLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_showBtn = new KSwitchButton(m_showFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_showBtn, "VPN", "", "show icon in the taskbar");
     showLayout->setContentsMargins(ITEM_MARGINS);
     showLayout->addWidget(m_showLabel);
     showLayout->addStretch();
@@ -353,6 +355,7 @@ void Vpn::addOneVirtualItem(QStringList infoList)
     QString connDbusPath = infoList.at(2);
     int status = infoList.at(3).toInt(); //1-连接中 2-已连接 3-断开中 4-已断开
     VpnItem * item = new VpnItem(m_pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(item, "VPN", "", "VPN item");
 
     QIcon searchIcon = QIcon::fromTheme(KVpnSymbolic);
     item->m_iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));

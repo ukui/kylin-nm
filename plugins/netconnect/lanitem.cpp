@@ -18,6 +18,7 @@
  *
  */
 #include "lanitem.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QApplication>
 #include <QProcess>
 
@@ -48,6 +49,7 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(infoLabel, "NetConnect", "", "details info button of wired network");
 
     m_networkCheckFrame = new QFrame(this);
     m_warnLabel = new QLabel(this);

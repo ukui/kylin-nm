@@ -17,7 +17,12 @@
  */
 
 #include "proxyapphandler.h"
+#include <sys/types.h>
+#include <cstddef>
+#include <cerrno>
+#include <cstring>
 #include <QDebug>
+#include <vector>
 
 const QStringList systemCmdList = {"cat",
                                 "grep",
@@ -64,20 +69,27 @@ bool ProcAddServer::netlinkConnect()
     m_sockFd = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
     if (m_sockFd < 0) {
         perror("socket");
+        qDebug() << "Failed to create netlink socket, errno:" << errno;
         return false;
     }
+    qDebug() << "Netlink socket created, fd:" << m_sockFd;
 
+    memset(&sa_nl, 0, sizeof(sa_nl));
     sa_nl.nl_family = AF_NETLINK;
     sa_nl.nl_groups = CN_IDX_PROC;
     sa_nl.nl_pid = getpid();
 
+    qDebug() << "Binding netlink socket, pid:" << sa_nl.nl_pid;
+
     if (bind(m_sockFd, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) < 0) {
         perror("bind");
+        qDebug() << "Failed to bind netlink socket, errno:" << errno;
         close(m_sockFd);
         m_sockFd = -1;
         return false;
     }
 
+    qDebug() << "Netlink socket bound successfully";
     return true;
 }
 
@@ -86,28 +98,31 @@ bool ProcAddServer::netlinkConnect()
  */
 bool ProcAddServer::setProcEvListen(int nl_sock, bool enable)
 {
-    struct __attribute__ ((aligned(NLMSG_ALIGNTO))) {
-        struct nlmsghdr nl_hdr;
-        struct __attribute__ ((__packed__)) {
-            enum proc_cn_mcast_op cn_mcast;
-            struct cn_msg cn_msg;
-        };
-    } nlcn_msg;
+    /* 动态分配消息内存 */
+    std::size_t msg_size = NLMSG_SPACE(sizeof(struct cn_msg) + sizeof(enum proc_cn_mcast_op));
+    std::vector<char> buf(msg_size);
+    memset(buf.data(), 0, msg_size);
 
-    memset(&nlcn_msg, 0, sizeof(nlcn_msg));
-    nlcn_msg.nl_hdr.nlmsg_len = sizeof(nlcn_msg);
-    nlcn_msg.nl_hdr.nlmsg_pid = getpid();
-    nlcn_msg.nl_hdr.nlmsg_type = NLMSG_DONE;
+    struct nlmsghdr *nlh = (struct nlmsghdr *)buf.data();
+    struct cn_msg *cn = (struct cn_msg *)NLMSG_DATA(nlh);
+    enum proc_cn_mcast_op *data = (enum proc_cn_mcast_op *)(cn + 1);
 
-    nlcn_msg.cn_msg.id.idx = CN_IDX_PROC;
-    nlcn_msg.cn_msg.id.val = CN_VAL_PROC;
-    nlcn_msg.cn_msg.len = sizeof(enum proc_cn_mcast_op);
+    nlh->nlmsg_len = msg_size;
+    nlh->nlmsg_pid = getpid();
+    nlh->nlmsg_type = NLMSG_DONE;
 
-    nlcn_msg.cn_mcast = enable ? PROC_CN_MCAST_LISTEN : PROC_CN_MCAST_IGNORE;
+    cn->id.idx = CN_IDX_PROC;
+    cn->id.val = CN_VAL_PROC;
+    cn->len = sizeof(enum proc_cn_mcast_op);
 
-    if (send(nl_sock, &nlcn_msg, sizeof(nlcn_msg), 0) < 0) {
+    *data = enable ? PROC_CN_MCAST_LISTEN : PROC_CN_MCAST_IGNORE;
+
+    if (send(nl_sock, buf.data(), msg_size, 0) < 0) {
         perror("netlink send");
+        qDebug() << "Failed to send netlink message, errno:" << errno;
         return false;
+    } else {
+        qDebug() << "Netlink message sent successfully";
     }
 
     return true;
@@ -118,35 +133,72 @@ bool ProcAddServer::setProcEvListen(int nl_sock, bool enable)
  */
 int ListenThObject::handleProcEv()
 {
-    int rc;
-    struct __attribute__ ((aligned(NLMSG_ALIGNTO))) {
-        struct nlmsghdr nl_hdr;
-        struct __attribute__ ((__packed__)) {
-            struct proc_event proc_ev;
-            struct cn_msg cn_msg;
-        };
-    } nlcn_msg;
+    /* 使用动态分配的缓冲区，避免栈溢出 */
+    const std::size_t BUFFER_SIZE = 8192;  // 8KB 缓冲区
+    std::vector<char> buffer(BUFFER_SIZE);
+    char *buf = buffer.data();
+
+    struct nlmsghdr *nlh;
+    struct cn_msg *cn;
+    struct proc_event *proc_ev;
 
     while (!m_exitStat) {
-        rc = recv(m_sockFd, &nlcn_msg, sizeof(nlcn_msg), 0);
+        ssize_t rc = recv(m_sockFd, buf, BUFFER_SIZE, 0);
         if (rc == 0) {
             /* shutdown? */
+            qDebug() << "连接关闭";
             return 0;
         } else if (rc == -1) {
             if (errno == EINTR) continue;
             perror("netlink recv");
+            qDebug() << "接收错误, errno:" << errno;
             return -1;
         }
-        switch (nlcn_msg.proc_ev.what) {
+
+        /* 解析消息 */
+        nlh = (struct nlmsghdr *)buf;
+
+        /* 检查消息长度 */
+        if ((std::size_t)rc < sizeof(struct nlmsghdr)) {
+            qDebug() << "消息过短，无法解析nlmsghdr";
+            continue;
+        }
+
+        /* 获取cn_msg */
+        cn = (struct cn_msg *)NLMSG_DATA(nlh);
+
+        /* 检查cn_msg长度 */
+        if ((char *)cn + sizeof(struct cn_msg) > buf + rc) {
+            qDebug() << "消息不完整，无法解析cn_msg";
+            continue;
+        }
+
+        /* 验证connector消息 */
+        if (cn->id.idx != CN_IDX_PROC || cn->id.val != CN_VAL_PROC) {
+            qDebug() << "非进程事件消息, 忽略";
+            continue;
+        }
+
+        /* 获取proc_event */
+        proc_ev = (struct proc_event *)(cn->data);
+
+        /* 检查proc_event长度 */
+        if ((char *)proc_ev + sizeof(struct proc_event) > buf + rc) {
+            qDebug() << "消息不完整，无法解析proc_event";
+            continue;
+        }
+
+        /* 处理各种事件类型 */
+        switch (proc_ev->what) {
             case PROC_EVENT_FORK:
-                if (nlcn_msg.proc_ev.event_data.fork.parent_pid > 1) {
-                    Q_EMIT this->procAdd(nlcn_msg.proc_ev.event_data.fork.parent_pid);
+                if (proc_ev->event_data.fork.parent_pid > 1) {
+                    Q_EMIT this->procAdd(proc_ev->event_data.fork.parent_pid);
                 }
                 break;
 
             case PROC_EVENT_EXEC:
-                if (nlcn_msg.proc_ev.event_data.exec.process_pid > 1) {
-                    Q_EMIT this->procAdd(nlcn_msg.proc_ev.event_data.exec.process_pid);
+                if (proc_ev->event_data.exec.process_pid > 1) {
+                    Q_EMIT this->procAdd(proc_ev->event_data.exec.process_pid);
                 }
                 break;
 
@@ -162,6 +214,7 @@ int ListenThObject::handleProcEv()
                 break;
         }
     }
+
     return 0;
 }
 
@@ -251,7 +304,15 @@ void ProcAddServer::stopListen(int pid)
 
 DealData::DealData(int pid, QObject *obj)
 {
-    qRegisterMetaType<MyMap>("MyMap");
+
+    /* 确保ProcessInfoMap类型已注册 */
+    static bool registered = false;
+    if (!registered) {
+        qRegisterMetaType<ProcessInfoMap>("ProcessInfoMap");
+        qDBusRegisterMetaType<ProcessInfoMap>();
+        registered = true;
+    }
+
     m_pid = pid;
     m_obj = obj;
 }
@@ -262,7 +323,10 @@ bool DealData::isSystemCmd(QString cmdline)
         return true;
     }
     QStringList fileLine = cmdline.split(" ");
-    QSet<QString> intersection = systemCmdList.toSet().intersect(fileLine.toSet());
+    //QSet<QString> intersection = systemCmdList.toSet().intersect(fileLine.toSet());
+    QSet<QString> systemCmdSet(systemCmdList.begin(), systemCmdList.end());
+    QSet<QString> fileLineSet(fileLine.begin(), fileLine.end());
+    QSet<QString> intersection = systemCmdSet.intersect(fileLineSet);
     if (intersection.isEmpty()) {
         return false;
     }
@@ -271,7 +335,7 @@ bool DealData::isSystemCmd(QString cmdline)
 
 void DealData::run()
 {
-    QMap<QString, QString> procInfo;
+    ProcessInfoMap procInfo;
     QString procDir = QString("/proc/%1/").arg(m_pid);
     if (QDir(procDir).exists()) {
         QString cmdLine = getFileMsg(procDir + "cmdline");
@@ -285,7 +349,9 @@ void DealData::run()
         procInfo.insert(PROCINFOKEY_CMDLINE, cmdLine);
         procInfo.insert(PROCINFOKEY_DESKTOP, getEnvironMsg(environ));
         getStatusMsg(status, &procInfo);
-        QMetaObject::invokeMethod(m_obj, "emitSignal", Q_ARG(MyMap, procInfo));
+
+        /* 确保在主线程中调用 */
+        QMetaObject::invokeMethod(m_obj, "emitSignal", Qt::QueuedConnection, Q_ARG(ProcessInfoMap, procInfo));
     }
 }
 
@@ -294,8 +360,8 @@ QString DealData::getFileMsg(QString filePath)
     QFile file(filePath);
     if (file.exists() && file.open(QFile::ReadOnly)) {
         QByteArray fileMsg = file.readAll();
-        //去掉fileMsg中的乱码，用空格替代
-        fileMsg.replace(0, 32);
+        // 去掉fileMsg中的乱码，用空格替代
+        fileMsg.replace('\0', ' ');
         file.close();
         return fileMsg;
     }
@@ -336,14 +402,18 @@ void DealData::getStatusMsg(QString fileMsg, QMap<QString, QString> *infoMap)
     }
 }
 
-void ProcAddServer::emitSignal(MyMap procmap)
+void ProcAddServer::emitSignal(ProcessInfoMap procmap)
 {
+    qDebug() << "ProcAddServer::emitSignal procAdd"<<procmap;
     Q_EMIT this->procAdd(procmap);
 }
 
 ProcAddServer::ProcAddServer(QObject *parent) : QObject(parent)
 {
-    qDBusRegisterMetaType<QMap<QString, QString>>();
+    /* 确保ProcessInfoMap类型已注册 */
+    qRegisterMetaType<ProcessInfoMap>("ProcessInfoMap");
+    qDBusRegisterMetaType<ProcessInfoMap>();
+
     m_queDutyPool = QThreadPool::globalInstance();
     m_queDutyPool->setMaxThreadCount(THREAD_MAXNUM);
 }

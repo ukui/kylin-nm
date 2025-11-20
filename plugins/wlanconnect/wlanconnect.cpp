@@ -19,6 +19,7 @@
  */
 #include "wlanconnect.h"
 #include "ui_wlanconnect.h"
+#include <kysdk/applications/accessinfohelper.h>
 
 #include <QGSettings>
 #include <QProcess>
@@ -226,6 +227,8 @@ void WlanConnect::initSearchText() {
     tr("Add Others");
     //~ contents_path /wlanconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
+    KDK_EXTEND_ALL_INFO_FORMAT(ui->detailBtn, "WlanConnect", "", "advanced settings of wlanconnect");
+
     ui->titleLabel->setText(tr("WLAN"));
     //~ contents_path /wlanconnect/WLAN
     ui->openLabel->setText(tr("WLAN"));
@@ -260,6 +263,7 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 
 void WlanConnect::initComponent() {
     m_wifiSwitch = new KSwitchButton(pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_wifiSwitch, "WlanConnect", "", "wife switch");
     ui->openWIifLayout->setSpacing(5);
     m_wirelessNoDeviceIconLabel=new QLabel(ui->openWifiFrame);
     ui->openWIifLayout->addWidget(m_wirelessNoDeviceIconLabel);
@@ -1068,6 +1072,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     //设置单项的信息
     int sign = setSignal(signal);
     WlanItem * wlanItem = new WlanItem(status, isLock, pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(wlanItem, "WlanConnect", "", "wlan item of wlanconnect");
     QString iconamePath;
     if (bApConnection) {
         iconamePath = KApSymbolic;

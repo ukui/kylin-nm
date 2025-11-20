@@ -18,6 +18,7 @@
  *
  */
 #include "deviceframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 #include <QPainterPath>
 
@@ -37,6 +38,7 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
+    kdk::KDK_EXTEND_ALL_INFO_FORMAT(dropDownLabel, "WlanConnect", "", "the drop-down button of wireless network card");
 
     deviceLayout->addWidget(deviceLabel);
     deviceLayout->addStretch();

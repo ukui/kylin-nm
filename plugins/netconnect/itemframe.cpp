@@ -18,6 +18,7 @@
  *
  */
 #include "itemframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 
 #include <QPainter>
 #include <QPalette>
@@ -35,6 +36,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
     lanItemLayout->setSpacing(1);
     addLanWidget = new AddNetBtn(false, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(addLanWidget, "NetConnect", "", "add a wired network");
 
     deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);

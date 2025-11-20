@@ -18,6 +18,7 @@
  *
  */
 #include "vpnitem.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
@@ -47,6 +48,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_infoLabel, "VPN", "", "details button of VPN");
 
     m_moreButton = new QPushButton(this);
     m_moreButton->setProperty("useButtonPalette", true);

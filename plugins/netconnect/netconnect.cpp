@@ -19,6 +19,7 @@
  */
 #include "netconnect.h"
 #include "ui_netconnect.h"
+#include <kysdk/applications/accessinfohelper.h>
 
 #include <QGSettings>
 #include <QProcess>
@@ -174,6 +175,8 @@ QString NetConnect::translationPath() const
 void NetConnect::initSearchText() {
     //~ contents_path /netconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
+    KDK_EXTEND_ALL_INFO_FORMAT(ui->detailBtn, "NetConnect", "", "advanced settings of netconnect");
+
     ui->titleLabel->setText(tr("LAN"));
     //~ contents_path /netconnect/open
     tr("open");
@@ -207,6 +210,7 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 }
 void NetConnect::initComponent() {
     wiredSwitch = new KSwitchButton(pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(wiredSwitch, "NetConnect", "", "wired switch");
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->openWIifLayout->setContentsMargins(0,0,8,0);
 //    ui->openWifiFrame->hide();
@@ -577,6 +581,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     }
 
     LanItem * lanItem = new LanItem(isActived, pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(lanItem, "NetConnect", "", "lan item of netconnect");
     QString iconPath = KLanSymbolic;
     // 判断是否为pppoe
     if (isActived) {

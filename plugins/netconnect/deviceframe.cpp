@@ -18,6 +18,7 @@
  *
  */
 #include "deviceframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainterPath>
 
 #define LAYOUT_MARGINS 16,0,16,0
@@ -34,7 +35,11 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
+    kdk::KDK_EXTEND_ALL_INFO_FORMAT(dropDownLabel, "NetConnect", "", "the drop-down button of wired network card");
+
     deviceSwitch = new KSwitchButton(this);
+    kdk::KDK_EXTEND_ALL_INFO_FORMAT(deviceSwitch, "NetConnect", "", "device switch of wired network card");
+
 //    deviceSwitch->installEventFilter(this);
 
     deviceLayout->addWidget(deviceLabel);

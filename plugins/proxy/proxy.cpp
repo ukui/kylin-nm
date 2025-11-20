@@ -20,6 +20,7 @@
 #include "proxy.h"
 #include "aptproxydialog.h"
 #include "aptinfo.h"
+#include <kysdk/applications/accessinfohelper.h>
 //#include "utils.h"
 
 #include <QDebug>
@@ -127,7 +128,7 @@ QWidget *Proxy::pluginUi() {
             initManualProxyStatus();
             initIgnoreHostStatus();
             initDbus();
-//            initAppProxyStatus();
+            initAppProxyStatus();
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
@@ -205,6 +206,7 @@ void Proxy::initUi(QWidget *widget)
     enableLyt->setContentsMargins(16, 0, 16, 0);
     QLabel *enableLabel = new QLabel(tr("Start using"), mEnableFrame);
     mEnableBtn = new KSwitchButton(mEnableFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(mEnableBtn, "Proxy", "", "enable switch of system proxy");
     enableLyt->addWidget(enableLabel);
     enableLyt->addStretch();
     enableLyt->addWidget(mEnableBtn);
@@ -219,9 +221,11 @@ void Proxy::initUi(QWidget *widget)
     QLabel *selectLabel = new QLabel(tr("Proxy mode"), mSelectFrame);
     selectLabel->setFixedWidth(148);
     mAutoBtn = new QRadioButton(mSelectFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(mAutoBtn, "Proxy", "", "auto mode button of system proxy");
     mProxyBtnGroup->addButton(mAutoBtn);
     QLabel *autoLabel = new QLabel(tr("Auto"), mSelectFrame);
     mManualBtn = new QRadioButton(mSelectFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(mManualBtn, "Proxy", "", "manual mode button of system proxy");
     mProxyBtnGroup->addButton(mManualBtn);
     QLabel *manualLabel = new QLabel(tr("Manual"), mSelectFrame);
     selectLyt->addWidget(selectLabel);
@@ -377,10 +381,10 @@ void Proxy::initUi(QWidget *widget)
     Lyt->addWidget(mIgnoreFrame);
 
     //应用代理模块
-//    m_appProxyLabel = new TitleLabel(widget);
-//    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
-//    setAppProxyFrameUi(widget);
-//    setAppListFrameUi(widget);
+    m_appProxyLabel = new KLabel(widget);
+    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
+    setAppProxyFrameUi(widget);
+    setAppListFrameUi(widget);
 
     //APT代理模块
     mAptProxyLabel = new KLabel(widget);
@@ -405,6 +409,7 @@ void Proxy::initUi(QWidget *widget)
     mAptLabel = new QLabel(mAPTFrame_1);
     mAptLabel->setFixedWidth(200);
     mAptBtn = new KSwitchButton(mAPTFrame_1);
+    KDK_EXTEND_ALL_INFO_FORMAT(mAptBtn, "Proxy", "", "enable switch of apt proxy");
     mAptLayout_1->addWidget(mAptLabel);
     mAptLayout_1->addStretch();
     mAptLayout_1->addWidget(mAptBtn);
@@ -421,6 +426,7 @@ void Proxy::initUi(QWidget *widget)
     mAPTPortLabel_1 = new QLabel(mAPTFrame_2);
     mAPTPortLabel_2 = new QLabel(mAPTFrame_2);
     mEditBtn = new QPushButton(mAPTFrame_2);
+    KDK_EXTEND_ALL_INFO_FORMAT(mEditBtn, "Proxy", "", "edit button of apt proxy");
     mEditBtn->setFixedWidth(80);
     mAptLayout_2->addWidget(mAPTHostLabel_1);
     mAptLayout_2->addWidget(mAPTHostLabel_2);
@@ -447,11 +453,11 @@ void Proxy::initUi(QWidget *widget)
     mverticalLayout->addWidget(mProxyFrame);
 
     mverticalLayout->addWidget(m_sysSpacerFrame);
-//    mverticalLayout->addWidget(m_appProxyLabel);
-//    mverticalLayout->addWidget(m_appProxyFrame);
+    mverticalLayout->addWidget(m_appProxyLabel);
+    mverticalLayout->addWidget(m_appProxyFrame);
     mverticalLayout->addWidget(m_appListSpacerFrame);
-//    mverticalLayout->addWidget(m_appListFrame);
-//    mverticalLayout->addWidget(m_appSpacerFrame);
+    mverticalLayout->addWidget(m_appListFrame);
+    mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
     mverticalLayout->addStretch();
@@ -1097,7 +1103,7 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
 void Proxy::setUkccProxySettings()
 {
     setSystemProxyFrameHidden(false);
-//    setAppProxyFrameHidden(false);
+    setAppProxyFrameHidden(false);
     setAPTProxyFrameHidden(false);
 
     QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
@@ -1131,7 +1137,7 @@ void Proxy::setUkccProxySettings()
         if (setting.contains("SystemProxyFrame") && setting.contains("false")) {
             setSystemProxyFrameHidden(true);
         } else if (setting.contains("AppProxyFrame") && setting.contains("false")) {
-//            setAppProxyFrameHidden(true);
+            setAppProxyFrameHidden(true);
         } else if (setting.contains("APTProxyFrame") && setting.contains("false")) {
             setAPTProxyFrameHidden(true);
         }
@@ -1172,6 +1178,7 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     setFrame_Noframe(m_appEnableFrame);
     m_appEnableLabel = new QLabel(tr("Open"), m_appEnableFrame);
     m_appEnableBtn = new KSwitchButton(m_appEnableFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_appEnableBtn, "Proxy", "", "enable switch of app proxy");
     m_appEnableBtn->setCheckable(true);
     QHBoxLayout *appEnableLayout = new QHBoxLayout(m_appEnableFrame);
     appEnableLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);

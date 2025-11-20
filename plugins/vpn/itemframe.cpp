@@ -18,6 +18,7 @@
  *
  */
 #include "itemframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 
 #define LAYOUT_MARGINS 0,0,0,0
@@ -35,6 +36,7 @@ ItemFrame::ItemFrame(QWidget *parent)
     m_vpnVLayout->setContentsMargins(LAYOUT_MARGINS);
     m_vpnVLayout->setSpacing(1);
     m_addVpnWidget = new AddNetBtn(false, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_addVpnWidget, "VPN", "", "add VPN");
     m_addVpnWidget->setTextLabel(tr("Add VPN"));
 
     m_mainVLayout->setSpacing(1);

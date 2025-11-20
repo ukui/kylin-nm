@@ -18,6 +18,7 @@
  *
  */
 #include "itemframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 
 #define LAYOUT_MARGINS 0,0,0,0
@@ -34,6 +35,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
     lanItemLayout->setSpacing(1);
     addWlanWidget = new AddNetBtn(true, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(addWlanWidget, "WlanConnect", "", "add others of wlanconnect");
 
     deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);

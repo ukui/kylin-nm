@@ -53,7 +53,7 @@ UkuiItems.DtThemeBackground {
                         id : lanTop
                         width: parent.width
                         Layout.alignment: Qt.AlignTop
-                        visible: true//lanDeviceComboBox.count >= 1
+                        visible: lanDeviceComboBox.count >= 1
 
                         UkuiItems.DtThemeText {
                             text: qsTr("Wired network")
@@ -167,6 +167,7 @@ UkuiItems.DtThemeBackground {
                                 if (lanDeviceComboBox.count <= 1) {
                                     lanDeviceComboBox.ishide = true
                                     lanDeviceComboBox.visible = false
+                                    lanContentArea.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
                                 } else {
                                     lanDeviceComboBox.ishide = false
                                     lanContentArea.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
@@ -366,6 +367,11 @@ UkuiItems.DtThemeBackground {
                 }
             }
 		}
+
+        Component.onDestruction: {
+            console.log("Rectangle is about to be destroyed.")
+            KInterface.wirelessScanState = false
+        }
     }
 }
 

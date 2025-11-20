@@ -89,5 +89,8 @@ TRANSLATIONS += \
         translations/kylin-nm_fr.ts \
         translations/kylin-nm_es.ts \
         translations/kylin-nm_de.ts \
+        translations/kylin-nm_th.ts\
+        translations/kylin-nm_vi.ts\
+        translations/kylin-nm_ms.ts\
         translations/kylin-nm_bo.ts\
         translations/kylin-nm_bo_CN.ts

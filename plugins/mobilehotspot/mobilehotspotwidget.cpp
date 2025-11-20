@@ -157,12 +157,16 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                 showDesktopNotify(tr("wirless switch is close or no wireless device"));
                 return true;
             }
+            
+            // 添加开始加载动画
+            startLoading();
+            
             UkccCommon::buriedSettings("MobileHotspot", "Open", QString("settings"), !m_switchBtn->isChecked() ? "true":"false");
             if (m_switchBtn->isChecked()) {
-//                showDesktopNotify(tr("start to close hotspot"));
                 QDBusReply<void> reply = m_interface->call("deactiveWirelessAp", m_apNameLine->text(), m_uuid);
                 if (!reply.isValid()) {
                     qDebug() << LOG_HEAD << "call deactiveWirelessAp failed ";
+                    stopLoading(); // 操作失败时停止加载
                     return true;
                 }
 #ifdef HOTSPOT_CONTROL
@@ -176,13 +180,14 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                 if (m_apNameLine->text().isEmpty() || m_interfaceName.isEmpty())
                 {
                     showDesktopNotify(tr("hotpots name or device is invalid"));
+                    stopLoading(); // 操作失败时停止加载
                     return true;
                 }
                 if (m_pwdNameLine->text().length() < 8) {
-//                    showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
+                    stopLoading(); // 操作失败时停止加载
                     return true;
                 }
-//                showDesktopNotify(tr("start to open hotspot ") + m_apNameLine->text());
+         
                 QDBusReply<void> reply = m_interface->call("activeWirelessAp",
                                                            m_apNameLine->text(),
                                                            m_pwdNameLine->text(),
@@ -190,9 +195,9 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                                                            m_interfaceComboBox->currentText());
                 if (!reply.isValid()) {
                     qDebug() << LOG_HEAD << "call activeWirelessAp failed ";
+                    stopLoading(); // 操作失败时停止加载
                     return true;
                 }
-
             }
             return true;
         }
@@ -355,16 +360,7 @@ void MobileHotspotWidget::onInterfaceChanged()
             flag = true;
         }
 
-        if (flag) {
-            m_interfaceWarnLabel->setText(tr("use ") + m_interfaceName +
-                                          tr(" share network, will interrupt local wireless connection"));
-            m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_FIX_HIGHT);
-            m_warnWidget->show();
-        } else {
-            m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_MIN_HIGHT);
-            m_warnWidget->hide();
-        }
-        resetFrameSize();
+        judgeNoticeInfoShow(m_interfaceName,flag);
     }
 
     updateBandCombox();
@@ -384,12 +380,8 @@ void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString 
         return;
     }
 
-    /*//热点能力获取耗时较长不适宜在此处阻塞获取也不必获取，可能造成用户困惑热点能力一会消失一会又行了
-    if (m_interfaceComboBox && status == 2) {
-        onInterfaceChanged();
-        qWarning() << "mqtest onActiveConnectionChanged"<<deviceName<<status;
-    }
-    */
+    //休眠和睡眠时连接要慢于初始提示信息更新所以要在状态变化中更新一下，防止不更新 2表示已连接
+    judgeNoticeInfoShow(deviceName,(status==2? true:false));
 }
 
 void MobileHotspotWidget::onWirelessBtnChanged(bool state)
@@ -635,13 +627,12 @@ void MobileHotspotWidget::setPasswordFrame()
     m_pwdNameLine = new KPasswordEdit(this);
     m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
-    m_pwdHintLabel= new QLabel(this);
+    m_pwdHintLabel= new KLabel(this);
     m_pwdHintLabel->setFixedHeight(20);
     m_pwdHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_pwdHintLabel->setPalette(hintTextColor);
+    m_pwdHintLabel->setFontColorRole(QPalette::WindowText);
+    m_pwdHintLabel->setFontColor(Qt::red);
     m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
 
     QGridLayout *pwdLayout = new QGridLayout(m_passwordFrame);
@@ -886,6 +877,11 @@ void MobileHotspotWidget::setUiEnabled(bool enable)
         m_interfaceComboBox->setEnabled(true);
         m_apNameLine->setEnabled(true);
     }
+
+    // When hotspot is off (enable == false) do not show the blacklist page.
+    if (m_blacklistPage) {
+        m_blacklistPage->setVisible(enable);
+    }
 }
 
 void MobileHotspotWidget::setWidgetHidden(bool isHidden)
@@ -1092,5 +1088,27 @@ void MobileHotspotWidget::initBlackListPage()
     m_blacklistPage = new BlacklistPage(this);
     m_Vlayout->addSpacing(32);
     m_Vlayout->addWidget(m_blacklistPage);
+
+    // Ensure initial visibility follows the hotspot switch state:
+    // when the hotspot switch is off, do not display the blacklist page.
+    m_blacklistPage->setVisible(m_switchBtn ? m_switchBtn->isChecked() : false);
 }
 
+
+void MobileHotspotWidget::judgeNoticeInfoShow(QString deviceName,bool isActived)
+{
+    if(deviceName!=m_interfaceName) {
+        return;
+    }
+
+    if (isActived) {
+        m_interfaceWarnLabel->setText(tr("use ") + m_interfaceName +
+                                      tr(" share network, will interrupt local wireless connection"));
+        m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_FIX_HIGHT);
+        m_warnWidget->show();
+    } else {
+        m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_MIN_HIGHT);
+        m_warnWidget->hide();
+    }
+    resetFrameSize();
+}

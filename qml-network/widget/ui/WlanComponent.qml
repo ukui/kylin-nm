@@ -36,7 +36,7 @@ ListView {
     }
     Connections {
         target: KInterface
-    function onTriggerButtonRequested(index) {
+        function onTriggerButtonRequested(index) {
                 console.log("Triggering button for index:", index)
                 const delegate = wlanlistView.itemAtIndex(index)
                 if (delegate) {
@@ -57,7 +57,7 @@ ListView {
                         })
                     delegate.triggerButtonClick();
                 }
-            }
+         }
     }
     property bool connectMac : false
     property int detailShowIndex : -1
@@ -91,6 +91,8 @@ ListView {
         height: wlanlistView.baseItemHeight
         property bool enteritem : false
         property bool conConnected:   model.status === 2
+        property int freqForDisplay: (model.frequency === 0 && model.ssid && model.ssid.toUpperCase().indexOf("5G") !== -1) ? 5200 : model.frequency
+        property int signalForDisplay: (isNaN(parseInt(model.signal)) ? -1 : (parseInt(model.signal) === 0 ? (model.status === 2 ? 100 : -1) : parseInt(model.signal)))
         property bool menuLoaded: false
         property bool textEditLoaded: false
         property bool pwdConnectBtnLoaded: false
@@ -168,8 +170,6 @@ ListView {
             }
 
             if(!textEditLayout.visible) {
-                typeicon.visible = false;
-                loadingicon.visible = true;
                 if (model.status === 2) {
                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                 } else if (model.status === 4) {
@@ -252,8 +252,6 @@ ListView {
                 }
 
                 if(connectBtnHandler.containsMouse) {
-                    typeicon.visible = false;
-                    loadingicon.visible = true;
                     if (model.status === 2) {
                         KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                     } else if (model.status === 4) {
@@ -302,8 +300,6 @@ ListView {
                             text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
                             onTriggered: {
                                 console.log("connect/disconnect network")
-                                typeicon.visible = false;
-                                loadingicon.visible = true;
                                 if (model.status === 2) {
                                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                                 } else if (model.status === 4) {
@@ -337,6 +333,7 @@ ListView {
 
                 Item {
                     Layout.alignment: Qt.AlignLeft
+                    enabled: false
                     Layout.leftMargin: 26
                     width: 36
                     height: 36
@@ -344,7 +341,8 @@ ListView {
                     UkuiItems.IconButton {
                         id: typeicon
                         visible: model.status === 2 || model.status === 4
-                        iconSource: KInterface.getWiFiIcon(model.signal, model.security, model.isApConn, model.category)
+                        // use signalForDisplay for icon selection; when unknown (-1) fall back to 0
+                        iconSource: KInterface.getWiFiIcon(signalForDisplay === -1 ? 0 : signalForDisplay, model.security, model.isApConn, model.category)
                         anchors.fill: parent
                         radius: 19
                         isHighLight: model.status === 2
@@ -378,10 +376,10 @@ ListView {
                     spacing: 0
 
                     RowLayout {
+                        Layout.leftMargin: 7
                         Label {
                             id: nameLabel
                             Layout.alignment: Qt.AlignLeft
-                            Layout.leftMargin: 8
                             Layout.bottomMargin: 0
                             Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)  // 限制最大宽度，为其他元素预留空间
                             Layout.maximumWidth: listItem.width - 250  // 确保不会挤压其他元素
@@ -397,7 +395,7 @@ ListView {
                             height: textMetrics.tightBoundingRect.height + 6
 
                             // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
-                            property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
+                            property int wlan_type : model.isMix ? 0 : freqForDisplay > 5000 ? 1 : 2;
 
                             color: "transparent"
                             radius: 4
@@ -416,7 +414,7 @@ ListView {
                             UkuiItems.DtThemeText {
                                 id: dtThemeText
                                 anchors.centerIn: parent
-                                property int wlan_type : model.isMix ? 0 : model.frequency > 5000 ? 1 : 2;
+                                property int wlan_type : model.isMix ? 0 : freqForDisplay > 5000 ? 1 : 2;
                                 text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"
                                 textColor: Platform.GlobalTheme.kFontPlaceholderText
                             }
@@ -427,18 +425,21 @@ ListView {
                         visible: false
                         id: textEditLayout
                         Layout.topMargin: 10
+                        Layout.leftMargin: 6
 
                         // 动态加载TextField
                         Loader {
                             id: textEditLoader
                             active: false
                             sourceComponent: TextField {
+                                Layout.leftMargin: 0
                                 id: textEdit
                                 width: 208
-                                Layout.leftMargin: 10
                                 echoMode: TextInput.Password
                                 property bool passMode: true
                                 property int textLength: textEdit.text.length
+                                validator: RegExpValidator { regExp: /^[a-zA-Z0-9\s\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^_\`\{\|\}\~]*$/}
+
                                 onTextLengthChanged: {
                                     if(textLength>=8) {
                                         if (pwdConnectBtnLoader.item) {
@@ -451,8 +452,6 @@ ListView {
                                     }
                                 }
                                 onAccepted: {
-                                    typeicon.visible = false;
-                                    loadingicon.visible = true;
 
                                     KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text,
                                                                autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
@@ -481,8 +480,6 @@ ListView {
                                 }
 
                                 onClicked: {
-                                    typeicon.visible = false;
-                                    loadingicon.visible = true;
 
                                     KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security,
                                                                textEditLoader.item ? textEditLoader.item.text : "",
@@ -500,11 +497,13 @@ ListView {
                             visible: model.status === 2
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             Layout.topMargin: 0
-                            Layout.leftMargin: 12
+                            Layout.leftMargin: 7
                             Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
 
                             text: {
-                                const signal = parseInt(model.signal);
+                                // use signalForDisplay: -1 means unknown/not-yet-available (hide detailed status)
+                                const signal = signalForDisplay;
+                                if (signal === -1) return qsTr("Connected");
                                 return signal > 80 ? qsTr("Connected,network is very good") :
                                                      signal > 55 ? qsTr("Connected,network is good") :
                                                                    signal > 30 ? qsTr("Connected,network is average") :
@@ -520,13 +519,11 @@ ListView {
                         Loader {
                             id: autoConnectCheckBoxLoader
                             active: false
-
                             sourceComponent: CheckBox {
                                 id: autoConnectCheckBox
                                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                                 width: Math.min(implicitWidth, listItem.width - 250)
                                 visible: false
-                                Layout.leftMargin: 8
                                 Layout.topMargin: 0
                                 text: qsTr("AutoConnect")
                                 checked: true
@@ -554,6 +551,13 @@ ListView {
                                 onVisibleChanged: {
                                     if (visible) {
                                         updateShowDetailIndex(index)
+                                        if (index == (wlanlistView.count - 1)) {
+                                            if (outerFlickable.contentHeight > outerFlickable.contentY + listItem.height) {
+                                                outerFlickable.contentY += listItem.height
+                                            } else {
+                                                outerFlickable.contentY = outerFlickable.contentHeight
+                                            }
+                                        }
                                     }
                                 }
                             }

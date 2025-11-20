@@ -55,8 +55,8 @@ QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringL
         isDSL = true;
     }
     connectionMap.insert("IsDSL", isDSL);
-    // 默认设置为完全连通
-    connectionMap.insert("Connectivity", 4);
+    // 默认设置为 UNKNOWN（0），避免把未查询的连接误判为完全连通
+    connectionMap.insert("Connectivity", 0);
 
     return connectionMap;
 }
@@ -106,58 +106,29 @@ void KnmLanDataKeeper::onActiveConnectionChanged(QString deviceName, QString uui
         }
     }
 
-    // 断开时处理
     if (deviceName.isEmpty()) {
         QMap<QString, QVariant> conn;
         QStringList devList = m_deviceList.keys();
 
         for (int i = 0; i < devList.count(); i++) {
             NetDevicePtr dev = m_deviceList.value(devList.at(i));
-            QMap<QString, QVariant> conn = dev->updateConnection(uuid, status);
             dev->updateConnectivity(uuid, status, connectivity);
-            if (!conn.isEmpty()) {
-                m_deviceList.remove(devList.at(i));
-                m_deviceList.insert(devList.at(i), dev);
-                break;
-            }
         }
 
-        for (int i = 0; i < devList.count(); i++) {
-            NetDevicePtr dev = m_deviceList.take(devList.at(i));
-            dev->addConnection(conn);
-            m_deviceList.insert(devList.at(i), dev);
-        }
         KInterface::getInstance()->getWiredDevConnList();
         return;
-    }
+    } else {
 
-    //若已指定设备且存在该连接时
-    if (m_deviceList.contains(deviceName)) {
-        if (!m_deviceList.value(deviceName)->containsConnection(uuid))
-            return;
-        NetDevicePtr dev = m_deviceList.value(deviceName);
-        QMap<QString, QVariant> conn = dev->updateConnection(uuid, status);
-        dev->updateConnectivity(uuid, status, connectivity);
-        if (!conn.isEmpty()) {
-            m_deviceList.remove(deviceName);
-            m_deviceList.insert(deviceName, dev);
+        //若已指定设备且存在该连接时
+        if (m_deviceList.contains(deviceName)) {
+            if (!m_deviceList.value(deviceName)->containsConnection(uuid))
+                return;
+            NetDevicePtr dev = m_deviceList.value(deviceName);
+            dev->updateConnectivity(uuid, status, connectivity);
             KInterface::getInstance()->getWiredDevConnList();
+            return;
         }
-        return;
     }
-
-    //若非以上情况,则为虚拟网卡
-    if (status != ACTIVATED && status != DEACTIVATED)
-        return;
-
-    if (!m_deviceList.value(deviceName)->containsConnection(uuid)) {
-        return;
-    }
-
-    NetDevicePtr dev = m_deviceList.take(deviceName);
-    dev->removeConnection(uuid);
-    m_deviceList.insert(deviceName, dev);
-    KInterface::getInstance()->getWiredDevConnList();
 }
 
 void KnmLanDataKeeper::onLanAdd(QString deviceName, QStringList lanInfo)

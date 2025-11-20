@@ -10,6 +10,13 @@ if [ "$1" = "configure" ]; then
         systemctl enable kylin-nm-sysdbus.service
         systemctl start kylin-nm-sysdbus.service
     fi
+
+    # 处理DBus安全策略配置文件：将临时目录中的配置文件复制到目标目录，然后删除临时目录
+    if [ -d "/usr/share/dbus-1/conf/.kylin-nm-yaml" ]; then
+        cp -f /usr/share/dbus-1/conf/.kylin-nm-yaml/* /etc/kylin-config/basic/
+        rm -rf /usr/share/dbus-1/conf/.kylin-nm-yaml
+        echo "DBus安全管控配置文件已更新"
+    fi
 fi
 
 PROGRAM=$(dpkg-divert --truename /usr/bin/kylin-nm)

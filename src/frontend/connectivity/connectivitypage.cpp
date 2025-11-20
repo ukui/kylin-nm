@@ -99,7 +99,7 @@ void ConnectivityPage::initUi()
     m_uriEdit->setText(m_uri);
     m_warningLabel = new QLabel(this);
     QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
+    hintTextColor.setColor(QPalette::Text, Qt::red);
     m_warningLabel->setPalette(hintTextColor);
     m_warningLabel->setWordWrap(true);
 

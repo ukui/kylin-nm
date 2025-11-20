@@ -161,7 +161,7 @@ bool BlacklistPage::removeStaFromBlacklist(QString staMac, QString staName)
 void BlacklistPage::resetLayoutHight()
 {
     int height = 0;
-    for (int i = 0; i < m_blacklistLayout->count(); i ++) {
+    for (int i = 0; i < m_blacklistLayout->count(); i++) {
         QWidget *w = m_blacklistLayout->itemAt(i)->widget();
         if (w != nullptr) {
             height += w->height();
@@ -169,6 +169,7 @@ void BlacklistPage::resetLayoutHight()
     }
     m_blacklistFrame->setFixedHeight(height);
 
+    // 根据黑名单是否为空决定是否显示
     if (m_blacklistMap.isEmpty()) {
         this->hide();
     } else {

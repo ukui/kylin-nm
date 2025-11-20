@@ -20,6 +20,16 @@ namespace KYLIN_NM
         SAE
     };
 
+    enum KyNetworkDevType {
+        KyWIRED = 0,
+        KyWIRELESS
+    };
+
+#define GSETTING_SCHEMA_UKCC "org.ukui.control-center.plugins"
+#define GSETTING_PATH_UKCC_MOBILEHOTSPOT "/org/ukui/control-center/plugins/mobilehotspot/"
+#define GSETTING_PATH_UKCC_NETCONNECT "/org/ukui/control-center/plugins/netconnect/"
+#define GSETTING_PATH_UKCC_WLANCONNECT "/org/ukui/control-center/plugins/wlanconnect/"
+
 }
 using namespace KYLIN_NM;
 #endif // COMMON_H

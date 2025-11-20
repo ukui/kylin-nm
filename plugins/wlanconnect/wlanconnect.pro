@@ -59,4 +59,7 @@ TRANSLATIONS += \
         translations/bo.ts \
         translations/bo_CN.ts \
         translations/en_US.ts \
+        translations/vi.ts \
+        translations/th.ts \
+        translations/ms.ts \
         translations/mn_MN.ts

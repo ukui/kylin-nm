@@ -70,7 +70,7 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="86"/>
         <source>Public network (default)</source>
-        <translation>公网（默认）</translation>
+        <translation>互联网（默认）</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
@@ -1032,6 +1032,11 @@
         <location filename="../frontend/mainwindow.cpp" line="831"/>
         <source>Network Card</source>
         <translation>网卡</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="939"/>
+        <source>Connected</source>
+        <translation>已连接</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1219"/>

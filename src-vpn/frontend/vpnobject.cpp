@@ -27,6 +27,8 @@ vpnObject::vpnObject(QMainWindow *parent) : QMainWindow(parent)
     initUI();
     initTrayIcon();
     initDbusConnnect();
+    m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setSkipTaskBar(true);
 }
 
 vpnObject::~vpnObject()
@@ -34,6 +36,10 @@ vpnObject::~vpnObject()
     if (m_vpnGsettings != nullptr) {
         delete m_vpnGsettings;
         m_vpnGsettings = nullptr;
+    }
+    if (m_uwin)
+    {
+        delete m_uwin;
     }
 }
 

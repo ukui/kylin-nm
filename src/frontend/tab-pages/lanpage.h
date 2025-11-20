@@ -72,6 +72,11 @@ public:
     void getWiredDeviceConnect(QMap<QString, QString> &map);
 
     void setWiredDeviceAutoconnect(const QString& devName, bool state);
+
+    void setWiredConnectAutoconnect(const QString& uuid,bool state);
+
+    QString getWiredDefaultDeviceName(void);
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 

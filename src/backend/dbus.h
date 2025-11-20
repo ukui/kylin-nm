@@ -137,6 +137,9 @@ class DbusAdaptor: public QObject, protected QDBusContext
 "      <arg direction=\"out\" type=\"s\" name=\"display\"/>\n"
 "      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
 "    </signal>\n"
+"    <signal name=\"sigNetworkPropChanged\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"parm\"/>\n"
+"    </signal>\n"
 "    <method name=\"getWirelessList\">\n"
 "      <arg direction=\"out\" type=\"av\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
@@ -267,6 +270,18 @@ class DbusAdaptor: public QObject, protected QDBusContext
 "      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
 "      <arg direction=\"out\" type=\"b\"/>\n"
 "    </method>\n"
+"    <method name=\"setNetworkConnectionAutoConnectState\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"netType\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"state\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getNetworkDeviceData\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\"/>\n"
+"      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"in\" type=\"i\" name=\"devType\"/>\n"
+"    </method>\n"
+
 
 "  </interface>\n"
         "")
@@ -303,6 +318,8 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void deleteConnect(int type,QString Uuid);
     //dev autoconnect
     Q_NOREPLY void setDeviceAutoConnectState(QString devName, bool state);
+    //networkconnect autoconnect
+    Q_NOREPLY void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool state);
 
     //获取设备列表和启用/禁用状态
     QVariantMap getDeviceListAndEnabled(int devType);
@@ -343,6 +360,8 @@ public Q_SLOTS: // METHODS
 
     int registerInputPasswdAgent(QString agentName,QVariantMap value);
     int requestInputPasswdAgent(QVariantMap value);
+
+    QVariantList getNetworkDeviceData(int devType);
 
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
@@ -385,6 +404,8 @@ Q_SIGNALS: // SIGNALS
     //需要用户输入
     void sigRequestInputPasswdAgent(QString agentName,QVariantMap value);
 
+    //无线列表各项属性更新 未来使用该信号更新就行 其他冗余信号与更新逻辑应该删掉
+    void sigNetworkPropChanged(QVariantMap parm);
 private:
     MainWindow *m_mainWindow;
     QString m_display;

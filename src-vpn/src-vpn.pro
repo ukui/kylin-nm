@@ -19,7 +19,7 @@ PKGCONFIG +=kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysdk-ukuiwindowhelper
 #LIBS    += -lkysec
 
 target.path = /usr/bin
@@ -80,6 +80,9 @@ TRANSLATIONS += \
         translations/kylin-vpn_fr.ts \
         translations/kylin-vpn_es.ts \
         translations/kylin-vpn_de.ts \
+        translations/kylin-vpn_vi.ts \
+        translations/kylin-vpn_th.ts \
+        translations/kylin-vpn_ms.ts \
         translations/kylin-vpn_bo.ts\
         translations/kylin-vpn_bo_CN.ts
 

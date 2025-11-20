@@ -69,6 +69,7 @@ public:
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
     void deactivateWirelessConnectionWithUuid(const QString devName, const QString uuid);
     void deleteWirelessConnect(const QString &connectUuid);
+    void setWirelessConnectAutoConnectState(const QString &connectUuid,bool state);
     void showDetailPage(QString devName, QString uuid);
     void showAddOtherPage(QString devName);
 
@@ -94,6 +95,8 @@ public:
     }
     void getWirelssDeviceConnect(QMap<QString, QString> &map);
 
+    QString getWirelessDefaultDeviceName(void);
+
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
@@ -115,6 +118,7 @@ Q_SIGNALS:
     void connectivityCheckSpareUriChanged();
 
     void wirelessSwitchBtnChanged(bool state);
+    void sigNetworkPropChanged(QVariantMap parm);
 
 public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);

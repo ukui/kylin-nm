@@ -483,6 +483,12 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
 {
     //for dbus
     qDebug() << "[LanPage] Q_EMIT lanRemove because onRemoveConnection " << path;
+
+    if (m_devList.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ <<  "[LanPage] m_devList.isEmpty ";
+        return;
+    }
+
     Q_EMIT lanRemove(path);
 
     if (m_lanPagePtrMap.contains(path)) {
@@ -593,6 +599,15 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
     setSwitchBtnState(wiredSwitch);
     if (m_devList.isEmpty()) {
         m_currentDeviceName = deviceName;
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings * ukccGsettingLan = new QGSettings(GSETTING_SCHEMA_UKCC,GSETTING_PATH_UKCC_NETCONNECT);
+            ukccGsettingLan->set("show",true);
+            // 使用完后释放
+            delete ukccGsettingLan;
+            ukccGsettingLan = nullptr;
+        }
     }
 
     qDebug() << "[LanPage] Begin add device:" << deviceName << m_currentDeviceName;
@@ -681,6 +696,15 @@ void LanPage::onDeviceRemove(QString deviceName)
         setSwitchBtnState(false);
         setSwitchBtnEnable(false);
         qDebug() << "[wiredSwitch]set not enable after device remove";
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings * ukccGsettingLan = new QGSettings(GSETTING_SCHEMA_UKCC,GSETTING_PATH_UKCC_NETCONNECT);
+            ukccGsettingLan->set("show",false);
+            // 使用完后释放
+            delete ukccGsettingLan;
+            ukccGsettingLan = nullptr;
+        }
     }
 
     QString nowDevice = m_currentDeviceName;
@@ -1375,6 +1399,12 @@ void LanPage::setWiredDeviceAutoconnect(const QString&  devName,bool state)
     m_wiredConnectOperation->setWiredDeviceAutoconnect(devName, state);
 }
 
+void LanPage::setWiredConnectAutoconnect(const QString& uuid,bool state)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__ << uuid << state;
+    m_wiredConnectOperation->setWiredAutoConnect(uuid, state);
+}
+
 void LanPage::deleteWiredConnect(const QString& connUuid)
 {
     qDebug() << "[LanPage] deactivateWired" << connUuid;
@@ -1838,4 +1868,10 @@ void LanPage::updateDeviceState(const QString &devName, bool enable)
         /* 发出有线网卡设备状态变化信号 */
         Q_EMIT deviceStatusChanged();
     }
+}
+
+//获取有线默认设备
+QString LanPage::getWiredDefaultDeviceName(void)
+{
+    return getDefaultDeviceName(WIRED);
 }

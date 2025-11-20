@@ -162,6 +162,8 @@ void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSet
 
     QByteArray caCerEndWithNull("");
     wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setClientCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setPrivateKey(caCerEndWithNull);
 
     return;
 }
@@ -191,6 +193,8 @@ void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSet
 
     QByteArray caCerEndWithNull("");
     wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setClientCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setPrivateKey(caCerEndWithNull);
     return;
 }
 
@@ -284,6 +288,8 @@ void modifyEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSet
 
     QByteArray caCerEndWithNull("");
     wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setClientCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setPrivateKey(caCerEndWithNull);
 
     return;
 }
@@ -306,6 +312,8 @@ void modifyEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSett
 
     QByteArray caCerEndWithNull("");
     wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setClientCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setPrivateKey(caCerEndWithNull);
 
     return;
 }
@@ -335,5 +343,10 @@ void modifyEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSet
         wifi_8021x_sett->setPassword(fastInfo.m_userPwd);
     }
     wifi_8021x_sett->setPasswordFlags(fastInfo.m_passwdFlag);
+
+    QByteArray caCerEndWithNull("");
+    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setClientCertificate(caCerEndWithNull);
+    wifi_8021x_sett->setPrivateKey(caCerEndWithNull);
     return;
 }

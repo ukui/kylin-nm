@@ -1,4 +1,4 @@
-com:kylin:network:qt:systemdbus:
+com:kylin:networkCtrol:
   1.0.0.1:
     audit:
       _type: b

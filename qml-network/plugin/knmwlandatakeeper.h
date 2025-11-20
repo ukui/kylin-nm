@@ -52,6 +52,8 @@ private slots:
 
     void onRequestInputPasswdAgent(QString agentName, QVariantMap parm);
 
+    void onNetworkPropChanged(QVariantMap parm);
+
 private:
     QDBusInterface      *m_pInterface = nullptr;
 };

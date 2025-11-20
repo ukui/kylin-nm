@@ -93,6 +93,9 @@ KnmWlanDataKeeper::KnmWlanDataKeeper(QObject *parent) : KnmDataKeeper(parent)
     //网卡name处理
     connect(m_pInterface, SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
 
+    //network属性更新
+    connect(m_pInterface, SIGNAL(networkProChanged(QString, QString, int)), this, SLOT(onNetworkProChanged(QString, QString, int)), Qt::QueuedConnection);
+
     //无线开关处理
     connect(m_pInterface, SIGNAL(wirelessSwitchBtnChanged(bool)), this, SLOT(onSwitchBtnChanged(bool)), Qt::QueuedConnection);
 
@@ -104,6 +107,13 @@ KnmWlanDataKeeper::KnmWlanDataKeeper(QObject *parent) : KnmDataKeeper(parent)
                                          "sigRequestInputPasswdAgent",
                                          this,
                                          SLOT(onRequestInputPasswdAgent(QString ,QVariantMap)));
+
+    QDBusConnection::sessionBus().connect("com.kylin.network",
+                                         "/com/kylin/network",
+                                         "com.kylin.network",
+                                         "sigNetworkPropChanged",
+                                         this,
+                                         SLOT(onNetworkPropChanged(QVariantMap)));
 
     //更新列表顺序
     //对部分QML功能有影响，待完善
@@ -404,3 +414,18 @@ void KnmWlanDataKeeper::onRequestInputPasswdAgent(QString agentName,QVariantMap 
 
     return ;
 }
+
+void KnmWlanDataKeeper::onNetworkPropChanged(QVariantMap parm)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ <<parm;
+    QString deviceName=parm.value("DeviceName").toString();
+    if (!m_deviceList.contains(deviceName))
+        return;
+
+    NetDevicePtr dev = m_deviceList.value(deviceName);
+    dev->updateConnectionProp(parm);
+    KInterface::getInstance()->wirelessDevConnListPropUpdate(deviceName,parm.value("Name").toString());
+
+    return ;
+}
+

@@ -200,12 +200,20 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
              << "specific parameter"<< specificObject;
 
     //set autoconnect
-    if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
+    //if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
     {
         NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
-        setAutoConnect(connectionSettings,true);
-        // 保存autoconnect设置到配置文件
-        connectPtr->update(connectionSettings->toMap());
+
+        NetworkManager::WirelessSetting::Ptr wirelessSetting
+            = connectionSettings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+        if (!wirelessSetting.isNull() && NetworkManager::WirelessSetting::NetworkMode::Ap
+                                        == wirelessSetting->mode()) {
+            qDebug() << "[activateConnection]" <<"the active connect mode is ap.";
+        } else {
+            setAutoConnect(connectionSettings,true);
+            // 保存autoconnect设置到配置文件
+            connectPtr->update(connectionSettings->toMap());
+        }
     }
 
     QDBusPendingCallWatcher * watcher;
@@ -279,10 +287,20 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
         Q_EMIT updateConnectionError(errorMessage);
         return;
     }
+
+
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
-    setAutoConnect(connectionSettings,false);
-    // 保存autoconnect设置到配置文件
-    connectPtr->update(connectionSettings->toMap());
+
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = connectionSettings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (!wirelessSetting.isNull() && NetworkManager::WirelessSetting::NetworkMode::Ap
+                                    == wirelessSetting->mode()) {
+        qDebug() << "[deactivateConnection]" <<"the active connect mode is ap.";
+    } else {
+        setAutoConnect(connectionSettings,false);
+        // 保存autoconnect设置到配置文件
+        connectPtr->update(connectionSettings->toMap());
+    }
 
     return;
 }

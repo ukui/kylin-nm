@@ -43,23 +43,16 @@ ListView {
 
             onReleased: {
                 mouse.accepted = true  // 右键菜单自己处理
-
-                console.log("onReleased:------------------- " )
-
                 nameLabel.visible = false
                 nameStateLabel.visible = true
             }
 
             onEntered: {
-                console.log("onEntered:------------------- " )
-
                 enteritem = true
                 connectBtn.visible = true
                 speedLabel.visible = false
             }
             onExited: {
-                console.log("onExited:------------------- " )
-
                 lanlistView.currentIndex = -1
                 enteritem = false
                 connectBtn.visible = false
@@ -69,8 +62,6 @@ ListView {
             }
 
             onClicked: {
-                console.log("onClicked:------------------- " )
-
                 // 只处理右键，左键允许传播
                 if (mouse.button == Qt.RightButton) {
                     propertyMenu.popup()
@@ -134,6 +125,7 @@ ListView {
 
             Item {
                 Layout.alignment: Qt.AlignLeft
+                enabled: false
                 Layout.leftMargin: 26
                 width: 36
                 height: 36
@@ -206,7 +198,6 @@ ListView {
                     hoverEnabled: true
 
                     onReleased: {
-                        console.log("onReleased:-------------------")
                         nameLabel.visible = false
                         nameStateLabel.visible = true
                     }
@@ -228,9 +219,11 @@ ListView {
                     Layout.leftMargin: 8
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
-                    text: modelData.State === 2 
-                            ? (modelData.Connectivity === 3 
-                                ? qsTr("connected") + "，" + qsTr("(network restricted)") 
+                    textColor: Platform.GlobalTheme.kFontPlaceholderText
+                    // 当 Connectivity 为 2（captive portal / 需要认证）或 3（受限）或 0 （未知）时都视为 “network restricted”
+                    text: modelData.State === 2
+                            ? ((modelData.Connectivity !=4 )
+                                ? qsTr("connected") + "，" + qsTr("(network restricted)")
                                 : qsTr("connected"))
                             : qsTr("Not connected")
                 }
@@ -338,7 +331,7 @@ ListView {
                     }
 
                     onClicked: {
-                        mouse.accepted = false
+                        mouse.accepted = true
 
                         // // 设置当前选中项
                         if (modelData.State === 2)

@@ -62,6 +62,9 @@ TRANSLATIONS += \
     translations/ukui-shortcut-network_mn.ts \
     translations/ukui-shortcut-network_ky.ts \
     translations/ukui-shortcut-network_kk.ts \
+    translations/ukui-shortcut-network_vi.ts \
+    translations/ukui-shortcut-network_ms.ts \
+    translations/ukui-shortcut-network_th.ts \
     translations/ukui-shortcut-network_bo_CN.ts
 
 

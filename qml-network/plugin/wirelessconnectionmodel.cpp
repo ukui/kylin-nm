@@ -239,3 +239,18 @@ int WirelessConnectionModel::getConButtonFromSsid(const QString itemId)
     }
     return -1;
 }
+
+void WirelessConnectionModel::replaceConnection(struct ST_ConnectionInfo *pConnection)
+{
+
+
+    int index = findIndexById(pConnection->ssid);
+    if (index != -1) {
+        m_connections.replace(index,*pConnection);
+        QModelIndex modelIndex = createIndex(index, 0);
+
+        emit dataChanged(modelIndex, modelIndex, {SSIDRole,StrengthRole,SecurityTypeRole,UUIDRole,IsAPRole,CategoryRole,ConnectStatusRole,IsLoadingRole,ConfiguredRole,FrequencyRole,IsMixRole});
+    }
+
+    qDebug() << "replace connection:" << pConnection->ssid <<pConnection->status<< "(" << pConnection->uuid << ")";
+}

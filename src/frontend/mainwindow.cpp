@@ -509,6 +509,7 @@ void MainWindow::initTrayIcon()
         if (m_connectivityPage != nullptr) {
             KWindowSystem::forceActiveWindow(m_connectivityPage->winId());
             KWindowSystem::raiseWindow(m_connectivityPage->winId());
+            m_connectivityPage->activateWindow();/* 激活窗口；hotfix bug#433661 网络连通性检测界面最小化之后再也无法打开 */
             return;
         }
         QString uri = getConnectivityCheckSpareUriByGDbus();
@@ -557,6 +558,8 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
     connect(m_wlanWidget, &WlanPage::connectivityCheckSpareUriChanged, this, &MainWindow::onConnectivityCheckSpareUriChanged);
+    connect(m_wlanWidget, &WlanPage::sigNetworkPropChanged, this, &MainWindow::sigNetworkPropChanged);
+
 
     connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIconTooltip);
     connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::onRefreshTrayIconTooltip);
@@ -926,16 +929,36 @@ void MainWindow::onRefreshTrayIcon()
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
-    } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
-//        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
-        signalStrength = m_wlanWidget->getActivateWifiSignal(m_wlanWidget->getCurrentDisplayDevice());
-        if (signalStrength == -1) {
-            signalStrength = m_wlanWidget->getActivateWifiSignal();
-        }
-        iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
-        iconStatus = IconActiveType::NOT_CONNECTED;
+        // wired dial-up (DSL/PPPoE) connections may not be recognized ,treat as wired connected.
+        QMap<QString, QString> wiredStateMap;
+        bool wiredActive = false;
+        if (m_lanWidget) {
+            m_lanWidget->getWiredDeviceConnectState(wiredStateMap);
+            for (auto it = wiredStateMap.cbegin(); it != wiredStateMap.cend(); ++it) {
+                const QString stateStr = it.value();
+                // Use i18n-aware string for detecting "connected" state so translations are handled
+                if (stateStr.contains(tr("Connected"), Qt::CaseInsensitive)) {
+                    wiredActive = true;
+                    break;
+                }
+            }
+        }
+        if (wiredActive) {
+            qDebug() << "Treating wired device as connected via fallback detection.";
+            m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+            iconStatus = IconActiveType::LAN_CONNECTED;
+        } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
+    //        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
+            signalStrength = m_wlanWidget->getActivateWifiSignal(m_wlanWidget->getCurrentDisplayDevice());
+            if (signalStrength == -1) {
+                signalStrength = m_wlanWidget->getActivateWifiSignal();
+            }
+            iconStatus = IconActiveType::WLAN_CONNECTED;
+        } else {
+            m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+            iconStatus = IconActiveType::NOT_CONNECTED;
+        }
     }
 
     NetworkManager::Connectivity connecttivity;
@@ -1371,6 +1394,10 @@ void MainWindow::setWiredDeviceAutoconnect(const QString& devName, bool state)
 {
     m_lanWidget->setWiredDeviceAutoconnect(devName, state);
 }
+void MainWindow::setWiredConnectAutoconnect(const QString& uuid, bool state)
+{
+    m_lanWidget->setWiredConnectAutoconnect(uuid, state);
+}
 
 void MainWindow::deleteWiredConnect(int type, const QString& connUuid)
 {
@@ -1396,6 +1423,11 @@ void MainWindow::deleteWireleeConnect(int type, const QString& connUuid)
     qDebug() << Q_FUNC_INFO << __LINE__ << type << connUuid;
     if (type == 1)
         m_wlanWidget->deleteWirelessConnect(connUuid);
+}
+
+void MainWindow::setWirelessConnectAutoconnect(const QString& uuid, bool state)
+{
+    m_wlanWidget->setWirelessConnectAutoConnectState(uuid, state);
 }
 
 void MainWindow::rescan()
@@ -1676,4 +1708,15 @@ void MainWindow::initNetCtrl()
 
     qInfo()<<"initNetCtrl success";
     return;
+}
+
+QString MainWindow::getDefaultDeviceName(int type)
+{
+    QString devName = QString("");
+
+    if (0 == type)
+        devName = m_lanWidget->getWiredDefaultDeviceName();
+    else
+        devName = m_wlanWidget->getWirelessDefaultDeviceName();
+    return devName;
 }

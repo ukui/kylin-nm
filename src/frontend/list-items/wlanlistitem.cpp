@@ -539,7 +539,29 @@ void WlanListItem::onNetButtonClicked()
                 isEnterpriseWlanDialogShow = true;
             }
         } else {
-            this->setExpanded(true);
+            //this->setExpanded(true);
+            QVariantMap value;
+            value.insert("Name",m_wirelessNetItem.m_NetSsid);
+            value.insert("Signal",m_wirelessNetItem.m_signalStrength);
+            value.insert("Security",m_wirelessNetItem.m_secuType);
+            value.insert("Uuid",m_wirelessNetItem.m_connectUuid);
+            //value.insert("isApConn",(m_connectResource->isApConnection(wirelessNetItem.m_connectUuid) ? IsApConnection : NotApConnection));
+            //value.insert("category");
+            value.insert("frequency",m_wirelessNetItem.m_frequency);
+            value.insert("State",4);//请求重新输入时应该停止连接状态
+            //value.insert("Loading");
+            value.insert("Configured",false);
+            value.insert("isMix",m_wirelessNetItem.m_isMix);
+            value.insert("DeviceName",m_wlanDevice);//
+             qDebug() << LOG_FLAG << "mqtest emit sigNetworkPropChanged " << value<<m_wirelessNetItem.m_secuType;
+            Q_EMIT sigNetworkPropChanged(value);//重新请求输入先更新前端配置 然后发起  只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
+
+            QTimer::singleShot(500,this,[=](){
+                requestInputPasswdAgent(m_wirelessNetItem.m_NetSsid,m_wlanDevice,1);
+            });
+
+
+             qDebug()<<"requestInputPasswdAgent"<<m_wirelessNetItem.m_NetSsid;
         }
     } else {
         onConnectButtonClicked();
@@ -748,4 +770,23 @@ void WlanListItem::setFrequency()
     } else {
         this->m_freq->setText("5G");
     }
+}
+
+
+void WlanListItem::requestInputPasswdAgent(QString netName, QString deviceName, int type)
+{
+
+    QDBusInterface iface("com.kylin.network", "/com/kylin/network",
+                                     "com.kylin.network",
+                                     QDBusConnection::sessionBus());
+    if(!iface.isValid()) {
+        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+        return;
+    }
+    QVariantMap value;
+    value.insert("ssid",netName);
+    value.insert("device",deviceName);
+    value.insert("type",type);
+    qDebug() << "[WlanListItem]call activateConnect" << __LINE__<<netName<<deviceName<<type;
+    iface.call("requestInputPasswdAgent",value);
 }

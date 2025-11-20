@@ -131,11 +131,13 @@ QVariantList DbusAdaptor::getWirelessList(QString devName)
     return vList;
 }
 
+//获取无线开关
 bool DbusAdaptor::getWirelessSwitchBtnState()
 {
     return m_mainWindow->getWirelessSwitchBtnState();
 }
 
+//有线开关
 bool DbusAdaptor::getWiredMainSwitchBtnState()
 {
     if (m_pSysBusInterfaces && m_pSysBusInterfaces->isValid())
@@ -159,6 +161,7 @@ bool DbusAdaptor::getCableStateByDevice(const QString deviceName)
 {
     return m_mainWindow->getCableStateByDevice(deviceName);
 }
+
 //有线列表
 QVariantList DbusAdaptor::getWiredList(QString devName)
 {
@@ -206,36 +209,11 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
             setDeviceAutoConnectState(devName,true);
         }
     }
-
-#if 0
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
-        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
-        if (gsetting->get(KEY_WIRED_SWITCH).toBool() != enable) {
-            gsetting->set(KEY_WIRED_SWITCH, enable);
-        }
-        delete gsetting;
-        gsetting = nullptr;
-    } else {
-        qDebug()<<"isSchemaInstalled false";
-    }
-#endif
-
 }
 
 //无线开关
 void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 {
-    //todo mainwindow调用backend 对开关 打开/关闭
-//    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
-//        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
-//        if (gsetting->get(KEY_WIRELESS_SWITCH).toBool() != enable) {
-//            gsetting->set(KEY_WIRELESS_SWITCH, enable);
-//        }
-//        delete gsetting;
-//        gsetting = nullptr;
-//    } else {
-//        qDebug()<<"isSchemaInstalled false";
-//    }
     m_mainWindow->setWirelessSwitchEnable(enable);
 }
 
@@ -302,11 +280,21 @@ void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
     }
 }
 
+// 设置设备自动连接状态
 void DbusAdaptor::setDeviceAutoConnectState(QString devName, bool state)
 {
     m_mainWindow->setWiredDeviceAutoconnect(devName,state);
 }
 
+// 设置网络连接自动连接的状态
+void DbusAdaptor::setNetworkConnectionAutoConnectState(int netType,QString uuid, bool state)
+{
+    qWarning () << Q_FUNC_INFO << __LINE__ << netType << uuid << state;
+    if (0 == netType)
+        m_mainWindow->setWiredConnectAutoconnect(uuid,state);
+    else if (1 == netType)
+        m_mainWindow->setWirelessConnectAutoconnect(uuid,state);
+}
 //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 {
@@ -517,6 +505,7 @@ void DbusAdaptor::connectToMainwindow()
     connect(m_mainWindow, &MainWindow::signalStrengthChange, this, &DbusAdaptor::signalStrengthChange);
     connect(m_mainWindow, &MainWindow::secuTypeChange, this, &DbusAdaptor::secuTypeChange);
     connect(m_mainWindow, &MainWindow::timeToUpdate, this, &DbusAdaptor::timeToUpdate);
+    connect(m_mainWindow, &MainWindow::sigNetworkPropChanged, this, &DbusAdaptor::sigNetworkPropChanged);
 }
 
 QString DbusAdaptor::checkDisplay()
@@ -572,6 +561,7 @@ int DbusAdaptor::registerInputPasswdAgent(QString agentName,QVariantMap value)
 /*请求代理接管输入*/
 int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
 {
+#if 0
     if(m_agentName.isEmpty()) {
         qWarning() << Q_FUNC_INFO << __LINE__<<"agent is empty,no register agent";
         return -1;
@@ -579,5 +569,116 @@ int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
         Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
         qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
     }
+#endif
+    //防止kylin-nm崩溃导致的未注册
+    Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
+    qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
     return  0;
+}
+
+/********************************
+ * 快捷面板显示窗口 type 0 有线 1 无线
+ * QVariantList 返回3个字段
+ * 1 是否支持有线或无线
+ * 2 有线或者无线的开关状态
+ * 3 有线或者无线的连接
+*********************************/
+
+QVariantList DbusAdaptor::getNetworkDeviceData(int type)
+{
+    QVariantList valueMap;
+    QStringList devDatalist;
+    qWarning () << Q_FUNC_INFO << __LINE__ << type;
+
+    //获取可用设备
+    QMap<QString,bool> devlistMap;
+    QVariantMap wire_value = getDeviceListAndEnabled(type);
+    QVariantMap::const_iterator item = wire_value.cbegin();
+    while (item != wire_value.cend()) {
+        devlistMap.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+    qWarning () << Q_FUNC_INFO << __LINE__ << "devlistMap:" << devlistMap;
+    devDatalist = devlistMap.keys();
+    qWarning () << Q_FUNC_INFO << __LINE__ << "devDatalist:" << devDatalist  << devDatalist.count();
+    if (devDatalist.count() < 1) {
+        valueMap.append(QVariant::fromValue(QString("0")));
+        valueMap.append(QVariant::fromValue(QString("0")));
+        valueMap.append(QVariant::fromValue(QString("")));
+        return valueMap;
+    }
+    else
+        valueMap.append(QVariant::fromValue(QString("1")));
+
+    //获取开关状态
+    bool switchBtnState = false;
+
+    if (0 == type)
+        switchBtnState = getWiredMainSwitchBtnState();
+    else if (1 == type)
+        switchBtnState = getWirelessSwitchBtnState();
+
+    qWarning () << Q_FUNC_INFO << __LINE__ << switchBtnState;
+
+    valueMap.append(QVariant::fromValue(switchBtnState?QString("1"):QString("0")));
+
+    if (switchBtnState) {
+        QString netDefaultName = m_mainWindow->getDefaultDeviceName(type);
+        if (netDefaultName.isEmpty() && devDatalist.count() >= 1) {
+            qWarning () << Q_FUNC_INFO << __LINE__ << "netDefaultName is empty" ;
+            netDefaultName = devDatalist.at(0);
+        }
+
+        qWarning () << Q_FUNC_INFO << __LINE__ << "netDefaultName:" << netDefaultName;
+
+        QVariantList connectList;
+        if (0 == type)
+            connectList = getWiredList(netDefaultName);
+        else if (1 == type)
+            connectList = getWirelessList(netDefaultName);
+
+        qWarning () << Q_FUNC_INFO << __LINE__ << "connectList:" << connectList;
+        for (int j = 0; j < connectList.size() && j < 1 ; ++j) { //只执行一次，所有已连接的网络连接均在最顶端
+            QStringList connList = connectList.at(j).toStringList();
+            qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
+            int index = 4;
+            if (type)
+                index=5;
+            if (connList.size() > index &&  (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
+                valueMap.append(QVariant::fromValue(connList.at(0)));
+                break;
+            }
+        }
+
+        if (2 == valueMap.size()) { //如果默认设备未获取到连接，则遍历其他网卡设备
+            for (const auto &data : devDatalist) {
+                if (data == netDefaultName)
+                    continue;
+
+                if (0 == type)
+                    connectList = getWiredList(netDefaultName);
+                else if (1 == type)
+                    connectList = getWirelessList(netDefaultName);
+
+                for (int j = 0; j < connectList.size() && j < 1 ; ++j) { //只执行一次，所有已连接的网络连接均在最顶端
+                    QStringList connList = connectList.at(j).toStringList();
+                    qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
+                    if (connList.size() > 4 &&  (connList.at(4).toInt() == 2 || connList.at(4).toInt() == 4) ) {
+                        valueMap.append(QVariant::fromValue(connList.at(0)));
+                        break;
+                    }
+                }
+            }
+        }
+
+
+    } else {
+        valueMap.append(QVariant::fromValue(QString("")));
+    }
+
+    if (2 == valueMap.size()) {
+        valueMap.append(QVariant::fromValue(QString("")));
+    }
+
+    return valueMap;
 }

@@ -241,9 +241,9 @@ void WlanPage::initTimer()
     m_scanTimer = new QTimer(this);
     connect(m_scanTimer, &QTimer::timeout, this, &WlanPage::requestScan);
 
-    m_refreshIconTimer = new QTimer(this);
-    connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
-    m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
+    //m_refreshIconTimer = new QTimer(this);
+    //connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
+    //m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
 }
 
 /**
@@ -344,6 +344,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
         m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+    connect(p_wlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
@@ -360,6 +361,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+    connect(p_wlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
@@ -376,6 +378,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
     WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+    connect(p_sortWlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
     p_sortListWidgetItem->setSizeHint(QSize(p_ListWidget->width(), p_sortWlanItem->height()));
@@ -746,6 +749,23 @@ void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuT
 
     if (nullptr != p_wlanItem) {
         p_wlanItem->updateWirelessNetSecurity(ssid, secuType);
+
+        QVariantMap value;
+        value.insert("Name",ssid);
+        //value.insert("Signal",p_wlanItem->getSignalStrength());
+        value.insert("Security",secuType);
+        //value.insert("Uuid",p_wlanItem->getUuid());
+        //value.insert("isApConn",(m_connectResource->isApConnection(wirelessNetItem.m_connectUuid) ? IsApConnection : NotApConnection));
+        //value.insert("category");
+        //value.insert("frequency",p_wlanItem->m_frequency);
+        //value.insert("State");
+        //value.insert("Loading");
+        //value.insert("Configured",false);
+        //value.insert("isMix",p_wlanItem->m_isMix);
+        value.insert("DeviceName",devName);
+         qDebug() << LOG_FLAG << "emit sigNetworkPropChanged " << value;
+        Q_EMIT sigNetworkPropChanged(value);//只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
+
     }
 
     Q_EMIT secuTypeChange(devName, ssid, secuType);
@@ -807,6 +827,20 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
 
     if (m_devList.isEmpty()) {
         m_currentDevice=deviceName;
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings* mobileHotspotSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
+            mobileHotspotSetting->set("show", true);
+            delete mobileHotspotSetting;
+            mobileHotspotSetting = nullptr;
+
+            QGSettings* wlanConnectSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_WLANCONNECT);
+            wlanConnectSetting->set("show", true);
+            delete wlanConnectSetting;
+            wlanConnectSetting = nullptr;
+
+        }
     }
     m_devList << deviceName;
     setSwitchBtnEnable(true);
@@ -874,6 +908,21 @@ void WlanPage::onDeviceRemove(QString deviceName)
     if (m_devList.isEmpty()) {
         setSwitchBtnState(false);
         setSwitchBtnEnable(false);
+        //设置控制面板热点界面 和 控制面板无线界面
+        qWarning() << Q_FUNC_INFO << __LINE__ << "deviceRemove" << deviceName;
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+            QGSettings* mobileHotspotSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
+            mobileHotspotSetting->set("show", false);
+            delete mobileHotspotSetting;
+            mobileHotspotSetting = nullptr;
+
+            QGSettings* wlanConnectSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_WLANCONNECT);
+            wlanConnectSetting->set("show", false);
+            delete wlanConnectSetting;
+            wlanConnectSetting = nullptr;
+        }
     }
 
     if (originalDeviceName == deviceName || m_devList.isEmpty()) {
@@ -1428,6 +1477,7 @@ void WlanPage::onRefreshIconTimer()
                 WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice, m_showWifi6Plus);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
                 connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
+                connect(p_sortWlanItem, &WlanListItem::sigNetworkPropChanged, this, &WlanPage::sigNetworkPropChanged);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
                 m_inactivatedNetListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
                 updateWlanItemState(m_inactivatedNetListWidget, p_sortListWidgetItem, Deactivated);
@@ -1888,4 +1938,17 @@ void WlanPage::deactivateWirelessConnectionWithUuid(const QString devName, const
 void WlanPage::deleteWirelessConnect(const QString &connectUuid)
 {
     m_wirelessConnectOpreation->deleteWirelessConnect(connectUuid);
+    //Q_EMIT sigNetworkPropChanged(value);//建议重新更新属性
 }
+
+void WlanPage::setWirelessConnectAutoConnectState(const QString &connectUuid,bool state)
+{
+    m_wirelessConnectOpreation->setWirelessAutoConnect(connectUuid,state);
+}
+
+//获取无线默认设备
+QString WlanPage::getWirelessDefaultDeviceName(void)
+{
+    return getDefaultDeviceName(WIRELESS);
+}
+

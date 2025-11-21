@@ -143,6 +143,25 @@ ListView {
             }
         }
 
+        function updateItemPos() {
+            Qt.callLater(function() {
+                var itemPos = listItem.mapToItem(outerFlickable, 0, 0);
+            
+                // 计算目标位置
+                var targetY = outerFlickable.height - itemPos.y ;
+
+                console.log("updateItemPos itemPos.y:", itemPos.y, " outerFlickable.contentY:",  outerFlickable.contentY, 
+                            " outerFlickable.height:", outerFlickable.height, " targetY:", targetY, " listItem.height:", listItem.height,
+                            "listItem.contentHeight:", outerFlickable.contentHeight);
+
+                if (targetY < listItem.height) {
+                    outerFlickable.contentY += (listItem.height - targetY);
+                    console.log("updateItemPos adjust outerFlickable.contentY to :", outerFlickable.contentY)
+                }
+            });
+            
+        }
+
         //改函数逻辑待梳理优化点击事件后可合并为公共方法 暂不处理
         function triggerButtonClick(){
 
@@ -477,6 +496,7 @@ ListView {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     elide: Text.ElideRight
+                                    property var labelDTColor: pwdConnectBtn.enabled ?  "kfont-white" : "kfont-white-disable"
                                 }
 
                                 onClicked: {
@@ -551,13 +571,7 @@ ListView {
                                 onVisibleChanged: {
                                     if (visible) {
                                         updateShowDetailIndex(index)
-                                        if (index == (wlanlistView.count - 1)) {
-                                            if (outerFlickable.contentHeight > outerFlickable.contentY + listItem.height) {
-                                                outerFlickable.contentY += listItem.height
-                                            } else {
-                                                outerFlickable.contentY = outerFlickable.contentHeight
-                                            }
-                                        }
+                                        updateItemPos()
                                     }
                                 }
                             }
@@ -645,6 +659,7 @@ ListView {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
+                        property var labelDTColor: connectBtn.enabled ?  "kfont-white" : "kfont-white-disable"
                     }
 
                     MouseArea {

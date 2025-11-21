@@ -133,7 +133,7 @@ bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ip
 
 bool KynmSystemDbus::checkIpv6IsConflict(const QString devName, const QString ipv6Address)
 {
-    PEEK_LIMIT_RET(false);
+    qWarning() << Q_FUNC_INFO << __LINE__ << "devName = " << devName << " ipv6Address =" << ipv6Address;
     bool isConflict = false;
     KyIpv6Arping* ipv6rping = new KyIpv6Arping(devName, ipv6Address);
     if (ipv6rping->ipv6ConflictCheck() >= 0) {

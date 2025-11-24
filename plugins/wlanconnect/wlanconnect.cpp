@@ -204,7 +204,58 @@ const QString WlanConnect::name() const {
 
 bool WlanConnect::isEnable() const
 {
-    return true;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network",
+                        "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),1);
+    if (!reply.isValid())
+    {
+        qWarning() << "[wlanConnect]getWirelessDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+    bool isEnabled = !map.isEmpty();
+
+    qWarning() << Q_FUNC_INFO << __LINE__ << isEnabled;
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+    if (QGSettings::isSchemaInstalled(schema)) {
+        qWarning() << Q_FUNC_INFO << __LINE__;
+        //get gsettings
+        QGSettings *showSettings;
+        QString path("/org/ukui/control-center/plugins/wlanconnect/");
+        showSettings = new QGSettings(schema, path.toUtf8());
+
+        QVariant enabledState = showSettings->get("show");
+
+        qWarning() << Q_FUNC_INFO << __LINE__ << enabledState.toBool();
+
+        //set gsettings
+        if (!enabledState.isValid() || enabledState.isNull()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "QGSettins get plugin show status error";
+        } else {
+            if (enabledState.toBool() != isEnabled) {
+                showSettings->set("show", isEnabled);
+            }
+        }
+        delete showSettings;
+        showSettings = nullptr;
+    }
+
+    return isEnabled;
 }
 
 bool WlanConnect::isShowOnHomePage() const

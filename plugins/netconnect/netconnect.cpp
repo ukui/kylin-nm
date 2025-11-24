@@ -153,7 +153,54 @@ const QString NetConnect::name() const {
 
 bool NetConnect::isEnable() const
 {
-    return true;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network",
+                        "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
+    if (!reply.isValid())
+    {
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+    bool isEnabled = !map.isEmpty();
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+
+    if (QGSettings::isSchemaInstalled(schema)) {
+        //get gsettings
+        QGSettings *showSettings;
+        QString path("/org/ukui/control-center/plugins/netconnect/");
+        showSettings = new QGSettings(schema, path.toUtf8());
+
+        QVariant enabledState = showSettings->get("show");
+
+        //set gsettings
+        if (!enabledState.isValid() || enabledState.isNull()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "QGSettins get plugin show status error";
+        } else {
+            if (enabledState.toBool() != isEnabled) {
+                showSettings->set("show", isEnabled);
+            }
+        }
+        delete showSettings;
+        showSettings = nullptr;
+    }
+
+    return isEnabled;
 }
 
 

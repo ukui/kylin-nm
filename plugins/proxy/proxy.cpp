@@ -27,6 +27,7 @@
 #include <QRegExpValidator>
 #include <QApplication>
 #include <QTranslator>
+#include <QProcess>
 
 #define PROXY_SCHEMA              "org.gnome.system.proxy"
 #define PROXY_MODE_KEY            "mode"
@@ -127,8 +128,11 @@ QWidget *Proxy::pluginUi() {
             initAutoProxyStatus();
             initManualProxyStatus();
             initIgnoreHostStatus();
-            initDbus();
-            initAppProxyStatus();
+            if (isKylinProxyProcessRunning()) {
+                /* 只有 kylin-proxy 进程存在时才初始化应用代理 */
+                initDbus();
+                initAppProxyStatus();
+            }
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
@@ -1103,7 +1107,13 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
 void Proxy::setUkccProxySettings()
 {
     setSystemProxyFrameHidden(false);
-    setAppProxyFrameHidden(false);
+    if(isKylinProxyProcessRunning()){
+        setAppProxyFrameHidden(false);
+    }else{
+        /* 如果 kylin-proxy 进程不存在，隐藏应用代理相关界面 */
+        setAppProxyFrameHidden(true);
+        qWarning() << "kylin-proxy process is not running, hiding application proxy interface";
+    }
     setAPTProxyFrameHidden(false);
 
     QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
@@ -1459,6 +1469,27 @@ void Proxy::setAPTProxyFrameHidden(bool state)
 {
     mAptProxyLabel->setHidden(state);
     mAPTFrame->setHidden(state);
+}
+
+bool Proxy::isKylinProxyProcessRunning()
+{
+    QProcess process;
+
+    /* 方法1: 使用 pgrep 命令查找进程 */
+    process.start("pgrep", QStringList() << "-f" << "kylin-proxy");
+    process.waitForFinished();
+
+    if (process.exitCode() == 0) {
+        QString output = process.readAllStandardOutput();
+        return !output.trimmed().isEmpty();
+    }
+
+    /* 方法2: 如果 pgrep 不可用，使用 ps 命令作为备选 */
+    process.start("ps", QStringList() << "aux");
+    process.waitForFinished();
+
+    QString output = process.readAllStandardOutput();
+    return output.contains("kylin-proxy");
 }
 
 void Proxy::onipEditStateChanged()

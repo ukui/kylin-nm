@@ -699,6 +699,7 @@ ListView {
         height: 40
         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
         hoverEnabled: true
+        flat: true
 
         UkuiItems.DtThemeText {
             text: qsTr("Add Others...")

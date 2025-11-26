@@ -109,14 +109,16 @@ void MultipleDnsWidget::initUI()
     btnHLayout->setContentsMargins(0, 0, 0, 0);
     btnHLayout->setSpacing(1);
     btnHLayout->setAlignment(Qt::AlignLeft);
-    btnHLayout->addWidget(m_buttonBox);
-    btnHLayout->addSpacing(23);
-    btnHLayout->addWidget(m_settingsLabel);
 
-    mulDnsVLayout->addWidget(m_mulDnsLabel, Qt::AlignLeft);
+    btnHLayout->addWidget(m_mulDnsLabel);
+    btnHLayout->addSpacing(200);
+    btnHLayout->addWidget(m_settingsLabel,Qt::AlignRight);
+    btnHLayout->addSpacing(23);
+    btnHLayout->addWidget(m_buttonBox,Qt::AlignRight);
+
+    mulDnsVLayout->addLayout(btnHLayout);
     mulDnsVLayout->addWidget(m_emptyWidget);
     mulDnsVLayout->addWidget(m_dnsListWidget);
-    mulDnsVLayout->addLayout(btnHLayout);
 
     m_emptyWidget->show();
     m_dnsListWidget->hide();

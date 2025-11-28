@@ -839,7 +839,7 @@ void MainWindow::assembleTrayIconTooltip(QMap<QString, QString> &map, QString &t
     QMap<QString, QString>::iterator iter = map.begin();
     if (map.size() == 1) {
         tip = map.value(iter.key());
-        if (tip.indexOf(":")) {
+        if (tip.indexOf(":") != -1) {
             tip = tip.mid(tip.indexOf(":") + 2); //单网卡显示时去掉“已连接: ”字样
         }
     } else if (map.size() > 1) {
@@ -938,7 +938,8 @@ void MainWindow::onRefreshTrayIcon()
             for (auto it = wiredStateMap.cbegin(); it != wiredStateMap.cend(); ++it) {
                 const QString stateStr = it.value();
                 // Use i18n-aware string for detecting "connected" state so translations are handled
-                if (stateStr.contains(tr("Connected"), Qt::CaseInsensitive)) {
+                //英文下有线所有状态均有Connected的字段
+                if (!stateStr.contains(tr("Not Connected"), Qt::CaseInsensitive) && stateStr.contains(tr("Connected"), Qt::CaseInsensitive)) {
                     wiredActive = true;
                     break;
                 }

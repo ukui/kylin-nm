@@ -286,10 +286,11 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
     if (uuid.isEmpty())
         return;
 
+    if (!m_deviceList.contains(deviceName)){
+        qDebug() << Q_FUNC_INFO << __LINE__<< "not such wireless dev" << deviceName;
+        return;
+    }
     if (status == ACTIVATED || status == ACTIVATING) {
-
-        if (!m_deviceList.contains(deviceName))
-            return;
 
         if(m_deviceList.value(deviceName)->containsConnectionName(ssid))
         {
@@ -313,19 +314,11 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
 
     QStringList devList = m_deviceList.keys();
     for (int i = 0; i < devList.count(); i++) {
-        QVariantList connList = m_deviceList.value(devList.at(i))->getConnections();
-        if(connList.isEmpty()) {
-            qDebug() << Q_FUNC_INFO << __LINE__
-                     << "deviceName:" << devList.at(i);
-            continue;
-        }
-        valueMap=connList.at(0).toMap();
-        if (!valueMap.contains("Uuid"))
-            continue;
-        if (valueMap.value("Uuid").toString() != uuid)
-            continue;
         NetDevicePtr dev = m_deviceList.value(devList.at(i));
         QMap<QString, QVariant> conn = dev->updateConnection(uuid, status);
+        if(conn.isEmpty()){
+            continue;
+        }
         qDebug() << Q_FUNC_INFO << __LINE__
                  << "deviceName:" << dev->devName()
                  << "ssid:" << conn["Name"]

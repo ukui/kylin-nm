@@ -1066,7 +1066,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt(), infoList.at(5).toInt());
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt(), DEACTIVATED);
 }
 
 //增加设备

@@ -83,6 +83,8 @@ void WarningDialog::initUI()
     warningText->setWordWrap(true);
     confirmButton->setText(tr("Confirm"));
 
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(26,13,24,24);
 

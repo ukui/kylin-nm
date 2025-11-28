@@ -75,7 +75,7 @@ void NetConnect::showDesktopNotify(const QString &message)
        <<tr("Settings desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
-       <<QVariantMap()
+       << QVariantMap{{"desktop-entry","kylin-nm"}}
        <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
@@ -679,6 +679,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     deviceFrameMap[devName]->itemMap.insert(infoList.at(1), lanItem);
     qDebug()<<"insert " << infoList.at(1) << " to " << devName << " list";
     frame->lanItemLayout->addWidget(lanItem);
+    frame->updateSeparators();
 }
 
 //增加设备
@@ -991,6 +992,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     int index = getInsertPos(connName, deviceName);
     qDebug()<<"[NetConnect]addOneLanFrame " << connName << " to " << deviceName << " list at pos:" << index;
     frame->lanItemLayout->insertWidget(index, lanItem);
+    frame->updateSeparators();
 }
 
 void NetConnect::removeOneLanFrame(ItemFrame *frame, QString deviceName, QString uuid)
@@ -1009,6 +1011,7 @@ void NetConnect::removeOneLanFrame(ItemFrame *frame, QString deviceName, QString
    frame->lanItemLayout->removeWidget(frame->itemMap[uuid]);
    delete frame->itemMap[uuid];
    frame->itemMap.remove(uuid);
+   frame->updateSeparators();
 }
 
 //activeconnect status change
@@ -1048,6 +1051,8 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
                 if (!iter.value()->itemMap.contains(uuid)) {
                     addOneLanFrame(iter.value(), iter.key(), infoList);
+                }else{
+                    deviceFrameMap[iters.key()]->updateSeparators();
                 }
             }
         }
@@ -1059,12 +1064,14 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
                     //为已连接则放到第一个
                     deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
                     deviceFrameMap[deviceName]->lanItemLayout->insertWidget(0,item);
+                    deviceFrameMap[deviceName]->updateSeparators();
                 } else if (status == DEACTIVATED) {
                     //为断开则重新插入
                     int index = getInsertPos(item->titileLabel->text(), deviceName);
                     qDebug() << "[NetConnect]reinsert" << item->titileLabel->text() << "pos" << index << "in" << deviceName << "because status changes to deactive";
                     deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
                     deviceFrameMap[deviceName]->lanItemLayout->insertWidget(index,item);
+                    deviceFrameMap[deviceName]->updateSeparators();
                 }
                 itemActiveConnectionStatusChanged(item, status);
             }

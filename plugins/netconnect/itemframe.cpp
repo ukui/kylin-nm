@@ -19,7 +19,6 @@
  */
 #include "itemframe.h"
 #include <kysdk/applications/accessinfohelper.h>
-
 #include <QPainter>
 #include <QPalette>
 
@@ -32,9 +31,10 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     lanItemFrame = new QFrame(this);
     lanItemFrame->setFrameShape(QFrame::Shape::NoFrame);
 
-    lanItemLayout = new QVBoxLayout(this);
+    lanItemLayout = new QVBoxLayout(lanItemFrame);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
-    lanItemLayout->setSpacing(1);
+    lanItemLayout->setSpacing(0);
+
     addLanWidget = new AddNetBtn(false, this);
     KDK_EXTEND_ALL_INFO_FORMAT(addLanWidget, "NetConnect", "", "add a wired network");
 
@@ -44,12 +44,42 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
+    KHLineFrame *deviceLine = new KHLineFrame(this);
+    deviceLanLayout->addWidget(deviceLine);
     deviceLanLayout->addWidget(lanItemFrame);
-    deviceLanLayout->addSpacing(1);
+    KHLineFrame *addLanLine = new KHLineFrame(this);
+    deviceLanLayout->addWidget(addLanLine);
+    deviceLanLayout->setSpacing(0);
     deviceLanLayout->addWidget(addLanWidget);
 
     //下拉按钮
     connect(deviceFrame->dropDownLabel, &DrownLabel::labelClicked, this, &ItemFrame::onDrownLabelClicked);
+}
+
+void ItemFrame::updateSeparators()
+{
+    /* 先清除所有现有的分割线 */
+    for (KHLineFrame *separator : separators) {
+        lanItemLayout->removeWidget(separator);
+        separator->deleteLater();
+    }
+    separators.clear();
+
+    /* 在网络项之间添加分割线 */
+    int itemCount = 0;
+    for (int i = 0; i < lanItemLayout->count(); ++i) {
+        QLayoutItem *item = lanItemLayout->itemAt(i);
+        if (item && item->widget() && qobject_cast<LanItem*>(item->widget())) {
+            itemCount++;
+            /* 如果不是第一个网络项，在前面添加分割线 */
+            if (itemCount > 1) {
+                KHLineFrame *separator = new KHLineFrame(lanItemFrame);
+                lanItemLayout->insertWidget(i, separator);
+                separators.append(separator);
+                i++; /* 因为插入了一个widget，索引要增加 */
+            }
+        }
+    }
 }
 
 void ItemFrame::onDrownLabelClicked()

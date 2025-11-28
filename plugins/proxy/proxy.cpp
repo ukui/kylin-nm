@@ -21,6 +21,7 @@
 #include "aptproxydialog.h"
 #include "aptinfo.h"
 #include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
 //#include "utils.h"
 
 #include <QDebug>
@@ -978,12 +979,7 @@ void Proxy::setFrame_Noframe(QFrame *frame)
 
 QFrame *Proxy::setLine(QFrame *frame)
 {
-    QFrame *line = new QFrame(frame);
-    line->setMinimumSize(QSize(0, 1));
-    line->setMaximumSize(QSize(16777215, 1));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
+    KHLineFrame *line = new KHLineFrame(frame);
     return line;
 }
 

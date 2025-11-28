@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>ลบเครือข่ายนี้ออก</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -138,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation>เชื่อมต่อแล้ว เครือข่ายดีมาก</translation>
+        <translation type="vanished">เชื่อมต่อแล้ว เครือข่ายดีมาก</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation>เชื่อมต่อแล้ว เครือข่ายดี</translation>
+        <translation type="vanished">เชื่อมต่อแล้ว เครือข่ายดี</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation>เชื่อมต่อแล้ว เครือข่ายปานกลาง</translation>
+        <translation type="vanished">เชื่อมต่อแล้ว เครือข่ายปานกลาง</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation>เชื่อมต่อแล้ว แต่สัญญาณอ่อน</translation>
+        <translation type="vanished">เชื่อมต่อแล้ว แต่สัญญาณอ่อน</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation>เชื่อมต่อแล้ว แต่เครือข่ายอ่อน</translation>
+        <translation type="vanished">เชื่อมต่อแล้ว แต่เครือข่ายอ่อน</translation>
     </message>
 </context>
 </TS>

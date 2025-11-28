@@ -520,16 +520,7 @@ ListView {
                             Layout.leftMargin: 7
                             Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
 
-                            text: {
-                                // use signalForDisplay: -1 means unknown/not-yet-available (hide detailed status)
-                                const signal = signalForDisplay;
-                                if (signal === -1) return qsTr("Connected");
-                                return signal > 80 ? qsTr("Connected,network is very good") :
-                                                     signal > 55 ? qsTr("Connected,network is good") :
-                                                                   signal > 30 ? qsTr("Connected,network is average") :
-                                                                                 signal > 5  ? qsTr("Connected,network weak") :
-                                                                                               qsTr("Connected,network is weak");
-                            }
+                            text: qsTr("connected");
 
                             textColor: Platform.GlobalTheme.kFontPlaceholderText
                             height: 16

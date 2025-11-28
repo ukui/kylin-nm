@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>དྲ་རྒྱ་དེ་བསུབ་དགོས།</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -138,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation>འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཧ་ཅང་བཟང་།</translation>
+        <translation type="vanished">འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཧ་ཅང་བཟང་།</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation>འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཡག་པོ་ཡོད།</translation>
+        <translation type="vanished">འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཡག་པོ་ཡོད།</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation>འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་སྤྱིར་བཏང་ཡིན།</translation>
+        <translation type="vanished">འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་སྤྱིར་བཏང་ཡིན།</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation>འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཉམས་པ།</translation>
+        <translation type="vanished">འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཉམས་པ།</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation>འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཧ་ཅང་ཞན།</translation>
+        <translation type="vanished">འབྲེལ་མཐུད་བྱས་ཟིན་པས་དྲ་རྒྱ་ཧ་ཅང་ཞན།</translation>
     </message>
 </context>
 </TS>

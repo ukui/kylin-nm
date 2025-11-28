@@ -25,6 +25,7 @@
 #include <addbtn.h>
 #include "../component/AddBtn/addnetbtn.h"
 #include "lanitem.h"
+#include "klineframe.h"
 
 class ItemFrame : public QFrame
 {
@@ -44,6 +45,11 @@ public:
     AddNetBtn * addLanWidget = nullptr;
     //单设备item列表 key:uuid
     QMap<QString, LanItem *> itemMap;
+    // 分割线列表
+    QList<KHLineFrame *> separators;
+
+public:
+    void updateSeparators();  /* 更新分割线：在网络项之间添加分割线 */
 
 private slots:
     void onDrownLabelClicked();

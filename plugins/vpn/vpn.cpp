@@ -20,6 +20,7 @@
 #include "vpn.h"
 #include "ui_vpn.h"
 #include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
 
 #include <QProcess>
 #include <QMouseEvent>
@@ -304,13 +305,7 @@ void Vpn::runExternalApp(){
 
 QFrame* Vpn::myLine()
 {
-    QFrame *line = new QFrame(m_pluginWidget);
-    line->setMinimumSize(QSize(LINE_MIN_SIZE));
-    line->setMaximumSize(QSize(LINE_MAX_SIZE));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
+    KHLineFrame *line = new KHLineFrame(m_pluginWidget);
     return line;
 }
 

@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>بۇل توردۇ ۅچۉرۉۉ</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -135,26 +139,6 @@
     <message>
         <source>Add Others...</source>
         <translation>باشقا تورعو  قوشۇلۇۇ...</translation>
-    </message>
-    <message>
-        <source>Connected,network is very good</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network is good</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network is average</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network weak</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network is weak</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

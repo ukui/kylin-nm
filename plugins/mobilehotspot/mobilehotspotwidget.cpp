@@ -18,6 +18,7 @@
  *
  */
 #include "mobilehotspotwidget.h"
+#include "klineframe.h"
 #include <QDebug>
 #include <QFormLayout>
 
@@ -59,14 +60,14 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("Settings"))
-       <<((unsigned int) 0)
-       <<QString("ukui-control-center")
-       <<tr("Settings desktop message") //显示的是什么类型的信息
-       <<message //显示的具体信息
-       <<QStringList()
-       <<QVariantMap()
-       <<(int)-1;
+    args << (tr("Settings"))
+         << ((unsigned int) 0)
+         << QString("ukui-control-center")
+         << tr("Settings desktop message") //显示的是什么类型的信息
+         << message //显示的具体信息
+         << QStringList()
+         << QVariantMap{{"desktop-entry","kylin-nm"}}
+         << (int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
@@ -878,10 +879,6 @@ void MobileHotspotWidget::setUiEnabled(bool enable)
         m_apNameLine->setEnabled(true);
     }
 
-    // When hotspot is off (enable == false) do not show the blacklist page.
-    if (m_blacklistPage) {
-        m_blacklistPage->setVisible(enable);
-    }
 }
 
 void MobileHotspotWidget::setWidgetHidden(bool isHidden)
@@ -945,13 +942,7 @@ void MobileHotspotWidget::updateBandCombox()
 
 QFrame* MobileHotspotWidget::myLine()
 {
-    QFrame *line = new QFrame(this);
-    line->setMinimumSize(QSize(LINE_MIN_SIZE));
-    line->setMaximumSize(QSize(LINE_MAX_SIZE));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
+    KHLineFrame *line = new KHLineFrame(this);
     return line;
 }
 

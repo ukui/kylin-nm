@@ -140,7 +140,7 @@ void WlanConnect::showDesktopNotify(const QString &message)
          <<tr("Settings desktop message") //显示的是什么类型的信息
          <<message //显示的具体信息
          <<QStringList()
-         <<QVariantMap()
+         <<QVariantMap{{"desktop-entry","kylin-nm"}}
          <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
@@ -475,6 +475,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
             qDebug() << "not find " << list.at(listIndex).at(0) << " in current list, ignore";
         }
     }
+    // 更新样式和分割线
+    frame->filletStyleChange();
+
     qDebug() << "resort finish";
 }
 
@@ -1187,6 +1190,17 @@ void WlanConnect::removeOneWlanFrame(ItemFrame *frame, QString deviceName, QStri
 
     if (frame->itemMap.contains(ssid)) {
         qDebug() << "[WlanConnect]removeOneWlanFrame " << deviceName << ssid;
+
+        // 找到要移除的item在布局中的位置
+        int itemIndex = -1;
+        for (int i = 0; i < frame->lanItemLayout->count(); ++i) {
+            QLayoutItem* item = frame->lanItemLayout->itemAt(i);
+            if (item && item->widget() == frame->itemMap[ssid]) {
+                itemIndex = i;
+                break;
+            }
+        }
+
         frame->lanItemLayout->removeWidget(frame->itemMap[ssid]);
         delete frame->itemMap[ssid];
         frame->itemMap.remove(ssid);

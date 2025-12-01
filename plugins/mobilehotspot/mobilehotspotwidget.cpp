@@ -21,6 +21,7 @@
 #include "klineframe.h"
 #include <QDebug>
 #include <QFormLayout>
+#include <unistd.h>
 
 #define LABEL_RECT 17, 0, 105, 23
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -151,6 +152,12 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
 
     if (watched == m_switchBtn && m_switchBtn->isEnabled()) {
         if (event->type() == QEvent::MouseButtonRelease) {
+
+            if(judgeHotSpotIsCtrl()){
+                qWarning() << LOG_HEAD << "hotspot is ctrled,do nothing";
+                return true;
+            }
+
             if (!m_interface->isValid()) {
                 return true;
             }
@@ -1102,4 +1109,23 @@ void MobileHotspotWidget::judgeNoticeInfoShow(QString deviceName,bool isActived)
         m_warnWidget->hide();
     }
     resetFrameSize();
+}
+
+bool MobileHotspotWidget::judgeHotSpotIsCtrl()
+{
+    FILE *fp=NULL;
+    char buffer[80];
+    if((access("/etc/apctl.conf",F_OK))!=-1){
+        fp=fopen("/etc/apctl.conf","r");
+        if (NULL != fp){
+            fgets(buffer,sizeof(buffer),fp);
+            //与文件内容不同则管控
+            if(strncmp(buffer,"#ap control\n",sizeof(buffer))!=0){
+                fclose(fp);
+                return true;
+            }
+        }
+     }
+    if(fp) fclose(fp);
+    return false;
 }

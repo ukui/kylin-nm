@@ -44,11 +44,9 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
-    KHLineFrame *deviceLine = new KHLineFrame(this);
-    deviceLanLayout->addWidget(deviceLine);
+    KHLineFrame *separator = new KHLineFrame(this);
+    deviceLanLayout->addWidget(separator);
     deviceLanLayout->addWidget(lanItemFrame);
-    KHLineFrame *addWlanLine = new KHLineFrame(this);
-    deviceLanLayout->addWidget(addWlanLine);
     deviceLanLayout->addSpacing(0);
     deviceLanLayout->addWidget(addWlanWidget);
 
@@ -72,83 +70,19 @@ void ItemFrame::onDrownLabelClicked()
     }
 }
 
-void ItemFrame::updateSeparators()
-{
-    // 清除所有现有的分割线
-    for (KHLineFrame* line : m_separatorLines) {
-        if (line) {
-            lanItemLayout->removeWidget(line);
-            line->deleteLater();
-        }
-    }
-    m_separatorLines.clear();
-
-    // 重新添加分割线
-    int widgetCount = 0;
-    for (int i = 0; i < lanItemLayout->count(); ++i) {
-        QLayoutItem* item = lanItemLayout->itemAt(i);
-        if (item && item->widget() && qobject_cast<WlanItem*>(item->widget())) {
-            widgetCount++;
-        }
-    }
-
-    // 在每个WlanItem之间插入分割线（最后一个item后不加）
-    for (int i = 0; i < widgetCount - 1; ++i) {
-        KHLineFrame* separator = new KHLineFrame(lanItemFrame); // 设置父对象为lanItemFrame
-        m_separatorLines.append(separator);
-
-        // 找到第i个WlanItem的位置
-        int insertPosition = -1;
-        int currentItemIndex = 0;
-        for (int j = 0; j < lanItemLayout->count(); ++j) {
-            QLayoutItem* item = lanItemLayout->itemAt(j);
-            if (item && item->widget() && qobject_cast<WlanItem*>(item->widget())) {
-                if (currentItemIndex == i) {
-                    insertPosition = j + 1; // 在WlanItem后面插入
-                    break;
-                }
-                currentItemIndex++;
-            }
-        }
-
-        if (insertPosition != -1) {
-            lanItemLayout->insertWidget(insertPosition, separator);
-        }
-    }
-}
-
 void ItemFrame::filletStyleChange()
 {
     if (lanItemLayout->isEmpty()) {
         return;
     }
 
-    // 更新网络项的圆角样式
-    int itemIndex = 0;
-    int totalItems = 0;
-
-    // 先计算WlanItem的数量
     for (int i = 0; i < lanItemLayout->count(); ++i) {
         QLayoutItem *it = lanItemLayout->itemAt(i);
-        if (WlanItem* itemFrame = qobject_cast<WlanItem*>(it->widget())) {
-            totalItems++;
+        WlanItem *itemFrame = (WlanItem*)(it->widget());
+        if (i != lanItemLayout->count()-1) {
+            itemFrame->setHalfFillet(false);
+        } else {
+            itemFrame->setHalfFillet(true);
         }
     }
-
-    // 设置圆角样式
-    int currentItem = 0;
-    for (int i = 0; i < lanItemLayout->count(); ++i) {
-        QLayoutItem *it = lanItemLayout->itemAt(i);
-        if (WlanItem* itemFrame = qobject_cast<WlanItem*>(it->widget())) {
-            if (currentItem != totalItems - 1) {
-                itemFrame->setHalfFillet(false);
-            } else {
-                itemFrame->setHalfFillet(true);
-            }
-            currentItem++;
-        }
-    }
-
-    // 更新分割线
-    updateSeparators();
 }

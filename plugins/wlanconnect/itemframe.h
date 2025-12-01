@@ -21,11 +21,9 @@
 #define ITEMFRAME_H
 #include <QFrame>
 #include <QVBoxLayout>
-#include <QList>
 #include "deviceframe.h"
 #include "../component/AddBtn/addnetbtn.h"
 #include "wlanitem.h"
-#include "klineframe.h"
 
 class ItemFrame : public QFrame
 {
@@ -47,13 +45,7 @@ public:
     QString uuid = "";
     //新建无线连接
     AddNetBtn * addWlanWidget = nullptr;
-
-private:
-    QList<KHLineFrame*> m_separatorLines; // 存储分割线对象
-
-public:
     void filletStyleChange();
-    void updateSeparators();
 
 private slots:
     void onDrownLabelClicked();

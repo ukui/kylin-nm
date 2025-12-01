@@ -244,6 +244,18 @@ ListView {
             onClicked: {
                 mouse.accepted = false
 
+                if (mouse.button == Qt.RightButton && model.status !== 2) {
+                    if (!menuLoaded) {
+                        loadMenu()
+                    }
+                    if (menuLoader.item) {
+                        menuLoader.item.popup()
+                        wlanlistView.currentOpenMenu = menuLoader.item;
+                    }
+                    mouse.accepted = true
+                    return
+                }
+
                 if (model.status !== 2 ) {
                     console.log("model.security:", model.security, model.security.length)
                     if (listItem.height == wlanlistView.expandedItemHeight ||  model.Configured || model.security.includes("802.1X") || !model.security) {

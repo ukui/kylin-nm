@@ -1,3 +1,13 @@
+kylin-nm (4.20.0.0-ok0.11) nile-sp2; urgency=medium
+
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明：去掉dns高级设置包依赖导致编译不过的问题
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Fri, 05 Dec 2025 13:53:32 +0800
+
 kylin-nm (4.20.0.0-ok0.10) nile-sp2; urgency=medium
 
   * Bug号:无

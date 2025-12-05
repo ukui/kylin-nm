@@ -35,6 +35,9 @@
 const QString NotApConnection   = "0";
 const QString IsApConnection    = "1";
 
+const QString str0 = "0";
+const QString str1 = "1";
+
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
@@ -587,15 +590,33 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     }
 
     QStringList info;
-    info << item.m_NetSsid
-         << QString::number(item.m_signalStrength)
-         << item.m_secuType
-         << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
-         << QString::number(category)
-         << QString::number(item.m_isConfigured)
-         << QString::number(item.m_frequency)
-         << (item.m_isMix?IsApConnection : NotApConnection)
-            ;
+    if (item.m_isConfigured) {
+        info << item.m_NetSsid
+             << QString::number(item.m_signalStrength)
+             << item.m_secuType
+             << item.m_connectUuid
+             << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
+             << QString::number(category)
+             << QString::number(item.m_isConfigured)
+             << QString::number(item.m_frequency)
+             << (item.m_isMix?IsApConnection : NotApConnection)
+             <<  QString::number(item.m_autoconnect)
+                ;
+    } else {
+        info << item.m_NetSsid
+             << QString::number(item.m_signalStrength)
+             << item.m_secuType
+             //<< item.m_connectUuid
+             << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
+             << QString::number(category)
+             << QString::number(item.m_isConfigured)
+             << QString::number(item.m_frequency)
+             << (item.m_isMix?IsApConnection : NotApConnection)
+             <<  QString::number(item.m_autoconnect)
+                ;
+    }
+
+    qWarning() << Q_FUNC_INFO << __LINE__ << "DtTest:" << info;
 
     Q_EMIT wlanAdd(interface, info);
 
@@ -726,9 +747,34 @@ void WlanPage::onConnectionRemove(QString deviceName, QString ssid, QString path
 
 void WlanPage::onConnectionUpdate(QString deviceName, QString ssid)
 {
-    qDebug() << "onConnectionUpdate" << deviceName << ssid;
+    qDebug() << Q_FUNC_INFO << __LINE__ << deviceName << ssid;
     if (deviceName == m_currentDevice || deviceName.isEmpty()) {
         updateWlanListItem(ssid);
+    }
+
+
+    QListWidgetItem *p_listWidgetItem = nullptr;
+    WlanListItem *p_wlanItem = nullptr;
+
+    qDebug()<< LOG_FLAG << "security type is chenged";
+
+    if (m_wirelessNetItemMap.contains(ssid)) {
+        p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
+        p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+    } else if (m_activateConnectionItemMap.contains(ssid)) {
+        p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
+        p_wlanItem = (WlanListItem*)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
+    }
+
+    if (nullptr != p_wlanItem) {
+        QVariantMap value;
+        value.insert("Name",ssid);
+        value.insert("Uuid",p_wlanItem->getUuid());
+        value.insert("DeviceName",deviceName);
+        value.insert("autoConnect",p_wlanItem->getAutoConnect());
+
+        qDebug() << Q_FUNC_INFO << __LINE__ << "[DtTest===]emit sigNetworkPropChanged " << value;
+        Q_EMIT sigNetworkPropChanged(value);//只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
     }
 }
 
@@ -763,7 +809,7 @@ void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuT
         //value.insert("Configured",false);
         //value.insert("isMix",p_wlanItem->m_isMix);
         value.insert("DeviceName",devName);
-         qDebug() << LOG_FLAG << "emit sigNetworkPropChanged " << value;
+        qDebug() << LOG_FLAG << "emit sigNetworkPropChanged " << value;
         Q_EMIT sigNetworkPropChanged(value);//只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
 
     }
@@ -1530,6 +1576,7 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
                           << QString::number(data.m_isConfigured) //7
                           << QString::number(data.m_frequency) //8
                           << (data.m_isMix ? IsApConnection : NotApConnection) //9
+                          << (data.m_isConfigured ? (data.m_autoconnect ? str1 : str0) : str1) //10
                         );
 
             //
@@ -1539,6 +1586,7 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
     }
     //未连接
     Q_FOREACH (auto itemData, wlanList) {
+
         if (itemData.m_NetSsid == activeSsid) {
             continue;
         }
@@ -1547,14 +1595,17 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
         if (!m_showWifi6Plus && category == 2) {
             category = 1;
         }
+
         list.append(QStringList()<<itemData.m_NetSsid
                       << QString::number(itemData.m_signalStrength)
                       << itemData.m_secuType
+                      << itemData.m_connectUuid
                       << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
                       << QString::number(category)
                       << QString::number(itemData.m_isConfigured)
                       << QString::number(itemData.m_frequency)
                       << (itemData.m_isMix ? IsApConnection : NotApConnection)
+                      << (itemData.m_isConfigured ? (itemData.m_autoconnect ? str1 : str0) : str1)
                     );
     }
 }
@@ -1868,7 +1919,7 @@ void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
         return;
     }
 
-    for (const auto devname : m_devList) {
+    for (const auto &devname : m_devList) {
         KyWirelessNetItem wirelessNetItem;
         if (!m_netDeviceResource->getDeviceManaged(devname)) {
             continue;
@@ -1888,7 +1939,7 @@ void WlanPage::initWirelssDeviceConnectState()
         return;
     }
 
-    for (const auto devname : m_devList) {
+    for (const auto &devname : m_devList) {
         KyWirelessNetItem wirelessNetItem;
         if (!m_netDeviceResource->getDeviceManaged(devname)) {
             continue;
@@ -1909,7 +1960,7 @@ void WlanPage::getWirelssDeviceConnect(QMap<QString, QString> &map)
         return;
     }
 
-    for (const auto devname : m_devList) {
+    for (const auto &devname : m_devList) {
         KyWirelessNetItem wirelessNetItem;
         if (!m_netDeviceResource->getDeviceManaged(devname)) {
             continue;

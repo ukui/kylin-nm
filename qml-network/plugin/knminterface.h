@@ -120,6 +120,9 @@ public slots:
     void passwdAgentChangeSelectSsid();
 
     void wirelessDevConnListPropUpdate(QString devName,QString ssid);
+
+    void setNetworkConnectAutoConnectState(int type , QString  uuid , bool state);
+
 private slots:
 
     void slotRefreshTimeout();

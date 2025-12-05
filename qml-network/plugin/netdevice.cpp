@@ -206,6 +206,10 @@ void NetDevice::updateConnectionProp(QVariantMap parm)
                 conn.remove("State");
                 conn.insert("State", parm.value("State"));
             }
+            if(parm.contains("autoConnect")){
+                conn.remove("autoConnect");
+                conn.insert("autoConnect", parm.value("autoConnect"));
+            }
 
             m_connectionsList.insert(i, conn);
             break;

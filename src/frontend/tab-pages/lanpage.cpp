@@ -1646,7 +1646,7 @@ void LanPage::initLanDeviceConnectState()
         return;
     }
 
-    for (const auto devname : m_devList) {
+    for (const auto &devname : m_devList) {
         if (!m_deviceResource->getDeviceManaged(devname)) {
             continue;
         }

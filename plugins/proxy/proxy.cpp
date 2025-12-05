@@ -388,6 +388,7 @@ void Proxy::initUi(QWidget *widget)
     //应用代理模块
     m_appProxyLabel = new KLabel(widget);
     m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
+    m_appProxyLabel->setContentsMargins(16, 0, 0, 0);
     setAppProxyFrameUi(widget);
     setAppListFrameUi(widget);
 
@@ -448,19 +449,18 @@ void Proxy::initUi(QWidget *widget)
     AptLayout->addWidget(mAPTFrame_2);
 
     m_sysSpacerFrame = new QFrame(widget);
-    m_sysSpacerFrame->setFixedHeight(32);
+    m_sysSpacerFrame->setFixedHeight(24);
     m_appListSpacerFrame = new QFrame(widget);
     m_appListSpacerFrame->setFixedHeight(4);
     m_appSpacerFrame = new QFrame(widget);;
-    m_appSpacerFrame->setFixedHeight(32);;
+    m_appSpacerFrame->setFixedHeight(24);;
 
     mverticalLayout->addWidget(mTitleLabel);
     mverticalLayout->addWidget(mProxyFrame);
-
     mverticalLayout->addWidget(m_sysSpacerFrame);
     mverticalLayout->addWidget(m_appProxyLabel);
     mverticalLayout->addWidget(m_appProxyFrame);
-    mverticalLayout->addWidget(m_appListSpacerFrame);
+    //mverticalLayout->addWidget(m_appListSpacerFrame);
     mverticalLayout->addWidget(m_appListFrame);
     mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
@@ -1457,7 +1457,6 @@ void Proxy::setAppProxyFrameHidden(bool state)
     } else {
         m_appListFrame->setHidden(!m_appEnableBtn->isChecked());
     }
-    m_appListSpacerFrame->setHidden(state);
     m_appSpacerFrame->setHidden(state);
 }
 

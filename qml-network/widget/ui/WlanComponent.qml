@@ -277,6 +277,11 @@ ListView {
                         textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && model.security)
                         connectBtn.visible = !textEditLayout.visible
                     }
+		   //增加无密码或者802.1X网络左键点击后，直接触发连接
+                    if ((mouse.button == Qt.LeftButton) && (model.status === 4) && ((model.security.includes("802.1X") || !model.security)) ) {
+
+                        KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                    }
                 } else if ((model.status === 2) && (mouse.button == Qt.LeftButton) ) {
                     console.log("onClicked return")
                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
@@ -331,10 +336,37 @@ ListView {
                             text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
                             onTriggered: {
                                 console.log("connect/disconnect network")
+
                                 if (model.status === 2) {
                                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                                 } else if (model.status === 4) {
-                                    KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                                    // 对于需要密码但未配置的网络，展开输入框
+                                    if (!model.Configured && model.security && !model.security.includes("802.1X")) {
+                                        // 展开项目显示密码输入区域
+                                        listItem.height = wlanlistView.expandedItemHeight
+
+                                        // 动态加载textEdit和pwdConnectBtn
+                                        if (!textEditLoaded) {
+                                            loadTextEdit()
+                                            loadPwdConnectBtn()
+                                        }
+                                        textEditLayout.visible = true
+                                        connectBtn.visible = false
+
+                                        // 显示自动连接复选框
+                                        if (!autoConnectCheckBoxLoaded) {
+                                            loadAutoConnectCheckBox()
+                                        }
+                                        autoConnectCheckBoxLoader.item.visible = true
+
+                                        // 更新显示详情索引
+                                        updateShowDetailIndex(index)
+                                        updateItemPos()
+
+                                    } else {
+                                        /* 对于已配置或开放网络，直接连接 */
+                                        KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                                    }
                                 }
                             }
                         }
@@ -549,7 +581,7 @@ ListView {
                                 visible: false
                                 Layout.topMargin: 0
                                 text: qsTr("AutoConnect")
-                                checked: true
+                                checked: model.Configured ? model.autoConnect : true
 
                                 // 使用TextMetrics来准确测量文本宽度
                                 TextMetrics {
@@ -575,6 +607,22 @@ ListView {
                                     if (visible) {
                                         updateShowDetailIndex(index)
                                         updateItemPos()
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: autoConnectCheckBoxMouseAreaHandler
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+
+                                    onClicked: {
+                                        autoConnectCheckBox.checked = !autoConnectCheckBox.checked
+                                        console.log("Dttest autoConnectCheckBoxLoader onClicked :", model.ssid , model.uuid , model.Configured ,autoConnectCheckBoxLoader.item.checkState)
+
+                                        model.autoConnect = autoConnectCheckBox.checked;
+                                        console.log("Dttest autoConnectCheckBoxLoader onClicked :", model.autoConnect)
+
+                                        KInterface.setNetworkConnectAutoConnectState(1, model.uuid, autoConnectCheckBoxLoader.item.checkState);
                                     }
                                 }
                             }

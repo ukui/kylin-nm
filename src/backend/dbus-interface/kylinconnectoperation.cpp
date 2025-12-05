@@ -201,7 +201,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
              << "specific parameter"<< specificObject;
 
     //set autoconnect
-    //if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
+    if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
     {
         NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
 
@@ -217,8 +217,8 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
         }
     }
 
-/*v11 network-manager 不允许在连接中途修改配置 会导致连接失败，增加延时确保激活连接前配置已修改完毕*/
- QTimer::singleShot(500,this,[this,connectPath,connectPtr, deviceIdentifier, specificObject,connectName, deviceName](){
+    /*v11 network-manager 不允许在连接中途修改配置 会导致连接失败，增加延时确保激活连接前配置已修改完毕*/
+    QTimer::singleShot(500,this,[this,connectPath,connectPtr, deviceIdentifier, specificObject,connectName, deviceName](){
         QDBusPendingCallWatcher * watcher;
         watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
         connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {

@@ -44,6 +44,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_device = "";
     m_channel = 0;
     m_isMix = false;
+    m_autoconnect = true;
 
     init(net);
 }
@@ -101,6 +102,8 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     NetworkManager::Device::Ptr devicePtr = nullptr;
     devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);
     if (!devicePtr.isNull()) {
+        m_deviceName = devicePtr->interfaceName();
+
         QString devUni = devicePtr->uni();
         NetworkManager::WirelessNetwork::Ptr wirelessPtr = nullptr;
         wirelessPtr = m_networkResourceInstance->findWifiNetwork(m_NetSsid, devUni);
@@ -299,7 +302,8 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
                 item->m_connName    = conn->name();
                 item->m_connDbusPath = conn->path();
                 item->m_isConfigured = true;
-                //qDebug()<<"mqtest updatewirelessItemConnectInfo come in update"<<item->m_connName<<item->m_connectUuid;//mqtest
+                item->m_autoconnect = settings->autoconnect();
+                //qWarning()<< Q_FUNC_INFO << __LINE__ <<"DtTest autoconnect:"<< item->m_autoconnect;//mqtest
                 return;
             }
 
@@ -308,32 +312,41 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
                 hotspotItem.m_connName    = conn->name();
                 hotspotItem.m_connDbusPath = conn->path();
                 hotspotItem.m_isConfigured = true;
+                hotspotItem.m_autoconnect = false;
+
                 findHotspot = true;
             } else {
                 connectItem.m_connectUuid = settings->uuid();
                 connectItem.m_connName    = conn->name();
                 connectItem.m_connDbusPath = conn->path();
                 connectItem.m_isConfigured = true;
+                connectItem.m_autoconnect = settings->autoconnect();
+
                 findInfrastructure = true;
             }
         }
     }
-    //qDebug()<<"mqtest updatewirelessItemConnectInfo findInfrastructure"<<findInfrastructure<<findHotspot;//mqtest
+
+    qDebug()<< Q_FUNC_INFO << __LINE__ << "mqtest updatewirelessItemConnectInfo findInfrastructure"<<findInfrastructure<<findHotspot;//mqtest
+
     if (findInfrastructure) {
         item->m_connectUuid = connectItem.m_connectUuid;
         item->m_connName = connectItem.m_connName;
         item->m_connDbusPath = connectItem.m_connDbusPath;
         item->m_isConfigured = connectItem.m_isConfigured;
+        item->m_autoconnect = connectItem.m_autoconnect;
     } else if (findHotspot) {
         item->m_connectUuid = hotspotItem.m_connectUuid;
         item->m_connName = hotspotItem.m_connName;
         item->m_connDbusPath = hotspotItem.m_connDbusPath;
         item->m_isConfigured = hotspotItem.m_isConfigured;
+        item->m_autoconnect = hotspotItem.m_autoconnect;
     } else {
         item->m_connectUuid.clear();
         item->m_connName.clear();
         item->m_connDbusPath.clear();
         item->m_isConfigured = false;
+        item->m_autoconnect = true;
     }
 }
 
@@ -351,6 +364,8 @@ int updateKylinWirelessItemInfo(KyWirelessNetItem& item)
         if (settings->uuid() == item.m_connectUuid) {
                 item.m_connName    = conn->name();
                 item.m_connDbusPath = conn->path();
+                item.m_autoconnect = settings->autoconnect();
+
                 NetworkManager::WirelessSetting::Ptr wifi_sett
                     = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
                 QByteArray rawSsid = wifi_sett->ssid();

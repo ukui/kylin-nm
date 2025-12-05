@@ -526,62 +526,61 @@
 <context>
     <name>DnsSettingWidget</name>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="53"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
         <source>DNS Server Advanced Settings</source>
         <translation>การตั้งค่าเซิร์ฟเวอร์ดีเอ็นเอสขั้นสูง</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="56"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
         <source>Tactic</source>
         <translation>กลยุทธ์</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="59"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
         <source>Timeout</source>
         <translation>หมดเวลา</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="62"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
         <source>Retry Count</source>
         <translation>จำนวนครั้งที่ลองใหม่</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
         <source>order</source>
         <translation>ลำดับ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="66"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
         <source>rotate</source>
         <translation>หมุนเวียน</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="67"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
         <source>concurrency</source>
         <translation>พร้อมกัน</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="72"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source> s</source>
         <translation> วินาที</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="78"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
         <source> times</source>
         <translation> ครั้ง</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="89"/>
         <source>Close</source>
-        <translation>ปิด</translation>
+        <translation type="vanished">ปิด</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="92"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
         <source>Cancel</source>
         <translation>ยกเลิก</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="95"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
         <source>Confirm</source>
         <translation>ยืนยัน</translation>
     </message>
@@ -597,27 +596,27 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="117"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
         <source>Wi-Fi network requires authentication</source>
         <translation>เครือข่าย Wi-Fi ต้องการการรับรองความถูกต้อง</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="122"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
         <source>Access to Wi-Fi network &quot;</source>
         <translation>การเข้าถึงเครือข่าย Wi-Fi &quot;</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="124"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
         <source>&quot; requires a password or encryption key.</source>
         <translation>ต้องการรหัสผ่านหรือคีย์การเข้ารหัส &quot;</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="155"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
         <source>Cancel</source>
         <translation>ยกเลิก</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="156"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
         <source>Connect</source>
         <translation>เชื่อมต่อ</translation>
     </message>
@@ -896,47 +895,47 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1234"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1302"/>
         <source>No ethernet device avaliable</source>
         <translation>ไม่มีอุปกรณ์อีเธอร์เน็ตพร้อมใช้งาน</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="764"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="807"/>
         <source>LAN</source>
         <translation>แลน</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="84"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
         <source>conflict, unable to connect to the network normally!</source>
         <translation>ชนกัน ไม่สามารถเชื่อมต่อกับเครือข่ายได้ตามปกติ!</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="418"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="437"/>
         <source>No wired network card detected</source>
         <translation>ไม่พบการ์ดเครือข่ายแบบใช้สาย</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="766"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="809"/>
         <source>Activated LAN</source>
         <translation>แลนที่เปิดใช้งานแล้ว</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="776"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="819"/>
         <source>Inactivated LAN</source>
         <translation>แลนที่ยังไม่ได้เปิดใช้งาน</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1483"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1562"/>
         <source>Connected, restricting access</source>
         <translation>เชื่อมต่อแล้ว แต่การเข้าถึงถูกจำกัด</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1493"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1572"/>
         <source>No internet access. Please click Network Check to specific reasons.</source>
         <translation>ไม่สามารถเข้าถึงอินเทอร์เน็ตได้ กรุณาคลิกการตรวจสอบเครือข่ายเพื่อดูสาเหตุเฉพาะ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1501"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1582"/>
         <source>Network Check</source>
         <translation>การตรวจสอบเครือข่าย</translation>
     </message>
@@ -945,7 +944,7 @@
         <translation type="vanished">有线网络已断开</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1315"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1383"/>
         <source>Wired Device not carried</source>
         <translation>ไม่มีอุปกรณ์ใช้สาย</translation>
     </message>
@@ -954,18 +953,18 @@
         <translation type="vanished">有线网络已连接</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1425"/>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1428"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1504"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1507"/>
         <source>Connected: </source>
         <translation>เชื่อมต่อแล้ว: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1415"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1494"/>
         <source>Not Connected</source>
         <translation>ไม่ได้เชื่อมต่อ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1425"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1504"/>
         <source>(Limited)</source>
         <translation>(ถูกจำกัด)</translation>
     </message>
@@ -973,12 +972,12 @@
 <context>
     <name>ListItem</name>
     <message>
-        <location filename="../frontend/list-items/listitem.cpp" line="181"/>
+        <location filename="../frontend/list-items/listitem.cpp" line="183"/>
         <source>Kylin NM</source>
         <translation>ไคลิน เอ็นเอ็ม</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/listitem.cpp" line="184"/>
+        <location filename="../frontend/list-items/listitem.cpp" line="186"/>
         <source>kylin network applet desktop message</source>
         <translation>ข้อความเดสก์ท็อปแอปเพล็ตเครือข่ายไคลิน</translation>
     </message>
@@ -986,19 +985,19 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="253"/>
-        <location filename="../frontend/mainwindow.cpp" line="284"/>
+        <location filename="../frontend/mainwindow.cpp" line="269"/>
+        <location filename="../frontend/mainwindow.cpp" line="300"/>
         <source>kylin-nm</source>
         <translation>ไคลิน-เอ็นเอ็ม</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="447"/>
+        <location filename="../frontend/mainwindow.cpp" line="463"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
         <translation>แลน</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="449"/>
+        <location filename="../frontend/mainwindow.cpp" line="465"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
         <translation>ดับเบิลยูแลน</translation>
@@ -1008,29 +1007,39 @@
         <translation type="vanished">打开网络工具</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="478"/>
+        <location filename="../frontend/mainwindow.cpp" line="494"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
         <translation>การตั้งค่า</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="479"/>
+        <location filename="../frontend/mainwindow.cpp" line="495"/>
         <source>Network Connectivity Detection</source>
         <translation>การตรวจจับการเชื่อมต่อเครือข่าย</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="817"/>
-        <location filename="../frontend/mainwindow.cpp" line="1236"/>
+        <location filename="../frontend/mainwindow.cpp" line="836"/>
+        <location filename="../frontend/mainwindow.cpp" line="1127"/>
         <source>Network tool</source>
         <translation>เครือข่ายเครื่องมือ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="831"/>
+        <location filename="../frontend/mainwindow.cpp" line="850"/>
         <source>Network Card</source>
         <translation>การ์ดเครือข่าย</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="1219"/>
+        <location filename="../frontend/mainwindow.cpp" line="942"/>
+        <source>Not Connected</source>
+        <translation type="unfinished">ไม่ได้เชื่อมต่อ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="942"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="1110"/>
         <source>Not connected to the network</source>
         <translation>ไม่ได้เชื่อมต่อกับเครือข่าย</translation>
     </message>
@@ -1038,17 +1047,17 @@
 <context>
     <name>MultipleDnsWidget</name>
     <message>
-        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="57"/>
+        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
         <source>DNS server(Drag to sort)</source>
         <translation>เซิร์ฟเวอร์ DNS (ลากเพื่อเรียงลำดับ)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="64"/>
+        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
         <source>Click &quot;+&quot; to configure DNS</source>
         <translation>คลิก &quot;+&quot; เพื่อกำหนดค่า DNS</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="102"/>
+        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
         <source>Settings</source>
         <translation>การตั้งค่า</translation>
     </message>
@@ -1056,42 +1065,42 @@
 <context>
     <name>NetDetail</name>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="130"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
         <source>Kylin NM</source>
         <translation>ไคลิน เอ็นเอ็ม</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="133"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
         <source>kylin network desktop message</source>
         <translation>ข้อความเดสก์ท็อปเครือข่ายไคลิน</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="409"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
         <translation>รายละเอียด</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="410"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
         <source>IPv4</source>
         <translation>Ipv4</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
         <source>IPv6</source>
         <translation>Ipv6</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="416"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
         <source>Security</source>
         <translation>ความปลอดภัย</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="969"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="973"/>
         <source>start check IPv4 address conflict</source>
         <translation>เริ่มตรวจสอบการชนกันของที่อยู่ IPv4</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="986"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="990"/>
         <source>start check IPv6 address conflict</source>
         <translation>เริ่มตรวจสอบการชนกันของที่อยู่</translation>
     </message>
@@ -1100,51 +1109,51 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="425"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
         <source>Config</source>
         <translation>กำหนดค่า</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="434"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
         <source>Confirm</source>
         <translation>ยืนยัน</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="436"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
         <source>Cancel</source>
         <translation>ยกเลิก</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="501"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
         <source>Forget this network</source>
         <translation>ลืมเครือข่ายนี้ไป</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="503"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
         <source>Delete this network</source>
         <translation>ลบเครือข่ายนี้</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="482"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
         <source>Add LAN Connect</source>
         <translation>เพิ่มการเชื่อมต่อ LAN</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="487"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
         <source>Connect Hidden WLAN</source>
         <translation>เชื่อมต่อ WLAN ที่ซ่อนอยู่</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="681"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="693"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1235"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="685"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="697"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1239"/>
         <source>None</source>
         <translation>ไม่มี</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="813"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="814"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="818"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="819"/>
         <source>Auto</source>
         <translation>อัตโนมัติ</translation>
     </message>
@@ -1165,22 +1174,22 @@
         <translation type="vanished">ipv6地址冲突！</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1231"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1235"/>
         <source>this wifi no support enterprise type</source>
         <translation>นี้ไม่รองรับประเภทองค์กร</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1236"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1240"/>
         <source>this wifi no support None type</source>
         <translation>WiFi นี้ไม่รองรับประเภท None</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1241"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1245"/>
         <source>this wifi no support WPA2 type</source>
         <translation>wifi นี้ไม่รองรับประเภท WPA2</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1244"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1248"/>
         <source>this wifi no support WPA3 type</source>
         <translation>WiFi นี้ไม่รองรับประเภท WPA3</translation>
     </message>
@@ -1570,17 +1579,17 @@
         <translation>การตั้งค่า</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="421"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="423"/>
         <source>Kylin NM</source>
         <translation>ไคลิน เอ็นเอ็ม</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="424"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="426"/>
         <source>kylin network applet desktop message</source>
         <translation>ข้อความเดสก์ท็อปแอปเพล็ตเครือข่ายไคลิน</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="618"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="620"/>
         <source>connected</source>
         <translation>เชื่อมต่อแล้ว</translation>
     </message>
@@ -1658,9 +1667,9 @@
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="195"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="640"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="658"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="667"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="664"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
         <source>Disconnect</source>
         <translation>ตัดการเชื่อมต่อ</translation>
     </message>
@@ -1668,20 +1677,20 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="199"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="307"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="649"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="665"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
         <source>Connect</source>
         <translation>เชื่อมต่อ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="671"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
         <source>Forget</source>
         <translation>ลืม</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="676"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
         <source>Property</source>
         <translation>คุณสมบัติ</translation>
     </message>
@@ -1706,23 +1715,23 @@
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="141"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="144"/>
         <source>WLAN</source>
         <translation>ดับเบิลยูแลน</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="117"/>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="568"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="120"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="574"/>
         <source>No wireless network card detected</source>
         <translation>ไม่พบการ์ดเครือข่ายไร้สาย</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="143"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="146"/>
         <source>Activated WLAN</source>
         <translation>ดับเบิลยูแลนที่เปิดใช้งานแล้ว</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="154"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="157"/>
         <source>Other WLAN</source>
         <translation>ดับเบิลยูแลนอื่น ๆ</translation>
     </message>
@@ -1731,37 +1740,37 @@
         <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1037"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1132"/>
         <source>WLAN Connected Successfully</source>
         <translation>เชื่อมต่อ ดับเบิลยูแลน สำเร็จแล้ว</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1033"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1128"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>ตัดการเชื่อมต่อ ดับเบิลยูแลน สำเร็จแล้ว</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="930"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1025"/>
         <source>The routing end rejects the access of the device</source>
         <translation>ฝั่งเราเตอร์ปฏิเสธการเข้าถึงของอุปกรณ์</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="932"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1027"/>
         <source>The network access at the routing end is full</source>
         <translation>การเข้าถึงเครือข่ายที่ฝั่งเราเตอร์เต็มแล้ว</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1323"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1418"/>
         <source>usd set offline mode failed: </source>
         <translation>ตั้งค่าโหมดออฟไลน์ล้มเหลว: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1836"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1928"/>
         <source>Connected: </source>
         <translation>เชื่อมต่อแล้ว: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1838"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1930"/>
         <source>Not Connected</source>
         <translation>ไม่ได้เชื่อมต่อ</translation>
     </message>

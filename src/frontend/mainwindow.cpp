@@ -494,7 +494,7 @@ void MainWindow::initTrayIcon()
     m_showSettingsAction = new QAction(tr("Settings"),this);
     m_showConnectivityPageAction = new QAction(tr("Network Connectivity Detection"), this);
 
-    m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
+    m_showSettingsAction->setIcon(QIcon::fromTheme("system-settings-symbolic", QIcon(":/res/x/setup.png")) );
     m_showConnectivityPageAction->setIcon(QIcon::fromTheme("gnome-netstatus-txrx"));
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);

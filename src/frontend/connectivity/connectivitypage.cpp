@@ -38,11 +38,13 @@
 #define  BOTTOM_LAYOUT_MARGINS  24, 16, 24, 24
 #define  LAYOUT_SPACING  16
 
+#define PageWidth   400
+
 ConnectivityPage::ConnectivityPage(QString uri, QWidget *parent)
     :m_uri(uri), QDialog(parent)
 {
     this->setAttribute(Qt::WA_DeleteOnClose, true);
-    this->setFixedSize(380, 369);
+    this->setFixedSize(PageWidth, 369);
     this->setWindowTitle(tr("Network connectivity detection"));
     setAttribute(Qt::WA_DeleteOnClose, false);
     KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
@@ -63,7 +65,7 @@ ConnectivityPage::ConnectivityPage(QString uri, QWidget *parent)
 void ConnectivityPage::initUi()
 {
     m_scrollArea = new QScrollArea(this);
-    m_scrollArea->setFixedWidth(380);
+    m_scrollArea->setFixedWidth(PageWidth);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollArea->setContentsMargins(0,0,0,0);
@@ -110,7 +112,7 @@ void ConnectivityPage::initUi()
     m_warningWidget->adjustSize();
     m_editWidget = new QWidget(this);
     m_centerWidget = new QWidget(this);
-    m_centerWidget->setFixedWidth(380);
+    m_centerWidget->setFixedWidth(PageWidth);
     m_bottomWidget = new QWidget(this);
 
     QHBoxLayout* warningLayout = new QHBoxLayout(m_warningWidget);

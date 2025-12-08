@@ -505,6 +505,13 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
 void WlanConnect::onDeviceStatusChanged()
 {
     qDebug()<<"[WlanConnect]onDeviceStatusChanged";
+
+    // 如果无线开关关闭，则忽略设备状态变化
+    if (!getSwitchBtnState()) {
+        qDebug() << "[WlanConnect]Wireless switch is off, ignore device status change";
+        return;
+    }
+
     QEventLoop eventloop;
     QTimer::singleShot(300, &eventloop, SLOT(quit()));
     eventloop.exec();
@@ -538,6 +545,10 @@ void WlanConnect::onDeviceStatusChanged()
 
 
     for (int i = 0; i < addList.size(); ++i) {
+        // 再次检查开关状态，防止在添加过程中开关被关闭
+        if (!getSwitchBtnState()) {
+            break;
+        }
         addDeviceFrame(addList.at(i));
         initNetListFromDevice(addList.at(i));
     }

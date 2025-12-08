@@ -10,8 +10,12 @@
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+        <source>Add WiredNetork</source>
+        <translation>เพิ่มเครือข่ายแบบใช้สาย</translation>
+    </message>
+    <message>
         <source>Add WiredNetwork</source>
-        <translation>เพิ่มเครือข่ายแบบมีสาย</translation>
+        <translation type="vanished">เพิ่มเครือข่ายแบบมีสาย</translation>
     </message>
 </context>
 <context>
@@ -23,9 +27,9 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
-        <location filename="../wlanconnect.cpp" line="141"/>
-        <location filename="../wlanconnect.cpp" line="215"/>
-        <location filename="../wlanconnect.cpp" line="217"/>
+        <location filename="../wlanconnect.cpp" line="154"/>
+        <location filename="../wlanconnect.cpp" line="283"/>
+        <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
         <translation>WLAN</translation>
         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
@@ -37,7 +41,7 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="214"/>
+        <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
         <translation>การตั้งค่าชั้นสูง</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
@@ -51,36 +55,36 @@
         <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="124"/>
+        <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
         <translation>การตั้งค่า</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="127"/>
+        <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
         <translation>การตั้งค่าการแจ้งเตือนเดสก์ท็อป</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="212"/>
+        <location filename="../wlanconnect.cpp" line="278"/>
         <source>Add Others</source>
         <translation>เพิ่มเครือข่ายอื่น</translation>
         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="232"/>
-        <location filename="../wlanconnect.cpp" line="568"/>
+        <location filename="../wlanconnect.cpp" line="301"/>
+        <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
         <translation>ไม่พบการ์ดเครือข่ายแลนไร้สาย</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="364"/>
-        <location filename="../wlanconnect.cpp" line="1057"/>
-        <location filename="../wlanconnect.cpp" line="1124"/>
+        <location filename="../wlanconnect.cpp" line="433"/>
+        <location filename="../wlanconnect.cpp" line="1137"/>
+        <location filename="../wlanconnect.cpp" line="1206"/>
         <source>connected</source>
         <translation>เชื่อมแล้ว</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="993"/>
+        <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
         <translation>การ์ด</translation>
     </message>

@@ -6,20 +6,20 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation>باشقانى قوشۇۇ</translation>
+        <translation>باشقالاردى قوشۇۇ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>سىمدۇۇ تور  قوشۇۇ</translation>
+        <translation>سىمدۇۇ تور   قوشۇۇ</translation>
     </message>
 </context>
 <context>
     <name>LanItem</name>
     <message>
-        <location filename="../lanitem.cpp" line="134"/>
+        <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلاندى، تور چەكلىمىگە ئۇچرايدۇ.</translation>
     </message>
 </context>
 <context>
@@ -27,20 +27,20 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمدۇۇ تور</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="225"/>
+        <location filename="../netconnect.cpp" line="229"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>اچۇۇ</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="222"/>
+        <location filename="../netconnect.cpp" line="224"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>جوعورۇ  تەڭشەكتەر</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -56,44 +56,44 @@
         <translation type="vanished">有线网络</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="71"/>
+        <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تەڭشەكتەر</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="74"/>
+        <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>شىرە  بەتى ۇچۇرۇ  تەڭشەگى</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="91"/>
-        <location filename="../netconnect.cpp" line="223"/>
-        <location filename="../netconnect.cpp" line="226"/>
+        <location filename="../netconnect.cpp" line="92"/>
+        <location filename="../netconnect.cpp" line="227"/>
+        <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمدۇۇ تور</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="341"/>
+        <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>未检测到有线设备</translation>
+        <translation>سىمدۇۇ جابدۇۇ ۇلانباعان</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="629"/>
-        <location filename="../netconnect.cpp" line="1113"/>
+        <location filename="../netconnect.cpp" line="635"/>
+        <location filename="../netconnect.cpp" line="1137"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>جالعانعان</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="631"/>
-        <location filename="../netconnect.cpp" line="935"/>
-        <location filename="../netconnect.cpp" line="1123"/>
+        <location filename="../netconnect.cpp" line="637"/>
+        <location filename="../netconnect.cpp" line="952"/>
+        <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ۇلانباعان</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="701"/>
+        <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>تور  كارتوچكاسى</translation>
     </message>
 </context>
 </TS>

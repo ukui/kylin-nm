@@ -62,4 +62,7 @@ TRANSLATIONS += \
         translations/vi.ts \
         translations/th.ts \
         translations/ms.ts \
-        translations/mn_MN.ts
+        translations/mn.ts \
+        translations/ug.ts \
+        translations/kk.ts \
+        translations/ky.ts \

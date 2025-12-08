@@ -72,7 +72,7 @@
     </message>
     <message>
         <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rangkaian terhad</translation>
     </message>
 </context>
 <context>

@@ -2,78 +2,88 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="th">
 <context>
+    <name>AddNetBtn</name>
+    <message>
+        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+        <source>Add Others</source>
+        <translation>เพิ่มเครื่อข่ายอื่น</translation>
+    </message>
+    <message>
+        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+        <source>Add WiredNetork</source>
+        <translation>เพิ่มเครือข่ายแบบใช้สาย</translation>
+    </message>
+</context>
+<context>
     <name>BlacklistItem</name>
     <message>
-        <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>เคลื่อนย้าย</translation>
+        <translation type="vanished">เคลื่อนย้าย</translation>
     </message>
 </context>
 <context>
     <name>BlacklistPage</name>
     <message>
-        <location filename="../blacklistpage.cpp" line="47"/>
         <source>Blacklist</source>
-        <translation>บัญชีดำ</translation>
+        <translation type="vanished">บัญชีดำ</translation>
     </message>
 </context>
 <context>
     <name>ConnectDevListItem</name>
     <message>
-        <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation>ลากเข้าไปในบัญชีดำ</translation>
+        <translation type="vanished">ลากเข้าไปในบัญชีดำ</translation>
     </message>
 </context>
 <context>
     <name>ConnectdevPage</name>
     <message>
-        <location filename="../connectdevpage.cpp" line="48"/>
         <source>Connect device</source>
-        <translation>เชื่อมต่ออุปกรณ์</translation>
+        <translation type="vanished">เชื่อมต่ออุปกรณ์</translation>
+    </message>
+</context>
+<context>
+    <name>LanItem</name>
+    <message>
+        <location filename="../lanitem.cpp" line="147"/>
+        <source>Connected, restricting access.</source>
+        <translation>เชื่อมต่อเครือข่าย จํากัด</translation>
     </message>
 </context>
 <context>
     <name>MobileHotspot</name>
     <message>
-        <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation>ฮอตสปอตมือถือ</translation>
+        <translation type="vanished">ฮอตสปอตมือถือ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="101"/>
         <source>Mobile Hotspot</source>
-        <translation>ฮอตสปอตมือถือ</translation>
+        <translation type="vanished">ฮอตสปอตมือถือ</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="103"/>
         <source>Open mobile hotspot</source>
-        <translation>เปิดฮอตสปอตมือถือ</translation>
+        <translation type="vanished">เปิดฮอตสปอตมือถือ</translation>
         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="105"/>
         <source>Wi-Fi Name</source>
-        <translation>ชื่อ Wi-Fi</translation>
+        <translation type="vanished">ชื่อ Wi-Fi</translation>
         <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="107"/>
         <source>Network Password</source>
-        <translation>รหัสผ่านเครือข่าย</translation>
+        <translation type="vanished">รหัสผ่านเครือข่าย</translation>
         <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="109"/>
         <source>Network Frequency band</source>
-        <translation>แถบความถี่เครือข่าย</translation>
+        <translation type="vanished">แถบความถี่เครือข่าย</translation>
         <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="111"/>
         <source>Shared NIC port</source>
-        <translation>พอร์ต NIC ที่แชร์</translation>
+        <translation type="vanished">พอร์ต NIC ที่แชร์</translation>
         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
     </message>
     <message>
@@ -92,18 +102,16 @@
         <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="157"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation>สวิตช์ไร้สายปิดหรือไม่มีอุปกรณ์ไร้สาย</translation>
+        <translation type="vanished">สวิตช์ไร้สายปิดหรือไม่มีอุปกรณ์ไร้สาย</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
         <translation type="vanished">开始关闭热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="178"/>
         <source>hotpots name or device is invalid</source>
-        <translation>ชื่อฮอตสปอตหรืออุปกรณ์ไม่ถูกต้อง</translation>
+        <translation type="vanished">ชื่อฮอตสปอตหรืออุปกรณ์ไม่ถูกต้อง</translation>
     </message>
     <message>
         <source>can not  create hotspot with password length less than eight!</source>
@@ -114,69 +122,56 @@
         <translation type="vanished">开始创建热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="628"/>
         <source>Contains at least 8 characters</source>
-        <translation>ต้องมีอย่างน้อย 8 ตัวอักษร</translation>
+        <translation type="vanished">ต้องมีอย่างน้อย 8 ตัวอักษร</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="232"/>
         <source>Hotspot</source>
-        <translation>ฮอตสปอต</translation>
+        <translation type="vanished">ฮอตสปอต</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="62"/>
         <source>Settings</source>
-        <translation>การตั้งค่า</translation>
+        <translation type="vanished">การตั้งค่า</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="65"/>
         <source>Settings desktop message</source>
-        <translation>การตั้งค่าข้อความบนเดสก์ท็อป</translation>
+        <translation type="vanished">การตั้งค่าข้อความบนเดสก์ท็อป</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="358"/>
         <source>use </source>
-        <translation>ใช้ </translation>
+        <translation type="vanished">ใช้ </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="359"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation> การแชร์เครือข่าย จะทำให้การเชื่อมต่อไร้สายในท้องถิ่นขัดข้อง</translation>
+        <translation type="vanished"> การแชร์เครือข่าย จะทำให้การเชื่อมต่อไร้สายในท้องถิ่นขัดข้อง</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="375"/>
-        <location filename="../mobilehotspotwidget.cpp" line="772"/>
         <source>hotspot already close</source>
-        <translation>ฮอตสปอตปิดแล้ว</translation>
+        <translation type="vanished">ฮอตสปอตปิดแล้ว</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="535"/>
         <source>Open mobile hotspot</source>
-        <translation>เปิดฮอตสปอตมือถือ</translation>
+        <translation type="vanished">เปิดฮอตสปอตมือถือ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="630"/>
         <source>Network Password</source>
-        <translation>รหัสผ่านเครือข่าย</translation>
+        <translation type="vanished">รหัสผ่านเครือข่าย</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="656"/>
         <source>Network Frequency band</source>
-        <translation>แถบความถี่เครือข่าย</translation>
+        <translation type="vanished">แถบความถี่เครือข่าย</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="680"/>
         <source>Shared NIC port</source>
-        <translation>พอร์ต NIC ที่แชร์</translation>
+        <translation type="vanished">พอร์ต NIC ที่แชร์</translation>
     </message>
     <message>
         <source>Open</source>
         <translation type="vanished">开启</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="595"/>
         <source>Wi-Fi Name</source>
-        <translation>ชื่อ Wi-Fi</translation>
+        <translation type="vanished">ชื่อ Wi-Fi</translation>
     </message>
     <message>
         <source>Password</source>
@@ -187,10 +182,70 @@
         <translation type="vanished">网络频带</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="803"/>
-        <location filename="../mobilehotspotwidget.cpp" line="811"/>
         <source>hotspot already open</source>
-        <translation>ฮอตสปอตเปิดแล้ว</translation>
+        <translation type="vanished">ฮอตสปอตเปิดแล้ว</translation>
+    </message>
+</context>
+<context>
+    <name>NetConnect</name>
+    <message>
+        <location filename="../netconnect.ui" line="50"/>
+        <source>Wired Network</source>
+        <translation>เครือข่ายแบบมีสาย</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.ui" line="112"/>
+        <location filename="../netconnect.cpp" line="229"/>
+        <source>open</source>
+        <translation>เปิด</translation>
+        <extra-contents_path>/netconnect/open</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../netconnect.ui" line="198"/>
+        <location filename="../netconnect.cpp" line="224"/>
+        <source>Advanced settings</source>
+        <translation>การตั้งค่าชั้นสูง</translation>
+        <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="72"/>
+        <source>Settings</source>
+        <translation>ตั้งค่า</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="75"/>
+        <source>Settings desktop message</source>
+        <translation>การตั้งค่าการแจ้งเตือนเดสก์ท็อป</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="92"/>
+        <location filename="../netconnect.cpp" line="227"/>
+        <location filename="../netconnect.cpp" line="230"/>
+        <source>LAN</source>
+        <translation>เครือข่ายแบบมีสาย</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="346"/>
+        <source>No ethernet device avaliable</source>
+        <translation>ไม่มีอุปกรณ์อีเธอร์เน็ตพร้อมใช้งาน</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="635"/>
+        <location filename="../netconnect.cpp" line="1137"/>
+        <source>connected</source>
+        <translation>เชื่อมแล้ว</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="637"/>
+        <location filename="../netconnect.cpp" line="952"/>
+        <location filename="../netconnect.cpp" line="1147"/>
+        <source>not connected</source>
+        <translation>ไม่ได้เชื่อมต่อ</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="714"/>
+        <source>card</source>
+        <translation>การ์ด</translation>
     </message>
 </context>
 </TS>

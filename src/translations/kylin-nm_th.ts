@@ -1031,12 +1031,12 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="942"/>
         <source>Not Connected</source>
-        <translation type="unfinished">ไม่ได้เชื่อมต่อ</translation>
+        <translation>ไม่ได้เชื่อมต่อ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="942"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>เชื่อมต่อแล้ว</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1110"/>

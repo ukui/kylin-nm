@@ -72,7 +72,7 @@
     </message>
     <message>
         <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
+        <translation>དྲ་བར་ཚོད་འཛིན་ཐེབས་པ་རེད།</translation>
     </message>
 </context>
 <context>

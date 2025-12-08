@@ -17,7 +17,7 @@
 <context>
     <name>ItemFrame</name>
     <message>
-        <location filename="../itemframe.cpp" line="38"/>
+        <location filename="../itemframe.cpp" line="40"/>
         <source>Add VPN</source>
         <translation>Añadir VPN</translation>
     </message>
@@ -26,7 +26,7 @@
     <name>Vpn</name>
     <message>
         <location filename="../vpn.ui" line="53"/>
-        <location filename="../vpn.cpp" line="68"/>
+        <location filename="../vpn.cpp" line="70"/>
         <source>VPN</source>
         <translation></translation>
     </message>
@@ -36,27 +36,27 @@
         <translation>importación</translation>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="157"/>
-        <location filename="../vpn.cpp" line="284"/>
+        <location filename="../vpn.cpp" line="159"/>
+        <location filename="../vpn.cpp" line="291"/>
         <source>Show on Taskbar</source>
         <translation>Mostrar en la barra de tareas</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="286"/>
+        <location filename="../vpn.cpp" line="293"/>
         <source>Add VPN</source>
         <translation>Añadir VPN</translation>
         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="372"/>
-        <location filename="../vpn.cpp" line="479"/>
+        <location filename="../vpn.cpp" line="374"/>
+        <location filename="../vpn.cpp" line="490"/>
         <source>connected</source>
         <translation>conexo</translation>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="374"/>
-        <location filename="../vpn.cpp" line="489"/>
+        <location filename="../vpn.cpp" line="376"/>
+        <location filename="../vpn.cpp" line="500"/>
         <source>not connected</source>
         <translation>no conectado</translation>
     </message>
@@ -64,19 +64,19 @@
 <context>
     <name>VpnItem</name>
     <message>
-        <location filename="../vpnitem.cpp" line="55"/>
+        <location filename="../vpnitem.cpp" line="60"/>
         <source>Delete</source>
         <translation>Borrar</translation>
     </message>
     <message>
-        <location filename="../vpnitem.cpp" line="107"/>
-        <location filename="../vpnitem.cpp" line="120"/>
+        <location filename="../vpnitem.cpp" line="117"/>
+        <location filename="../vpnitem.cpp" line="130"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
     <message>
-        <location filename="../vpnitem.cpp" line="109"/>
-        <location filename="../vpnitem.cpp" line="118"/>
+        <location filename="../vpnitem.cpp" line="119"/>
+        <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>

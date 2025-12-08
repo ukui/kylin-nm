@@ -72,7 +72,7 @@
     </message>
     <message>
         <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
+        <translation>تور چەكلىمىگە ئۇچرايدۇ</translation>
     </message>
 </context>
 <context>

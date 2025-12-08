@@ -168,7 +168,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
@@ -912,7 +912,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="437"/>
         <source>No wired network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>未检测到有线网卡</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="809"/>
@@ -1040,7 +1040,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="942"/>
         <source>Not Connected</source>
-        <translation type="unfinished">未连接</translation>
+        <translation>未连接</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1110"/>
@@ -1548,7 +1548,7 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1169"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1191"/>
         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1245"/>
@@ -1595,7 +1595,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="620"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>已连接</translation>
     </message>
 </context>
 <context>
@@ -1623,42 +1623,42 @@
     <message>
         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN认证</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
-        <translation type="unfinished"></translation>
+        <translation>请输入WLAN信息</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN ID：</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
         <source>WLAN Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN 名称:</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
-        <translation type="unfinished"></translation>
+        <translation>密码：</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>确认</translation>
     </message>
 </context>
 <context>
@@ -1766,7 +1766,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1418"/>
         <source>usd set offline mode failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>设置离线模式失败: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1928"/>
@@ -1843,17 +1843,17 @@
     <message>
         <location filename="../main.cpp" line="123"/>
         <source>kylinnm</source>
-        <translation type="unfinished"></translation>
+        <translation>网络工具</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="127"/>
         <source>show kylin-nm wifi page</source>
-        <translation type="unfinished"></translation>
+        <translation>显示无线页面</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
         <source>show kylin-nm lan page</source>
-        <translation type="unfinished"></translation>
+        <translation>显示有线页面</translation>
     </message>
 </context>
 </TS>

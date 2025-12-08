@@ -1031,12 +1031,12 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="942"/>
         <source>Not Connected</source>
-        <translation type="unfinished">ᠴᠦᠷᠬᠡᠯᠡᠬᠡ ᠥᠬᠡᠢ</translation>
+        <translation>ᠴᠦᠷᠬᠡᠯᠡᠬᠡ ᠥᠬᠡᠢ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="942"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠵᠠᠯᠭᠠᠪᠠ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1110"/>

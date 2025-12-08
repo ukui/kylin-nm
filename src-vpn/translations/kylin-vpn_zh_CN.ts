@@ -9,12 +9,12 @@
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="141"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="140"/>
         <source>Kylin VPN</source>
         <translation>VPN 工具</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="144"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="143"/>
         <source>kylin vpn applet desktop message</source>
         <translation>VPN 配置桌面提示</translation>
     </message>
@@ -748,19 +748,19 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>VpnListItem</name>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="61"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="146"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="161"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="148"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="159"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -768,12 +768,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="253"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="248"/>
         <source>VPN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="264"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="257"/>
         <source>VPN Settings</source>
         <translation>更多 VPN 设置</translation>
     </message>
@@ -832,7 +832,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>vpnObject</name>
     <message>
-        <location filename="../frontend/vpnobject.cpp" line="50"/>
+        <location filename="../frontend/vpnobject.cpp" line="57"/>
         <source>VPN Tool</source>
         <translation>VPN 工具</translation>
     </message>

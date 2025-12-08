@@ -72,7 +72,7 @@
     </message>
     <message>
         <source>(network restricted)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng lưới hạn chế</translation>
     </message>
 </context>
 <context>

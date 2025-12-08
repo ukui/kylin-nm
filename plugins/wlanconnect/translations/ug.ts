@@ -23,22 +23,21 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
-        <location filename="../wlanconnect.cpp" line="144"/>
-        <location filename="../wlanconnect.cpp" line="280"/>
+        <location filename="../wlanconnect.cpp" line="154"/>
         <location filename="../wlanconnect.cpp" line="283"/>
+        <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
         <translation>تار دائىرىلىك سىمسىز تور</translation>
+        <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
-        <location filename="../wlanconnect.cpp" line="282"/>
         <source>open</source>
         <translation>ئېچىش</translation>
-        <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="279"/>
+        <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
         <translation>يۇقىرى تەڭشەكلەر</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
@@ -52,29 +51,36 @@
         <translation type="vanished">كونترول قىلىش ئېكرانى ئۈستەل ئۈستىدە ئۇقتۇرۇش قىلىنىدۇ </translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="127"/>
+        <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
         <translation>تەڭشەكلەر</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="130"/>
+        <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
         <translation>ئۈستەل يۈزى ئۇچۇرى تەڭشىكى</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="298"/>
+        <location filename="../wlanconnect.cpp" line="278"/>
+        <source>Add Others</source>
+        <translation>باشقا تورغا قوشۇلماق</translation>
+        <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../wlanconnect.cpp" line="301"/>
+        <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
         <translation>سىمسىز تور كارتىسى بايقالمىدى</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="425"/>
-        <location filename="../wlanconnect.cpp" line="1104"/>
-        <location filename="../wlanconnect.cpp" line="1167"/>
+        <location filename="../wlanconnect.cpp" line="433"/>
+        <location filename="../wlanconnect.cpp" line="1137"/>
+        <location filename="../wlanconnect.cpp" line="1206"/>
         <source>connected</source>
         <translation>ئۇلانغان</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="1040"/>
+        <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
         <translation>تور كارتىسى</translation>
     </message>

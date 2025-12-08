@@ -5,15 +5,15 @@
     <name>DeviceComboBox</name>
     <message>
         <source>(Connected)</source>
-        <translation type="unfinished"></translation>
+        <translation>( ۇلاندى )</translation>
     </message>
     <message>
         <source>(Not Connected)</source>
-        <translation type="unfinished"></translation>
+        <translation>( ۇلانباعان )</translation>
     </message>
     <message>
         <source>Current Network Card</source>
-        <translation type="unfinished"></translation>
+        <translation>گەزەكتەكى  تور  كارتوچكاسى</translation>
     </message>
 </context>
 <context>
@@ -28,15 +28,15 @@
     </message>
     <message>
         <source>Not connected</source>
-        <translation>جالعاۋنبادٸ</translation>
+        <translation>ۇلانبادى</translation>
     </message>
     <message>
         <source>disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ۉزۉلۉپ اچۇۇ</translation>
     </message>
     <message>
         <source>connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ۇلانۇۇ</translation>
     </message>
     <message>
         <source>disconnect network</source>
@@ -56,7 +56,7 @@
     </message>
     <message>
         <source>Disconnect network</source>
-        <translation type="unfinished"></translation>
+        <translation>توردۇ ۉزۉپ اچۇۇ</translation>
     </message>
     <message>
         <source>Connect network</source>
@@ -64,11 +64,15 @@
     </message>
     <message>
         <source>Network property</source>
-        <translation type="unfinished"></translation>
+        <translation>تور  ەرەكچەلىگى</translation>
     </message>
     <message>
         <source>Delete this network</source>
         <translation>نۇ توردى ٴوشىرۋ</translation>
+    </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation>تور چەكلىمىگە ئۇچرايدۇ</translation>
     </message>
 </context>
 <context>
@@ -79,15 +83,15 @@
     </message>
     <message>
         <source>No wired network card was detected</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمدۇۇ تور  كارتاسىن  تەكشۈرمىگەن</translation>
     </message>
     <message>
         <source>Wireless network</source>
-        <translation type="unfinished"></translation>
+        <translation>سەمىز تور</translation>
     </message>
     <message>
         <source>More network Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>داعى ەلە كۅپ تور  قۇرۇۇ ، اچۇۇ ، باشتوو  جاسوو ،اتقارۇۇ</translation>
     </message>
 </context>
 <context>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>جالعانعان</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -106,19 +110,19 @@
     </message>
     <message>
         <source>disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ۉزۉلۉپ اچۇۇ</translation>
     </message>
     <message>
         <source>connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ۇلانۇۇ</translation>
     </message>
     <message>
         <source>AutoConnect</source>
-        <translation type="unfinished"></translation>
+        <translation>اپتوماتتىك ۇلوو</translation>
     </message>
     <message>
         <source>Disconnect network</source>
-        <translation type="unfinished"></translation>
+        <translation>توردۇ ۉزۉپ اچۇۇ</translation>
     </message>
     <message>
         <source>Connect network</source>
@@ -126,35 +130,15 @@
     </message>
     <message>
         <source>Network property</source>
-        <translation type="unfinished"></translation>
+        <translation>تور  ەرەكچەلىگى</translation>
     </message>
     <message>
         <source>Forget the network</source>
-        <translation type="unfinished"></translation>
+        <translation>بۇل توردۇ ۇنتۇپ قالۇۇ</translation>
     </message>
     <message>
         <source>Add Others...</source>
-        <translation>باسقا تورعا قوسىلۋ...</translation>
-    </message>
-    <message>
-        <source>Connected,network is very good</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network is good</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network is average</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network weak</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connected,network is weak</source>
-        <translation type="unfinished"></translation>
+        <translation>باشقا تورعو  قوشۇلۇۇ...</translation>
     </message>
 </context>
 </TS>

@@ -402,11 +402,12 @@ void KyWirelessConnectOperation::addFastConnect(const KyWirelessConnectSetting &
 
 void KyWirelessConnectOperation::setWirelessAutoConnect(const QString &uuid, bool bAutoConnect)
 {
-    NetworkManager::Connection::Ptr connectPtr =
-            NetworkManager::findConnectionByUuid(uuid);
+    qDebug() << Q_FUNC_INFO << __LINE__ << uuid << bAutoConnect;
+
+    NetworkManager::Connection::Ptr connectPtr = NetworkManager::findConnectionByUuid(uuid);
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + uuid;
-        qWarning()<<errorMessage;
+        qWarning() << Q_FUNC_INFO << __LINE__ << errorMessage;
         Q_EMIT updateConnectionError(errorMessage);
         return;
     }

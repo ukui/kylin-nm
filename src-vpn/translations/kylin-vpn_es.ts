@@ -9,12 +9,12 @@
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="141"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="140"/>
         <source>Kylin VPN</source>
         <translation>Kylin VPN</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="144"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="143"/>
         <source>kylin vpn applet desktop message</source>
         <translation>Mensaje de escritorio del applet de VPN de Kylin</translation>
     </message>
@@ -748,19 +748,19 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
 <context>
     <name>VpnListItem</name>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="61"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
         <source>Not connected</source>
         <translation>No conectado</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="146"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="161"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="148"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="159"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>
@@ -768,12 +768,12 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="253"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="248"/>
         <source>VPN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="264"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="257"/>
         <source>VPN Settings</source>
         <translation>Configuración de VPN</translation>
     </message>
@@ -832,7 +832,7 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
 <context>
     <name>vpnObject</name>
     <message>
-        <location filename="../frontend/vpnobject.cpp" line="50"/>
+        <location filename="../frontend/vpnobject.cpp" line="57"/>
         <source>VPN Tool</source>
         <translation>Herramienta VPN</translation>
     </message>

@@ -69,6 +69,8 @@ public:
     void getCableStateByDevice(const QString &dev);
 
     void registerInputPasswdAgent();
+
+    void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool state);
 //用于调用kylin-nm的dbus
 protected:
     QDBusPendingCallWatcher * asyncCall(const QString & methed, const QList<QVariant> & params);

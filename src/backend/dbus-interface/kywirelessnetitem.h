@@ -36,6 +36,10 @@ public:
         return m_device;
     }
 
+    QString getDeviceName() {
+        return m_deviceName;
+    }
+
 private:
     void init(NetworkManager::WirelessNetwork::Ptr net);
 
@@ -56,12 +60,15 @@ public:
     QString                                 m_connDbusPath;
     uint                                    m_channel;
 
+    bool                                    m_autoconnect;
+
     int getCategory(QString uni);
     void setKySecuType(QString strSecuType);
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     QString                                 m_device;
+    QString                                 m_deviceName;
 
 };
 

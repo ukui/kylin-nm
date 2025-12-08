@@ -566,3 +566,37 @@ void KnmInterface::wirelessDevConnListPropUpdate(QString devName,QString ssid)
     }
     emit updateWirelessDevConnList();
 }
+
+void KnmInterface::setNetworkConnectAutoConnectState(int type, QString uuid, bool state)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << type << uuid << state;
+
+    // 调用后端接口
+    KNMDC::getInstance()->setNetworkConnectionAutoConnectState(type, uuid, state);
+
+    // 更新 m_wirelessDevConnList
+    for(int j = 0; j < m_wirelessDevConnList.count(); j++) {
+        QVariantMap connMap = m_wirelessDevConnList.at(j).toMap();
+        if (connMap.value("Uuid").toString() == uuid) {
+            // 创建新的map并更新autoConnect值
+            QVariantMap newConnMap = connMap;
+            newConnMap["autoConnect"] = state;
+            qWarning() << Q_FUNC_INFO << __LINE__ << "DtTest ======:" << newConnMap;
+
+            // 替换列表中的项
+            m_wirelessDevConnList.replace(j, newConnMap);
+
+            // 更新模型
+            WirelessConnectionModel::ST_ConnectionInfo con;
+            con = mWirelessConnecModel.mapToConnectionInfo(newConnMap);
+            mWirelessConnecModel.replaceConnection(&con);
+
+            qDebug() << "Updated autoConnect for UUID:" << uuid << "to:" << state;
+            break;
+        }
+    }
+
+    // 发射信号通知UI更新
+    emit updateWirelessDevConnList();
+    emit wirelessConListChanged();
+}

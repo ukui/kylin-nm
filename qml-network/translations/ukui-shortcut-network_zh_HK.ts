@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>刪除此網路</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -138,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation>已連接，網路很好</translation>
+        <translation type="vanished">已連接，網路很好</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation>已連接，網路好</translation>
+        <translation type="vanished">已連接，網路好</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation>已連接，網路一般</translation>
+        <translation type="vanished">已連接，網路一般</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation>已連接，網路弱</translation>
+        <translation type="vanished">已連接，網路弱</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation>已連接，網路很弱</translation>
+        <translation type="vanished">已連接，網路很弱</translation>
     </message>
 </context>
 </TS>

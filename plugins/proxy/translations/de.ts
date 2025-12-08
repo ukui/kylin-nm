@@ -32,187 +32,188 @@
 <context>
     <name>Proxy</name>
     <message>
-        <location filename="../proxy.cpp" line="63"/>
+        <location filename="../proxy.cpp" line="71"/>
         <source>Proxy</source>
         <translation>Stellvertreter</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="201"/>
+        <location filename="../proxy.cpp" line="212"/>
         <source>Start using</source>
         <translation>Beginnen Sie mit der Verwendung</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="214"/>
+        <location filename="../proxy.cpp" line="226"/>
         <source>Proxy mode</source>
         <translation>Proxy-Modus</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="218"/>
+        <location filename="../proxy.cpp" line="231"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="221"/>
+        <location filename="../proxy.cpp" line="235"/>
         <source>Manual</source>
         <translation>Manuell</translation>
     </message>
     <message>
+        <location filename="../proxy.cpp" line="390"/>
         <source>Application Proxy</source>
-        <translation type="vanished">Anwendungs-Proxy</translation>
+        <translation>Anwendungs-Proxy</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="459"/>
+        <location filename="../proxy.cpp" line="477"/>
         <source>System Proxy</source>
         <translation>System-Proxy</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="461"/>
+        <location filename="../proxy.cpp" line="479"/>
         <source>Auto url</source>
         <translation>Automatische URL</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="463"/>
+        <location filename="../proxy.cpp" line="481"/>
         <source>Http Proxy</source>
         <translation>HTTP-Proxy</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="465"/>
+        <location filename="../proxy.cpp" line="483"/>
         <source>Https Proxy</source>
         <translation>HTTPS-Proxy</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="467"/>
+        <location filename="../proxy.cpp" line="485"/>
         <source>Ftp Proxy</source>
         <translation>FTP-Proxy</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="469"/>
+        <location filename="../proxy.cpp" line="487"/>
         <source>Socks Proxy</source>
         <translation>Socken-Proxy</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="470"/>
-        <location filename="../proxy.cpp" line="471"/>
-        <location filename="../proxy.cpp" line="472"/>
-        <location filename="../proxy.cpp" line="473"/>
-        <location filename="../proxy.cpp" line="1122"/>
+        <location filename="../proxy.cpp" line="488"/>
+        <location filename="../proxy.cpp" line="489"/>
+        <location filename="../proxy.cpp" line="490"/>
+        <location filename="../proxy.cpp" line="491"/>
+        <location filename="../proxy.cpp" line="1248"/>
         <source>Port</source>
         <translation>Hafen</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="474"/>
+        <location filename="../proxy.cpp" line="492"/>
         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
         <translation>Liste der ignorierten Hosts. Mehr als ein Eintrag, bitte mit englischem Semikolon trennen (;)</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="477"/>
+        <location filename="../proxy.cpp" line="495"/>
         <source>App Proxy</source>
         <translation>App-Proxy</translation>
         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="480"/>
+        <location filename="../proxy.cpp" line="498"/>
         <source>APT Proxy</source>
         <translation>APT-Proxy</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="481"/>
-        <location filename="../proxy.cpp" line="1059"/>
+        <location filename="../proxy.cpp" line="499"/>
+        <location filename="../proxy.cpp" line="1185"/>
         <source>Open</source>
         <translation>Offen</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="482"/>
+        <location filename="../proxy.cpp" line="500"/>
         <source>Server Address : </source>
         <translation>Server-Adresse : </translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="483"/>
+        <location filename="../proxy.cpp" line="501"/>
         <source>Port : </source>
         <translation>Hafen: </translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="484"/>
+        <location filename="../proxy.cpp" line="502"/>
         <source>Edit</source>
         <translation>Redigieren</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="586"/>
+        <location filename="../proxy.cpp" line="657"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
         <translation>Der APT-Proxy wurde deaktiviert und muss neu gestartet werden, um wirksam zu werden</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="587"/>
-        <location filename="../proxy.cpp" line="824"/>
+        <location filename="../proxy.cpp" line="658"/>
+        <location filename="../proxy.cpp" line="946"/>
         <source>Reboot Later</source>
         <translation>Später neu starten</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="588"/>
-        <location filename="../proxy.cpp" line="825"/>
+        <location filename="../proxy.cpp" line="659"/>
+        <location filename="../proxy.cpp" line="947"/>
         <source>Reboot Now</source>
         <translation>Jetzt neu starten</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="823"/>
+        <location filename="../proxy.cpp" line="945"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
         <translation>Das System muss neu gestartet werden, um den APT-Proxy zu setzen, ob ein Neustart durchgeführt werden soll</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1071"/>
+        <location filename="../proxy.cpp" line="1198"/>
         <source>Proxy type</source>
         <translation>Proxy-Typ</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1088"/>
+        <location filename="../proxy.cpp" line="1215"/>
         <source>IP address</source>
         <translation>IP-Adresse</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1094"/>
-        <location filename="../proxy.cpp" line="1125"/>
+        <location filename="../proxy.cpp" line="1221"/>
+        <location filename="../proxy.cpp" line="1251"/>
         <source>Required</source>
         <translation>Erforderlich</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1115"/>
+        <location filename="../proxy.cpp" line="1241"/>
         <source>Invalid IP Address</source>
         <translation>Ungültige IP-Adresse</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1136"/>
+        <location filename="../proxy.cpp" line="1262"/>
         <source>Username</source>
         <translation>Nutzername</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1139"/>
-        <location filename="../proxy.cpp" line="1153"/>
+        <location filename="../proxy.cpp" line="1265"/>
+        <location filename="../proxy.cpp" line="1279"/>
         <source>Optional</source>
         <translation>Wahlfrei</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1149"/>
+        <location filename="../proxy.cpp" line="1275"/>
         <source>Password</source>
         <translation>Passwort</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1172"/>
+        <location filename="../proxy.cpp" line="1298"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1173"/>
+        <location filename="../proxy.cpp" line="1299"/>
         <source>Save</source>
         <translation>Retten</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1245"/>
+        <location filename="../proxy.cpp" line="1371"/>
         <source>The following applications are allowed to use this configuration:</source>
         <translation>Die folgenden Anwendungen dürfen diese Konfiguration verwenden:</translation>
     </message>

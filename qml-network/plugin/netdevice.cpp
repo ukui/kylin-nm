@@ -83,6 +83,8 @@ QMap<QString, QVariant> NetDevice::updateConnection(QString uuid, int status)
     QMap<QString, QVariant> conn;
     while (i < m_connectionsList.count()) {
         QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (!valueMap.contains("Uuid"))
+            continue;
         if (valueMap.value("Uuid").toString() == uuid) {
             conn = m_connectionsList.takeAt(i).toMap();
             conn.remove("State");
@@ -203,6 +205,10 @@ void NetDevice::updateConnectionProp(QVariantMap parm)
             if(parm.contains("State")){
                 conn.remove("State");
                 conn.insert("State", parm.value("State"));
+            }
+            if(parm.contains("autoConnect")){
+                conn.remove("autoConnect");
+                conn.insert("autoConnect", parm.value("autoConnect"));
             }
 
             m_connectionsList.insert(i, conn);

@@ -83,6 +83,8 @@ void WarningDialog::initUI()
     warningText->setWordWrap(true);
     confirmButton->setText(tr("Confirm"));
 
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(26,13,24,24);
 
@@ -126,6 +128,8 @@ void NetDetail::showDesktopNotify(const QString &message, QString soundName)
     if (!soundName.isEmpty()) {
         hints.insert("sound-name", soundName); //添加声音
     }
+    hints.insert("desktop-entry","kylin-nm");
+
     QList<QVariant> args;
     args<<(tr("Kylin NM"))
        <<((unsigned int) 0)

@@ -772,6 +772,10 @@ void WlanListItem::setFrequency()
     }
 }
 
+bool WlanListItem::getAutoConnect()
+{
+    return m_wirelessNetItem.m_autoconnect;
+}
 
 void WlanListItem::requestInputPasswdAgent(QString netName, QString deviceName, int type)
 {

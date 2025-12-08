@@ -19,6 +19,7 @@
  */
 #include "wlanconnect.h"
 #include "ui_wlanconnect.h"
+#include <kysdk/applications/accessinfohelper.h>
 
 #include <QGSettings>
 #include <QProcess>
@@ -139,7 +140,7 @@ void WlanConnect::showDesktopNotify(const QString &message)
          <<tr("Settings desktop message") //显示的是什么类型的信息
          <<message //显示的具体信息
          <<QStringList()
-         <<QVariantMap()
+         <<QVariantMap{{"desktop-entry","kylin-nm"}}
          <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
@@ -203,7 +204,58 @@ const QString WlanConnect::name() const {
 
 bool WlanConnect::isEnable() const
 {
-    return true;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network",
+                        "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),1);
+    if (!reply.isValid())
+    {
+        qWarning() << "[wlanConnect]getWirelessDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+    bool isEnabled = !map.isEmpty();
+
+    qWarning() << Q_FUNC_INFO << __LINE__ << isEnabled;
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+    if (QGSettings::isSchemaInstalled(schema)) {
+        qWarning() << Q_FUNC_INFO << __LINE__;
+        //get gsettings
+        QGSettings *showSettings;
+        QString path("/org/ukui/control-center/plugins/wlanconnect/");
+        showSettings = new QGSettings(schema, path.toUtf8());
+
+        QVariant enabledState = showSettings->get("show");
+
+        qWarning() << Q_FUNC_INFO << __LINE__ << enabledState.toBool();
+
+        //set gsettings
+        if (!enabledState.isValid() || enabledState.isNull()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "QGSettins get plugin show status error";
+        } else {
+            if (enabledState.toBool() != isEnabled) {
+                showSettings->set("show", isEnabled);
+            }
+        }
+        delete showSettings;
+        showSettings = nullptr;
+    }
+
+    return isEnabled;
 }
 
 bool WlanConnect::isShowOnHomePage() const
@@ -226,6 +278,8 @@ void WlanConnect::initSearchText() {
     tr("Add Others");
     //~ contents_path /wlanconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
+    KDK_EXTEND_ALL_INFO_FORMAT(ui->detailBtn, "WlanConnect", "", "advanced settings of wlanconnect");
+
     ui->titleLabel->setText(tr("WLAN"));
     //~ contents_path /wlanconnect/WLAN
     ui->openLabel->setText(tr("WLAN"));
@@ -260,6 +314,7 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 
 void WlanConnect::initComponent() {
     m_wifiSwitch = new KSwitchButton(pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_wifiSwitch, "WlanConnect", "", "wife switch");
     ui->openWIifLayout->setSpacing(5);
     m_wirelessNoDeviceIconLabel=new QLabel(ui->openWifiFrame);
     ui->openWIifLayout->addWidget(m_wirelessNoDeviceIconLabel);
@@ -450,6 +505,13 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
 void WlanConnect::onDeviceStatusChanged()
 {
     qDebug()<<"[WlanConnect]onDeviceStatusChanged";
+
+    // 如果无线开关关闭，则忽略设备状态变化
+    if (!getSwitchBtnState()) {
+        qDebug() << "[WlanConnect]Wireless switch is off, ignore device status change";
+        return;
+    }
+
     QEventLoop eventloop;
     QTimer::singleShot(300, &eventloop, SLOT(quit()));
     eventloop.exec();
@@ -483,6 +545,10 @@ void WlanConnect::onDeviceStatusChanged()
 
 
     for (int i = 0; i < addList.size(); ++i) {
+        // 再次检查开关状态，防止在添加过程中开关被关闭
+        if (!getSwitchBtnState()) {
+            break;
+        }
         addDeviceFrame(addList.at(i));
         initNetListFromDevice(addList.at(i));
     }
@@ -1008,7 +1074,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt(), infoList.at(5).toInt());
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt(), DEACTIVATED);
 }
 
 //增加设备
@@ -1068,6 +1134,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     //设置单项的信息
     int sign = setSignal(signal);
     WlanItem * wlanItem = new WlanItem(status, isLock, pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(wlanItem, "WlanConnect", "", "wlan item of wlanconnect");
     QString iconamePath;
     if (bApConnection) {
         iconamePath = KApSymbolic;

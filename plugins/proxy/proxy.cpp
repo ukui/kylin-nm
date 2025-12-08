@@ -20,12 +20,15 @@
 #include "proxy.h"
 #include "aptproxydialog.h"
 #include "aptinfo.h"
+#include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
 //#include "utils.h"
 
 #include <QDebug>
 #include <QRegExpValidator>
 #include <QApplication>
 #include <QTranslator>
+#include <QProcess>
 
 #define PROXY_SCHEMA              "org.gnome.system.proxy"
 #define PROXY_MODE_KEY            "mode"
@@ -126,8 +129,11 @@ QWidget *Proxy::pluginUi() {
             initAutoProxyStatus();
             initManualProxyStatus();
             initIgnoreHostStatus();
-            initDbus();
-//            initAppProxyStatus();
+            if (isKylinProxyProcessRunning()) {
+                /* 只有 kylin-proxy 进程存在时才初始化应用代理 */
+                initDbus();
+                initAppProxyStatus();
+            }
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
@@ -205,6 +211,7 @@ void Proxy::initUi(QWidget *widget)
     enableLyt->setContentsMargins(16, 0, 16, 0);
     QLabel *enableLabel = new QLabel(tr("Start using"), mEnableFrame);
     mEnableBtn = new KSwitchButton(mEnableFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(mEnableBtn, "Proxy", "", "enable switch of system proxy");
     enableLyt->addWidget(enableLabel);
     enableLyt->addStretch();
     enableLyt->addWidget(mEnableBtn);
@@ -219,9 +226,11 @@ void Proxy::initUi(QWidget *widget)
     QLabel *selectLabel = new QLabel(tr("Proxy mode"), mSelectFrame);
     selectLabel->setFixedWidth(148);
     mAutoBtn = new QRadioButton(mSelectFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(mAutoBtn, "Proxy", "", "auto mode button of system proxy");
     mProxyBtnGroup->addButton(mAutoBtn);
     QLabel *autoLabel = new QLabel(tr("Auto"), mSelectFrame);
     mManualBtn = new QRadioButton(mSelectFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(mManualBtn, "Proxy", "", "manual mode button of system proxy");
     mProxyBtnGroup->addButton(mManualBtn);
     QLabel *manualLabel = new QLabel(tr("Manual"), mSelectFrame);
     selectLyt->addWidget(selectLabel);
@@ -377,10 +386,11 @@ void Proxy::initUi(QWidget *widget)
     Lyt->addWidget(mIgnoreFrame);
 
     //应用代理模块
-//    m_appProxyLabel = new TitleLabel(widget);
-//    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
-//    setAppProxyFrameUi(widget);
-//    setAppListFrameUi(widget);
+    m_appProxyLabel = new KLabel(widget);
+    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
+    m_appProxyLabel->setContentsMargins(16, 0, 0, 0);
+    setAppProxyFrameUi(widget);
+    setAppListFrameUi(widget);
 
     //APT代理模块
     mAptProxyLabel = new KLabel(widget);
@@ -405,6 +415,7 @@ void Proxy::initUi(QWidget *widget)
     mAptLabel = new QLabel(mAPTFrame_1);
     mAptLabel->setFixedWidth(200);
     mAptBtn = new KSwitchButton(mAPTFrame_1);
+    KDK_EXTEND_ALL_INFO_FORMAT(mAptBtn, "Proxy", "", "enable switch of apt proxy");
     mAptLayout_1->addWidget(mAptLabel);
     mAptLayout_1->addStretch();
     mAptLayout_1->addWidget(mAptBtn);
@@ -421,6 +432,7 @@ void Proxy::initUi(QWidget *widget)
     mAPTPortLabel_1 = new QLabel(mAPTFrame_2);
     mAPTPortLabel_2 = new QLabel(mAPTFrame_2);
     mEditBtn = new QPushButton(mAPTFrame_2);
+    KDK_EXTEND_ALL_INFO_FORMAT(mEditBtn, "Proxy", "", "edit button of apt proxy");
     mEditBtn->setFixedWidth(80);
     mAptLayout_2->addWidget(mAPTHostLabel_1);
     mAptLayout_2->addWidget(mAPTHostLabel_2);
@@ -437,21 +449,20 @@ void Proxy::initUi(QWidget *widget)
     AptLayout->addWidget(mAPTFrame_2);
 
     m_sysSpacerFrame = new QFrame(widget);
-    m_sysSpacerFrame->setFixedHeight(32);
+    m_sysSpacerFrame->setFixedHeight(24);
     m_appListSpacerFrame = new QFrame(widget);
     m_appListSpacerFrame->setFixedHeight(4);
     m_appSpacerFrame = new QFrame(widget);;
-    m_appSpacerFrame->setFixedHeight(32);;
+    m_appSpacerFrame->setFixedHeight(24);;
 
     mverticalLayout->addWidget(mTitleLabel);
     mverticalLayout->addWidget(mProxyFrame);
-
     mverticalLayout->addWidget(m_sysSpacerFrame);
-//    mverticalLayout->addWidget(m_appProxyLabel);
-//    mverticalLayout->addWidget(m_appProxyFrame);
-    mverticalLayout->addWidget(m_appListSpacerFrame);
-//    mverticalLayout->addWidget(m_appListFrame);
-//    mverticalLayout->addWidget(m_appSpacerFrame);
+    mverticalLayout->addWidget(m_appProxyLabel);
+    mverticalLayout->addWidget(m_appProxyFrame);
+    //mverticalLayout->addWidget(m_appListSpacerFrame);
+    mverticalLayout->addWidget(m_appListFrame);
+    mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
     mverticalLayout->addStretch();
@@ -968,12 +979,7 @@ void Proxy::setFrame_Noframe(QFrame *frame)
 
 QFrame *Proxy::setLine(QFrame *frame)
 {
-    QFrame *line = new QFrame(frame);
-    line->setMinimumSize(QSize(0, 1));
-    line->setMaximumSize(QSize(16777215, 1));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
+    KHLineFrame *line = new KHLineFrame(frame);
     return line;
 }
 
@@ -1097,7 +1103,13 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
 void Proxy::setUkccProxySettings()
 {
     setSystemProxyFrameHidden(false);
-//    setAppProxyFrameHidden(false);
+    if(isKylinProxyProcessRunning()){
+        setAppProxyFrameHidden(false);
+    }else{
+        /* 如果 kylin-proxy 进程不存在，隐藏应用代理相关界面 */
+        setAppProxyFrameHidden(true);
+        qWarning() << "kylin-proxy process is not running, hiding application proxy interface";
+    }
     setAPTProxyFrameHidden(false);
 
     QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
@@ -1131,7 +1143,7 @@ void Proxy::setUkccProxySettings()
         if (setting.contains("SystemProxyFrame") && setting.contains("false")) {
             setSystemProxyFrameHidden(true);
         } else if (setting.contains("AppProxyFrame") && setting.contains("false")) {
-//            setAppProxyFrameHidden(true);
+            setAppProxyFrameHidden(true);
         } else if (setting.contains("APTProxyFrame") && setting.contains("false")) {
             setAPTProxyFrameHidden(true);
         }
@@ -1172,6 +1184,7 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     setFrame_Noframe(m_appEnableFrame);
     m_appEnableLabel = new QLabel(tr("Open"), m_appEnableFrame);
     m_appEnableBtn = new KSwitchButton(m_appEnableFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_appEnableBtn, "Proxy", "", "enable switch of app proxy");
     m_appEnableBtn->setCheckable(true);
     QHBoxLayout *appEnableLayout = new QHBoxLayout(m_appEnableFrame);
     appEnableLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
@@ -1444,7 +1457,6 @@ void Proxy::setAppProxyFrameHidden(bool state)
     } else {
         m_appListFrame->setHidden(!m_appEnableBtn->isChecked());
     }
-    m_appListSpacerFrame->setHidden(state);
     m_appSpacerFrame->setHidden(state);
 }
 
@@ -1452,6 +1464,27 @@ void Proxy::setAPTProxyFrameHidden(bool state)
 {
     mAptProxyLabel->setHidden(state);
     mAPTFrame->setHidden(state);
+}
+
+bool Proxy::isKylinProxyProcessRunning()
+{
+    QProcess process;
+
+    /* 方法1: 使用 pgrep 命令查找进程 */
+    process.start("pgrep", QStringList() << "-f" << "kylin-proxy");
+    process.waitForFinished();
+
+    if (process.exitCode() == 0) {
+        QString output = process.readAllStandardOutput();
+        return !output.trimmed().isEmpty();
+    }
+
+    /* 方法2: 如果 pgrep 不可用，使用 ps 命令作为备选 */
+    process.start("ps", QStringList() << "aux");
+    process.waitForFinished();
+
+    QString output = process.readAllStandardOutput();
+    return output.contains("kylin-proxy");
 }
 
 void Proxy::onipEditStateChanged()

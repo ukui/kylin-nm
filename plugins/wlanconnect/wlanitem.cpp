@@ -18,6 +18,9 @@
  *
  */
 #include "wlanitem.h"
+#include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
+
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
@@ -36,9 +39,17 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
 
-    QHBoxLayout *mLanLyt = new QHBoxLayout(this);
-    mLanLyt->setContentsMargins(16,0,16,0);
+    /* 创建主垂直布局 */
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+
+    /* 创建水平布局用于内容 */
+    QHBoxLayout *mLanLyt = new QHBoxLayout();
+    mLanLyt->setContentsMargins(16, 0, 16, 0);
     mLanLyt->setSpacing(16);
+    mLanLyt->setAlignment(Qt::AlignVCenter);
+
     iconLabel = new QLabel(this);
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
     titileLabel = new KLabel(this);
@@ -46,16 +57,22 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(infoLabel, "WlanConnect", "", "details button of wireless network");
 
     iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     titileLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     statusLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
     mLanLyt->addWidget(iconLabel);
-    mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
+    mLanLyt->addWidget(titileLabel, Qt::AlignLeft);
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
     mLanLyt->addWidget(infoLabel);
+
+
+    mainLayout->addLayout(mLanLyt);/* 将水平布局添加到主布局 */
+    KHLineFrame *separator = new KHLineFrame(this); /* 分割线 */
+    mainLayout->addWidget(separator);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));

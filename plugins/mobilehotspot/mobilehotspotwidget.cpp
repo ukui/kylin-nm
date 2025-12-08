@@ -18,8 +18,10 @@
  *
  */
 #include "mobilehotspotwidget.h"
+#include "klineframe.h"
 #include <QDebug>
 #include <QFormLayout>
+#include <unistd.h>
 
 #define LABEL_RECT 17, 0, 105, 23
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -59,14 +61,14 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("Settings"))
-       <<((unsigned int) 0)
-       <<QString("ukui-control-center")
-       <<tr("Settings desktop message") //显示的是什么类型的信息
-       <<message //显示的具体信息
-       <<QStringList()
-       <<QVariantMap()
-       <<(int)-1;
+    args << (tr("Settings"))
+         << ((unsigned int) 0)
+         << QString("ukui-control-center")
+         << tr("Settings desktop message") //显示的是什么类型的信息
+         << message //显示的具体信息
+         << QStringList()
+         << QVariantMap{{"desktop-entry","kylin-nm"}}
+         << (int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
@@ -150,6 +152,12 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
 
     if (watched == m_switchBtn && m_switchBtn->isEnabled()) {
         if (event->type() == QEvent::MouseButtonRelease) {
+
+            if(judgeHotSpotIsCtrl()){
+                qWarning() << LOG_HEAD << "hotspot is ctrled,do nothing";
+                return true;
+            }
+
             if (!m_interface->isValid()) {
                 return true;
             }
@@ -878,10 +886,6 @@ void MobileHotspotWidget::setUiEnabled(bool enable)
         m_apNameLine->setEnabled(true);
     }
 
-    // When hotspot is off (enable == false) do not show the blacklist page.
-    if (m_blacklistPage) {
-        m_blacklistPage->setVisible(enable);
-    }
 }
 
 void MobileHotspotWidget::setWidgetHidden(bool isHidden)
@@ -945,13 +949,7 @@ void MobileHotspotWidget::updateBandCombox()
 
 QFrame* MobileHotspotWidget::myLine()
 {
-    QFrame *line = new QFrame(this);
-    line->setMinimumSize(QSize(LINE_MIN_SIZE));
-    line->setMaximumSize(QSize(LINE_MAX_SIZE));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
+    KHLineFrame *line = new KHLineFrame(this);
     return line;
 }
 
@@ -1111,4 +1109,23 @@ void MobileHotspotWidget::judgeNoticeInfoShow(QString deviceName,bool isActived)
         m_warnWidget->hide();
     }
     resetFrameSize();
+}
+
+bool MobileHotspotWidget::judgeHotSpotIsCtrl()
+{
+    FILE *fp=NULL;
+    char buffer[80];
+    if((access("/etc/apctl.conf",F_OK))!=-1){
+        fp=fopen("/etc/apctl.conf","r");
+        if (NULL != fp){
+            fgets(buffer,sizeof(buffer),fp);
+            //与文件内容不同则管控
+            if(strncmp(buffer,"#ap control\n",sizeof(buffer))!=0){
+                fclose(fp);
+                return true;
+            }
+        }
+     }
+    if(fp) fclose(fp);
+    return false;
 }

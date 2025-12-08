@@ -81,14 +81,14 @@ void Utils::onRequestSendDesktopNotify(QString message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("Kylin NM"))
-       <<((unsigned int) 0)
-      <<QString("gnome-dev-ethernet")
-     <<tr("kylin network applet desktop message") //显示的是什么类型的信息
-    <<message //显示的具体信息
-    <<QStringList()
-    <<QVariantMap()
-    <<(int)-1;
+    args << (tr("Kylin NM"))
+         << ((unsigned int) 0)
+         << QString("gnome-dev-ethernet")
+         << tr("kylin network applet desktop message") //显示的是什么类型的信息
+         << message //显示的具体信息
+         << QStringList()
+         << QVariantMap{{"desktop-entry","kylin-nm"}}
+         << (int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 

@@ -57,6 +57,7 @@ void KnmDataKeeper::setSwitchState(bool switched)
 
 QVariantList KnmDataKeeper::getDevConnections(QString devName)
 {
+    qDebug() << Q_FUNC_INFO << __LINE__ << "devName:" << devName;
     QVariantList ret;
     if (m_deviceList.isEmpty() || !m_deviceList.contains(devName))
         return ret;

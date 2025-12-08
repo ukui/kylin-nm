@@ -41,6 +41,8 @@ public:
         ConfiguredRole,
         FrequencyRole,
         IsMixRole,
+        AutoConnectRole,
+
     };
 
 
@@ -58,6 +60,7 @@ public:
         int Configured;
 
         bool isMix;
+        bool autoConnect;
 
     };
     explicit WirelessConnectionModel(QObject *parent = nullptr);

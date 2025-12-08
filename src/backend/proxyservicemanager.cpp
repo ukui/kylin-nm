@@ -157,7 +157,11 @@ void ProcInfoDeal::setProxyState(bool state)
     }
     if (m_procAddServerDbus->isValid()) {
         if (state) {
-            m_procAddServerDbus->asyncCall("startListen", getpid());
+            //m_procAddServerDbus->asyncCall("startListen", getpid());
+            QDBusReply<void> reply = m_procAddServerDbus->call("startListen", getpid());
+            if (!reply.isValid()) {
+                qWarning() << "D-Bus call startListen failed: " << reply.error().message();
+            }
             //用QObject的connect会报没有procAdd这个信号，使用QDBusConnection可以监听到这个信号，随后调研下为啥在别的地方可以connect到
 //            connect(m_procAddServerDbus, SIGNAL(procAdd(QMap<QString, QString>)), this, SLOT(onProcAdd(QMap<QString, QString>)), Qt::QueuedConnection);
             QDBusConnection::systemBus().connect("com.kylin.network.qt.systemdbus",
@@ -892,6 +896,7 @@ QStringList ProxyServiceManager::getDesktopFilePath()
                 getAndroidApp();
 #endif
                 recursiveSearchFile("/usr/share/applications/");
+                recursiveSearchFile("/opt/kaiming/share/applications/");
                 recursiveSearchFile("/var/lib/snapd/desktop/applications/");
                 recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
                 QJsonArray blArray = obj.value("blacklist").toArray();
@@ -906,6 +911,7 @@ QStringList ProxyServiceManager::getDesktopFilePath()
                 getAndroidApp();
 #endif
                 recursiveSearchFile("/usr/share/applications/");
+                recursiveSearchFile("/opt/kaiming/share/applications/");
                 recursiveSearchFile("/var/lib/snapd/desktop/applications/");
                 recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
             }
@@ -917,6 +923,7 @@ QStringList ProxyServiceManager::getDesktopFilePath()
         getAndroidApp();
 #endif
         recursiveSearchFile("/usr/share/applications/");
+        recursiveSearchFile("/opt/kaiming/share/applications/");
         recursiveSearchFile("/var/lib/snapd/desktop/applications/");
         recursiveSearchFile("/var/lib/flatpak/exports/share/applications/");
     }

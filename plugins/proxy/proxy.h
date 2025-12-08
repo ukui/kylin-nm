@@ -157,6 +157,7 @@ private:
     void setSystemProxyFrameHidden(bool state);
     void setAppProxyFrameHidden(bool state);
     void setAPTProxyFrameHidden(bool state);
+    bool isKylinProxyProcessRunning();
 
 private:
     QFrame *m_sysSpacerFrame;

@@ -18,6 +18,7 @@
  *
  */
 #include "connectdevpage.h"
+#include "klineframe.h"
 #include <QDebug>
 
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -55,13 +56,7 @@ ConnectdevPage::ConnectdevPage(QWidget *parent) :
 
 QFrame* ConnectdevPage::myLine()
 {
-    QFrame *line = new QFrame(this);
-    line->setMinimumSize(QSize(LINE_MIN_SIZE));
-    line->setMaximumSize(QSize(LINE_MAX_SIZE));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
+    KHLineFrame *line = new KHLineFrame(this);
     return line;
 }
 

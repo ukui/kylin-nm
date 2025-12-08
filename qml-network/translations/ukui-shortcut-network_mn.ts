@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>ᠲᠤᠰ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠠᠰᠤᠬᠤ</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation>ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠭᠳᠠᠨ᠎ᠠ ᠃</translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -138,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠣᠩ ᠰᠠᠢ᠌ᠨ ᠃</translation>
+        <translation type="vanished">ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠣᠩ ᠰᠠᠢ᠌ᠨ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠰᠠᠶᠢᠨ ᠃</translation>
+        <translation type="vanished">ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠰᠠᠶᠢᠨ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠲᠣᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠢ ᠡᠩ ᠦᠨ ᠪᠠᠶᠢᠳᠠᠭ ᠃</translation>
+        <translation type="vanished">ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠲᠣᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠢ ᠡᠩ ᠦᠨ ᠪᠠᠶᠢᠳᠠᠭ ᠃</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠪᠠᠭᠤᠷᠠᠶ ᠃</translation>
+        <translation type="vanished">ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠪᠠᠭᠤᠷᠠᠶ ᠃</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation>ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠤᠩ ᠪᠠᠭᠤᠷᠠᠢ ᠃</translation>
+        <translation type="vanished">ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠠᠢ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠲᠤᠩ ᠪᠠᠭᠤᠷᠠᠢ ᠃</translation>
     </message>
 </context>
 </TS>

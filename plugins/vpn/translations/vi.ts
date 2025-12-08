@@ -6,57 +6,57 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>Thêm mạng khác</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation></translation>
+        <translation>thêm WiredNetork</translation>
     </message>
 </context>
 <context>
     <name>ItemFrame</name>
     <message>
-        <location filename="../itemframe.cpp" line="38"/>
+        <location filename="../itemframe.cpp" line="40"/>
         <source>Add VPN</source>
-        <translation>Thêm VPN</translation>
+        <translation>thêm VPN</translation>
     </message>
 </context>
 <context>
     <name>Vpn</name>
     <message>
         <location filename="../vpn.ui" line="53"/>
-        <location filename="../vpn.cpp" line="68"/>
+        <location filename="../vpn.cpp" line="70"/>
         <source>VPN</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../vpn.ui" line="68"/>
         <source>import</source>
-        <translation></translation>
+        <translation>Nhập</translation>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="157"/>
-        <location filename="../vpn.cpp" line="284"/>
+        <location filename="../vpn.cpp" line="159"/>
+        <location filename="../vpn.cpp" line="291"/>
         <source>Show on Taskbar</source>
         <translation>Các biểu tượng được hiển thị trên thanh tác vụ</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="286"/>
+        <location filename="../vpn.cpp" line="293"/>
         <source>Add VPN</source>
-        <translation>Thêm kết nối VPN</translation>
+        <translation>thêm VPN</translation>
         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="372"/>
-        <location filename="../vpn.cpp" line="479"/>
+        <location filename="../vpn.cpp" line="374"/>
+        <location filename="../vpn.cpp" line="490"/>
         <source>connected</source>
-        <translation>Kết nối</translation>
+        <translation>Đã kết nối</translation>
     </message>
     <message>
-        <location filename="../vpn.cpp" line="374"/>
-        <location filename="../vpn.cpp" line="489"/>
+        <location filename="../vpn.cpp" line="376"/>
+        <location filename="../vpn.cpp" line="500"/>
         <source>not connected</source>
         <translation>Không kết nối</translation>
     </message>
@@ -64,21 +64,21 @@
 <context>
     <name>VpnItem</name>
     <message>
-        <location filename="../vpnitem.cpp" line="55"/>
+        <location filename="../vpnitem.cpp" line="60"/>
         <source>Delete</source>
-        <translation>Xóa</translation>
+        <translation>Xóa bỏ chữ ký</translation>
     </message>
     <message>
-        <location filename="../vpnitem.cpp" line="107"/>
-        <location filename="../vpnitem.cpp" line="120"/>
+        <location filename="../vpnitem.cpp" line="117"/>
+        <location filename="../vpnitem.cpp" line="130"/>
         <source>Disconnect</source>
-        <translation>Ngắt kết nối</translation>
+        <translation>Ngắt</translation>
     </message>
     <message>
-        <location filename="../vpnitem.cpp" line="109"/>
-        <location filename="../vpnitem.cpp" line="118"/>
+        <location filename="../vpnitem.cpp" line="119"/>
+        <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
-        <translation>kết nối</translation>
+        <translation>Kết nối</translation>
     </message>
 </context>
 </TS>

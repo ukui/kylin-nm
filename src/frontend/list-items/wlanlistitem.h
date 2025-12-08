@@ -84,6 +84,7 @@ public:
 
     void setFrequency();
 
+    bool getAutoConnect();
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();

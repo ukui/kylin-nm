@@ -253,22 +253,33 @@ UkuiItems.DtThemeBackground {
                             id: wlanswitchBtn
                             checked: KInterface.wirelessSwitch
                             enabled: (wlanDeviceComboBox.count >= 1)
-                            onClicked: {
-                                if(!enabled)
-                                {
-                                    wlanswitchBtn.checked=false
-                                    KInterface.wirelessSwitch = wlanswitchBtn.checked
-                                    return
-                                }
-                                KInterface.wirelessSwitch = wlanswitchBtn.checked
-                                wlanDeviceComboBox.visible = !wlanDeviceComboBox.ishide && wlanswitchBtn.checked && (wlanDeviceComboBox.count >= 2)
-                                wlanContentArea.visible = wlanswitchBtn.checked
-                            }
+                            visible: wlanDeviceComboBox.count >= 1
+                       MouseArea {
+                           anchors.fill: parent
+                           // 阻止事件传递到SwitchDelegate内部
+                           propagateComposedEvents: false
+                           onClicked: {
+                               if (!wlanswitchBtn.enabled) {
+                                   KInterface.wirelessSwitch = false
+                                   return
+                               }
+                               // 直接修改数据源，而不是通过checked属性
+                               KInterface.wirelessSwitch = !KInterface.wirelessSwitch
+
+
+                               //console.log("Switch clicked, new state:", KInterface.wirelessSwitch)
+                           }
+                       }
+                       // 状态变化时更新UI
+                       onCheckedChanged: {
+                           wlanDeviceComboBox.visible = !wlanDeviceComboBox.ishide && checked && (wlanDeviceComboBox.count >= 2)
+                           wlanContentArea.visible = checked
+                           //console.log("State changed to:", checked)
+                       }
                             Layout.alignment: Qt.AlignRight
                             Layout.rightMargin: 24
                             spacing:0
                             rightPadding: 0
-                            visible: wlanDeviceComboBox.count >= 1
                             Layout.preferredWidth: 44
                         }
                     }

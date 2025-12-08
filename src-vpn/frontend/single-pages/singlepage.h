@@ -36,6 +36,7 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "ukuiwindowhelper/ukuiwindowhelper.h"
 
 using namespace kdk;
 
@@ -111,6 +112,8 @@ protected:
     double m_transparency = 1.0;  //透明度
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
+
+    UkuiWindowHelper *m_uwin;
 
 };
 

@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>بۇ تورنى ئۆچۈرۈش</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation>تور چەكلىمىگە ئۇچرايدۇ</translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -138,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation>ئۇلاندى، تور بەك ياخشى</translation>
+        <translation type="vanished">ئۇلاندى، تور بەك ياخشى</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation>ئۇلاندى ، تور ياخشى</translation>
+        <translation type="vanished">ئۇلاندى ، تور ياخشى</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation>ئاللىقاچان ئۇلاندى ، تور ئادەتتىكىچە</translation>
+        <translation type="vanished">ئاللىقاچان ئۇلاندى ، تور ئادەتتىكىچە</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation>ئۇلاندى، تور ئاجىز</translation>
+        <translation type="vanished">ئۇلاندى، تور ئاجىز</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation>ئاللىقاچان ئۇلاندى ، تور بەك ئاجىز</translation>
+        <translation type="vanished">ئاللىقاچان ئۇلاندى ، تور بەك ئاجىز</translation>
     </message>
 </context>
 </TS>

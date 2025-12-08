@@ -576,3 +576,13 @@ void KnmDBusCaller::registerInputPasswdAgent()
         qWarning() << "registerInputPasswdAgent pending";
     }
 }
+
+void KnmDBusCaller::setNetworkConnectionAutoConnectState(int netType, QString uuid, bool state)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << netType << uuid << state;
+    QList<QVariant> list;
+    list.append(netType);
+    list.append(uuid);
+    list.append(state);
+    this->asyncCall("setNetworkConnectionAutoConnectState",list);
+}

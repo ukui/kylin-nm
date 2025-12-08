@@ -6,15 +6,15 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>Chuyển ra ngoài</translation>
+        <translation>Xóa</translation>
     </message>
 </context>
 <context>
     <name>BlacklistPage</name>
     <message>
-        <location filename="../blacklistpage.cpp" line="47"/>
+        <location filename="../blacklistpage.cpp" line="48"/>
         <source>Blacklist</source>
-        <translation>Danh sách đen thiết bị</translation>
+        <translation>Danh sách đen</translation>
     </message>
 </context>
 <context>
@@ -22,13 +22,13 @@
     <message>
         <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation>Thêm vào danh sách đen</translation>
+        <translation>kéo vào danh sách đen</translation>
     </message>
 </context>
 <context>
     <name>ConnectdevPage</name>
     <message>
-        <location filename="../connectdevpage.cpp" line="48"/>
+        <location filename="../connectdevpage.cpp" line="49"/>
         <source>Connect device</source>
         <translation>Kết nối thiết bị</translation>
     </message>
@@ -38,62 +38,55 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation>Điểm truy cập di động</translation>
+        <translation>Điểm phát sóng di động</translation>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="101"/>
+        <location filename="../mobilehotspot.cpp" line="110"/>
+        <source>mobilehotspot open</source>
+        <translation>Bật điểm phát sóng</translation>
+        <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="112"/>
         <source>Mobile Hotspot</source>
-        <translation>Điểm truy cập di động</translation>
+        <translation>Điểm phát sóng di động</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="103"/>
+        <location filename="../mobilehotspot.cpp" line="114"/>
         <source>Open mobile hotspot</source>
-        <translation>Bật điểm phát sóng di động</translation>
+        <translation>Mở điểm phát sóng di động</translation>
         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="105"/>
+        <location filename="../mobilehotspot.cpp" line="116"/>
         <source>Wi-Fi Name</source>
         <translation>Tên Wi-Fi</translation>
         <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="107"/>
+        <location filename="../mobilehotspot.cpp" line="118"/>
         <source>Network Password</source>
         <translation>Mật khẩu mạng</translation>
         <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="109"/>
+        <location filename="../mobilehotspot.cpp" line="120"/>
         <source>Network Frequency band</source>
-        <translation>Dải tần mạng</translation>
+        <translation>Băng tần mạng</translation>
         <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="111"/>
+        <location filename="../mobilehotspot.cpp" line="122"/>
         <source>Shared NIC port</source>
-        <translation>Chia sẻ cổng card mạng</translation>
+        <translation>Cổng chia sẻ NIC</translation>
         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="vanished">网络密码</translation>
-        <extra-contents_path>/mobilehotspot/Password</extra-contents_path>
-    </message>
-    <message>
-        <source>Frequency band</source>
-        <translation type="vanished">网络频带</translation>
-        <extra-contents_path>/mobilehotspot/Frequency band</extra-contents_path>
-    </message>
-    <message>
-        <source>Net card</source>
-        <translation type="vanished">共享网卡端口</translation>
-        <extra-contents_path>/mobilehotspot/Net card</extra-contents_path>
-    </message>
-    <message>
+        <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
-        <translation type="vanished">移动热点</translation>
+        <translation>移动热点</translation>
+        <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
 </context>
 <context>
@@ -107,18 +100,18 @@
         <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="157"/>
+        <location filename="../mobilehotspotwidget.cpp" line="165"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation>Công tắc không dây bị tắt hoặc không có card mạng không dây có chức năng điểm phát sóng</translation>
+        <translation>công tắc không dây bị đóng hoặc không có thiết bị không dây</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
         <translation type="vanished">开始关闭热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="178"/>
+        <location filename="../mobilehotspotwidget.cpp" line="190"/>
         <source>hotpots name or device is invalid</source>
-        <translation>Tên hoặc thiết bị điểm phát sóng sai</translation>
+        <translation>Tên điểm phát sóng của thiết bị không hợp lệ</translation>
     </message>
     <message>
         <source>can not  create hotspot with password length less than eight!</source>
@@ -129,70 +122,70 @@
         <translation type="vanished">开始创建热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="637"/>
+        <location filename="../mobilehotspotwidget.cpp" line="644"/>
         <source>Contains at least 8 characters</source>
         <translation>Chứa ít nhất 8 ký tự</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="232"/>
+        <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
-        <translation>Điểm truy cập di động</translation>
+        <translation>điểm phát sóng</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="62"/>
+        <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation>Dựng</translation>
+        <translation>Mục cài đặt</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="65"/>
+        <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation>Thiết lập thông báo trên màn hình nền</translation>
+        <translation>Cài đặt thông báo trên màn hình</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="358"/>
+        <location filename="../mobilehotspotwidget.cpp" line="1103"/>
         <source>use </source>
         <translation>dùng </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="359"/>
+        <location filename="../mobilehotspotwidget.cpp" line="1104"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation> Chia sẻ điểm phát sóng làm gián đoạn kết nối mạng không dây cục bộ</translation>
+        <translation> ·chia sẻ mạng sẽ làm gián đoạn kết nối không dây cục bộ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="376"/>
-        <location filename="../mobilehotspotwidget.cpp" line="396"/>
-        <location filename="../mobilehotspotwidget.cpp" line="480"/>
-        <location filename="../mobilehotspotwidget.cpp" line="520"/>
-        <location filename="../mobilehotspotwidget.cpp" line="779"/>
+        <location filename="../mobilehotspotwidget.cpp" line="381"/>
+        <location filename="../mobilehotspotwidget.cpp" line="400"/>
+        <location filename="../mobilehotspotwidget.cpp" line="484"/>
+        <location filename="../mobilehotspotwidget.cpp" line="526"/>
+        <location filename="../mobilehotspotwidget.cpp" line="791"/>
         <source>hotspot already close</source>
-        <translation>Điểm phát sóng bị tắt</translation>
+        <translation>điểm phát sóng đã dóng</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="544"/>
+        <location filename="../mobilehotspotwidget.cpp" line="550"/>
         <source>Open mobile hotspot</source>
-        <translation>Bật điểm phát sóng di động</translation>
+        <translation>Mở điểm phát sóng di động</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="625"/>
+        <location filename="../mobilehotspotwidget.cpp" line="633"/>
         <source>Network Password</source>
         <translation>Mật khẩu mạng</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="665"/>
+        <location filename="../mobilehotspotwidget.cpp" line="672"/>
         <source>Network Frequency band</source>
-        <translation>Dải tần mạng</translation>
+        <translation>Băng tần mạng</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="689"/>
+        <location filename="../mobilehotspotwidget.cpp" line="697"/>
         <source>Shared NIC port</source>
-        <translation>Chia sẻ cổng card mạng</translation>
+        <translation>Cổng chia sẻ NIC</translation>
     </message>
     <message>
         <source>Open</source>
         <translation type="vanished">开启</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="604"/>
+        <location filename="../mobilehotspotwidget.cpp" line="611"/>
         <source>Wi-Fi Name</source>
         <translation>Tên Wi-Fi</translation>
     </message>
@@ -205,15 +198,10 @@
         <translation type="vanished">网络频带</translation>
     </message>
     <message>
-        <source>Net card</source>
-        <translation type="vanished">共享网卡端口</translation>
-    </message>
-    <message>
-        <location filename="../mobilehotspotwidget.cpp" line="514"/>
-        <location filename="../mobilehotspotwidget.cpp" line="811"/>
         <location filename="../mobilehotspotwidget.cpp" line="823"/>
+        <location filename="../mobilehotspotwidget.cpp" line="835"/>
         <source>hotspot already open</source>
-        <translation>Điểm phát sóng được bật</translation>
+        <translation>điểm phát sóng đã mở</translation>
     </message>
 </context>
 </TS>

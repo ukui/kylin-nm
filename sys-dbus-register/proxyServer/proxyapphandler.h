@@ -69,7 +69,7 @@ extern "C"
 #define FILEKEY_TGID "Tgid:"
 #define FILEKEY_UID "Uid:"
 
-typedef QMap<QString, QString> MyMap;
+typedef QMap<QString, QString> ProcessInfoMap;
 
 class ListenThObject : public QObject,protected QDBusContext
 {
@@ -128,7 +128,7 @@ private:
     bool setProcEvListen(int nl_sock, bool enable);
 
 private Q_SLOTS:
-    void emitSignal(MyMap procmap);
+    void emitSignal(ProcessInfoMap procmap);
 
 public Q_SLOTS:
     void startListen(int pid);
@@ -143,7 +143,7 @@ private:
 
     QList<int> m_usedModelList;
 Q_SIGNALS:
-    void procAdd(QMap<QString, QString> procinfo);
+    void procAdd(ProcessInfoMap procinfo);
 };
 
 #endif // PROXYAPPHANDLER_H

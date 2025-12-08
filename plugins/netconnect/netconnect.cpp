@@ -19,6 +19,7 @@
  */
 #include "netconnect.h"
 #include "ui_netconnect.h"
+#include <kysdk/applications/accessinfohelper.h>
 
 #include <QGSettings>
 #include <QProcess>
@@ -74,7 +75,7 @@ void NetConnect::showDesktopNotify(const QString &message)
        <<tr("Settings desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
-       <<QVariantMap()
+       << QVariantMap{{"desktop-entry","kylin-nm"}}
        <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
@@ -152,7 +153,54 @@ const QString NetConnect::name() const {
 
 bool NetConnect::isEnable() const
 {
-    return true;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network",
+                        "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
+    if (!reply.isValid())
+    {
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+    bool isEnabled = !map.isEmpty();
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+
+    if (QGSettings::isSchemaInstalled(schema)) {
+        //get gsettings
+        QGSettings *showSettings;
+        QString path("/org/ukui/control-center/plugins/netconnect/");
+        showSettings = new QGSettings(schema, path.toUtf8());
+
+        QVariant enabledState = showSettings->get("show");
+
+        //set gsettings
+        if (!enabledState.isValid() || enabledState.isNull()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "QGSettins get plugin show status error";
+        } else {
+            if (enabledState.toBool() != isEnabled) {
+                showSettings->set("show", isEnabled);
+            }
+        }
+        delete showSettings;
+        showSettings = nullptr;
+    }
+
+    return isEnabled;
 }
 
 
@@ -174,6 +222,8 @@ QString NetConnect::translationPath() const
 void NetConnect::initSearchText() {
     //~ contents_path /netconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
+    KDK_EXTEND_ALL_INFO_FORMAT(ui->detailBtn, "NetConnect", "", "advanced settings of netconnect");
+
     ui->titleLabel->setText(tr("LAN"));
     //~ contents_path /netconnect/open
     tr("open");
@@ -207,6 +257,7 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 }
 void NetConnect::initComponent() {
     wiredSwitch = new KSwitchButton(pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(wiredSwitch, "NetConnect", "", "wired switch");
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->openWIifLayout->setContentsMargins(0,0,8,0);
 //    ui->openWifiFrame->hide();
@@ -577,6 +628,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     }
 
     LanItem * lanItem = new LanItem(isActived, pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(lanItem, "NetConnect", "", "lan item of netconnect");
     QString iconPath = KLanSymbolic;
     // 判断是否为pppoe
     if (isActived) {
@@ -664,8 +716,10 @@ void NetConnect::addDeviceFrame(QString devName)
     if (enable) {
         itemFrame->lanItemFrame->show();
         itemFrame->deviceFrame->dropDownLabel->show();
+        itemFrame->m_deviceSeparator->show();
     } else {
         itemFrame->lanItemFrame->hide();
+        itemFrame->m_deviceSeparator->hide();
         itemFrame->deviceFrame->dropDownLabel->hide();
         itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(false);
     }
@@ -686,12 +740,14 @@ void NetConnect::addDeviceFrame(QString devName)
             qDebug() << "[NetConnect]set " << devName << "status" << true;
             itemFrame->lanItemFrame->show();
             itemFrame->deviceFrame->dropDownLabel->show();
+            itemFrame->m_deviceSeparator->show();
             itemFrame->addLanWidget->show();
             itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
             deviceStatusMap[devName] = true;
         } else {
             qDebug() << "[NetConnect]set " << devName << "status" << false;
             itemFrame->lanItemFrame->hide();
+            itemFrame->m_deviceSeparator->hide();
             itemFrame->deviceFrame->dropDownLabel->hide();
             itemFrame->addLanWidget->hide();
             deviceStatusMap[devName] = false;
@@ -705,6 +761,11 @@ void NetConnect::addDeviceFrame(QString devName)
                 }
             }
         }
+	//这个先规避bug#447629
+        itemFrame->deviceFrame->deviceSwitch->setEnabled(false);
+        QTimer::singleShot(1000, [=]() {
+            itemFrame->deviceFrame->deviceSwitch->setEnabled(true);
+        });
         m_pSysBusIntfs->call(QStringLiteral("setDeviceSwitch"), devName, checked);
     });
 

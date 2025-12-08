@@ -18,7 +18,7 @@
  *
  */
 #include "itemframe.h"
-
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 #include <QPalette>
 
@@ -31,10 +31,12 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     lanItemFrame = new QFrame(this);
     lanItemFrame->setFrameShape(QFrame::Shape::NoFrame);
 
-    lanItemLayout = new QVBoxLayout(this);
+    lanItemLayout = new QVBoxLayout(lanItemFrame);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
-    lanItemLayout->setSpacing(1);
+    lanItemLayout->setSpacing(0);
+
     addLanWidget = new AddNetBtn(false, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(addLanWidget, "NetConnect", "", "add a wired network");
 
     deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);
@@ -42,8 +44,11 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
+    m_deviceSeparator = new KHLineFrame(this);
+    deviceLanLayout->addWidget(m_deviceSeparator);
+
     deviceLanLayout->addWidget(lanItemFrame);
-    deviceLanLayout->addSpacing(1);
+    deviceLanLayout->setSpacing(0);
     deviceLanLayout->addWidget(addLanWidget);
 
     //下拉按钮
@@ -53,9 +58,11 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
 void ItemFrame::onDrownLabelClicked()
 {
     if (!deviceFrame->dropDownLabel->isChecked) {
+        m_deviceSeparator->show();
         lanItemFrame->show();
         deviceFrame->dropDownLabel->setDropDownStatus(true);
     } else {
+        m_deviceSeparator->hide();
         lanItemFrame->hide();
         deviceFrame->dropDownLabel->setDropDownStatus(false);
     }

@@ -37,6 +37,7 @@ using namespace kdk;
 
 class WlanItem : public QPushButton
 {
+    Q_OBJECT
 public:
     WlanItem(bool bAcitve, bool isLock, QWidget *parent = nullptr);
     ~WlanItem();

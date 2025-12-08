@@ -643,7 +643,7 @@ QVariantList DbusAdaptor::getNetworkDeviceData(int type)
             qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
             int index = 4;
             if (type)
-                index=5;
+                index=10;
             if (connList.size() > index &&  (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
                 valueMap.append(QVariant::fromValue(connList.at(0)));
                 break;

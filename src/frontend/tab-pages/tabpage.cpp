@@ -417,6 +417,8 @@ void TabPage::showDesktopNotify(const QString &message, QString soundName)
     if (!soundName.isEmpty()) {
         hints.insert("sound-name",soundName); //添加声音
     }
+    hints.insert("desktop-entry","kylin-nm");
+
     QList<QVariant> args;
     args<<(tr("Kylin NM"))
        <<((unsigned int) 0)

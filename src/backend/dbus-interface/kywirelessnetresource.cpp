@@ -481,7 +481,7 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::WirelessNetwork::P
 
 void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssid)
 {
-
+    qDebug() << Q_FUNC_INFO << __LINE__ << devIfaceName << ssid;
     NetworkManager::Device::Ptr dev = m_networkResourceInstance->findDeviceInterface(devIfaceName);
     if (dev.isNull()) {
         return;
@@ -937,17 +937,17 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
 void KyWirelessNetResource::onConnectionUpdate(QString uuid)
 {
     qDebug()<< LOG_FLAG << "onConnectionUpdate " << uuid;
-
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter;
     for (iter = m_WifiNetworkList.begin(); iter != m_WifiNetworkList.end(); ++iter) {
-            QList<KyWirelessNetItem>::iterator itemIter;
-            for (itemIter = iter.value().begin(); itemIter != iter.value().end(); ++itemIter) {
-                //判断是否有其他wifi配置 更新WIFI-bd 的connect相关变量 emit update
-                if (uuid == itemIter->m_connectUuid) {
+        qDebug() << Q_FUNC_INFO << __LINE__ << "interfaceName :"<< iter.key();
+        QList<KyWirelessNetItem>::iterator itemIter;
+        for (itemIter = iter.value().begin(); itemIter != iter.value().end(); ++itemIter) {
+            //判断是否有其他wifi配置 更新WIFI-bd 的connect相关变量 emit update
+            if (uuid == itemIter->m_connectUuid) {
                 //更新WIFI 的connect相关变量 emit update to ui
 
-                 updateKylinWirelessItemInfo(*itemIter);
-                 Q_EMIT connectionUpdate(itemIter->getDevice(), itemIter->m_NetSsid);
+                updateKylinWirelessItemInfo(*itemIter);
+                Q_EMIT connectionUpdate(iter.key(), itemIter->m_NetSsid);
                 break;
             }
         }

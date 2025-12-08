@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>Padamkan rangkaian ini</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation>Rangkaian terhad</translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>
@@ -98,7 +102,7 @@
     </message>
     <message>
         <source>connected</source>
-        <translation type="vanished">已连接</translation>
+        <translation>已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -138,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation>Disambungkan, rangkaian sangat baik</translation>
+        <translation type="vanished">Disambungkan, rangkaian sangat baik</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation>Disambungkan, rangkaian baik</translation>
+        <translation type="vanished">Disambungkan, rangkaian baik</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation>Disambungkan, rangkaian sederhana</translation>
+        <translation type="vanished">Disambungkan, rangkaian sederhana</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation>Disambungkan, rangkaian lemah</translation>
+        <translation type="vanished">Disambungkan, rangkaian lemah</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation>Disambungkan, rangkaian lemah</translation>
+        <translation type="vanished">Disambungkan, rangkaian lemah</translation>
     </message>
 </context>
 </TS>

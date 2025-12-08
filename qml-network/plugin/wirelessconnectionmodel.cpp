@@ -54,6 +54,7 @@ QVariant WirelessConnectionModel::data(const QModelIndex &index, int role) const
     case ConfiguredRole: return connection.Configured;
     case FrequencyRole: return connection.frequency;
     case IsMixRole: return connection.isMix;
+    case AutoConnectRole: return connection.autoConnect;
 
     default: return QVariant();
     }
@@ -100,6 +101,9 @@ bool WirelessConnectionModel::setData(const QModelIndex &index, const QVariant &
     case IsMixRole:
         connection.isMix = value.toBool();
         break;
+    case AutoConnectRole:
+        connection.autoConnect = value.toBool();
+        break;
     default:
         return false;
     }
@@ -121,7 +125,8 @@ QHash<int, QByteArray> WirelessConnectionModel::roleNames() const
         {IsLoadingRole,"Loading"},
         {ConfiguredRole,"Configured"},
         {FrequencyRole, "frequency"},
-        {IsMixRole, "isMix"}
+        {IsMixRole, "isMix"},
+        {AutoConnectRole, "autoConnect"}
 
     };
 }
@@ -195,6 +200,7 @@ WirelessConnectionModel::ST_ConnectionInfo WirelessConnectionModel::mapToConnect
     connect.Loading=value.value("Loading").toBool();
     connect.Configured=value.value("Configured").toInt();
     connect.isMix=value.value("isMix").toBool();
+    connect.autoConnect=value.value("autoConnect").toBool();
 
     return connect;
 }
@@ -249,7 +255,19 @@ void WirelessConnectionModel::replaceConnection(struct ST_ConnectionInfo *pConne
         m_connections.replace(index,*pConnection);
         QModelIndex modelIndex = createIndex(index, 0);
 
-        emit dataChanged(modelIndex, modelIndex, {SSIDRole,StrengthRole,SecurityTypeRole,UUIDRole,IsAPRole,CategoryRole,ConnectStatusRole,IsLoadingRole,ConfiguredRole,FrequencyRole,IsMixRole});
+        emit dataChanged(modelIndex, modelIndex, {SSIDRole,
+                                                  StrengthRole,
+                                                  SecurityTypeRole,
+                                                  UUIDRole,
+                                                  IsAPRole,
+                                                  CategoryRole,
+                                                  ConnectStatusRole,
+                                                  IsLoadingRole,
+                                                  ConfiguredRole,
+                                                  FrequencyRole,
+                                                  IsMixRole,
+                                                  AutoConnectRole}
+                         );
     }
 
     qDebug() << "replace connection:" << pConnection->ssid <<pConnection->status<< "(" << pConnection->uuid << ")";

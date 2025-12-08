@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
-        <source>Add WiredNetwork</source>
+        <source>Add WiredNetork</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -23,9 +23,9 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
-        <location filename="../wlanconnect.cpp" line="141"/>
-        <location filename="../wlanconnect.cpp" line="215"/>
-        <location filename="../wlanconnect.cpp" line="217"/>
+        <location filename="../wlanconnect.cpp" line="154"/>
+        <location filename="../wlanconnect.cpp" line="283"/>
+        <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
@@ -37,42 +37,42 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="214"/>
+        <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="124"/>
+        <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="127"/>
+        <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="212"/>
+        <location filename="../wlanconnect.cpp" line="278"/>
         <source>Add Others</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="232"/>
-        <location filename="../wlanconnect.cpp" line="568"/>
+        <location filename="../wlanconnect.cpp" line="301"/>
+        <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="364"/>
-        <location filename="../wlanconnect.cpp" line="1057"/>
-        <location filename="../wlanconnect.cpp" line="1124"/>
+        <location filename="../wlanconnect.cpp" line="433"/>
+        <location filename="../wlanconnect.cpp" line="1137"/>
+        <location filename="../wlanconnect.cpp" line="1206"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="993"/>
+        <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

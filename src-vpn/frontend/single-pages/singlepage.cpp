@@ -36,6 +36,7 @@ SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
     initWindowProperties();
     initTransparency();
     initWindowTheme();
+    m_uwin = new UkuiWindowHelper(this);
 }
 
 SinglePage::~SinglePage()
@@ -105,7 +106,7 @@ void SinglePage::initWindowProperties()
         QPainterPath path;
         auto rect = this->rect();
         path.addRect(rect);
-        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+        m_uwin->setBlurEffect(QRegion(path.toFillPolygon().toPolygon()),0 , true);
     }
 }
 
@@ -162,7 +163,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
 
     painter.setBrush(col);
     painter.drawPath(rectPath);
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(rectPath.toFillPolygon().toPolygon()));   //背景模糊
+    m_uwin->setBlurEffect(QRegion(rectPath.toFillPolygon().toPolygon()),0 , true);
 }
 
 void SinglePage::initTransparency()

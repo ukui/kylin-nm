@@ -302,8 +302,11 @@ void Ipv6Page::initConflictHintLable()
     QIcon icon = QIcon::fromTheme("dialog-warning");
     m_iconLabel = new QLabel(m_addressHintLabel);
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
-    m_textLabel = new QLabel(m_addressHintLabel);
+    m_textLabel = new KLabel(m_addressHintLabel);
     m_textLabel->setText(tr("Address conflict"));
+    m_textLabel->setFontColorRole(QPalette::WindowText);
+    m_textLabel->setFontColor(Qt::red);
+
     QHBoxLayout *conflictHintLayout = new QHBoxLayout(m_addressHintLabel);
     conflictHintLayout->setContentsMargins(0, 0, 0, 0);
     conflictHintLayout->addWidget(m_iconLabel);

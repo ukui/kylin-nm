@@ -761,6 +761,11 @@ void NetConnect::addDeviceFrame(QString devName)
                 }
             }
         }
+	//这个先规避bug#447629
+        itemFrame->deviceFrame->deviceSwitch->setEnabled(false);
+        QTimer::singleShot(1000, [=]() {
+            itemFrame->deviceFrame->deviceSwitch->setEnabled(true);
+        });
         m_pSysBusIntfs->call(QStringLiteral("setDeviceSwitch"), devName, checked);
     });
 

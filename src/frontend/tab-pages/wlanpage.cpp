@@ -601,18 +601,19 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
              << QString::number(item.m_frequency)
              << (item.m_isMix?IsApConnection : NotApConnection)
              <<  QString::number(item.m_autoconnect)
+             << QString::number(m_connectResource->getActiveConnectionState(item.m_connectUuid))
                 ;
     } else {
         info << item.m_NetSsid
              << QString::number(item.m_signalStrength)
              << item.m_secuType
-             //<< item.m_connectUuid
+             << item.m_connectUuid
              << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
              << QString::number(category)
              << QString::number(item.m_isConfigured)
              << QString::number(item.m_frequency)
              << (item.m_isMix?IsApConnection : NotApConnection)
-             <<  QString::number(item.m_autoconnect)
+             << QString::number(item.m_autoconnect)
                 ;
     }
 
@@ -1577,6 +1578,8 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
                           << QString::number(data.m_frequency) //8
                           << (data.m_isMix ? IsApConnection : NotApConnection) //9
                           << (data.m_isConfigured ? (data.m_autoconnect ? str1 : str0) : str1) //10
+                          << (QString::number(m_connectResource->getActiveConnectionState(data.m_connectUuid))) //11
+
                         );
 
             //

@@ -101,6 +101,7 @@ void AptProxyDialog::initUi()
     mConfirmBtn = new QPushButton(mChooseFrame);
     mConfirmBtn->setMinimumWidth(96);
     mConfirmBtn->setText(tr("Confirm"));
+    mConfirmBtn->setProperty("isImportant", true);/* v11引导操作设置高亮，link bug#452573 */
 
     mLyt_3->addStretch();
     mLyt_3->addWidget(mCancelBtn);

@@ -227,7 +227,17 @@ bool WlanConnect::isEnable() const
         item ++;
     }
 
-    bool isEnabled = !map.isEmpty();
+    //保证和快捷面板一致，在wifi未托管情况下不显示控制面板选项
+    bool isEnabled = false;
+    if (!map.isEmpty()) {
+        QMutableMapIterator<QString, bool> it(map);
+        while (it.hasNext()) {
+            it.next(); // 必须先跳转到下一个元素
+            if (it.value() == true) {
+                isEnabled = true;
+            }
+        }
+    }
 
     qWarning() << Q_FUNC_INFO << __LINE__ << isEnabled;
 

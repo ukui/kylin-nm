@@ -1238,6 +1238,9 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     m_wirelessNetResource->getSsidByUuid(uuid, ssid);
     m_wirelessNetResource->getDeviceByUuid(uuid, devName);
 
+    if (devName.isEmpty()) {
+        devName = m_currentDevice;
+    }
     qDebug()<< LOG_FLAG << "Q_EMIT wlanActiveConnectionStateChanged" << devName << ssid << state;
     Q_EMIT wlanActiveConnectionStateChanged(devName, ssid, uuid, state);
 

@@ -328,14 +328,15 @@ void KnmInterface::setWirelessSwitch(bool switched)
 
 void KnmInterface::setWirelessScanState(bool state)
 {
-    qWarning() << Q_FUNC_INFO << __LINE__ << state;
+    qDebug() << Q_FUNC_INFO << __LINE__ << state;
     if (state) {
-        if(m_pRefreshTimer && !m_pRefreshTimer->isActive())
+        rescanWirelessConn();
+        if(m_pRefreshTimer && !m_pRefreshTimer->isActive()) {
             m_pRefreshTimer->start();
+        }
     } else {
         if(m_pRefreshTimer && m_pRefreshTimer->isActive()) {
-            qWarning() << Q_FUNC_INFO << __LINE__ << "========= m_pRefreshTimer set stop";
-
+            qDebug() << Q_FUNC_INFO << __LINE__ << "m_pRefreshTimer set stop";
             m_pRefreshTimer->stop();
         }
     }

@@ -379,6 +379,11 @@ UkuiItems.DtThemeBackground {
             }
 		}
 
+        Component.onCompleted: {
+            console.log("Component.onCompleted")
+            KInterface.wirelessScanState = true
+        }
+
         Component.onDestruction: {
             console.log("Rectangle is about to be destroyed.")
             KInterface.wirelessScanState = false

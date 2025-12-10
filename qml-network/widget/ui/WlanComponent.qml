@@ -332,6 +332,11 @@ ListView {
                     sourceComponent: Menu {
                         id: propertyMenu
 
+                        Component.onCompleted: {
+                            console.log("Menu completed for SSID:", model.ssid);
+                            console.log("model.Configured:", model.Configured);
+                        }
+
                         MenuItem {//connect/disconnect
                             text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
                             onTriggered: {
@@ -373,7 +378,13 @@ ListView {
 
                         MenuItem {//property
                             text:qsTr("Network property")
-                            visible: model.status === 2
+                            visible: {
+                                console.log("Property MenuItem visible check - model.Configured:", model.Configured);
+                                return model.Configured;
+                            }
+                            Component.onCompleted: {
+                                console.log("Property MenuItem loaded for SSID:", model.ssid);
+                            }
                             onTriggered: {
                                 console.log("network property")
                                 console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
@@ -384,7 +395,13 @@ ListView {
 
                         MenuItem {
                             text:qsTr("Forget the network")
-                            visible: model.status === 2
+                            visible: {
+                                console.log("Forget MenuItem visible check - model.Configured:", model.Configured);
+                                return model.Configured;
+                            }
+                            Component.onCompleted: {
+                                console.log("Forget MenuItem loaded for SSID:", model.ssid);
+                            }
                             onTriggered: {
                                 console.log("Forget the network",model.uuid)
                                 KInterface.deleteConnect(1,model.uuid)

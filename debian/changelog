@@ -1,3 +1,13 @@
+kylin-nm (4.20.0.0-ok0.13) nile-sp2; urgency=medium
+
+  * Bug号: #462571 【版本组自测】【kylin-nm包编译】 2.0-SP2（kylin-nm=4.20.0.0-ok0.10）riscv架构包编译失败
+
+  * 需求号:无
+  * 其他改动说明：无
+  * 其他改动影响域:无
+
+ -- yangling <yangling@kylinos.cn>  Wed, 10 Dec 2025 09:32:41 +0800
+
 kylin-nm (4.20.0.0-ok0.12) nile-sp2; urgency=medium
 
   * Bug号:无

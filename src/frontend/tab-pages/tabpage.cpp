@@ -311,10 +311,16 @@ QRect TabPage::caculatePositionWithPanel(const int windowWidth, const int window
     case PanelPosition::Top:
         x = availableGeo.x() + availableGeo.width() - windowWidth - margin;
         y = availableGeo.y() + m_panelSize + margin;
+        if(isRightToLeft()){
+            x = availableGeo.x() + availableGeo.width() - x - windowWidth;
+        }
         break;
     case PanelPosition::Bottom:
         x = availableGeo.x() + availableGeo.width() - windowWidth - margin;
         y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - margin;
+        if(isRightToLeft()){
+            x = availableGeo.x() + availableGeo.width() - x - windowWidth;
+        }
         break;
     case PanelPosition::Left:
         x = availableGeo.x() + m_panelSize + margin;

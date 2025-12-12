@@ -68,16 +68,16 @@
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
-const QString KWifiSymbolic     = "network-wireless-signal-excellent";
-const QString KWifiLockSymbolic = "network-wireless-secure-signal-excellent";
-const QString KWifiGood         = "network-wireless-signal-good";
-const QString KWifiLockGood     = "network-wireless-secure-signal-good";
-const QString KWifiOK           = "network-wireless-signal-ok";
-const QString KWifiLockOK       = "network-wireless-secure-signal-ok";
-const QString KWifiLow          = "network-wireless-signal-low";
-const QString KWifiLockLow      = "network-wireless-secure-signal-low";
-const QString KWifiNone         = "network-wireless-signal-none";
-const QString KWifiLockNone     = "network-wireless-secure-signal-none";
+const QString KWifiSymbolic     = "network-wireless-signal-excellent-symbolic";
+const QString KWifiLockSymbolic = "network-wireless-signal-excellent-secure-symbolic";
+const QString KWifiGood         = "network-wireless-signal-good-symbolic";
+const QString KWifiLockGood     = "network-wireless-signal-good-secure-symbolic";
+const QString KWifiOK           = "network-wireless-signal-ok-symbolic";
+const QString KWifiLockOK       = "network-wireless-signal-ok-secure-symbolic";
+const QString KWifiLow          = "network-wireless-signal-weak-symbolic";
+const QString KWifiLockLow      = "network-wireless-signal-weak-secure-symbolic";
+const QString KWifiNone         = "network-wireless-signal-none-symbolic";
+const QString KWifiLockNone     = "network-wireless-signal-none-secure-symbolic";
 
 const QString KWifi6Symbolic        = "ukui-wifi6-full-symbolic";
 const QString KWifi6PlusSymbolic    = "ukui-wifi6+-full-symbolic";

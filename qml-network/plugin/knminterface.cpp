@@ -394,8 +394,11 @@ ConnectStatus KnmInterface::getConnectionStatus()
     auto wiredDev = KNMDC::getInstance()->wiredDeviceList();
 
     bool wiredConnect = false;
+    bool wiredDeviceExists = false;  // 添加标志判断是否有真实设备
+
     for (auto iter : wiredDev) {
         if (!iter.isNull()) {
+            wiredDeviceExists = true;  // 有真实设备存在
             if (!wiredConnect) {
                 for (auto devices : iter->getConnections()) {
                     int status = devices.toMap().value("State").toInt();
@@ -411,12 +414,13 @@ ConnectStatus KnmInterface::getConnectionStatus()
         }
     }
 
-
     auto wirelessDev = KNMDC::getInstance()->wirelessDeviceList();
     bool wirelessConnect = false;
+    bool wirelessDeviceExists = false;  // 添加标志判断是否有真实设备
 
     for (auto iter : wirelessDev) {
         if (!iter.isNull()) {
+            wirelessDeviceExists = true;  // 有真实设备存在
             if (!wirelessConnect) {
                 for (auto devices : iter->getConnections()) {
                     int status = devices.toMap().value("State").toInt();
@@ -432,6 +436,11 @@ ConnectStatus KnmInterface::getConnectionStatus()
         }
     }
 
+    qWarning() << Q_FUNC_INFO << __LINE__ << " wiredConnect " << wiredConnect
+               << "wirelessConnect:" << wirelessConnect
+               << "wiredDeviceExists:" << wiredDeviceExists
+               << "wirelessDeviceExists:" << wirelessDeviceExists;
+
     if (wiredConnect && wirelessConnect) {
         return ConnectStatus::All;
     } else if (wiredConnect) {
@@ -439,12 +448,14 @@ ConnectStatus KnmInterface::getConnectionStatus()
     } else if (wirelessConnect) {
         return ConnectStatus::Wireless;
     } else {
-        if (wiredDev.count() > 0)
-            return ConnectStatus::Wire;
-        else if (wirelessDev.count() > 0)
-            return ConnectStatus::Wireless;
+        // 修改判断逻辑，基于是否有真实设备而不是Map元素数量
+        if (wiredDeviceExists) {
+            return ConnectStatus::Wire;  // 有有线设备但未连接
+        } else if (wirelessDeviceExists) {
+            return ConnectStatus::Wireless;  // 有无线设备但未连接
+        }
 
-        return ConnectStatus::NoConnect;
+        return ConnectStatus::NoConnect;  // 没有任何网络设备
     }
 }
 

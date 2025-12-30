@@ -642,15 +642,15 @@ QVariantList DbusAdaptor::getNetworkDeviceData(int type)
             QStringList connList = connectList.at(j).toStringList();
             qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
             int index = 4;
-            if (type)
+            if (type)//无线
                 index=10;
-            if (connList.size() > index &&  (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
+            if (connList.size() > index && (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
                 valueMap.append(QVariant::fromValue(connList.at(0)));
                 break;
             }
         }
 
-        if (2 == valueMap.size()) { //如果默认设备未获取到连接，则遍历其他网卡设备
+        if ((valueMap.size() <= 2) || (valueMap.size() >= 3 && valueMap.at(2).toString().isEmpty())) { //如果默认设备未获取到连接，则遍历其他网卡设备
             for (const auto &data : devDatalist) {
                 if (data == netDefaultName)
                     continue;
@@ -663,7 +663,10 @@ QVariantList DbusAdaptor::getNetworkDeviceData(int type)
                 for (int j = 0; j < connectList.size() && j < 1 ; ++j) { //只执行一次，所有已连接的网络连接均在最顶端
                     QStringList connList = connectList.at(j).toStringList();
                     qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
-                    if (connList.size() > 4 &&  (connList.at(4).toInt() == 2 || connList.at(4).toInt() == 4) ) {
+                    int index = 4;
+                    if (type)//无线
+                        index=10;
+                    if (connList.size() > 4 &&  (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
                         valueMap.append(QVariant::fromValue(connList.at(0)));
                         break;
                     }

@@ -1,3 +1,59 @@
+kylin-nm (4.20.0.0-ok0.13) nile-sp2; urgency=medium
+
+  * Bug号: #462571 【版本组自测】【kylin-nm包编译】 2.0-SP2（kylin-nm=4.20.0.0-ok0.10）riscv架构包编译失败
+
+  * 需求号:无
+  * 其他改动说明：无
+  * 其他改动影响域:无
+
+ -- yangling <yangling@kylinos.cn>  Wed, 10 Dec 2025 09:32:41 +0800
+
+kylin-nm (4.20.0.0-ok0.12) nile-sp2; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明：处理翻译问题，以及vpn打开不了问题
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Mon, 08 Dec 2025 15:20:24 +0800
+
+kylin-nm (4.20.0.0-ok0.11) nile-sp2; urgency=medium
+
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明：去掉dns高级设置包依赖导致编译不过的问题
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Fri, 05 Dec 2025 13:53:32 +0800
+
+kylin-nm (4.20.0.0-ok0.10) nile-sp2; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明：导入kylin-nm问题修改代码
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Thu, 20 Nov 2025 15:55:27 +0800
+
+kylin-nm (4.20.0.0-ok0.9) nile-sp2; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明：修复kylin-nm-qml界面打开无显示的问题
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Tue, 28 Oct 2025 10:42:25 +0800
+
+kylin-nm (4.20.0.0-ok0.8) nile-sp2; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明:修改部分bug，更新上游代码；
+  * 其他改动影响域:无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Fri, 24 Oct 2025 13:52:04 +0800
+
 kylin-nm (4.20.0.0-ok0.7) nile-sp2; urgency=medium
 
   * Bug号:无

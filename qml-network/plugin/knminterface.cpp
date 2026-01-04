@@ -206,6 +206,10 @@ void KnmInterface::openwLanNetworkSetting()
 void KnmInterface::getWiredDevConnList(QString devName)
 {
     m_currentWiredDevice = devName;
+
+    //设置默认有线网卡
+    KNMDC::getInstance()->setDefaultWiredDevice(devName);
+
     m_wiredDevConnList = KNMDC::getInstance()->wiredDeviceConnList(devName);
     emit updateWiredDevConnList();
 }

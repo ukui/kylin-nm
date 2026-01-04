@@ -97,6 +97,8 @@ public:
 
     QString getWirelessDefaultDeviceName(void);
 
+    int getActivateWifiCategory(QString devName);
+
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);

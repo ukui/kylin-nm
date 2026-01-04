@@ -2009,3 +2009,24 @@ QString WlanPage::getWirelessDefaultDeviceName(void)
     return getDefaultDeviceName(WIRELESS);
 }
 
+int WlanPage::getActivateWifiCategory(QString devName)
+{
+    QString currentActivateWifiUni = m_activatedConnectResource->getActivateWifiUni(devName);
+
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              currentActivateWifiUni,
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    if (!interface.isValid()) {
+        qDebug() << Q_FUNC_INFO << "dbus is invalid";
+        return -1;
+    }
+
+    QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Category");
+    if (!reply.isValid()) {
+        qDebug()<<"can not get the attribute 'Category' in func getCategory()";
+        return 0;
+    } else {
+        return reply.value().toInt();
+    }
+}

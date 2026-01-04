@@ -7,6 +7,7 @@ include(netdetails/netdetails.pri)
 include(enterprise-wlan/enterprise-wlan.pri)
 include(connectivity/connectivity.pri)
 include(networkmode/networkmode.pri)
+include(../../common/common.pri)
 
 FORMS += \
     $$PWD/wificonfigdialog.ui

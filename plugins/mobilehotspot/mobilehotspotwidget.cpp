@@ -377,8 +377,6 @@ void MobileHotspotWidget::onInterfaceChanged()
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
     if(m_uuid == uuid && status == 4) {
-        if(m_switchBtn->isChecked())
-            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(false);
         setUiEnabled(false);
         m_uuid.clear();
@@ -396,8 +394,6 @@ void MobileHotspotWidget::onWirelessBtnChanged(bool state)
 {
     stopLoading();
     if (!state) {
-        if(m_switchBtn->isChecked())
-            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(state);
         m_uuid.clear();
         m_switchBtn->setCheckable(false);
@@ -480,8 +476,6 @@ void MobileHotspotWidget::getApInfo()
     }
 
     if (m_interfaceComboBox->count() <= 0) {
-        if(m_switchBtn->isChecked())
-            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(false);
         setWidgetHidden(true);
         qWarning() << LOG_HEAD << "getApInfo but interface is empty";
@@ -522,8 +516,6 @@ void MobileHotspotWidget::getApInfo()
             setUiEnabled(true);
             m_uuid = apInfo.at(4);
         } else {
-            if(m_switchBtn->isChecked())
-                showDesktopNotify(tr("hotspot already close"));
             m_switchBtn->setChecked(false);
             setUiEnabled(false);
             m_uuid = apInfo.at(4);
@@ -787,8 +779,6 @@ void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
         return;
     }
     if (devName == m_interfaceComboBox->currentText() && ssid == m_apNameLine->text()) {
-        if(m_switchBtn->isChecked())
-            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(false);
         m_uuid.clear();
 //        setUiEnabled(true);
@@ -819,8 +809,6 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
     this->update();
 
     if (devName == m_interfaceComboBox->currentText() && ssid == m_apNameLine->text()) {
-        if(!m_switchBtn->isChecked())
-            showDesktopNotify(tr("hotspot already open"));
         m_switchBtn->setChecked(true);
         m_uuid = uuid;
 //        setUiEnabled(false);
@@ -831,8 +819,6 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
         }
         int index = m_interfaceComboBox->findText(devName);
         if (index >= 0) {
-            if(!m_switchBtn->isChecked())
-                showDesktopNotify(tr("hotspot already open"));
             m_apNameLine->setText(ssid);
             m_interfaceComboBox->setCurrentIndex(index);
             m_switchBtn->setChecked(true);

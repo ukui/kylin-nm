@@ -47,6 +47,7 @@
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "ukcccommon.h"
+#include "common.h"
 
 using namespace kdk;
 using namespace ukcc;

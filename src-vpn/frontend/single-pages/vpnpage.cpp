@@ -255,6 +255,9 @@ void VpnPage::initUI()
     m_listWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
     m_settingsLabel->setText(tr("VPN Settings"));
+    m_settingsLabel->setAttribute(Qt::WA_Hover, true);
+    m_settingsLabel->setMouseTracking(true);
+
     m_settingsLabel->installEventFilter(this);
 }
 

@@ -2,9 +2,7 @@ INCLUDEPATH += $$PWD
 
 
 HEADERS += \
-    $$PWD/common.h \
-    $$PWD/test.h
-
+    $$PWD/common.h
 
 SOURCES += 
 

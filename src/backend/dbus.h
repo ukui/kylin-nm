@@ -281,7 +281,20 @@ class DbusAdaptor: public QObject, protected QDBusContext
 "      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
 "      <arg direction=\"in\" type=\"i\" name=\"devType\"/>\n"
 "    </method>\n"
-
+"    <method name=\"setDefaultWiredDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getDefaultWiredDevice\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"    </method>\n"
+"    <method name=\"setDefaultWirelessDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getDefaultWirelessDevice\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"    </method>\n"
 
 "  </interface>\n"
         "")
@@ -301,11 +314,7 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void setWirelessSwitchEnable(bool enable);
     //有线网卡开关
     Q_NOREPLY void setDeviceEnable(QString devName, bool enable);
-    //设置默认网卡
-//    Q_NOREPLY void setDefaultWiredDevice(QString deviceName);
-//    QString getDefaultWiredDevice();
-//    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
-//    QString  getDefaultWirelessDevice();
+
     //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
@@ -362,6 +371,11 @@ public Q_SLOTS: // METHODS
     int requestInputPasswdAgent(QVariantMap value);
 
     QVariantList getNetworkDeviceData(int devType);
+    //设置默认网卡
+    void setDefaultWiredDevice(QString deviceName);
+    QString getDefaultWiredDevice();
+    void setDefaultWirelessDevice(QString deviceName);
+    QString  getDefaultWirelessDevice();
 
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);

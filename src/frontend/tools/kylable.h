@@ -59,6 +59,7 @@ protected:
 
 private:
     QColor m_foregroundColor;
+    QColor m_origForegroundColor;
 
     void setPressColor();
     void setHoverColor();

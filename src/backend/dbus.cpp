@@ -224,49 +224,57 @@ void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 }
 
 //设置默认网卡
-//void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
-//{
-//    if (!checkDeviceExist(WIRED, deviceName)) {
-//        return;
-//    }
-//    setDefaultDevice(WIRED, deviceName);
-//    parent()->setWiredDefaultDevice(deviceName);
-//    return;
-//}
+void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
 
-//QString DbusAdaptor::getDefaultWiredDevice()
-//{
-//    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-//    m_settings->beginGroup("DEFAULTCARD");
-//    QString key("wired");
-//    QString deviceName = m_settings->value(key, "").toString();
-//    m_settings->endGroup();
-//    delete m_settings;
-//    m_settings = nullptr;
-//    return deviceName;
-//}
+    if (!checkDeviceExist(WIRED, deviceName)) {
+        return;
+    }
+    setDefaultDevice(WIRED, deviceName);
+//    m_mainWindow->setWiredDefaultDevice(deviceName);
+    return;
+}
 
-//void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
-//{
-//    if (!checkDeviceExist(WIRED, deviceName)) {
-//        return;
-//    }
-//    setDefaultDevice(WIRELESS, deviceName);
+QString DbusAdaptor::getDefaultWiredDevice()
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wired");
+    QString deviceName = m_settings->value(key, "").toString();
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    return deviceName;
+}
+
+void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
+
+    if (!checkDeviceExist(WIRED, deviceName)) {
+        return;
+    }
+    setDefaultDevice(WIRELESS, deviceName);
 //    parent()->setWirelessDefaultDevice(deviceName);
-//    return;
-//}
+    return;
+}
 
-//QString  DbusAdaptor::getDefaultWirelessDevice()
-//{
-//    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-//    m_settings->beginGroup("DEFAULTCARD");
-//    QString key("wireless");
-//    QString deviceName = m_settings->value(key, "").toString();
-//    m_settings->endGroup();
-//    delete m_settings;
-//    m_settings = nullptr;
-//    return deviceName;
-//}
+QString  DbusAdaptor::getDefaultWirelessDevice()
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wireless");
+    QString deviceName = m_settings->value(key, "").toString();
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    return deviceName;
+}
 
 //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)

@@ -72,6 +72,7 @@ void Ipv4Page::initUI() {
 
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_statusLabel->setProperty("useIconHighlightEffect", 0x01);
     QHBoxLayout *pPwdLayout = new QHBoxLayout(ipv4addressEdit);
     pPwdLayout->addStretch();
     pPwdLayout->addWidget(m_statusLabel);

@@ -77,9 +77,14 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     mLanLyt->addWidget(m_networkCheckFrame);
     mLanLyt->addWidget(infoLabel);
 
-    mainLayout->addLayout(mLanLyt);/* 将水平布局添加到主布局 */
-    KHLineFrame *separator = new KHLineFrame(this); /* 分割线 */
-    mainLayout->addWidget(separator);
+    m_topSeparator = new KHLineFrame(this);
+    m_topSeparator->setVisible(false);
+    mainLayout->addWidget(m_topSeparator);
+
+    mainLayout->addLayout(mLanLyt);
+
+    m_bottomSeparator = new KHLineFrame(this); 
+    mainLayout->addWidget(m_bottomSeparator);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
@@ -132,6 +137,21 @@ void LanItem::setNetworkCheckFrameHidden(bool state)
 {
     m_networkCheckFrame->setHidden(state);
     statusLabel->setVisible(state);
+}
+
+void LanItem::setTopSeparatorVisible(bool visible)
+{
+    if (m_topSeparator){
+        m_topSeparator->setVisible(visible);
+    }
+}
+
+void LanItem::setBottomSeparatorVisible(bool visible)
+{
+    if (m_bottomSeparator){
+        m_bottomSeparator->setVisible(visible);
+    }
+        
 }
 
 void LanItem::setConnectivityWarn(ConnectivityType connectivityType)

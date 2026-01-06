@@ -17,10 +17,10 @@
  */
 
 #include "proxyapphandler.h"
+#include <sys/types.h>
 #include <cstddef>
 #include <cerrno>
 #include <cstring>
-#include <sys/types.h>
 #include <QDebug>
 #include <vector>
 

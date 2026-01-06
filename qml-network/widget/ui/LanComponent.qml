@@ -70,7 +70,7 @@ ListView {
                     mouse.accepted = false  // 左键允许继续传播
                 }
 
-                if(connectBtnHandler.containsMouse) {
+                if(connectBtnHandler.containsMouse && mouse.button === Qt.LeftButton) {
                     console.log("in connectBtn return")
                     typeicon.visible = false;
                     loadingicon.visible = true;
@@ -302,14 +302,7 @@ ListView {
                 ToolTip.visible: connectBtnHandler.containsMouse && contentItem.truncated
                 ToolTip.text: text
                 ToolTip.delay: 500
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight  /* 文本过长时显示省略号 */
-                }
+                property var maxWidth: 88
 
                 MouseArea {
                     id: connectBtnHandler

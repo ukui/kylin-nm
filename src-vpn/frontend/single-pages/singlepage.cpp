@@ -37,6 +37,7 @@ SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
     initTransparency();
     initWindowTheme();
     m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setWindowRole(UkuiWindowHelper::WindowRole::SystemWindow);
 }
 
 SinglePage::~SinglePage()

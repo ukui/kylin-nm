@@ -679,6 +679,8 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     deviceFrameMap[devName]->itemMap.insert(infoList.at(1), lanItem);
     qDebug()<<"insert " << infoList.at(1) << " to " << devName << " list";
     frame->lanItemLayout->addWidget(lanItem);
+    frame->updateCornerStyle();
+    frame->filletStyleChange();
 }
 
 //增加设备
@@ -717,11 +719,23 @@ void NetConnect::addDeviceFrame(QString devName)
         itemFrame->lanItemFrame->show();
         itemFrame->deviceFrame->dropDownLabel->show();
         itemFrame->m_deviceSeparator->show();
+        itemFrame->updateCornerStyle();
+        itemFrame->filletStyleChange();
     } else {
         itemFrame->lanItemFrame->hide();
         itemFrame->m_deviceSeparator->hide();
         itemFrame->deviceFrame->dropDownLabel->hide();
         itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(false);
+        if (itemFrame->addLanWidget){
+            itemFrame->addLanWidget->hide();
+        }
+
+        if (itemFrame->m_addSeparator){
+            itemFrame->m_addSeparator->hide();
+        }
+            
+        itemFrame->updateCornerStyle();
+        itemFrame->filletStyleChange();            
     }
     deviceFrameMap.insert(devName, itemFrame);
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
@@ -742,6 +756,8 @@ void NetConnect::addDeviceFrame(QString devName)
             itemFrame->deviceFrame->dropDownLabel->show();
             itemFrame->m_deviceSeparator->show();
             itemFrame->addLanWidget->show();
+            itemFrame->updateCornerStyle();
+            itemFrame->filletStyleChange();
             itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
             deviceStatusMap[devName] = true;
         } else {
@@ -750,6 +766,8 @@ void NetConnect::addDeviceFrame(QString devName)
             itemFrame->m_deviceSeparator->hide();
             itemFrame->deviceFrame->dropDownLabel->hide();
             itemFrame->addLanWidget->hide();
+            itemFrame->updateCornerStyle();
+            itemFrame->filletStyleChange();
             deviceStatusMap[devName] = false;
             QMap<QString, LanItem *>::iterator iter;
             for (iter = deviceFrameMap.value(devName)->itemMap.begin();
@@ -928,6 +946,8 @@ void NetConnect::onLanRemove(QString lanPath)
                iter.value()->lanItemLayout->removeWidget(itemIter.value());
                delete itemIter.value();
                iter.value()->itemMap.remove(key);
+               iter.value()->updateCornerStyle();
+               iter.value()->filletStyleChange();
                break;
             }
         }
@@ -1000,6 +1020,8 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     int index = getInsertPos(connName, deviceName);
     qDebug()<<"[NetConnect]addOneLanFrame " << connName << " to " << deviceName << " list at pos:" << index;
     frame->lanItemLayout->insertWidget(index, lanItem);
+    frame->updateCornerStyle();
+    frame->filletStyleChange();
 }
 
 void NetConnect::removeOneLanFrame(ItemFrame *frame, QString deviceName, QString uuid)
@@ -1018,6 +1040,8 @@ void NetConnect::removeOneLanFrame(ItemFrame *frame, QString deviceName, QString
    frame->lanItemLayout->removeWidget(frame->itemMap[uuid]);
    delete frame->itemMap[uuid];
    frame->itemMap.remove(uuid);
+    frame->updateCornerStyle();
+    frame->filletStyleChange();
 }
 
 //activeconnect status change

@@ -992,7 +992,7 @@
         <location filename="../frontend/mainwindow.cpp" line="269"/>
         <location filename="../frontend/mainwindow.cpp" line="300"/>
         <source>kylin-nm</source>
-        <translation>kylin-تور  قۇرالى</translation>
+        <translation>تور  قۇرالى</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="463"/>

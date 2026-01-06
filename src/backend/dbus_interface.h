@@ -254,6 +254,31 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("getNetworkDeviceData"), argumentList);
     }
 
+    inline Q_NOREPLY void setDefaultWiredDevice(QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDefaultWiredDevice"), argumentList);
+    }
+
+    inline QDBusPendingReply<QString> getDefaultWiredDevice()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("getDefaultWiredDevice"), argumentList);
+    }
+
+    inline Q_NOREPLY void setDefaultWirelessDevice(QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDefaultWirelessDevice"), argumentList);
+    }
+
+    inline QDBusPendingReply<QString> getDefaultWirelessDevice()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("getDefaultWirelessDevice"), argumentList);
+    }
 
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);

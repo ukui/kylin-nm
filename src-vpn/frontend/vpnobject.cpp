@@ -28,7 +28,9 @@ vpnObject::vpnObject(QMainWindow *parent) : QMainWindow(parent)
     initTrayIcon();
     initDbusConnnect();
     m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setBlurEffect(QRegion());
     m_uwin->setSkipTaskBar(true);
+    m_uwin->setWindowRole(UkuiWindowHelper::WindowRole::SystemWindow);
 }
 
 vpnObject::~vpnObject()

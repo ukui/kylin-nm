@@ -71,6 +71,8 @@ public:
     void registerInputPasswdAgent();
 
     void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool state);
+
+    void setDefaultWiredDevice(QString devName);
 //用于调用kylin-nm的dbus
 protected:
     QDBusPendingCallWatcher * asyncCall(const QString & methed, const QList<QVariant> & params);

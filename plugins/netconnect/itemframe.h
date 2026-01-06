@@ -48,6 +48,11 @@ public:
     // 分割线
     KHLineFrame * m_deviceSeparator = nullptr;
 
+    KHLineFrame * m_addSeparator = nullptr;
+
+    void updateCornerStyle();
+    void filletStyleChange();
+
 private slots:
     void onDrownLabelClicked();
 };

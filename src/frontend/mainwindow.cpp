@@ -35,6 +35,8 @@
 #include "windowmanager/windowmanager.h"
 #include "kysdk/kysdk-system/libkysysinfo.h"
 #include "kylinutil.h"
+#include "common.h"
+
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
@@ -925,6 +927,8 @@ void MainWindow::onRefreshTrayIcon()
 {
     //更新托盘图标显示
     int signalStrength = 0;
+    int currentCategory = 0;
+
     iconTimer->stop();
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
@@ -952,9 +956,14 @@ void MainWindow::onRefreshTrayIcon()
         } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
     //        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
             signalStrength = m_wlanWidget->getActivateWifiSignal(m_wlanWidget->getCurrentDisplayDevice());
+            currentCategory = m_wlanWidget->getActivateWifiCategory(m_wlanWidget->getCurrentDisplayDevice());
+
             if (signalStrength == -1) {
                 signalStrength = m_wlanWidget->getActivateWifiSignal();
             }
+            if (currentCategory < 0)
+                currentCategory = 0;
+
             iconStatus = IconActiveType::WLAN_CONNECTED;
         } else {
             m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
@@ -975,30 +984,56 @@ void MainWindow::onRefreshTrayIcon()
         }
     }
 
+    qDebug() << Q_FUNC_INFO << __LINE__ << "WiFi signalStrength : " << signalStrength << "current avtive WiFi Category : " << currentCategory;
+
     if (iconStatus == IconActiveType::WLAN_CONNECTED
             || iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
         if (signalStrength > MW_EXCELLENT_SIGNAL){
-            m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
+            if (currentCategory == KyCategoryWiFi7)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Symbolic));
+             else if (currentCategory == KyCategoryWiFi6Plus)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6PlusSymbolic));
+             else if (currentCategory == KyCategoryWiFi6)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6Symbolic));
+             else
+                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
+
         } else if (signalStrength > MW_GOOD_SIGNAL) {
-            m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_ICON));
+            if (currentCategory == KyCategoryWiFi7)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Good));
+            else if (currentCategory == KyCategoryWiFi6Plus)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6PlusGood));
+            else if (currentCategory == KyCategoryWiFi6)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Good));
+            else
+                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_ICON));
         } else if (signalStrength > MW_OK_SIGNAL) {
-            m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_ICON));
+            if (currentCategory == KyCategoryWiFi7)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7OK));
+            else if (currentCategory == KyCategoryWiFi6Plus)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6PlusOK));
+            else if (currentCategory == KyCategoryWiFi6)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6OK));
+            else
+                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_ICON));
         } else if (signalStrength > MW_LOW_SIGNAL) {
-            m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_ICON));
+            if (currentCategory == KyCategoryWiFi7)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Low));
+            else if (currentCategory == KyCategoryWiFi6Plus)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6PlusLow));
+            else if (currentCategory == KyCategoryWiFi6)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6Low));
+            else
+                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_ICON));
         } else {
-            m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_ICON));
-        }
-    } else if (iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
-        if (signalStrength > MW_EXCELLENT_SIGNAL){
-            m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_LIMIT_ICON));
-        } else if (signalStrength > MW_GOOD_SIGNAL) {
-            m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_LIMIT_ICON));
-        } else if (signalStrength > MW_OK_SIGNAL) {
-            m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_LIMIT_ICON));
-        } else if (signalStrength > MW_LOW_SIGNAL) {
-            m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_LIMIT_ICON));
-        } else {
-            m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
+            if (currentCategory == KyCategoryWiFi7)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7None));
+            else if (currentCategory == KyCategoryWiFi6Plus)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6PlusNone));
+            else if (currentCategory == KyCategoryWiFi6)
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6None));
+            else
+                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_ICON));
         }
     }
 

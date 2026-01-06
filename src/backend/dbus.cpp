@@ -224,49 +224,57 @@ void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 }
 
 //设置默认网卡
-//void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
-//{
-//    if (!checkDeviceExist(WIRED, deviceName)) {
-//        return;
-//    }
-//    setDefaultDevice(WIRED, deviceName);
-//    parent()->setWiredDefaultDevice(deviceName);
-//    return;
-//}
+void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
 
-//QString DbusAdaptor::getDefaultWiredDevice()
-//{
-//    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-//    m_settings->beginGroup("DEFAULTCARD");
-//    QString key("wired");
-//    QString deviceName = m_settings->value(key, "").toString();
-//    m_settings->endGroup();
-//    delete m_settings;
-//    m_settings = nullptr;
-//    return deviceName;
-//}
+    if (!checkDeviceExist(WIRED, deviceName)) {
+        return;
+    }
+    setDefaultDevice(WIRED, deviceName);
+//    m_mainWindow->setWiredDefaultDevice(deviceName);
+    return;
+}
 
-//void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
-//{
-//    if (!checkDeviceExist(WIRED, deviceName)) {
-//        return;
-//    }
-//    setDefaultDevice(WIRELESS, deviceName);
+QString DbusAdaptor::getDefaultWiredDevice()
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wired");
+    QString deviceName = m_settings->value(key, "").toString();
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    return deviceName;
+}
+
+void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
+
+    if (!checkDeviceExist(WIRED, deviceName)) {
+        return;
+    }
+    setDefaultDevice(WIRELESS, deviceName);
 //    parent()->setWirelessDefaultDevice(deviceName);
-//    return;
-//}
+    return;
+}
 
-//QString  DbusAdaptor::getDefaultWirelessDevice()
-//{
-//    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-//    m_settings->beginGroup("DEFAULTCARD");
-//    QString key("wireless");
-//    QString deviceName = m_settings->value(key, "").toString();
-//    m_settings->endGroup();
-//    delete m_settings;
-//    m_settings = nullptr;
-//    return deviceName;
-//}
+QString  DbusAdaptor::getDefaultWirelessDevice()
+{
+    qWarning() << Q_FUNC_INFO << __LINE__;
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wireless");
+    QString deviceName = m_settings->value(key, "").toString();
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    return deviceName;
+}
 
 //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
@@ -642,15 +650,15 @@ QVariantList DbusAdaptor::getNetworkDeviceData(int type)
             QStringList connList = connectList.at(j).toStringList();
             qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
             int index = 4;
-            if (type)
+            if (type)//无线
                 index=10;
-            if (connList.size() > index &&  (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
+            if (connList.size() > index && (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
                 valueMap.append(QVariant::fromValue(connList.at(0)));
                 break;
             }
         }
 
-        if (2 == valueMap.size()) { //如果默认设备未获取到连接，则遍历其他网卡设备
+        if ((valueMap.size() <= 2) || (valueMap.size() >= 3 && valueMap.at(2).toString().isEmpty())) { //如果默认设备未获取到连接，则遍历其他网卡设备
             for (const auto &data : devDatalist) {
                 if (data == netDefaultName)
                     continue;
@@ -663,7 +671,10 @@ QVariantList DbusAdaptor::getNetworkDeviceData(int type)
                 for (int j = 0; j < connectList.size() && j < 1 ; ++j) { //只执行一次，所有已连接的网络连接均在最顶端
                     QStringList connList = connectList.at(j).toStringList();
                     qWarning () << Q_FUNC_INFO << __LINE__ << "connList:" << connList;
-                    if (connList.size() > 4 &&  (connList.at(4).toInt() == 2 || connList.at(4).toInt() == 4) ) {
+                    int index = 4;
+                    if (type)//无线
+                        index=10;
+                    if (connList.size() > 4 &&  (connList.at(index).toInt() == 2 || connList.at(index).toInt() == 4) ) {
                         valueMap.append(QVariant::fromValue(connList.at(0)));
                         break;
                     }

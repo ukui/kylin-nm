@@ -67,17 +67,19 @@ void DeviceFrame::paintEvent(QPaintEvent *event)
     
     QRect rect = this->rect();
     const int radius = RADIUS;
-    
-    // 创建单一路径实现上圆角下直角
     QPainterPath path;
-    path.moveTo(rect.topLeft() + QPointF(0, radius));
-    path.arcTo(rect.left(), rect.top(), radius * 2, radius * 2, 180, -90);
-    path.lineTo(rect.right() - radius, rect.top());
-    path.arcTo(rect.right() - radius * 2, rect.top(), radius * 2, radius * 2, 90, -90);
-    path.lineTo(rect.right(), rect.bottom());
-    path.lineTo(rect.left(), rect.bottom());
-    path.lineTo(rect.left(), rect.top() + radius);
-    
+    if (deviceSwitch && !deviceSwitch->isChecked()) {
+        path.addRoundedRect(rect, radius, radius);
+    } else {
+        path.moveTo(rect.topLeft() + QPointF(0, radius));
+        path.arcTo(rect.left(), rect.top(), radius * 2, radius * 2, 180, -90);
+        path.lineTo(rect.right() - radius, rect.top());
+        path.arcTo(rect.right() - radius * 2, rect.top(), radius * 2, radius * 2, 90, -90);
+        path.lineTo(rect.right(), rect.bottom());
+        path.lineTo(rect.left(), rect.bottom());
+        path.lineTo(rect.left(), rect.top() + radius);
+    }
+
     // 绘制背景
     painter.setPen(Qt::NoPen);
     painter.setBrush(pal.color(QPalette::Base));

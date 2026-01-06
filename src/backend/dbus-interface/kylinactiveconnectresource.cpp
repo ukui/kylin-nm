@@ -816,3 +816,40 @@ bool KyActiveConnectResourse::checkInternetLoading()
     }
     return false;
 }
+
+
+//当前连接的uni
+QString KyActiveConnectResourse::getActivateWifiUni(QString devName)
+{
+    QString activateWifiUni ;
+    KyNetworkDeviceResourse devResource;
+    QStringList devList;
+    devResource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
+
+    for (int i = 0; i < devList.size(); ++i) {
+
+        NetworkManager::Device::Ptr connectDevice =
+                            m_networkResourceInstance->findDeviceInterface(devList.at(i));
+
+        if (nullptr == connectDevice || !connectDevice->isValid()) {
+            qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devList.at(i) << "is not existed";
+            continue;
+        }
+
+        if (connectDevice->type() == NetworkManager::Device::Wifi) {
+            if ((!devName.isEmpty() && connectDevice->interfaceName() == devName)
+                    || devName.isEmpty()) {
+                NetworkManager::WirelessDevice *wirelessDevicePtr =
+                    qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+                NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+                if (apPtr.isNull()) {
+                    continue;
+                }
+                activateWifiUni = apPtr->uni();
+                break;
+            }
+        }
+    }
+
+    return activateWifiUni;
+}

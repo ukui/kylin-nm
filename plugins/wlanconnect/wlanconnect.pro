@@ -4,6 +4,7 @@ CONFIG += plugin
 
 include(../component/drownlabel.pri)
 include(../component/addbtn.pri)
+include(../../common/common.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)
 DESTDIR = ../..

@@ -586,3 +586,11 @@ void KnmDBusCaller::setNetworkConnectionAutoConnectState(int netType, QString uu
     list.append(state);
     this->asyncCall("setNetworkConnectionAutoConnectState",list);
 }
+
+void KnmDBusCaller::setDefaultWiredDevice(QString devName)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << devName;
+    QList<QVariant> list;
+    list.append(devName);
+    this->asyncCall("setDefaultWiredDevice",list);
+}

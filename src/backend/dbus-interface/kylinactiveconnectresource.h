@@ -63,6 +63,7 @@ public:
 
     int getActivateWifiSignal(QString devName = "");
     bool checkInternetLoading();
+    QString getActivateWifiUni(QString devName);
 
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,

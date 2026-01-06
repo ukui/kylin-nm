@@ -183,7 +183,9 @@ UkuiItems.DtThemeBackground {
                         Layout.alignment: Qt.AlignTop
                         interactive: false
                         implicitHeight: lanContentArea.contentHeight
-                        width: 396
+                        width: 396 - 10
+                        Layout.leftMargin: 5
+                        Layout.rightMargin: 5
                         visible: lanDeviceComboBox.count && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
                     }
 
@@ -334,7 +336,9 @@ UkuiItems.DtThemeBackground {
                         Layout.alignment: Qt.AlignBottom
                         interactive: false
                         implicitHeight: wlanContentArea.contentHeight
-                        width: 396
+                        width: 396 - 10
+                        Layout.leftMargin: 5
+                        Layout.rightMargin: 5
                     }
                 }
             }
@@ -345,6 +349,7 @@ UkuiItems.DtThemeBackground {
             Layout.fillWidth: true
             Layout.bottomMargin: 1
             height: 1
+            verticalPadding: 0
         }
 
         Item {
@@ -355,7 +360,6 @@ UkuiItems.DtThemeBackground {
 
             UkuiItems.DtThemeText {
                 id: networkSettingText
-                height: 22
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: 24
@@ -378,6 +382,11 @@ UkuiItems.DtThemeBackground {
                 }
             }
 		}
+
+        Component.onCompleted: {
+            console.log("Component.onCompleted")
+            KInterface.wirelessScanState = true
+        }
 
         Component.onDestruction: {
             console.log("Rectangle is about to be destroyed.")

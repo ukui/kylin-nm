@@ -902,7 +902,7 @@ void NetDetail::on_btnConfirm_clicked()
     setNetdetailSomeEnable(false);
     QString meesage;
     if (!checkErrorMessage(meesage)) {
-        WarningDialog dialog;
+        WarningDialog dialog(this);
         dialog.setWarningMessage(meesage);
         dialog.exec();
         setNetdetailSomeEnable(true);

@@ -112,6 +112,7 @@ ListView {
             }
             if (autoConnectCheckBoxLoader.item) {
                 autoConnectCheckBoxLoader.item.visible = false
+                autoConnectRow.visible = false
             }
         }
 
@@ -202,10 +203,12 @@ ListView {
 
             if(autoConnectCheckBoxLoader.item && autoConnectCheckBoxLoader.item.visible) {
                 autoConnectCheckBoxLoader.item.visible = false
+                autoConnectRow.visible = false
             } else if (model.status !== 2){
                 if (!autoConnectCheckBoxLoaded) {
                     loadAutoConnectCheckBox()
                 }
+                autoConnectRow.visible = (textEditLayout.visible || model.Configured)
                 autoConnectCheckBoxLoader.item.visible = (textEditLayout.visible || model.Configured)
             }
         }
@@ -298,10 +301,12 @@ ListView {
 
                 if(autoConnectCheckBoxLoader.item && autoConnectCheckBoxLoader.item.visible) {
                     autoConnectCheckBoxLoader.item.visible = false
+                    autoConnectRow.visible = false
                 } else if (model.status !== 2){
                     if (!autoConnectCheckBoxLoaded) {
                         loadAutoConnectCheckBox()
                     }
+                    autoConnectRow.visible =  (textEditLayout.visible || model.Configured)
                     autoConnectCheckBoxLoader.item.visible = (textEditLayout.visible || model.Configured)
                 }
 
@@ -332,6 +337,11 @@ ListView {
                     sourceComponent: Menu {
                         id: propertyMenu
 
+                        Component.onCompleted: {
+                            console.log("Menu completed for SSID:", model.ssid);
+                            console.log("model.Configured:", model.Configured);
+                        }
+
                         MenuItem {//connect/disconnect
                             text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
                             onTriggered: {
@@ -357,6 +367,7 @@ ListView {
                                         if (!autoConnectCheckBoxLoaded) {
                                             loadAutoConnectCheckBox()
                                         }
+                                        autoConnectRow.visible =  true
                                         autoConnectCheckBoxLoader.item.visible = true
 
                                         // 更新显示详情索引
@@ -373,7 +384,13 @@ ListView {
 
                         MenuItem {//property
                             text:qsTr("Network property")
-                            visible: model.status === 2
+                            visible: {
+                                console.log("Property MenuItem visible check - model.Configured:", model.Configured);
+                                return model.Configured;
+                            }
+                            Component.onCompleted: {
+                                console.log("Property MenuItem loaded for SSID:", model.ssid);
+                            }
                             onTriggered: {
                                 console.log("network property")
                                 console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
@@ -384,7 +401,13 @@ ListView {
 
                         MenuItem {
                             text:qsTr("Forget the network")
-                            visible: model.status === 2
+                            visible: {
+                                console.log("Forget MenuItem visible check - model.Configured:", model.Configured);
+                                return model.Configured;
+                            }
+                            Component.onCompleted: {
+                                console.log("Forget MenuItem loaded for SSID:", model.ssid);
+                            }
                             onTriggered: {
                                 console.log("Forget the network",model.uuid)
                                 KInterface.deleteConnect(1,model.uuid)
@@ -533,15 +556,7 @@ ListView {
                                 Layout.rightMargin: 24
                                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                 text: qsTr("connect")
-
-                                contentItem: Label {
-                                    text: parent.text
-                                    font: parent.font
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    elide: Text.ElideRight
-                                    property var labelDTColor: pwdConnectBtn.enabled ?  "kfont-white" : "kfont-white-disable"
-                                }
+                                property var maxWidth: 88
 
                                 onClicked: {
 
@@ -557,6 +572,7 @@ ListView {
                         }
                     }
                     RowLayout {
+                        id: autoConnectRow
                         UkuiItems.DtThemeText {
                             visible: model.status === 2
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
@@ -703,15 +719,7 @@ ListView {
                     ToolTip.visible: connectBtnHandler.containsMouse && contentItem.truncated
                     ToolTip.text: text
                     ToolTip.delay: 500
-
-                    contentItem: Label {
-                        text: parent.text
-                        font: parent.font
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                        property var labelDTColor: connectBtn.enabled ?  "kfont-white" : "kfont-white-disable"
-                    }
+                    property var maxWidth: 88
 
                     MouseArea {
                         id: connectBtnHandler

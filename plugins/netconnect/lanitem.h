@@ -33,6 +33,7 @@
 #include "klabel.h"
 //#include "infobutton.h"
 #include "../component/AddBtn/grayinfobutton.h"
+#include "klineframe.h"
 //#include "kborderlessbutton.h"
 
 using namespace kdk;
@@ -70,6 +71,8 @@ public:
     void stopLoading();
     void setNetworkCheckFrameHidden(bool state);
     void setConnectivityWarn(ConnectivityType connectivityType);
+    void setTopSeparatorVisible(bool visible);
+    void setBottomSeparatorVisible(bool visible);
 
     bool loading = false;
     bool isAcitve = false;
@@ -91,6 +94,9 @@ private:
     QLabel * m_warnLabel = nullptr;
     QLabel * m_warnTextLabel = nullptr;
     //KBorderlessButton * m_networkCheckBtn = nullptr;
+
+    KHLineFrame *m_topSeparator = nullptr;
+    KHLineFrame *m_bottomSeparator = nullptr;
 
 private slots:
     void updateIcon();

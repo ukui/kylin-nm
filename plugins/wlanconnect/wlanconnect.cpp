@@ -68,56 +68,6 @@
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
-const QString KWifiSymbolic     = "network-wireless-signal-excellent";
-const QString KWifiLockSymbolic = "network-wireless-secure-signal-excellent";
-const QString KWifiGood         = "network-wireless-signal-good";
-const QString KWifiLockGood     = "network-wireless-secure-signal-good";
-const QString KWifiOK           = "network-wireless-signal-ok";
-const QString KWifiLockOK       = "network-wireless-secure-signal-ok";
-const QString KWifiLow          = "network-wireless-signal-low";
-const QString KWifiLockLow      = "network-wireless-secure-signal-low";
-const QString KWifiNone         = "network-wireless-signal-none";
-const QString KWifiLockNone     = "network-wireless-secure-signal-none";
-
-const QString KWifi6Symbolic        = "ukui-wifi6-full-symbolic";
-const QString KWifi6PlusSymbolic    = "ukui-wifi6+-full-symbolic";
-const QString KWifi7Symbolic        = "ukui-wifi7-full-symbolic";
-
-const QString KWifi6LockSymbolic    = "ukui-wifi6-full-pwd-symbolic";
-const QString KWifi6PlusLockSymbolic= "ukui-wifi6+-full-pwd-symbolic";
-const QString KWifi7LockSymbolic    = "ukui-wifi7-full-pwd-symbolic";
-
-const QString KWifi6Good            = "ukui-wifi6-high-symbolic";
-const QString KWifi6PlusGood        = "ukui-wifi6+-high-symbolic";
-const QString KWifi7Good            = "ukui-wifi7-high-symbolic";
-
-const QString KWifi6LockGood        = "ukui-wifi6-high-pwd-symbolic";
-const QString KWifi6PlusLockGood    = "ukui-wifi6+-high-pwd-symbolic";
-const QString KWifi7LockGood        = "ukui-wifi7-high-pwd-symbolic";
-
-const QString KWifi6OK              = "ukui-wifi6-medium-symbolic";
-const QString KWifi6PlusOK          = "ukui-wifi6+-high-medium-symbolic";
-const QString KWifi7OK              = "ukui-wifi7-medium-symbolic";
-
-const QString KWifi6LockOK          = "ukui-wifi6-medium-pwd-symbolic";
-const QString KWifi6PlusLockOK      = "ukui-wifi6+-medium-pwd-symbolic";
-const QString KWifi7LockOK          = "ukui-wifi7-medium-pwd-symbolic";
-
-const QString KWifi6Low             = "ukui-wifi6-low-symbolic";
-const QString KWifi6PlusLow         = "ukui-wifi6+-low-symbolic";
-const QString KWifi7Low             = "ukui-wifi7-low-symbolic";
-
-const QString KWifi6LockLow         = "ukui-wifi6-low-pwd-symbolic";
-const QString KWifi6PlusLockLow     = "ukui-wifi6+-low-pwd-symbolic";
-const QString KWifi7LockLow         = "ukui-wifi7-low-pwd-symbolic";
-
-const QString KWifi6None            = "ukui-wifi6-none-symbolic";
-const QString KWifi6PlusNone        = "ukui-wifi6+-none-symbolic";
-const QString KWifi7None            = "ukui-wifi7-none-symbolic";
-
-const QString KWifi6LockNone        = "ukui-wifi6-none-pwd-symbolic";
-const QString KWifi6PlusLockNone    = "ukui-wifi6+-none-pwd-symbolic";
-const QString KWifi7LockNone        = "ukui-wifi7-none-pwd-symbolic";
 
 const QString KLanSymbolic      = ":/img/plugins/netconnect/eth.svg";
 const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
@@ -227,7 +177,17 @@ bool WlanConnect::isEnable() const
         item ++;
     }
 
-    bool isEnabled = !map.isEmpty();
+    //保证和快捷面板一致，在wifi未托管情况下不显示控制面板选项
+    bool isEnabled = false;
+    if (!map.isEmpty()) {
+        QMutableMapIterator<QString, bool> it(map);
+        while (it.hasNext()) {
+            it.next(); // 必须先跳转到下一个元素
+            if (it.value() == true) {
+                isEnabled = true;
+            }
+        }
+    }
 
     qWarning() << Q_FUNC_INFO << __LINE__ << isEnabled;
 
@@ -1074,7 +1034,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt(), DEACTIVATED);
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(5).toInt(), DEACTIVATED);
 }
 
 //增加设备

@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
 Uploaders:
  handsome_feng <jianfengli@ubuntukylin.com>,
+ zhangpan <zhangpan@kylinos.cn>
 Build-Depends:
  debhelper(>=10),
  dh-sequence-systemd,
@@ -30,9 +31,9 @@ Build-Depends:
  qt6-tools-dev-tools,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
-Homepage: https://github.com/ukui/kylin-nm
-Vcs-Git: https://github.com/ukui/kylin-nm.git
-Vcs-Browser: https://github.com/ukui/kylin-nm
+Homepage: https://gitee.com/openkylin/kylin-nm
+Vcs-Git: https://gitee.com/openkylin/kylin-nm.git
+Vcs-Browser: https://gitee.com/openkylin/kylin-nm
 
 Package: kylin-nm
 Architecture: any

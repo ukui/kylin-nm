@@ -1,11 +1,193 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://gitee.com/openkylin/kylin-nm
 Upstream-Name: kylin-nm
 Upstream-Contact: Kylin Team <ukui@kylinos.cn>
-Source: https://github.com/ukui/kylin-nm
 
 Files: *
-Copyright: 2019, Tianjin KYLIN Information Technology Co., Ltd.
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
+
+Files: plugins/netconnect/lanitem.cpp
+ plugins/netconnect/lanitem.h
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: plugins/proxy/aptinfo.h
+ plugins/proxy/aptproxydialog.cpp
+ plugins/proxy/aptproxydialog.h
+Copyright: 2020, 2023, KylinSoft Co., Ltd.
+License: GPL-3+
+
+Files: plugins/wlanconnect/wlanconnect.cpp
+ plugins/wlanconnect/wlanconnect.h
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: qml-network/plugin/CSingleton.h
+Copyright: 2020, 2023, KylinSoft Co., Ltd.
+License: GPL-3+
+
+Files: src-vpn/backend/vpndbusadaptor.h
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: src-vpn/frontend/*
+Copyright: 2020, 2023, KylinSoft Co., Ltd.
+License: GPL-3+
+
+Files: src-vpn/frontend/list-items/*
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src-vpn/frontend/single-pages/*
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src-vpn/singleapplication/*
+Copyright: 2013, Digia Plc and/or its subsidiary(-ies)
+License: BSD-3-clause
+
+Files: src/backend/dbus-interface/kylinnetworkdeviceresource.h
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: src/backend/dbus.cpp
+ src/backend/dbus.h
+ src/backend/dbus_adaptor.cpp
+ src/backend/dbus_adaptor.h
+ src/backend/dbus_interface.cpp
+ src/backend/dbusadaptor.cpp
+ src/backend/vpndbusadaptor.cpp
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: src/frontend/*
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: src/frontend/customstyle.cpp
+ src/frontend/customstyle.h
+ src/frontend/mainwindow.cpp
+ src/frontend/mainwindow.h
+ src/frontend/wificonfigdialog.cpp
+ src/frontend/wificonfigdialog.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src/frontend/enterprise-wlan/enterprisewlandialog.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src/frontend/netdetails/configpage.cpp
+ src/frontend/netdetails/configpage.h
+ src/frontend/netdetails/coninfo.h
+ src/frontend/netdetails/customtabstyle.cpp
+ src/frontend/netdetails/detailwidget.cpp
+ src/frontend/netdetails/detailwidget.h
+ src/frontend/netdetails/dnssettingwidget.cpp
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src/frontend/tools/listitemedit.h
+ src/frontend/tools/loadingdiv.cpp
+ src/frontend/tools/loadingdiv.h
+ src/frontend/tools/radioitembutton.h
+ src/frontend/tools/switchbutton.cpp
+ src/frontend/tools/switchbutton.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src/frontend/xatom/*
+Copyright: 2020, 2023, KylinSoft Co., Ltd.
+License: GPL-3+
+
+Files: src/singleapplication/*
+Copyright: 2013, Digia Plc and/or its subsidiary(-ies)
+License: BSD-3-clause
+
+Files: sys-dbus-register/kyarping/*
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: sys-dbus-register/kynmsystemdbus.cpp
+ sys-dbus-register/kynmsystemdbus.h
+ sys-dbus-register/main.cpp
+Copyright: 2020, 2023, KylinSoft Co., Ltd.
+License: GPL-3+
+
+Files: tests/*
+Copyright: 2024, KylinSoft Co., Ltd.
+License: GPL-2+
+
+Files: tests/kt-test-utils/cpp-stub-ext/*
+Copyright: 2020, Zhang Yu
+License: Expat
+
+License: BSD-3-clause
+ The BSD License
+ .
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are
+ met:
+ .
+   * Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+ .
+   * Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution. 
+ .
+   * Neither the name of the copyright holder nor the names of its
+     contributors may be used to endorse or promote products derived from
+     this software without specific prior written permission. 
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+License: Expat
+ The MIT License
+ .
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated
+ documentation files (the "Software"), to deal in the Software
+ without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to
+ whom the Software is furnished to do so, subject to the
+ following conditions:
+ .
+ The above copyright notice and this permission notice shall
+ be included in all copies or substantial portions of the
+ Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
+ WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 2 dated June, 1991, or (at
+ your option) any later version.
+ On Debian systems, the complete text of version 2 of the GNU General
+ Public License can be found in '/usr/share/common-licenses/GPL-2'.
 
 License: GPL-3+
  This package is free software; you can redistribute it and/or modify

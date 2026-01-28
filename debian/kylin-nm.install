@@ -1,3 +1,2 @@
 debian/kylin-nm.json /etc/ukui/ukui-notification/default-app/
 debian/nm_enhance_dns.conf /etc/nm_enhance/
-sys-dbus-register/conf/kylin-nm-sysdbus.service /lib/systemd/system/

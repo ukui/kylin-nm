@@ -123,7 +123,8 @@ MainWindow::MainWindow(QString display, QWidget *parent) : QMainWindow(parent), 
 
     //去除窗管标题栏，传入参数为QWidget*
     //此方法只需要调用一次，多次调用时，除首次调用窗口正常外，其余次数调用窗口setGeometry接口失效
-    kdk::UkuiStyleHelper::self()->removeHeader(this);
+   //kf6 qt6 崩溃 by mq 
+  //kdk::UkuiStyleHelper::self()->removeHeader(this);
 }
 
 /**
@@ -292,6 +293,16 @@ void MainWindow::initWindowProperties()
 void MainWindow::registerTrayIcon()
 {
     m_registerCount++;
+    //qt6 kf6环境isSystemTrayAvailable返回flase v101没有这个逻辑
+    m_trayIcon = new QSystemTrayIcon();
+    if (nullptr == m_trayIcon) {
+        qWarning()<< "分配空间trayIcon失败";
+        return ;
+    }
+    m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+    m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+    qWarning()<< "isSystemTrayAvailable is "<<QSystemTrayIcon::isSystemTrayAvailable();
+    /*
     if (QSystemTrayIcon::isSystemTrayAvailable() || m_registerCount > 10) {
         m_trayIcon = new QSystemTrayIcon();
         if (nullptr == m_trayIcon) {
@@ -308,6 +319,7 @@ void MainWindow::registerTrayIcon()
             });
         }
     }
+    */
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)

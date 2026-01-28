@@ -6,6 +6,7 @@ Uploaders:
  handsome_feng <jianfengli@ubuntukylin.com>,
 Build-Depends:
  debhelper(>=10),
+ dh-sequence-systemd,
  libcap-dev,
  libgsettings-qt6-dev,
  libgtk-3-dev,

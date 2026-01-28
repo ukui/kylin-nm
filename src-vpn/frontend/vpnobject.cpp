@@ -40,7 +40,8 @@ vpnObject::~vpnObject()
 void vpnObject::initUI()
 {
     m_vpnPage = new VpnPage(nullptr);
-    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
+    //kf6 qt6 崩溃 by mq
+    //kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
     m_vpnPage->update();
 
 }

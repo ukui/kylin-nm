@@ -12,9 +12,9 @@ PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libcap
 inst1.files += conf/com.kylin.network.qt.systemdbus.service
 inst1.path = /usr/share/dbus-1/system-services/
 inst2.files += conf/com.kylin.network.qt.systemdbus.conf
-inst2.path = /etc/dbus-1/system.d/
+inst2.path = /usr/share/dbus-1/system.d/
 inst3.files += conf/kylin-nm-sysdbus.service
-inst3.path = /etc/systemd/system/
+inst3.path = /usr/lib/systemd/system/
 target.source += $$TARGET
 target.path = /usr/bin
 

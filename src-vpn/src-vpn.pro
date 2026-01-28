@@ -28,7 +28,7 @@ desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-vpn.desktop
 gschema.files = org.ukui.kylin-vpn.switch.gschema.xml
 gschema.path = /usr/share/glib-2.0/schemas/
-qm_files.path = $${PREFIX}/share/kylin-nm/kylin-vpn/
+qm_files.path = /usr/share/kylin-nm/kylin-vpn/
 qm_files.files = translations/*.qm
 
 INSTALLS += target \

@@ -242,7 +242,7 @@ void VpnPage::onAddConnection(QString uuid)               //新增一个有线�
 void VpnPage::onShowControlCenter()
 {
     QProcess process;
-    process.startDetached("ukui-control-center -m vpn");
+    process.startDetached("ukui-control-center", QStringList() << "-m" << "vpn");
 }
 
 void VpnPage::initUI()

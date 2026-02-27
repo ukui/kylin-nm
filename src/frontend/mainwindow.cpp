@@ -1484,9 +1484,9 @@ void MainWindow::showControlCenter()
 {
     QProcess process;
     if (!m_lanWidget->lanIsConnected() && m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
-        process.startDetached("ukui-control-center -m wlanconnect");
+        process.startDetached("ukui-control-center", QStringList() << "-m" << "wlanconnect");
     } else {
-        process.startDetached("ukui-control-center -m netconnect");
+        process.startDetached("ukui-control-center", QStringList() << "-m" << "netconnect");
     }
 }
 

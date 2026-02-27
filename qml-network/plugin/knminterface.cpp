@@ -173,9 +173,9 @@ void KnmInterface::openNetworkSetting()
 
     QProcess process;
     if (connect_status == ConnectStatus::Wireless){
-        process.startDetached("ukui-control-center -m wlanconnect");
+        process.startDetached("ukui-control-center", QStringList() << "-m" << "wlanconnect");
     } else {
-        process.startDetached("ukui-control-center -m netconnect");
+        process.startDetached("ukui-control-center", QStringList() << "-m" << "netconnect");
     }
 }
 

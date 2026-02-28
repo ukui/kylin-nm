@@ -35,7 +35,7 @@
 
 #define LOG_IDENT "kylin_vpn"
 
-const QString QT_TRANSLATE_FILE = "/usr/share/qt5/translations/qt_zh_CN.qm";
+const QString QT_TRANSLATE_FILE = "/usr/share/qt6/translations/qt_zh_CN.qm";
 
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     }
 
     QTranslator qtBaseTranslator;
-    if (qtBaseTranslator.load(QLocale(), "qt", "_", "/usr/share/qt5/translations/"))
+    if (qtBaseTranslator.load(QLocale(), "qt", "_", "/usr/share/qt6/translations/"))
     {
         a.installTranslator(&qtBaseTranslator);
         qDebug()<<"QtBase Translations load success";

@@ -43,7 +43,7 @@ inst1.files += widget/**
 inst1.path = /usr/share/ukui/widgets/org.ukui.shortcut.network
 
 inst2.files += plugin/qmldir
-inst2.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
+inst2.path = $$[QT_INSTALL_LIBS]/qt6/qml/org/ukui/shortcut/network
 
 qm_files.files += translations/*.qm
 qm_files.path = /usr/share/ukui/widgets/org.ukui.shortcut.network/translations
@@ -52,7 +52,7 @@ ts_files.files += translations/*.ts
 ts_files.path = /usr/share/ukui/widgets/org.ukui.shortcut.network/translations
 
 
-target.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
+target.path = $$[QT_INSTALL_LIBS]/qt6/qml/org/ukui/shortcut/network
 
 TRANSLATIONS += \
     translations/ukui-shortcut-network_zh_CN.ts \

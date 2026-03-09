@@ -4,21 +4,30 @@
 #export QT_SELECT=qt6
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
+# Workaround for Ubuntu 26.04 Qt6 packaging issue:
+# Export a custom QMAKEPATH so qmake reads our injected dummy module first.
+export QMAKEPATH=$(CURDIR)/debian/qmake-env
+
 QMAKE_OPTS = DEFINES+=NO_DEBUG_ON_CONSOLE
 MAKE_OPTS  = PREFIX=/usr QMAKE=qmake6 LRELEASE=lrelease QMAKE_OPTS="$(QMAKE_OPTS)"
 
+%:
+	dh $@
+
 override_dh_auto_configure:
+	# Create a temporary mkspecs directory to inject missing Qt6 module definitions.
+	mkdir -p debian/qmake-env/mkspecs/modules
+	# Provide a dummy qt_lib_libatomic.pri to fix the "Library 'libatomic' is not defined"
+	# error caused by missing definitions in Ubuntu's qt6-base-dev package.
+	echo "QMAKE_LIBS_LIBATOMIC = -latomic" > debian/qmake-env/mkspecs/modules/qt_lib_libatomic.pri
 	#QT_SELECT=qt6 dh_auto_configure \
 	#--"QMAKE_CXXFLAGS=$(CFLAGS)" \
 	#kylin-nm.pro
 	#qmake6 kylin-nm.pro
 	# dh_auto_configure -- \
-#	@echo $PATH
-	qmake6	"QMAKE_CXXFLAGS=$(CFLAGS)" \
+	# @echo $PATH
+	qmake6  "QMAKE_CXXFLAGS=$(CFLAGS)" \
 	kylin-nm.pro
-
-%:
-	dh $@
 
 override_dh_install:
 	dh_install
@@ -33,6 +42,7 @@ override_dh_auto_clean:
 	@echo "清理所有 .qm 翻译文件..."
 	find . -type f -name "*.qm" -delete
 	[ ! -f Makefile ] || dh_auto_clean
+	rm -rf debian/qmake-env
 
 override_dh_auto_build:
 	dh_auto_build -- $(MAKE_OPTS)

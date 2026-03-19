@@ -1038,11 +1038,9 @@ void MainWindow::onRefreshTrayIcon()
     }
 
     if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
-        if (iconStatus == IconActiveType::LAN_CONNECTED ||
-            iconStatus == IconActiveType::LAN_CONNECTED_LIMITED) {
+        if (iconStatus == IconActiveType::LAN_CONNECTED) {
             m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
-        } else if (iconStatus == IconActiveType::WLAN_CONNECTED ||
-                   iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
+        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
             if (signalStrength > MW_EXCELLENT_SIGNAL){
                 m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
             } else if (signalStrength > MW_GOOD_SIGNAL) {

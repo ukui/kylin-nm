@@ -132,12 +132,13 @@ ListView {
                 connectBtn.visible = true
                 speedLabel.visible = false
             }
-            onExited: {
+	    onExited: {
+		if(!connectBtnHandler.containsMouse){
                 wlanlistView.currentIndex = -1
                 enteritem = false
                 connectBtn.visible = false
                 speedLabel.visible = (model.status === 2)
-
+		}
             }
 
             onWheel: {

@@ -34,6 +34,7 @@
 #include "list-items/listitem.h"
 #include "list-items/vpnlistitem.h"
 #include "single-pages/singlepage.h"
+#include "ukuiwindowhelper/ukuiwindowhelper.h"
 
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
 #define VPN_LIST_SPACING 0

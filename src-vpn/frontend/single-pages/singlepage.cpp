@@ -36,6 +36,9 @@ SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
     initWindowProperties();
     initTransparency();
     initWindowTheme();
+    m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setWindowRole(UkuiWindowHelper::WindowRole::SystemWindow);
+    m_uwin->setSlideEffect(UkuiWindowHelper::Position::Bottom);
 }
 
 SinglePage::~SinglePage()
@@ -71,11 +74,10 @@ void SinglePage::initUI()
     m_setDivider = new Divider(true, this);
 
     m_settingsFrame = new QFrame(this);
-    m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
+    m_settingsFrame->setFixedHeight(SETTING_FRAME_HEIGHT);
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
     m_settingsLabel = new KyLable(m_settingsFrame);
-    m_settingsLabel->setCursor(Qt::PointingHandCursor);
     m_settingsLabel->setText(tr("Settings"));
     m_settingsLabel->setScaledContents(true);
     m_settingsLayout->addWidget(m_settingsLabel);
@@ -105,7 +107,7 @@ void SinglePage::initWindowProperties()
         QPainterPath path;
         auto rect = this->rect();
         path.addRect(rect);
-        KWindowEffects::enableBlurBehind(this->windowHandle(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+ //     m_uwin->setBlurEffect(QRegion(path.toFillPolygon().toPolygon()),0 , true);//qt6kf6环境中此处会崩溃先注释
     }
 }
 
@@ -162,7 +164,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
 
     painter.setBrush(col);
     painter.drawPath(rectPath);
-    KWindowEffects::enableBlurBehind(this->windowHandle(), true, QRegion(rectPath.toFillPolygon().toPolygon()));   //背景模糊
+    m_uwin->setBlurEffect(QRegion(rectPath.toFillPolygon().toPolygon()),0 , true);
 }
 
 void SinglePage::initTransparency()

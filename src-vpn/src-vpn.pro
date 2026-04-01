@@ -19,7 +19,7 @@ PKGCONFIG +=kysdk-sysinfo KF6WindowSystem
 
 INCLUDEPATH += /usr/include/KF6/NetworkManagerQt \
 
-LIBS    +=  -L/usr/lib/ -lX11 -lKF6NetworkManagerQt -lukui-log4qt
+LIBS    +=  -L/usr/lib/ -lX11 -lKF6NetworkManagerQt -lukui-log4qt -lkysdk-ukuiwindowhelper
 #LIBS    += -lkysec
 
 target.path = /usr/bin

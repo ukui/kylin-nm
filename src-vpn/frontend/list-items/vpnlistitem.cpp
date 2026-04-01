@@ -31,7 +31,7 @@ VpnListItem::VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent):L
 
     connectItemCopy(vpnConnectItem);
     char *envStr = getenv("LANGUAGE");
-    if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+    if (envStr && (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG")) == 0) {
         this->setFixedWidth(390);
     }
 

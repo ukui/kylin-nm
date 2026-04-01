@@ -27,6 +27,10 @@ vpnObject::vpnObject(QMainWindow *parent) : QMainWindow(parent)
     initUI();
     initTrayIcon();
     initDbusConnnect();
+    m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setBlurEffect(QRegion());
+    m_uwin->setSkipTaskBar(true);
+    m_uwin->setWindowRole(UkuiWindowHelper::WindowRole::SystemWindow);
 }
 
 vpnObject::~vpnObject()
@@ -34,6 +38,10 @@ vpnObject::~vpnObject()
     if (m_vpnGsettings != nullptr) {
         delete m_vpnGsettings;
         m_vpnGsettings = nullptr;
+    }
+    if (m_uwin)
+    {
+        delete m_uwin;
     }
 }
 

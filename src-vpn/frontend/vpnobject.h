@@ -33,6 +33,7 @@ class VpnPage;
 #define VISIBLE "visible"
 #define GSETTINGS_VPNICON_VISIBLE "org.ukui.kylin-nm.vpnicon"
 //const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
+#include "ukuiwindowhelper/ukuiwindowhelper.h"
 
 
 class vpnObject : public QMainWindow
@@ -74,6 +75,8 @@ private:
     bool m_isShowInCenter = false;
 
     vpnAddPage *m_vpnAddPage = nullptr;
+
+    UkuiWindowHelper *m_uwin = nullptr;
 
 public Q_SLOTS:
     void onShowMainWindow();

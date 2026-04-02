@@ -386,13 +386,6 @@ UkuiItems.DtThemeBackground {
         Component.onCompleted: {
             console.log("Component.onCompleted")
             KInterface.wirelessScanState = true
-
-            /* 强制触发设备列表更新,link bug#471953 */
-            Qt.callLater(function() {
-                /* 强制发射更新信号 */
-                KInterface.updateWirelessDeviceList()
-                KInterface.updateWiredDeviceList()
-            })
         }
 
         Component.onDestruction: {

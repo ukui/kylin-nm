@@ -269,25 +269,6 @@ void WlanPage::initDevice()
             m_devList.removeOne(m_devList.at(index));
         }
     }
-
-    //解决bug#494345，通过日志猜测时由于控制面板sessiondbus启动在了kylin-nm的sessiondbus之前导致了初始化gsetting值为false
-    if (m_devList.count()) {
-        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
-            qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success , set mobileHotspotSetting and wlanConnectSetting true";
-
-            QGSettings* mobileHotspotSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
-            mobileHotspotSetting->set("show", true);
-            delete mobileHotspotSetting;
-            mobileHotspotSetting = nullptr;
-
-            QGSettings* wlanConnectSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_WLANCONNECT);
-            wlanConnectSetting->set("show", true);
-            delete wlanConnectSetting;
-            wlanConnectSetting = nullptr;
-
-        }
-    }
-
     return;
 }
 

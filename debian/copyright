@@ -1,35 +1,83 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Source: https://gitee.com/openkylin/kylin-nm
 Upstream-Name: kylin-nm
-Upstream-Contact: Kylin Team <ukui@kylinos.cn>
+Upstream-Contact:
+ Kylin Team <ukui@kylinos.cn>,
 
 Files: *
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
+
+Files: plugins/component/*
 Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
 
-Files: plugins/netconnect/lanitem.cpp
- plugins/netconnect/lanitem.h
-Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
-License: GPL-2+
+Files: plugins/mobilehotspot/blacklistitem.cpp
+ plugins/mobilehotspot/blacklistitem.h
+ plugins/mobilehotspot/blacklistpage.cpp
+ plugins/mobilehotspot/blacklistpage.h
+ plugins/mobilehotspot/connectdevlistitem.cpp
+ plugins/mobilehotspot/connectdevlistitem.h
+ plugins/mobilehotspot/connectdevpage.cpp
+ plugins/mobilehotspot/connectdevpage.h
+ plugins/mobilehotspot/mobilehotspot.cpp
+ plugins/mobilehotspot/mobilehotspot.h
+ plugins/mobilehotspot/mobilehotspotwidget.cpp
+ plugins/mobilehotspot/mobilehotspotwidget.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
 
-Files: plugins/proxy/aptinfo.h
- plugins/proxy/aptproxydialog.cpp
- plugins/proxy/aptproxydialog.h
+Files: plugins/netconnect/deviceframe.cpp
+ plugins/netconnect/deviceframe.h
+ plugins/netconnect/itemframe.cpp
+ plugins/netconnect/itemframe.h
+ plugins/netconnect/netconnect.cpp
+ plugins/netconnect/netconnect.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: plugins/proxy/*
 Copyright: 2020, 2023, KylinSoft Co., Ltd.
 License: GPL-3+
 
-Files: plugins/wlanconnect/wlanconnect.cpp
- plugins/wlanconnect/wlanconnect.h
-Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
-License: GPL-2+
+Files: plugins/proxy/applistwidget.cpp
+ plugins/proxy/applistwidget.h
+ plugins/proxy/certificationdialog.h
+ plugins/proxy/proxy.cpp
+ plugins/proxy/proxy.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
 
-Files: qml-network/plugin/CSingleton.h
+Files: plugins/vpn/itemframe.cpp
+ plugins/vpn/itemframe.h
+ plugins/vpn/vpn.cpp
+ plugins/vpn/vpn.h
+ plugins/vpn/vpnitem.cpp
+ plugins/vpn/vpnitem.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: plugins/wlanconnect/deviceframe.cpp
+ plugins/wlanconnect/deviceframe.h
+ plugins/wlanconnect/itemframe.cpp
+ plugins/wlanconnect/itemframe.h
+ plugins/wlanconnect/wlanitem.cpp
+ plugins/wlanconnect/wlanitem.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: qml-network/*
 Copyright: 2020, 2023, KylinSoft Co., Ltd.
 License: GPL-3+
 
-Files: src-vpn/backend/vpndbusadaptor.h
-Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
-License: GPL-2+
+Files: qml-network/plugin/wirelessconnectionmodel.cpp
+ qml-network/plugin/wirelessconnectionmodel.h
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
+Files: src-vpn/backend/vpndbusadaptor.cpp
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
 
 Files: src-vpn/frontend/*
 Copyright: 2020, 2023, KylinSoft Co., Ltd.
@@ -43,9 +91,17 @@ Files: src-vpn/frontend/single-pages/*
 Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
 
+Files: src-vpn/main.cpp
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
+
 Files: src-vpn/singleapplication/*
 Copyright: 2013, Digia Plc and/or its subsidiary(-ies)
 License: BSD-3-clause
+
+Files: src/*
+Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-3+
 
 Files: src/backend/dbus-interface/kylinnetworkdeviceresource.h
 Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
@@ -74,9 +130,13 @@ Files: src/frontend/customstyle.cpp
 Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
 
-Files: src/frontend/enterprise-wlan/enterprisewlandialog.h
+Files: src/frontend/enterprise-wlan/*
 Copyright: 2019, 2020, 2022, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-3+
+
+Files: src/frontend/enterprise-wlan/enterprisewlandialog.cpp
+Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
+License: GPL-2+
 
 Files: src/frontend/netdetails/configpage.cpp
  src/frontend/netdetails/configpage.h
@@ -105,15 +165,13 @@ Files: src/singleapplication/*
 Copyright: 2013, Digia Plc and/or its subsidiary(-ies)
 License: BSD-3-clause
 
+Files: sys-dbus-register/*
+Copyright: 2020, 2023, KylinSoft Co., Ltd.
+License: GPL-3+
+
 Files: sys-dbus-register/kyarping/*
 Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.
 License: GPL-2+
-
-Files: sys-dbus-register/kynmsystemdbus.cpp
- sys-dbus-register/kynmsystemdbus.h
- sys-dbus-register/main.cpp
-Copyright: 2020, 2023, KylinSoft Co., Ltd.
-License: GPL-3+
 
 Files: tests/*
 Copyright: 2024, KylinSoft Co., Ltd.

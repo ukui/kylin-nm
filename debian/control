@@ -2,34 +2,31 @@ Source: kylin-nm
 Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
-Uploaders:
- handsome_feng <jianfengli@ubuntukylin.com>,
- zhangpan <zhangpan@kylinos.cn>
-Build-Depends:
- debhelper(>=10),
- dh-sequence-systemd,
- libcap-dev,
- libgsettings-qt6-dev,
- libgtk-3-dev,
- libkf6networkmanagerqt-dev,
- libkf6windowsystem-dev,
- libkysdk-applications-dev,
- libkysdk-system-dev,
- libnm-dev,
- libnma-dev,
- libqt6svg6-dev,
- libsecret-1-dev,
- libukcc-dev(>=3.1.1+1217),
- libukui-common-dev,
- libukui-log4qt-dev,
- libukui-quick-dev,
- libx11-dev,
- qt6-base-dev,
- qt6-base-dev-tools,
- qtchooser,
- qt6-declarative-dev,
- qt6-tools-dev-tools,
-Standards-Version: 4.5.0
+Uploaders: handsome_feng <jianfengli@ubuntukylin.com>,
+           zhangpan <zhangpan@kylinos.cn>
+Build-Depends: debhelper-compat (= 13),
+               libcap-dev,
+               libgsettings-qt6-dev,
+               libgtk-3-dev,
+               libkf6networkmanagerqt-dev,
+               libkf6windowsystem-dev,
+               libkysdk-applications-dev,
+               libkysdk-system-dev,
+               libnm-dev,
+               libnma-dev,
+               libqt6svg6-dev,
+               libsecret-1-dev,
+               libukcc-dev(>=3.1.1),
+               libukui-common-dev,
+               libukui-log4qt-dev,
+               libukui-quick-dev,
+               libx11-dev,
+               qt6-base-dev,
+               qt6-base-dev-tools,
+               qtchooser,
+               qt6-declarative-dev,
+               qt6-tools-dev-tools,
+Standards-Version: 4.7.2
 Rules-Requires-Root: no
 Homepage: https://gitee.com/openkylin/kylin-nm
 Vcs-Git: https://gitee.com/openkylin/kylin-nm.git
@@ -37,21 +34,17 @@ Vcs-Browser: https://gitee.com/openkylin/kylin-nm
 
 Package: kylin-nm
 Architecture: any
-Depends:
- libkysdk-applications-dev,
- libkysdk-system-dev,
- network-manager (>=1.2.6),
- network-manager-gnome,
- network-manager-l2tp,
- network-manager-l2tp-gnome,
- network-manager-openvpn,
- network-manager-openvpn-gnome,
- network-manager-pptp,
- network-manager-pptp-gnome,
- network-manager-strongswan,
- ukui-control-center (>= 3.1.1+1217),
- ${misc:Depends},
- ${shlibs:Depends},
+Depends: network-manager (>=1.2.6),
+         network-manager-gnome,
+         network-manager-l2tp,
+         network-manager-l2tp-gnome,
+         network-manager-openvpn,
+         network-manager-openvpn-gnome,
+         network-manager-pptp,
+         network-manager-pptp-gnome,
+         network-manager-strongswan,
+         ${misc:Depends},
+         ${shlibs:Depends},
 Description: Gui Applet tool for display and edit network simply
  Kylin NM is a Applet tool for managing network settings simply.
  It has beautiful UI and very comfortable to use.

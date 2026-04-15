@@ -1,26 +1,6 @@
-kylin-nm (4.20.0.0-4) unstable; urgency=medium
+kylin-nm (4.20.0.0-0ubuntu1) resolute; urgency=medium
 
-  * Update vpn project:
-    - Fix vpn disappear.
-
- -- maqiang <maqiang@kylinos.cn>  Wed, 01 Apr 2026 09:34:56 +0800
-
-kylin-nm (4.20.0.0-3) unstable; urgency=medium
-
-  * Update qml-network/WlanComponent.qml:
-    - Fix button disappear.
-
- -- maqiang <maqiang@kylinos.cn>  Mon, 30 Mar 2026 09:47:42 +0800
-
-kylin-nm (4.20.0.0-2) unstable; urgency=medium
-
-  * Update qml-network/qml-network.pro:
-    - Modify the installation path of qml.
-
- -- maqiang <maqiang@kylinos.cn>  Sat, 28 Feb 2026 13:41:04 +0800
-
-kylin-nm (4.20.0.0-1) unstable; urgency=medium
-
+  * New upstream release for UKUI 4.20.
   * Port project to Qt6 and KF6:
     - debian/control: Update Build-Depends from qtbase5-dev/libkf5* to
       qt6-base-dev and libkf6* packages.
@@ -45,13 +25,7 @@ kylin-nm (4.20.0.0-1) unstable; urgency=medium
   * Add maintainer scripts:
     - Add debian/kylin-nm.postinst and debian/kylin-nm.preinst.
 
- -- zhangpan <zhangpan@kylinos.cn>  Wed, 28 Jan 2026 15:01:51 +0800
-
-kylin-nm (4.0.0.0-1) unstable; urgency=medium
-
-  * New upstream release.
-
- -- xibowen <xibowen@kylinos.cn>  Tue, 26 Sep 2023 14:58:15 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 15 Apr 2026 16:57:54 +0800
 
 kylin-nm (3.0.3-1) unstable; urgency=medium
 

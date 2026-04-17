@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
-import QtQuick.Controls.Material 2.3
 import org.ukui.shortcut.network 1.0
 import org.ukui.quick.items 1.0 as UkuiItems
 import org.ukui.quick.platform 1.0 as Platform

@@ -1,0 +1,39 @@
+Description: fix network switch icon color rendering issue
+ Remove unused QtQuick.Controls.Material import from network panel
+ QML components. The Material style import was overriding the system
+ theme, causing network switch icons to display with incorrect colors
+ in the UKUI desktop environment.
+Author: dengtuo <dengtuo@kylinos.cn>
+Origin: upstream
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/2152070
+
+--- kylin-nm-4.20.0.0.orig/qml-network/widget/ui/LanComponent.qml
++++ kylin-nm-4.20.0.0/qml-network/widget/ui/LanComponent.qml
+@@ -2,7 +2,6 @@ import QtQuick 2.15
+ import QtQuick.Window 2.15
+ import QtQuick.Controls 2.5
+ import QtQuick.Layouts 1.1
+-import QtQuick.Controls.Material 2.3
+ import org.ukui.shortcut.network 1.0
+ import org.ukui.quick.items 1.0 as UkuiItems
+ import org.ukui.quick.platform 1.0 as Platform
+--- kylin-nm-4.20.0.0.orig/qml-network/widget/ui/NetScrollViewArea.qml
++++ kylin-nm-4.20.0.0/qml-network/widget/ui/NetScrollViewArea.qml
+@@ -2,7 +2,6 @@ import QtQuick 2.12
+ import QtQuick.Window 2.12
+ import QtQuick.Controls 2.5
+ import QtQuick.Layouts 1.15
+-import QtQuick.Controls.Material 2.3
+ import org.ukui.shortcut.network 1.0
+
+ import org.ukui.quick.items 1.0 as UkuiItems
+--- kylin-nm-4.20.0.0.orig/qml-network/widget/ui/WlanComponent.qml
++++ kylin-nm-4.20.0.0/qml-network/widget/ui/WlanComponent.qml
+@@ -2,7 +2,6 @@ import QtQuick 2.15
+ import QtQuick.Window 2.15
+ import QtQuick.Controls 2.5
+ import QtQuick.Layouts 1.1
+-import QtQuick.Controls.Material 2.3
+ import org.ukui.shortcut.network 1.0
+ import org.ukui.quick.items 1.0 as UkuiItems
+ import org.ukui.quick.platform 1.0 as Platform

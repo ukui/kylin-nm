@@ -1,3 +1,11 @@
+kylin-nm (4.20.0.0-0ubuntu1.1) resolute-proposed; urgency=medium
+
+  * Fix network switch icon color rendering issue by removing unused
+    QtQuick.Controls.Material import from LanComponent.qml,
+    NetScrollViewArea.qml, and WlanComponent.qml. (LP: #2152070)
+
+ -- zhangpan <zhangpan@kylinos.cn>  Sat, 09 May 2026 10:12:05 +0800
+
 kylin-nm (4.20.0.0-0ubuntu1) resolute; urgency=medium
 
   * New upstream release for UKUI 4.20.

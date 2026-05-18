@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QFormLayout>
 #include <unistd.h>
+#include "uisecurityconfig.h"
 
 #define LABEL_RECT 17, 0, 105, 23
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -134,6 +135,7 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     m_connectDevPage->refreshStalist();
     m_blacklistPage->refreshBlacklist();
 #endif
+    componentSettings();
     this->update();
 }
 
@@ -398,6 +400,10 @@ void MobileHotspotWidget::onWirelessBtnChanged(bool state)
         m_uuid.clear();
         m_switchBtn->setCheckable(false);
     } else {
+       qDebug()  << LOG_HEAD <<"onWirelessBtnChanged updateBandCombox" ;
+       QTimer::singleShot(1000, this, [=]() {
+            updateBandCombox();//无线开关开启时需要更新一下 防止进入热点界面后再打开开关导致不更新
+        });
         m_switchBtn->setCheckable(true);
     }
 }
@@ -1095,6 +1101,25 @@ void MobileHotspotWidget::judgeNoticeInfoShow(QString deviceName,bool isActived)
         m_warnWidget->hide();
     }
     resetFrameSize();
+}
+
+void MobileHotspotWidget::componentSettings()
+{
+    QVariant configData=UiSecurityConfig::getInstance()->getConnectSettingsData("mobilehotspot","mobilehotspotEnable");
+    QString settings=configData.toString();
+
+    if (settings.contains("mobileMainSwitch:false")) {
+        m_switchBtn->setEnabled(false);
+    }
+
+    if (settings.contains("mobileBlackRemoveButton:false")) {
+        m_blacklistPage->setEnabled(false);
+    }
+
+    if(settings.contains("mobileBlackAddButton:false")) {
+        m_connectDevPage->setEnabled(false);
+    }
+
 }
 
 bool MobileHotspotWidget::judgeHotSpotIsCtrl()

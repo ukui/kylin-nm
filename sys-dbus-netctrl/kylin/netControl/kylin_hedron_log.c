@@ -61,7 +61,9 @@ int hedronGetDataTime(char*backTime)
 
 int hedronGetDataHostname(char*backHostName)
 {
-    const char sn_str[] = "who | grep -v root | awk '{printf $1;}'";
+    /*多用户时使用当前桌面使用用户的用户名*/
+    const char sn_str[] = "who | awk -v tty=\"$(cat /sys/class/tty/tty0/active)\" '$2 == tty {printf \"%s\", $1}'";
+    const char final_sn_str[] ="who | grep -v root | awk 'NR==1{printf $1}'";//保底命令
 	char cmdBackStr[MAX_LENGTH]={0};
     int str_result = 0; 
     str_result = kylinExeSystemCmd(sn_str,cmdBackStr);
@@ -72,6 +74,14 @@ int hedronGetDataHostname(char*backHostName)
     }
     else
     {
+		if(!cmdBackStr[0]){
+			str_result = kylinExeSystemCmd(final_sn_str,cmdBackStr);
+			if (str_result)
+			{
+				KYLIN_COMMON_LOG(_LOGL_INFO, "use final Get uid error");
+				return str_result;
+			}
+        }
         KYLIN_COMMON_LOG(_LOGL_INFO, "Get uid information:%s", cmdBackStr);
     }
 

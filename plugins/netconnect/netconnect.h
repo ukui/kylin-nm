@@ -87,6 +87,10 @@ public:
     QIcon icon() const  Q_DECL_OVERRIDE;
     bool isEnable() const  Q_DECL_OVERRIDE;
     QString translationPath() const  Q_DECL_OVERRIDE;
+
+public Q_SLOTS:
+    void updateNetCtrl(QString modName,QVariantMap value);
+
 private:
     void initSearchText();
     void initComponent();
@@ -129,13 +133,15 @@ private:
     // 打卡托盘网络窗口，后续需要跳转到指定密码框
     void openKylinm();
 
-    void netComponnetSettings();
-
     bool LaunchApp(QString desktopFile);
 
     bool isExitWiredDevice();
 
     bool isDslConnection(const QString &uuid);
+	
+	void initNetCtrl();
+    void updateAddButtonShow(bool netctlEnable);
+    void componentSettings();
 
 protected:
     bool eventFilter(QObject *w,QEvent *e);
@@ -159,6 +165,8 @@ private:
     QMap<QString, QList<QStringList>> getWiredList();
     QDBusInterface *m_pSysBusIntfs;
 
+    bool m_hideDeviceButton=false;
+    bool m_hideAddButton=false;
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);
 

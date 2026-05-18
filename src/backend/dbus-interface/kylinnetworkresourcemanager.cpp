@@ -683,7 +683,7 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
                      <<"connect real state"<<activeConnect->state() <<"change state"<<state;
             ::usleep(EMIT_DELAY);
         }
-
+        qDebug() << Q_FUNC_INFO << __LINE__ << "connection uuid:" << activeConnect->uuid() <<" state change :"<<state;
         Q_EMIT activeConnectStateChangeReason(activeConnect->uuid(), state,
                                             NetworkManager::ActiveConnection::Reason::UknownReason);
     } else {

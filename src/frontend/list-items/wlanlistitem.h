@@ -43,11 +43,6 @@ using namespace kdk;
 #define PWD_LENGTH_LIMIT 8
 #define PWD_LENGTH_MAX 63
 
-#define EXCELLENT_SIGNAL 80
-#define GOOD_SIGNAL 55
-#define OK_SIGNAL 30
-#define LOW_SIGNAL 5
-#define NONE_SIGNAL 0
 
 #define FREQ_5GHZ 5000
 

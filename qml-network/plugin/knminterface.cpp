@@ -1,6 +1,15 @@
 #include "knminterface.h"
 #include "knmdbuscaller.h"
+#include "uisecurityconfig.h"
 #include <QGSettings>
+
+enum E_KylinDeviceType{
+    KEYLIN_NC_NONE= 0, //无
+    KEYLIN_NC_WIRED=1ul<<0,//有线
+    KEYLIN_NC_WIRELESS=1ul<<1,//无线
+
+    KEYLIN_NC_ALL=KEYLIN_NC_WIRED|KEYLIN_NC_WIRELESS,
+};
 
 KnmInterface::KnmInterface()
 {
@@ -36,6 +45,8 @@ KnmInterface::KnmInterface()
             }
         });
     }
+    initNetCtrl();
+    componentSettings();
 }
 
 KnmInterface::~KnmInterface()
@@ -229,7 +240,9 @@ void KnmInterface::rebuildCurrentWirelessList()
 {
     if(m_currentWirelessDevice.isEmpty()) {
         QMap<QString, NetDevicePtr>devMap=KNMDC::getInstance()->wirelessDeviceList();
-        if(!devMap.isEmpty()) m_currentWirelessDevice=devMap.first()->devName();
+        if(!devMap.isEmpty() && !devMap.first().isNull()) {
+            m_currentWirelessDevice=devMap.first()->devName();
+        }
         qWarning() << Q_FUNC_INFO <<__LINE__ << "set currentdevice"<<m_currentWirelessDevice;
     }
     m_wirelessDevConnList.clear();
@@ -241,12 +254,12 @@ void KnmInterface::rebuildCurrentWirelessList()
 /*增量更新*/
 void KnmInterface::getWirelessDevConnList(QString devName)
 {
-    QVariantList conList;
     /*后端add与remove信号可能先于qml的设备名传递，造成崩溃，先做保护,后边要重新优化下，规避方案不影响实际效果，设备变化会重建列表不影响*/
     if(devName.isEmpty()) {
         qWarning() << Q_FUNC_INFO <<__LINE__ << devName<<"devname is empty";
         return;
-     }
+    }
+
     m_currentWirelessDevice = devName;
     if(m_wirelessDevConnList.isEmpty()) {
         m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(devName);
@@ -256,7 +269,8 @@ void KnmInterface::getWirelessDevConnList(QString devName)
         return;
     }
 
-    conList = KNMDC::getInstance()->wirelessDeviceConnList(devName);
+    QVariantList conList = KNMDC::getInstance()->wirelessDeviceConnList(devName);
+    qDebug() << Q_FUNC_INFO <<__LINE__ << "conList:"<<conList;
 
     for(int i=0;i<m_wirelessDevConnList.count();i++)
     {
@@ -269,26 +283,84 @@ void KnmInterface::getWirelessDevConnList(QString devName)
         m_wirelessDevConnList.removeAt(i);
     }
 
-    for(int i=0;i<conList.count();i++)
-    {
-        if(m_wirelessDevConnList.contains(conList.at(i)))
-        {
-            continue;
+    // 处理新增和更新的连接（保持排序）
+    for(int i = 0; i < conList.count(); i++) {
+        QVariantMap newConn = conList.at(i).toMap();
+        QString newSsid = newConn.value("Name").toString();
+        int newStatus = newConn.value("State").toInt();
+        int newConfigured = newConn.value("Configured", 0).toInt();
+        int newSignal = newConn.value("Signal", "0").toString().toInt();
+
+        // 检查是否已存在
+        bool exists = false;
+        int existingIndex = -1;
+        for(int j = 0; j < m_wirelessDevConnList.count(); j++) {
+            QVariantMap existingConn = m_wirelessDevConnList.at(j).toMap();
+            QString existingSsid = existingConn.value("Name").toString();
+            if(existingSsid == newSsid) {
+                exists = true;
+                existingIndex = j;
+                break;
+            }
         }
 
-        if (conList.at(i).toMap().value("State").toInt() == ACTIVATED
-            || conList.at(i).toMap().value("State").toInt() == ACTIVATING)
-        {
-            m_wirelessDevConnList.push_front(conList.at(i));
+        WirelessConnectionModel::ST_ConnectionInfo con = mWirelessConnecModel.mapToConnectionInfo(newConn);
+        if(exists) {
+            // 更新现有连接
+            m_wirelessDevConnList.replace(existingIndex, newConn);
+            mWirelessConnecModel.replaceConnection(&con);
+        } else {
+            // 插入新连接（按排序规则）
+            bool inserted = false;
+
+            // 如果是激活状态，插入到最前面
+            if(newStatus == ACTIVATED || newStatus == ACTIVATING) {
+                m_wirelessDevConnList.push_front(newConn);
+                mWirelessConnecModel.addConnection(0, &con);
+                inserted = true;
+            } else {
+                // 按排序规则找到插入位置；规则：已激活的连接在最前面，然后是已配置的连接，最后是未配置的连接；在同一类别中按信号强度降序排序，信号相同时新增的放前面。
+                for(int j = 0; j < m_wirelessDevConnList.count(); j++) {
+                    QVariantMap existingConn = m_wirelessDevConnList.at(j).toMap();
+                    int existingStatus = existingConn.value("State").toInt();
+
+                    // 跳过已激活的连接（它们已经在最前面）
+                    if(existingStatus == ACTIVATED || existingStatus == ACTIVATING) {
+                        continue;
+                    }
+
+                    int existingConfigured = existingConn.value("Configured", 0).toInt();
+                    int existingSignal = existingConn.value("Signal", "0").toString().toInt();
+
+                    // 按排序规则比较
+                    if(newConfigured > existingConfigured) {
+                        // 新连接已配置，现有连接未配置，插入此处
+                        m_wirelessDevConnList.insert(j, newConn);
+                        mWirelessConnecModel.addConnection(j, &con);
+                        inserted = true;
+                        break;
+                    } else if(newConfigured == existingConfigured) {
+                        // 配置状态相同，按信号强度排序；信号相同时新增的放前面
+                        if(newSignal >= existingSignal) {
+                            m_wirelessDevConnList.insert(j, newConn);
+                            mWirelessConnecModel.addConnection(j, &con);
+                            inserted = true;
+                            break;
+                        }
+                    }
+                    // 如果新连接未配置，而已有连接已配置，则继续向后查找，直到找到未配置的连接，然后比较信号强度
+                }
+            }
+
+            // 如果没找到合适位置，则添加到末尾
+            if(!inserted) {
+                int index = m_wirelessDevConnList.count();
+                m_wirelessDevConnList.append(newConn);
+                mWirelessConnecModel.addConnection(index, &con);
+            }
         }
-        else
-        {
-            m_wirelessDevConnList.append(conList.at(i));
-        }
-        WirelessConnectionModel::ST_ConnectionInfo con;
-        con=mWirelessConnecModel.mapToConnectionInfo(conList.at(i).toMap());
-        mWirelessConnecModel.addConnection(&con);
     }
+
     emit updateWirelessDevConnList();
 }
 
@@ -548,6 +620,7 @@ void KnmInterface::passwdAgentChangeSelectSsid()
 /*属性更新*/
 void KnmInterface::wirelessDevConnListPropUpdate(QString devName,QString ssid)
 {
+    qDebug() << Q_FUNC_INFO << __LINE__ << " devName :" << devName << " ssid :" << ssid;
     QVariantList conList;
 
     if(devName!=m_currentWirelessDevice && !m_currentWirelessDevice.isEmpty()) {
@@ -615,4 +688,85 @@ void KnmInterface::setNetworkConnectAutoConnectState(int type, QString uuid, boo
     // 发射信号通知UI更新
     emit updateWirelessDevConnList();
     emit wirelessConListChanged();
+}
+
+
+QVariantMap KnmInterface::getUiCtlData()
+{
+    qInfo()<<"[updateNetCtrl]"<<m_uiCtlData<<Q_FUNC_INFO<<__LINE__;
+    return m_uiCtlData;
+}
+
+void KnmInterface::updateNetCtrl(QString modName,QVariantMap value)
+{
+    bool enable=false;
+
+    if(modName!="Connect") return;
+
+    qInfo()<<"[WlanPage]"<<modName<<value;
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
+        QString key = it.key();
+        QVariant value = it.value();
+        if(key==QString("addConnectCtrol")) {
+
+            m_uiCtlData["wlanAddButton"]=((value.toUInt()&KEYLIN_NC_WIRELESS)==KEYLIN_NC_WIRELESS)? false:true;//为了m_uiCtlData参数意义一致 所以此处管控时wlanAddButton为false
+            emit updateUiCtlData(m_uiCtlData);
+            qInfo()<<"[updateNetCtrl]"<<m_uiCtlData;
+        }
+    }
+    return;
+}
+
+void KnmInterface::initNetCtrl()
+{
+    QVariantMap map;
+    int errCode=0;
+    m_uiCtlData["wlanAddButton"]=true;//初始化管控为true
+    QString netCtrlConnectName="Connect";
+    QDBusInterface dbusInterface("com.kylin.networkCtrol",
+                                 "/com/kylin/networkCtrol",
+                                 "com.kylin.networkCtrol",
+                                 QDBusConnection::systemBus());
+    if (!dbusInterface.isValid()) {
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+    } else {
+        dbusInterface.setTimeout(2000);
+        QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlConnectName);
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[WlanPage]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"[WlanPage]"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlConnectName,map);
+                map.clear();
+            }
+        }
+    }
+
+    QDBusConnection::systemBus().connect("com.kylin.networkCtrol",
+                                         "/com/kylin/networkCtrol",
+                                         "com.kylin.networkCtrol",
+                                         "sigNetContrlRuleChanged",
+                                         this,
+                                         SLOT(updateNetCtrl(QString ,QVariantMap)));
+
+    qInfo()<<"[WlanPage] initNetCtrl success";
+    return;
+}
+
+void KnmInterface::componentSettings()
+{
+    m_uiCtlData["netMainSwitch"]=true;//初始化管控为true
+    QVariant configData=UiSecurityConfig::getInstance()->getConnectSettingsData("netconnect","netconnectSettings");
+    SDK_TYPE_PROJECT projectId=UiSecurityConfig::getInstance()->getProjectIdentity();
+    QString settings=configData.toString();
+
+    if (settings.contains("netMainSwitch:false") || projectId==SDK_TYPE_YDSYY){
+       qInfo() << Q_FUNC_INFO << __LINE__ << "netMainSwitch:false";
+       m_uiCtlData["netMainSwitch"]=false;
+       emit updateUiCtlData(m_uiCtlData);
+    }
 }

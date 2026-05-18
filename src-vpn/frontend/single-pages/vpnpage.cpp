@@ -149,6 +149,18 @@ void VpnPage::constructItemArea()
     }
 
     resetListWidgetWidth();
+    
+    if (m_listWidget->count() == 0) {
+        if (m_emptyLabel) {
+            m_listWidget->hide();
+            m_emptyLabel->show();
+        }
+    } else {
+        if (m_emptyLabel) {
+            m_emptyLabel->hide();
+            m_listWidget->show();
+        }
+    }
 }
 
 void VpnPage::initVpnArea()
@@ -162,7 +174,20 @@ void VpnPage::resetPageHeight()
     int count = m_listWidget->count();
     m_listFrame->setFixedHeight(VPN_PAGE_HEIGHT);
 
-    m_listWidget->show();
+    if (m_listWidget->count() == 0) {
+        if (m_emptyLabel) {
+            m_listWidget->hide();
+            m_emptyLabel->show();
+        } else {
+            m_listWidget->show();
+        }
+    } else {
+        if (m_emptyLabel){
+            m_emptyLabel->hide();
+        } 
+        m_listWidget->show();
+    }
+
     m_listFrame->show();
     m_netDivider->show();
 }
@@ -259,6 +284,16 @@ void VpnPage::initUI()
     m_settingsLabel->setMouseTracking(true);
 
     m_settingsLabel->installEventFilter(this);
+
+    m_emptyLabel = new QLabel(m_listFrame);
+    m_emptyLabel->setText(tr("No VPN configuration available"));
+    m_emptyLabel->setAlignment(Qt::AlignCenter);
+    m_emptyLabel->setWordWrap(true);
+    m_emptyLabel->setEnabled(false);
+    m_emptyLabel->hide();
+    if (m_listLayout) {
+        m_listLayout->addWidget(m_emptyLabel);
+    }
 }
 
 QListWidgetItem *VpnPage::insertNewItem(KyConnectItem *itemData, QListWidget *listWidget)

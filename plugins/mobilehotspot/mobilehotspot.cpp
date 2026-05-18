@@ -124,9 +124,10 @@ void MobileHotspot::initSearchText()
 
 bool MobileHotspot::isExitWirelessDevice()
 {
-    QDBusInterface *interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
-                                     "com.kylin.network",
-                                     QDBusConnection::sessionBus());
+    QDBusInterface *interface = new QDBusInterface("com.kylin.network",
+                                                   "/com/kylin/network",
+                                                   "com.kylin.network",
+                                                   QDBusConnection::sessionBus());
     if (!interface->isValid()) {
         qDebug() << "/com/kylin/network is invalid";
         return false;

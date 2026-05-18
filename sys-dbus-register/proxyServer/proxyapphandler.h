@@ -51,35 +51,6 @@ extern "C"
 
 }
 
-
-/* 在包含系统头文件后，如果某些常量仍然未定义，则提供默认定义
-*  根据riscv架构的特性，可能需要定义这些常量
- */
-#ifndef PROC_EVENT_NONE
-#define PROC_EVENT_NONE 0x00000000
-#endif
-
-#ifndef PROC_EVENT_FORK
-#define PROC_EVENT_FORK 0x00000001
-#endif
-
-#ifndef PROC_EVENT_EXEC
-#define PROC_EVENT_EXEC 0x00000002
-#endif
-
-#ifndef PROC_EVENT_UID
-#define PROC_EVENT_UID 0x00000004
-#endif
-
-#ifndef PROC_EVENT_GID
-#define PROC_EVENT_GID 0x00000040
-#endif
-
-#ifndef PROC_EVENT_EXIT
-#define PROC_EVENT_EXIT 0x80000000
-#endif
-
-
 #define THREAD_MAXNUM 5
 #define READLINE_MAXSIZE 256
 

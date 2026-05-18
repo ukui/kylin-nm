@@ -24,6 +24,8 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDir>
+#include <QDBusPendingCallWatcher>
+
 #include "kylinactiveconnectresource.h"
 #include "kylinconnectresource.h"
 #include "kywirelessnetresource.h"
@@ -33,7 +35,7 @@
 #define FIRE_WALL_PERMISSION_SHOW "conf/firewallPermissionShow"
 
 enum NetworkModeType {
-    DBUS_INVAILD = -2,
+    DBUS_INVALID = -2,
     NO_CONFIG = -1,
     KSC_FIREWALL_PUBLIC = 0,
     KSC_FIREWALL_PRIVATE
@@ -44,18 +46,41 @@ class NetworkModeConfig : public QObject
     Q_OBJECT
 public:
     static NetworkModeConfig *getInstance();
+    //异步安全中心-获取网络模式配置
+    void getNetworkModeConfigAsync(const QString &uuid);
     //安全中心-获取网络模式配置
     int getNetworkModeConfig(QString uuid);
     //安全中心-设置网络模式配置
     void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
     //安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
-    int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
+    void breakNetworkConnect(QString uuid, QString cardName, QString ssid);
 
     static NetworkModeConfig *m_netModeInstance;
+
+Q_SIGNALS:
+    // 异步结果信号（核心新增）
+    void networkModeConfigReady(const QString &uuid, int configType, bool success);
 
 private:
     explicit NetworkModeConfig(QObject *parent = nullptr);
     QDBusInterface *m_dbusInterface = nullptr;
+};
+
+
+// 定义待处理的配置数据结构体
+struct PendingConfigData {
+    QString uuid;
+    QString deviceName;
+    QString ssid;
+    bool isWired;
+};
+
+struct PendingStateData {
+    QString uuid;
+    QString deviceName;
+    QString ssid;
+    bool isWired;
+    bool isWireless;
 };
 
 
@@ -70,12 +95,19 @@ public:
 
 private:
     KyActiveConnectResourse *m_activatedConnectResource = nullptr;
+    // 保存待处理的初始化配置
+    QMap<QString, PendingConfigData> m_pendingConfigMap;
+    // 保存待处理的连接状态变化配置
+    QMap<QString, PendingStateData> m_pendingStateMap;
+
     void setFirstConnectNetworkMode(QString uuid, QString deviceName, QString ssid);
 
 private Q_SLOTS:
     void onConnectionStateChanged(QString uuid,
                                   NetworkManager::ActiveConnection::State state,
                                   NetworkManager::ActiveConnection::Reason reason);
+    // 新增：异步查询结果回调
+    void onGetNetworkModeConfigReady(const QString &uuid, int configType, bool success);
 };
 
 #endif // NETWORKMODECONFIG_H

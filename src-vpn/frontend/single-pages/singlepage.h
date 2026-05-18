@@ -43,6 +43,7 @@ using namespace kdk;
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
 #define TITLE_FRAME_HEIGHT 50
+#define SETTING_FRAME_HEIGHT 56
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
 #define NET_LAYOUT_MARGINS 8,4,0,4
 #define TEXT_HEIGHT 20
@@ -112,6 +113,8 @@ protected:
     double m_transparency = 1.0;  //透明度
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
+
+    QLabel *m_emptyLabel = nullptr;
 
     UkuiWindowHelper *m_uwin;
 

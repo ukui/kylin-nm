@@ -45,8 +45,10 @@ public:
 
     void initUi();
 private:
-    QLineEdit *mHostEdit;
-    QLineEdit *mPortEdit;
+    QLineEdit *m_pHttpHostEdit = nullptr;
+    QLineEdit *m_pHttpPortEdit = nullptr;
+    QLineEdit *m_pHttpsHostEdit = nullptr;
+    QLineEdit *m_pHttpsPortEdit = nullptr;
 
     QPushButton *mCancelBtn;
     QPushButton *mConfirmBtn;

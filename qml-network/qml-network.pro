@@ -1,11 +1,16 @@
 TEMPLATE = lib
+
+include(../pub/pub.pri)
+include(../common/common.pri)
+
 TARGET = ukui-shortcut-network
 QT += quick dbus core
 CONFIG += plugin c++11 link_pkgconfig
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-PKGCONFIG += gsettings-qt
+PKGCONFIG += gsettings-qt \
+             kysdk-sysinfo
 
 LIBS += -lpthread
 # You can make your code fail to compile if it uses deprecated APIs.

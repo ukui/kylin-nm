@@ -74,7 +74,7 @@ public:
 
 public slots:
     // 添加连接项
-    void addConnection(struct ST_ConnectionInfo *pConnection);
+    void addConnection( int index,struct ST_ConnectionInfo *pConnection);
     
     // 移除连接项
     void removeConnection(const QString &connectionId);

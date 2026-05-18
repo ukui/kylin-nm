@@ -97,6 +97,7 @@ UkuiItems.DtThemeBackground {
                             id: lanswitchBtn
                             checked: KInterface.wiredMainSwitch
                             enabled: true//(lanDeviceComboBox.count !== 0)
+                            visible: KInterface.uiCtlData.netMainSwitch
                             onClicked: {
                                 KInterface.wiredMainSwitch = lanswitchBtn.checked
 

@@ -22,6 +22,7 @@
 #include "aptinfo.h"
 #include <kysdk/applications/accessinfohelper.h>
 #include "klineframe.h"
+#include "uisecurityconfig.h"
 //#include "utils.h"
 
 #include <QDebug>
@@ -286,7 +287,7 @@ void Proxy::initUi(QWidget *widget)
     line_3 = setLine(mProxyFrame);
 
     mHTTPSFrame = new QFrame(mProxyFrame);
-   setFrame_Noframe(mHTTPSFrame);
+    setFrame_Noframe(mHTTPSFrame);
 
     QHBoxLayout *mHTTPSLayout = new QHBoxLayout(mHTTPSFrame);
     mHTTPSLayout->setSpacing(8);
@@ -420,33 +421,63 @@ void Proxy::initUi(QWidget *widget)
     mAptLayout_1->addStretch();
     mAptLayout_1->addWidget(mAptBtn);
 
-    mAPTFrame_2 = new QFrame(mAPTFrame);
-    setFrame_Noframe(mAPTFrame_2);
+    m_pAPTHttpFrame = new QFrame(mAPTFrame);
+    setFrame_Noframe(m_pAPTHttpFrame);
 
-    QHBoxLayout *mAptLayout_2 = new QHBoxLayout(mAPTFrame_2);
-    mAptLayout_2->setContentsMargins(16, 0, 16, 0);
-    mAptLayout_2->setSpacing(8);
+    QHBoxLayout *mAptHttpLayout = new QHBoxLayout(m_pAPTHttpFrame);
+    mAptHttpLayout->setContentsMargins(16, 0, 16, 0);
+    mAptHttpLayout->setSpacing(8);
 
-    mAPTHostLabel_1 = new QLabel(mAPTFrame_2);
-    mAPTHostLabel_2 = new QLabel(mAPTFrame_2);
-    mAPTPortLabel_1 = new QLabel(mAPTFrame_2);
-    mAPTPortLabel_2 = new QLabel(mAPTFrame_2);
-    mEditBtn = new QPushButton(mAPTFrame_2);
-    KDK_EXTEND_ALL_INFO_FORMAT(mEditBtn, "Proxy", "", "edit button of apt proxy");
-    mEditBtn->setFixedWidth(80);
-    mAptLayout_2->addWidget(mAPTHostLabel_1);
-    mAptLayout_2->addWidget(mAPTHostLabel_2);
-    mAptLayout_2->addSpacing(100);
-    mAptLayout_2->addWidget(mAPTPortLabel_1);
-    mAptLayout_2->addWidget(mAPTPortLabel_2);
-    mAptLayout_2->addStretch();
-    mAptLayout_2->addWidget(mEditBtn,Qt::AlignRight);
+    m_pAPTHttpHostTipsLabel = new QLabel(m_pAPTHttpFrame);
+    m_pAPTHttpHostInfoLabel = new QLabel(m_pAPTHttpFrame);
+    m_pAPTHttpPortTipsLabel = new QLabel(m_pAPTHttpFrame);
+    m_pAPTHttpPortInfoLabel = new QLabel(m_pAPTHttpFrame);
+    m_pAPTHttpHostTipsLabel->setFixedWidth(120);
+    m_pAPTHttpHostInfoLabel->setFixedWidth(160);
+    m_pAPTHttpPortTipsLabel->setFixedWidth(50);
+    m_pAPTHttpPortInfoLabel->setFixedWidth(120);
+    mAptHttpLayout->addWidget(m_pAPTHttpHostTipsLabel);
+    mAptHttpLayout->addWidget(m_pAPTHttpHostInfoLabel);
+    mAptHttpLayout->addStretch(1);
+    mAptHttpLayout->addWidget(m_pAPTHttpPortTipsLabel);
+    mAptHttpLayout->addWidget(m_pAPTHttpPortInfoLabel);
+    mAptHttpLayout->addStretch(1);
 
-    line_7 = setLine(mAPTFrame);
+    m_pLineHttp = setLine(mAPTFrame);
+
+    m_pAPTHttpsFrame = new QFrame(mAPTFrame);
+    setFrame_Noframe(m_pAPTHttpsFrame);
+
+    QHBoxLayout *mAptHttpsLayout = new QHBoxLayout(m_pAPTHttpsFrame);
+    mAptHttpsLayout->setContentsMargins(16, 0, 16, 0);
+    mAptHttpsLayout->setSpacing(8);
+
+    m_pAPTHttpsHostTipsLabel = new QLabel(m_pAPTHttpsFrame);
+    m_pAPTHttpsHostInfoLabel = new QLabel(m_pAPTHttpsFrame);
+    m_pAPTHttpsPortTipsLabel = new QLabel(m_pAPTHttpsFrame);
+    m_pAPTHttpsPortInfoLabel = new QLabel(m_pAPTHttpsFrame);
+    m_pAPTHttpsHostTipsLabel->setFixedWidth(120);
+    m_pAPTHttpsHostInfoLabel->setFixedWidth(160);
+    m_pAPTHttpsPortTipsLabel->setFixedWidth(50);
+    m_pAPTHttpsPortInfoLabel->setFixedWidth(120);
+    mAptHttpsLayout->addWidget(m_pAPTHttpsHostTipsLabel);
+    mAptHttpsLayout->addWidget(m_pAPTHttpsHostInfoLabel);
+    mAptHttpsLayout->addStretch(1);
+    mAptHttpsLayout->addWidget(m_pAPTHttpsPortTipsLabel);
+    mAptHttpsLayout->addWidget(m_pAPTHttpsPortInfoLabel);
+    mAptHttpsLayout->addStretch(1);
+
+    m_pLineHttps = setLine(mAPTFrame);
+
+    m_pEditBtn = new QPushButton(widget);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_pEditBtn, "Proxy", "", "edit button of apt proxy");
+    m_pEditBtn->setFixedSize(120, 36);
 
     AptLayout->addWidget(mAPTFrame_1);
-    AptLayout->addWidget(line_7);
-    AptLayout->addWidget(mAPTFrame_2);
+    AptLayout->addWidget(m_pLineHttp);
+    AptLayout->addWidget(m_pAPTHttpFrame);
+    AptLayout->addWidget(m_pLineHttps);
+    AptLayout->addWidget(m_pAPTHttpsFrame);
 
     m_sysSpacerFrame = new QFrame(widget);
     m_sysSpacerFrame->setFixedHeight(24);
@@ -465,6 +496,7 @@ void Proxy::initUi(QWidget *widget)
     mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
+    mverticalLayout->addWidget(m_pEditBtn);
     mverticalLayout->addStretch();
 }
 
@@ -497,9 +529,11 @@ void Proxy::retranslateUi()
     //~ contents_path /Proxy/APT Proxy
     mAptProxyLabel->setText(tr("APT Proxy"));
     mAptLabel->setText(tr("Open"));
-    mAPTHostLabel_1->setText(tr("Server Address : "));
-    mAPTPortLabel_1->setText(tr("Port : "));
-    mEditBtn->setText(tr("Edit"));
+    m_pAPTHttpHostTipsLabel->setText(tr("Http Address : "));
+    m_pAPTHttpPortTipsLabel->setText(tr("Port : "));
+    m_pAPTHttpsHostTipsLabel->setText(tr("Https Address : "));
+    m_pAPTHttpsPortTipsLabel->setText(tr("Port : "));
+    m_pEditBtn->setText(tr("Edit"));
 }
 
 void Proxy::setupComponent(){
@@ -550,11 +584,26 @@ void Proxy::setupConnect(){
         UkccCommon::buriedSettings(QString("Proxy"), QString("System Proxy Open"), QString("settings"), checked?"true":"false");
         refreshSystemProxyState(checked);
 
+        /* 日志上报 */
         QString logMsg = checked ? QString("系统代理启用") : QString("系统代理关闭");
-        sendProxyNetCtlLog(logMsg);
+        QDBusInterface netCtlLogInterface("com.kylin.networkCtrol",
+                                           "/com/kylin/networkCtrol",
+                                           "com.kylin.networkCtrol",
+                                           QDBusConnection::systemBus());
+        if(!netCtlLogInterface.isValid()){
+            qWarning() << QString("Failed to create D-Bus of com.kylin.networkCtrol");
+            return;
+
+        }
+
+        qDebug()<<Q_FUNC_INFO<<__LINE__<< "Sent log message:" << logMsg;
+        QDBusMessage reply = netCtlLogInterface.call("sendSysProxyNetCtlLog", logMsg);
+        if (reply.type() == QDBusMessage::ErrorMessage) {
+            qWarning()<< "D-Bus call failed:"<< reply.errorMessage();
+        }
     });
 
-    connect(mEditBtn ,&QPushButton::clicked, this, &Proxy::setAptProxySlot);
+    connect(m_pEditBtn ,&QPushButton::clicked, this, &Proxy::setAptProxySlot);
 
     connect(mProxyBtnGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton * eBtn){
         if (eBtn == mAutoBtn) {
@@ -645,12 +694,17 @@ void Proxy::setupConnect(){
     connect(mAptBtn , &KSwitchButton::stateChanged, this ,[=](bool checked){
         UkccCommon::buriedSettings(QString("Proxy"), QString("Apt Proxy Open"), QString("settings"), checked?"true":"false");
         if (checked) {
-            emit mEditBtn->click();
-        } else {   // 关闭APT代理，删除对应的配置文件
+            emit m_pEditBtn->click();
+        } else {
+            /* 关闭APT代理，但不删除配置信息, 关闭代理时传入当前配置，这样配置信息会被保留 */
+            QHash<QString, QVariant> currentAptInfo = getAptProxy();
+            QString httpIp = currentAptInfo["http_ip"].toString();
+            QString httpPort = currentAptInfo["http_port"].toString();
+            QString httpsIp = currentAptInfo["https_ip"].toString();
+            QString httpsPort = currentAptInfo["https_port"].toString();
             if (QString(qgetenv("http_proxy").data()).isEmpty()) {
-                line_7->hide();
-                mAPTFrame_2->hide();
-                setAptProxy("" ,0 ,false);
+                setAPTProxyInfoFrameVisible(false);
+                setAptProxy(httpIp, httpPort, httpsIp, httpsPort, false);
             } else {
                 QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
                 mReboot->setIcon(QMessageBox::Warning);
@@ -659,15 +713,13 @@ void Proxy::setupConnect(){
                 QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
                 mReboot->exec();
                 if (mReboot->clickedButton() == nowbtn) {  //选择了立即重启，一秒后系统会重启
-                    line_7->hide();
-                    mAPTFrame_2->hide();
-                    setAptProxy("" ,0 ,false);
+                    setAPTProxyInfoFrameVisible(false);
+                    setAptProxy(httpIp, httpPort, httpsIp, httpsPort, false);
                     sleep(1);
                     reboot();
-                } else {  //选择了稍后重启,删掉对应文件，但删不了已生效的环境变量
-                    line_7->hide();
-                    mAPTFrame_2->hide();
-                    setAptProxy("" ,0 ,false);
+                } else {  //选择了稍后重启,修改了配置，但未改动了已生效的环境变量
+                    setAPTProxyInfoFrameVisible(false);
+                    setAptProxy(httpIp, httpPort, httpsIp, httpsPort, false);
                 }
             }
         }
@@ -701,12 +753,13 @@ void Proxy::initProxyModeStatus(){
     } else {
         if (mAptinfo["open"].toBool()) {
             mAptBtn->setChecked(true);
-            mAPTHostLabel_2->setText(mAptinfo["ip"].toString());
-            mAPTPortLabel_2->setText(mAptinfo["port"].toString());
+            m_pAPTHttpHostInfoLabel->setText(mAptinfo["http_ip"].toString());
+            m_pAPTHttpPortInfoLabel->setText(mAptinfo["http_port"].toString());
+            m_pAPTHttpsHostInfoLabel->setText(mAptinfo["https_ip"].toString());
+            m_pAPTHttpsPortInfoLabel->setText(mAptinfo["https_port"].toString());
         } else {
             mAptBtn->setChecked(false);
-            line_7->setVisible(false);
-            mAPTFrame_2->setVisible(false);
+            setAPTProxyInfoFrameVisible(false);
         }
     }
 
@@ -797,6 +850,49 @@ void Proxy::initDbus()
     if(!m_appProxyDbus->isValid()) {
         qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
     }
+
+    // 连接D-Bus信号
+    QDBusConnection sessionBus = QDBusConnection::sessionBus();
+
+    // 连接代理配置变化信号
+    sessionBus.connect("com.kylin.network",
+                      "/com/kylin/proxy",
+                      "com.kylin.network.proxy",
+                      "proxyConfigChanged",
+                      this,
+                      SLOT(onProxyConfigChanged(QStringList)));
+
+    // 连接应用代理状态变化信号
+    sessionBus.connect("com.kylin.network",
+                      "/com/kylin/proxy",
+                      "com.kylin.network.proxy",
+                      "appProxyStateChanged",
+                      this,
+                      SLOT(onAppProxyStateChanged(bool)));
+
+    // 连接应用代理列表变化信号
+    sessionBus.connect("com.kylin.network",
+                      "/com/kylin/proxy",
+                      "com.kylin.network.proxy",
+                      "appProxyAllListChanged",
+                      this,
+                      SLOT(onAppProxyAppListChanged()));
+
+    // 连接单个应用变化信号
+    sessionBus.connect("com.kylin.network",
+                      "/com/kylin/proxy",
+                      "com.kylin.network.proxy",
+                      "appProxyAppListChanged",
+                      this,
+                      SLOT(onAppProxySingleAppChanged(QString, bool)));
+
+    // 连接APT代理变化信号
+    sessionBus.connect("com.kylin.network",
+                      "/com/kylin/proxy",
+                      "com.kylin.network.proxy",
+                      "aptProxyChanged",
+                      this,
+                      SLOT(onAptProxyChanged(QHash<QString, QVariant>)));
 }
 
 void Proxy::initAppProxyStatus()
@@ -888,30 +984,31 @@ void Proxy::refreshSystemProxyState(bool isChecked)
      _setSensitivity();
 }
 
-void Proxy::setAptProxy(QString host, QString port, bool status)
+void Proxy::setAptProxy(QString http_host, QString http_port, QString https_host, QString https_port, bool status)
 {
-    QHash<QString, QVariant> preAptInfo = getAptProxy();
-    QDBusInterface *mAptproxyDbus = new QDBusInterface("com.control.center.qt.systemdbus",
-                                                             "/",
-                                                             "com.control.center.interface",
-                                                             QDBusConnection::systemBus());
-    if (mAptproxyDbus->isValid()) {
-        QDBusReply<bool> reply = mAptproxyDbus->call("setaptproxy", host, port , status);
-        sendAptProxyNetCtlLog(preAptInfo, host, port, status);
-   }
-    delete mAptproxyDbus;
-    mAptproxyDbus = nullptr;
+    QDBusInterface *proxyServiceDbus = new QDBusInterface("com.kylin.network",
+                                                          "/com/kylin/proxy",
+                                                          "com.kylin.network.proxy",
+                                                          QDBusConnection::sessionBus());
+
+    if (proxyServiceDbus->isValid()) {
+        QDBusReply<void> reply = proxyServiceDbus->call("setAptProxy", http_host, http_port, https_host, https_port, status);
+
+    }
+
+    delete proxyServiceDbus;
+    proxyServiceDbus = nullptr;
 }
 
 QHash<QString, QVariant> Proxy::getAptProxy()
 {
      QHash<QString, QVariant> mAptInfo;
-     QDBusInterface *mAptproxyDbus = new QDBusInterface("com.control.center.qt.systemdbus",
-                                                              "/",
-                                                              "com.control.center.interface",
-                                                              QDBusConnection::systemBus());
-    if (mAptproxyDbus->isValid()) {
-        QDBusMessage result = mAptproxyDbus->call("getaptproxy");
+     QDBusInterface *proxyServiceDbus = new QDBusInterface("com.kylin.network",
+                                                           "/com/kylin/proxy",
+                                                           "com.kylin.network.proxy",
+                                                           QDBusConnection::sessionBus());
+    if (proxyServiceDbus->isValid()) {
+        QDBusMessage result = proxyServiceDbus->call("getAptProxy");
 
         QList<QVariant> outArgs = result.arguments();
         QVariant first = outArgs.at(0);
@@ -933,8 +1030,8 @@ QHash<QString, QVariant> Proxy::getAptProxy()
             mAptInfo.insert(it.arg, it.out.variant());
         }
     }
-    delete mAptproxyDbus;
-    mAptproxyDbus = nullptr;
+    delete proxyServiceDbus;
+    proxyServiceDbus = nullptr;
     return mAptInfo;
 }
 
@@ -950,10 +1047,11 @@ void Proxy::setAptInfo()
         sleep(1);
         reboot();
     } else  {  //选择了稍后重启或点击了关闭按钮，配置文件已写入，但是/etc/profile.d目录下新增的脚本文件未执行
-        line_7->show();
-        mAPTFrame_2->show();
-        mAPTHostLabel_2->setText(getAptProxy()["ip"].toString());
-        mAPTPortLabel_2->setText(getAptProxy()["port"].toString());
+        setAPTProxyInfoFrameVisible(true);
+        m_pAPTHttpHostInfoLabel->setText(getAptProxy()["http_ip"].toString());
+        m_pAPTHttpPortInfoLabel->setText(getAptProxy()["http_port"].toString());
+        m_pAPTHttpsHostInfoLabel->setText(getAptProxy()["https_ip"].toString());
+        m_pAPTHttpsPortInfoLabel->setText(getAptProxy()["https_port"].toString());
     }
 }
 
@@ -992,8 +1090,8 @@ bool Proxy::getAppProxyState()
     }
 
     //获取应用代理开启状态
-    qDebug() << "call QDBusInterface getProxyStateDbus";
-    QDBusReply<bool> reply = m_appProxyDbus->call("getProxyStateDbus");
+    qDebug() << "call QDBusInterface getAppProxyState";
+    QDBusReply<bool> reply = m_appProxyDbus->call("getAppProxyState");
 
     if (!reply.isValid()) {
         return false;
@@ -1010,11 +1108,9 @@ void Proxy::setAppProxyState(bool state)
         return;
     }
 
-    bool preStatus = getAppProxyState();
     //设置应用代理开启状态
-    qDebug() << "call QDBusInterface setProxyStateDbus" << state;
-    m_appProxyDbus->call("setProxyStateDbus", state);
-    sendAppProxyNetCtlLog(QStringList(), preStatus, QStringList(), state);
+    qDebug() << "call QDBusInterface setAppProxyState" << state;
+    m_appProxyDbus->call("setAppProxyState", state);
 }
 
 QStringList Proxy::getAppProxyConf()
@@ -1033,18 +1129,18 @@ QStringList Proxy::getAppProxyConf()
     }
 
     //获取应用代理配置信息
-    qDebug() << "call QDBusInterface getProxyConfig";
-    QDBusReply<QStringList> reply = dbusInterface.call("getProxyConfig");
+    qDebug() << "call QDBusInterface getAppProxyConfig";
+    QDBusReply<QStringList> reply = dbusInterface.call("getAppProxyConfig");
 
     if (!reply.isValid()) {
-        qWarning ()<< "Return empty app proxy information, getProxyConfig reply is invalid";
+        qWarning ()<< "Return empty app proxy information, getAppProxyConfig reply is invalid";
         return info;
     }
 
     info =  reply.value();
 
     if (info.isEmpty()) {
-        qWarning() << "getAppProxyConf reply is empty";
+        qWarning() << "getAppProxyConfig reply is empty";
     }
 
     return info;
@@ -1062,11 +1158,9 @@ void Proxy::setAppProxyConf(QStringList list)
         return;
     }
 
-    QStringList preAppInfo = getAppProxyConf();
     //写入应用代理配置信息
-    qDebug() << "call QDBusInterface setProxyConfig"<<"preConf:"<<preAppInfo<<"currConf:"<<list;
-    m_appProxyDbus->call("setProxyConfig", list);
-    sendAppProxyNetCtlLog(preAppInfo, true, list, true);
+    qDebug() << "call QDBusInterface setAppProxyConfig"<<"currConf:"<<list;
+    m_appProxyDbus->call("setAppProxyConfig", list);
 }
 
 QMap<QString, QStringList> Proxy::getAppListProxy()
@@ -1085,8 +1179,8 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
     }
 
     //获取可以配置应用代理的应用信息
-    qDebug() << "call QDBusInterface getAppProxy";
-    QDBusReply<QMap<QString, QStringList>> reply = dbusInterface.call("getAppProxy");
+    qDebug() << "call QDBusInterface getAppProxyAppsInfo";
+    QDBusReply<QMap<QString, QStringList>> reply = dbusInterface.call("getAppProxyAppsInfo");
 
     if (!reply.isValid()) {
         qWarning ()<< "Return empty app list, getAppProxy reply is invalid";
@@ -1094,7 +1188,7 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
     }
     appList = reply.value();
     if (appList.isEmpty()) {
-        qWarning() << "getAppProxy reply appList is empty";
+        qWarning() << "getAppProxyAppsInfo reply appList is empty";
     }
 
     return appList;
@@ -1112,40 +1206,27 @@ void Proxy::setUkccProxySettings()
     }
     setAPTProxyFrameHidden(false);
 
-    QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
-                       "/",
-                       "org.ukui.ukcc.session.interface",
-                       QDBusConnection::sessionBus());
-
-    if(!ukccDbusInterface.isValid()) {
-        qWarning() << "ukccDbusInterface is invalid";
+    QVariant configData=UiSecurityConfig::getInstance()->getConnectSettingsData("proxy","proxySettings");
+    QString proxySettings = configData.toString();
+    if (proxySettings.isEmpty()) {
         return;
     }
+    qDebug()<<Q_FUNC_INFO<<__LINE__<< "get Ukcc ctrl ProxySettings" << proxySettings;
 
-    QDBusReply<QMap<QString, QVariant> > reply = ukccDbusInterface.call("getModuleHideStatus");
-    if (!reply.isValid()) {
-        qWarning() << "reply of getModuleHideStatus is invalid";
-        return;
-    }
-
-    QStringList proxySettingList;
-    if (reply.value().contains("proxySettings")) {
-        QString proxySettings = reply.value()["proxySettings"].toString();
-        qDebug() << "proxySettings" << proxySettings;
-
-        if (proxySettings.isEmpty()) {
-            return;
-        }
-        proxySettingList = proxySettings.split(",");
-    }
-
+    QStringList proxySettingList = proxySettings.split(",");
     for (const QString setting : proxySettingList) {
-        if (setting.contains("SystemProxyFrame") && setting.contains("false")) {
+        if (setting.contains("SystemProxyFrame:false")) {
             setSystemProxyFrameHidden(true);
-        } else if (setting.contains("AppProxyFrame") && setting.contains("false")) {
+        } else if (setting.contains("AppProxyFrame:false")) {
             setAppProxyFrameHidden(true);
-        } else if (setting.contains("APTProxyFrame") && setting.contains("false")) {
+        } else if (setting.contains("APTProxyFrame:false")) {
             setAPTProxyFrameHidden(true);
+        } else if(setting.contains("SystemProxyFrameEnable:false")) {
+            setSystemProxyFrameEnable(false);
+        } else if (setting.contains("AppProxyFrameEnable:false")) {
+            setAppProxyFrameEnable(false);
+        } else if (setting.contains("APTProxyFrameEnable:false")) {
+            setAPTProxyFrameEnable(false);
         }
     }
 }
@@ -1419,6 +1500,7 @@ void Proxy::appListPadding()
         appWidget->setAppName(appInfo.value(0));
         appWidget->setAppIcon(QIcon::fromTheme(appInfo.value(1)));
         appWidget->setAppChecked(flag);
+        appWidget->setProperty("desktopfp", index);// 保存桌面文件路径作为属性
 
         QListWidgetItem *appListWidgetItem = new QListWidgetItem(m_appListWidget);
         appListWidgetItem->setSizeHint(QSize(m_appListWidget->width(),36));
@@ -1538,6 +1620,69 @@ void Proxy::onPaletteChanged()
     m_appListWidget->setPalette(mpal);
 }
 
+// 添加槽函数来处理信号
+void Proxy::onProxyConfigChanged(const QStringList &configList)
+{
+    // 更新应用代理配置显示
+    m_proxyTypeComboBox->setCurrentText(configList.value(0));
+    m_ipAddressLineEdit->setText(configList.value(1));
+    m_portLineEdit->setText(configList.value(2));
+    m_userNameLineEdit->setText(configList.value(3));
+    m_pwdLineEdit->setText(configList.value(4));
+}
+
+void Proxy::onAppProxyStateChanged(bool state)
+{
+    // 更新应用代理开关状态
+    m_appEnableBtn->blockSignals(true);
+    m_appEnableBtn->setChecked(state);
+    m_appEnableBtn->blockSignals(false);
+
+    // 更新UI
+    setAppProxyUiEnable(state);
+}
+
+void Proxy::onAppProxyAppListChanged()
+{
+    // 清空并重新加载应用列表
+    m_appListWidget->clear();
+    appListPadding();
+}
+
+void Proxy::onAppProxySingleAppChanged(const QString &desktopfp, bool added)
+{
+    // 优化：只更新单个应用的状态
+    for (int i = 0; i < m_appListWidget->count(); ++i) {
+        QListWidgetItem *item = m_appListWidget->item(i);
+        AppListWidget *widget = qobject_cast<AppListWidget*>(m_appListWidget->itemWidget(item));
+        if (widget && widget->property("desktopfp").toString() == desktopfp) {
+            widget->setAppChecked(added);
+            break;
+        }
+    }
+}
+
+void Proxy::onAptProxyChanged(const QHash<QString, QVariant> &aptInfo)
+{
+    // 更新APT代理显示
+    if (aptInfo["open"].toBool()) {
+        mAptBtn->blockSignals(true);
+        mAptBtn->setChecked(true);
+        mAptBtn->blockSignals(false);
+
+        m_pAPTHttpHostInfoLabel->setText(aptInfo["http_ip"].toString());
+        m_pAPTHttpPortInfoLabel->setText(aptInfo["http_port"].toString());
+        m_pAPTHttpsHostInfoLabel->setText(aptInfo["https_ip"].toString());
+        m_pAPTHttpsPortInfoLabel->setText(aptInfo["https_port"].toString());
+        setAPTProxyInfoFrameVisible(true);
+    } else {
+        mAptBtn->blockSignals(true);
+        mAptBtn->setChecked(false);
+        mAptBtn->blockSignals(false);
+        setAPTProxyInfoFrameVisible(false);
+    }
+}
+
 void Proxy::setAppProxyUiEnable(bool enable)
 {
     if (enable) {
@@ -1596,9 +1741,12 @@ void Proxy::setAptProxySlot()
         setAptInfo();
     }
     if (getAptProxy()["open"].toBool() && prestatus) {
-        if (getAptProxy()["ip"].toString() == preaptinfo["ip"].toString() && getAptProxy()["port"].toString() == preaptinfo["port"].toString() && prestatus){  //点击了编辑按钮，且在设置IP和端口号的弹窗中，点击了取消或者关闭按钮
-            line_7->show();
-            mAPTFrame_2->show();
+        if (getAptProxy()["http_ip"].toString() == preaptinfo["http_ip"].toString()
+                && getAptProxy()["http_port"].toString() == preaptinfo["http_port"].toString()
+                && getAptProxy()["https_ip"].toString() == preaptinfo["https_ip"].toString()
+                && getAptProxy()["https_port"].toString() == preaptinfo["https_port"].toString()
+                && prestatus){  //点击了编辑按钮，且在设置IP和端口号的弹窗中，点击了取消或者关闭按钮
+            setAPTProxyInfoFrameVisible(true);
         } else {
              setAptInfo();
         }
@@ -1656,104 +1804,27 @@ void Proxy::manualProxyTextChanged()
     setting = nullptr;
 }
 
-void Proxy::sendProxyNetCtlLog(const QString &logMessage)
+void Proxy::setAPTProxyInfoFrameVisible(bool state) {
+    m_pLineHttp->setVisible(state);
+    m_pAPTHttpFrame->setVisible(state);
+    m_pLineHttps->setVisible(state);
+    m_pAPTHttpsFrame->setVisible(state);
+    m_pEditBtn->setVisible(state);
+}
+
+void Proxy::setSystemProxyFrameEnable(bool enable)
 {
-    QDBusInterface netCtlLogInterface("com.kylin.networkCtrol",
-                                       "/com/kylin/networkCtrol",
-                                       "com.kylin.networkCtrol",
-                                       QDBusConnection::systemBus());
-    if(!netCtlLogInterface.isValid()){
-        qWarning() << QString("Failed to create D-Bus of com.kylin.networkCtrol");
-        return;
-
-    }
-
-    qDebug()<<Q_FUNC_INFO<<__LINE__<< "Sent log message:" << logMessage;
-    QDBusMessage reply = netCtlLogInterface.call("sendSysProxyNetCtlLog", logMessage);
-    if (reply.type() == QDBusMessage::ErrorMessage) {
-        qWarning()<< "D-Bus call failed:"<< reply.errorMessage();
-    }
+    mProxyFrame->setEnabled(enable);
 }
 
-void Proxy::sendAppProxyNetCtlLog(const QStringList& preAppInfo, bool preStatus, const QStringList& currAppInfo, bool status,bool addApp, const QString& appName)
-{    /* 应用代理的日志上报 */
-
-    QString message;
-    if(preStatus != status){
-        message = status ? QString("应用代理开启") : QString("应用代理关闭");
-        sendProxyNetCtlLog(message);
-        return;
-    }else if(preAppInfo != currAppInfo){
-        /* 变量判空，若是赋值为"空",增强日志可读性 */
-        auto formatValue = [](const QString& value) {
-            return value.isEmpty() ? QString("空") : value;
-        };
-
-        QStringList changes;
-        auto checkChange = [&](const QString& field, const QString& preValue, const QString& currValue) {
-            if (preValue != currValue) {
-                changes << QString("原%1：%2，新%1：%3")
-                               .arg(field)
-                               .arg(formatValue(preValue))
-                               .arg(formatValue(currValue));
-            }
-        };
-        checkChange(QString("代理类型"), preAppInfo.value(0), currAppInfo.value(0));
-        checkChange(QString("IP地址"), preAppInfo.value(1), currAppInfo.value(1));
-        checkChange(QString("端口"), preAppInfo.value(2), currAppInfo.value(2));
-        checkChange(QString("用户名"), preAppInfo.value(3), currAppInfo.value(3));
-        checkChange(QString("密码"), preAppInfo.value(4), currAppInfo.value(4));
-
-        if (!changes.isEmpty()) {
-            sendProxyNetCtlLog("应用代理的配置变化，" + changes.join("; "));
-        }
-        //message= QString("应用代理的配置变化，原配置：{" + preAppInfo.join(",") + "}, 新配置：{" + currAppInfo.join(",")) +"}";
-        return;
-    }else if(!appName.isEmpty()){
-        if(addApp){
-            message= QString("应用代理的应用列表变化，勾选应用：" + appName);
-        }else{
-            message= QString("应用代理的应用列表变化，取消勾选应用：" + appName);
-        }
-        sendProxyNetCtlLog(message);
-    }
-    return;
+void Proxy::setAppProxyFrameEnable(bool enable)
+{
+    m_appProxyFrame->setEnabled(enable);
+    m_appListFrame->setEnabled(enable);
 }
 
-void Proxy::sendAptProxyNetCtlLog(const QHash<QString, QVariant> &preAptInfo, QString host, QString port, bool status)
-{   /* APT代理的日志上报 */
-
-    bool preStatus = preAptInfo["open"].toBool();
-    if(preStatus != status){
-        QString logMsg = status ? QString("APT代理开启") : QString("APT代理关闭");
-        sendProxyNetCtlLog(logMsg);
-    }
-
-    QString preAptHost = preAptInfo["ip"].toString();
-    QString preAptPort = preAptInfo["port"].toString();
-
-    if(preAptHost == host && preAptPort == port){
-        return;
-    }
-
-    /* 变量判空，若是赋值为"空",增强日志可读性 */
-    auto formatValue = [](const QString& value) {
-        return value.isEmpty() ? QString("空") : value;
-    };
-    QStringList changes;
-    auto checkChange = [&](const QString& field, const QString& preValue, const QString& currValue) {
-        if (preValue != currValue) {
-            changes << QString("原%1：%2，新%1：%3")
-                           .arg(field)
-                           .arg(formatValue(preValue))
-                           .arg(formatValue(currValue));
-        }
-    };
-    checkChange(QString("服务器地址"), preAptHost, host);
-    checkChange(QString("端口"), preAptPort, port);
-    if (!changes.isEmpty()) {
-        sendProxyNetCtlLog("APT代理的配置变化，" + changes.join("; "));
-    }
-
-    return;
+void Proxy::setAPTProxyFrameEnable(bool enable)
+{
+    mAPTFrame->setEnabled(enable);
+    m_pEditBtn->setEnabled(enable);
 }

@@ -639,6 +639,7 @@ void TabPage::updateDeviceConnectState(QString deviceName,int flag)
             index=m_deviceComboBox->findData(deviceName);
             if(index<0) {
                 qDebug() << "cannt find  " << deviceName;
+		return;//此处不返回也没有问题，setItemText与setItemData均有异常判断不会动作，但是应该返回表示此处是异常
             }
             devStrState=changeDeviceStateText(deviceName,flag);
             QFontMetrics fm(m_deviceComboBox->font());

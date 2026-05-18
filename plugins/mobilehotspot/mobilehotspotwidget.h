@@ -152,7 +152,7 @@ private:
     void judgeNoticeInfoShow(QString deviceName , bool isActived);
     bool judgeHotSpotIsCtrl();
     bool m_isUserSelect = true;  //是否用户操作
-
+    void componentSettings();
 signals:
 
 private slots:

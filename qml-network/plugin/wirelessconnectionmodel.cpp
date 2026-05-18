@@ -131,11 +131,10 @@ QHash<int, QByteArray> WirelessConnectionModel::roleNames() const
     };
 }
 
-void WirelessConnectionModel::addConnection(struct ST_ConnectionInfo *pConnection)
+void WirelessConnectionModel::addConnection(int index, struct ST_ConnectionInfo *pConnection)
 {
     // 确保ID唯一性
     QString id = generateUniqueId();
-    //
 
     if(pConnection->status==1 || pConnection->status == 2)
     {
@@ -145,8 +144,8 @@ void WirelessConnectionModel::addConnection(struct ST_ConnectionInfo *pConnectio
     }
     else
     {
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        m_connections.append(*pConnection);
+        beginInsertRows(QModelIndex(), index, index);
+        m_connections.insert(index, *pConnection);
         endInsertRows();
     }
     
@@ -248,7 +247,7 @@ int WirelessConnectionModel::getConButtonFromSsid(const QString itemId)
 
 void WirelessConnectionModel::replaceConnection(struct ST_ConnectionInfo *pConnection)
 {
-
+    qDebug() << Q_FUNC_INFO << __LINE__ ;
 
     int index = findIndexById(pConnection->ssid);
     if (index != -1) {

@@ -74,6 +74,36 @@ DbusAdaptor::DbusAdaptor(QString display, MainWindow *m, QObject *parent)
     }
 
     connectToMainwindow();
+
+    // 加一些打印，进入到这里说明kylin-nm的dbus服务已经注册成功了，后续可以在这里添加一些启动时的逻辑
+    qDebug() << "kylin-nm dbus service registered successfully";
+    // 检测当前是否有托管的无线网卡，如果有则显示控制面板的 wlan & mobilehotspot 插件，否则隐藏
+    {
+        QMap<QString, bool> devMap;
+        getDeviceEnableState(1, devMap);
+        int managedCount = 0;
+        QMap<QString, bool>::const_iterator it = devMap.cbegin();
+        while (it != devMap.cend()) {
+            if (it.value()) {
+                ++managedCount;
+            }
+            ++it;
+        }
+        // 如果有托管的无线网卡，则显示控制面板的 wlan & mobilehotspot 插件，否则隐藏
+        qDebug() << "Managed wireless devices count:" << managedCount;
+
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+            // 说明控制面板的 ukcc 模块已经安装了，才去设置显示/隐藏，否则不设置，避免不必要的错误日志
+            qDebug() << "Control panel ukcc module is installed, set mobile hotspot and wlan connect visibility according to managed wireless devices count.";
+            QGSettings mobileHotspotSetting(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
+            mobileHotspotSetting.set("show", managedCount > 0);
+
+            QGSettings wlanConnectSetting(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_WLANCONNECT);
+            wlanConnectSetting.set("show", managedCount > 0);
+        }
+    }
+
+    
 }
 
 DbusAdaptor::~DbusAdaptor()
@@ -693,3 +723,4 @@ QVariantList DbusAdaptor::getNetworkDeviceData(int type)
 
     return valueMap;
 }
+

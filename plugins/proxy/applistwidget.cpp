@@ -86,7 +86,6 @@ void AppListWidget::AddAppProxyConfig()
 
     qDebug() << "call QDBusInterface addAppIntoProxy";
     m_dbusInterface->call("addAppIntoProxy", m_path);
-    Proxy::sendAppProxyNetCtlLog(QStringList(), true, QStringList(), true, true, m_nameLabel->text());
 }
 
 /**
@@ -102,7 +101,6 @@ void AppListWidget::RemoveAppProxyConfig()
 
     qDebug() << "call QDBusInterface delAppIntoProxy";
     m_dbusInterface->call("delAppIntoProxy", m_path);
-    Proxy::sendAppProxyNetCtlLog(QStringList(), true, QStringList(), true, false, m_nameLabel->text());
 }
 
 void AppListWidget::mousePressEvent(QMouseEvent *event)

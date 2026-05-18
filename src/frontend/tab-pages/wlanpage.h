@@ -127,6 +127,7 @@ public Q_SLOTS:
     void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
     void requestScan();
     void onWlanPageVisibleChanged(int index);
+    void onSignalStrengthChange(QString interface, QString ssid, int signalStrength);
 
 private Q_SLOTS:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);

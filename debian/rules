@@ -4,7 +4,7 @@ export QT_SELECT=5
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 QMAKE_OPTS = DEFINES+=NO_DEBUG_ON_CONSOLE
-MAKE_OPTS  = PREFIX=/usr QMAKE=qmake LRELEASE=lrelease QMAKE_OPTS="$(QMAKE_OPTS)"
+MAKE_OPTS  = PREFIX=/usr QMAKE=qmake LRELEASE=lrelease QMAKE_OPTS="$(QMAKE_OPTS)" -j$(shell nproc)
 
 override_dh_auto_configure:
 	QT_SELECT=qt5 dh_auto_configure \

@@ -107,6 +107,8 @@ KyLable::KyLable(QWidget *parent) : QLabel(parent)
     connect(qApp, &QApplication::paletteChanged, this, &KyLable::onPaletteChanged);
     onPaletteChanged();
     m_origForegroundColor = FOREGROUND_COLOR_NORMAL;
+    this->setAttribute(Qt::WA_Hover, true);
+    this->setMouseTracking(true);
 }
 
 void KyLable::onPaletteChanged()
@@ -137,7 +139,10 @@ void KyLable::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
     pal.setColor(QPalette::WindowText, m_foregroundColor);
+    pal.setColor(QPalette::Text, m_foregroundColor);
+    pal.setColor(QPalette::ButtonText, m_foregroundColor);
     this->setPalette(pal);
+
     return QLabel::paintEvent(event);
 }
 
@@ -145,12 +150,14 @@ void KyLable::enterEvent(QEvent *event)
 {
     setHoverColor();
     this->update();
+    QWidget::enterEvent(event);
 }
 
 void KyLable::leaveEvent(QEvent *event)
 {
     setNormalColor();
     this->update();
+    QWidget::leaveEvent(event);
 }
 
 void KyLable::mousePressEvent(QMouseEvent *event)

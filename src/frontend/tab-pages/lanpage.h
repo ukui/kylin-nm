@@ -20,25 +20,27 @@
 #ifndef LANPAGE_H
 #define LANPAGE_H
 
-#include "divider.h"
+#include <QMap>
+#include <QLabel>
+#include <QGSettings>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QScrollArea>
 #include <QListWidget>
-#include <QMap>
-#include <QGSettings>
-
-#include "list-items/listitem.h"
-#include "list-items/lanlistitem.h"
-#include "tab-pages/tabpage.h"
-
 #include <QDBusMetaType>
 
+#include "divider.h"
+#include "tab-pages/tabpage.h"
+#include "list-items/listitem.h"
+#include "list-items/lanlistitem.h"
 
 #define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
 #define SYSTEM_DBUS_PATH  "/"
 #define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
+
+#define NETWORK_MANAGER_SERVICE "org.freedesktop.NetworkManager"
+#define NETWORK_MANAGER_PATH "/org/freedesktop/NetworkManager"
+#define DBUS_PROPERTIES_INTERFACE "org.freedesktop.DBus.Properties"
 
 class LanListItem;
 
@@ -61,6 +63,8 @@ public:
 
     bool lanIsConnected();
     void getWiredDeviceConnectState(QMap<QString, QString> &map);
+
+    bool hasInternetAccess();
 
     bool getWiredEnabledState() {
         return m_wiredConnectOperation->getWiredEnabled();

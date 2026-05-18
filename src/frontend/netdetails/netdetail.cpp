@@ -425,7 +425,7 @@ void NetDetail::initUI()
     } else {
         m_netTabBar->setFixedWidth(PPPOE_TAB_WIDTH);
     }
-    if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
+    if (isActive && m_networkMode != DBUS_INVALID && m_networkMode != NO_CONFIG) {
         m_netTabBar->addTab(tr("Config")); //配置
         m_netTabBar->setFixedWidth(m_netTabBar->width() + TAB_WIDTH);
     }
@@ -566,7 +566,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //ipv4页面填充
     ipv4Page->setUuid(m_uuid);
-
+    ipv4Page->setMulDns(m_info.ipv4DnsList);
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv4Conflict(m_info.strIPV4Address);
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
@@ -575,12 +575,11 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 //        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
 //        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
         ipv4Page->setGateWay(m_info.strIPV4GateWay);
-        ipv4Page->setMulDns(m_info.ipv4DnsList);//只有在手动时才显示连接配置的dns信息。不然会造成自动时详情页面显示的dhcp的dns 这里显示手动配置的dns造成显示差异
     } else {
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
     }
     //ipv6页面填充
-
+    ipv6Page->setMulDns(m_info.ipv6DnsList);
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
@@ -589,7 +588,6 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 //        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
 //        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
-        ipv6Page->setMulDns(m_info.ipv6DnsList);
     } else {
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
     }
@@ -618,7 +616,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     }
 
     //配置页面
-    if (isActive  && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
+    if (isActive  && m_networkMode != DBUS_INVALID && m_networkMode != NO_CONFIG) {
         configPage->setConfigState(m_networkMode);
     }
 
@@ -1213,7 +1211,7 @@ bool NetDetail::updateConnect()
         }
     }
 
-    if (m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
+    if (m_networkMode != DBUS_INVALID && m_networkMode != NO_CONFIG) {
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();

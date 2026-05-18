@@ -352,25 +352,25 @@ QString getIcon(bool isEncrypted, int signalStrength, int category) {
         iconNameFirst = "ukui-wifi6+-";
     }
     if (!isEncrypted) {
-        if (signalStrength > EXCELLENT_SIGNAL){
+        if (signalStrength > WIFI_EXCELLENT_SIGNAL){
             if (category == 0) {
                 iconNameLast = "excellent-symbolic";
             } else {
                 iconNameLast = "full-symbolic";
             }
-        } else if (signalStrength > GOOD_SIGNAL) {
+        } else if (signalStrength > WIFI_GOOD_SIGNAL) {
             if (category == 0) {
                 iconNameLast = "good-symbolic";
             } else {
                 iconNameLast = "high-symbolic";
             }
-        } else if (signalStrength > OK_SIGNAL) {
+        } else if (signalStrength > WIFI_OK_SIGNAL) {
             if (category == 0) {
                 iconNameLast = "ok-symbolic";
             } else {
                 iconNameLast = "medium-symbolic";
             }
-       } else if (signalStrength > LOW_SIGNAL) {
+       } else if (signalStrength > WIFI_LOW_SIGNAL) {
             if (category == 0) {
                 iconNameLast = "weak-symbolic";
             } else {
@@ -380,25 +380,25 @@ QString getIcon(bool isEncrypted, int signalStrength, int category) {
             iconNameLast = "none-symbolic";
         }
     } else {
-        if (signalStrength > EXCELLENT_SIGNAL){
+        if (signalStrength > WIFI_EXCELLENT_SIGNAL){
             if (category == 0) {
                 iconNameLast = "excellent-secure-symbolic";
             } else {
                 iconNameLast = "full-pwd-symbolic";
             }
-        } else if (signalStrength > GOOD_SIGNAL) {
+        } else if (signalStrength > WIFI_GOOD_SIGNAL) {
             if (category == 0) {
                 iconNameLast = "good-secure-symbolic";
             } else {
                 iconNameLast = "high-pwd-symbolic";
             }
-        } else if (signalStrength > OK_SIGNAL) {
+        } else if (signalStrength > WIFI_OK_SIGNAL) {
             if (category == 0) {
                 iconNameLast = "ok-secure-symbolic";
             } else {
                 iconNameLast = "medium-pwd-symbolic";
             }
-       } else if (signalStrength > LOW_SIGNAL) {
+       } else if (signalStrength > WIFI_LOW_SIGNAL) {
             if (category == 0) {
                 iconNameLast = "weak-secure-symbolic";
             } else {

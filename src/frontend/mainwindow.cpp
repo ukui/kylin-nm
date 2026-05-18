@@ -68,11 +68,6 @@ const QString intel = "V10SP1-edu";
 
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
-#define MW_EXCELLENT_SIGNAL 80
-#define MW_GOOD_SIGNAL 55
-#define MW_OK_SIGNAL 30
-#define MW_LOW_SIGNAL 5
-#define MW_NONE_SIGNAL 0
 
 #define EXCELLENT_SIGNAL_ICON   "network-wireless-signal-excellent-symbolic"
 #define GOOD_SIGNAL_ICON        "network-wireless-signal-good-symbolic"
@@ -490,6 +485,10 @@ void MainWindow::initTrayIcon()
     loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
     iconTimer = new QTimer(this);
     connect(iconTimer, &QTimer::timeout, this, &MainWindow::onSetTrayIconLoading);
+
+    m_iconTimeoutTimer = new QTimer(this);
+    m_iconTimeoutTimer->setInterval(3*60000);//
+    connect(m_iconTimeoutTimer, &QTimer::timeout, this, &MainWindow::onIconLoadingTimeout);
 
     m_trayIconMenu = new QMenu();
 //    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
@@ -975,7 +974,8 @@ void MainWindow::onRefreshTrayIcon()
     m_wlanWidget->getConnectivity(connecttivity);
     if (connecttivity != NetworkManager::Connectivity::Full) {
         if (iconStatus == IconActiveType::LAN_CONNECTED) {
-            m_trayIcon->setIcon(QIcon::fromTheme("network-error-symbolic"));
+            //多项目提出感叹号图标为异常图标，所以任务栏图标去掉此状态显示（海关，工行，建行，中行等）
+//            m_trayIcon->setIcon(QIcon::fromTheme("network-error-symbolic"));
             iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
         } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
             //todo 信号强度
@@ -988,7 +988,7 @@ void MainWindow::onRefreshTrayIcon()
 
     if (iconStatus == IconActiveType::WLAN_CONNECTED
             || iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
-        if (signalStrength > MW_EXCELLENT_SIGNAL){
+        if (signalStrength > WIFI_EXCELLENT_SIGNAL){
             if (currentCategory == KyCategoryWiFi7)
                 m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Symbolic));
              else if (currentCategory == KyCategoryWiFi6Plus)
@@ -998,16 +998,18 @@ void MainWindow::onRefreshTrayIcon()
              else
                 m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
 
-        } else if (signalStrength > MW_GOOD_SIGNAL) {
+        } else if (signalStrength > WIFI_GOOD_SIGNAL) {
             if (currentCategory == KyCategoryWiFi7)
                 m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Good));
             else if (currentCategory == KyCategoryWiFi6Plus)
                 m_trayIcon->setIcon(QIcon::fromTheme(KWifi6PlusGood));
             else if (currentCategory == KyCategoryWiFi6)
-                m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Good));
+                m_trayIcon->setIcon(QIcon::fromTheme(KWifi6Good));
             else
                 m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_ICON));
-        } else if (signalStrength > MW_OK_SIGNAL) {
+        } else if (signalStrength > WIFI_OK_SIGNAL) {
+
+
             if (currentCategory == KyCategoryWiFi7)
                 m_trayIcon->setIcon(QIcon::fromTheme(KWifi7OK));
             else if (currentCategory == KyCategoryWiFi6Plus)
@@ -1016,7 +1018,7 @@ void MainWindow::onRefreshTrayIcon()
                 m_trayIcon->setIcon(QIcon::fromTheme(KWifi6OK));
             else
                 m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_ICON));
-        } else if (signalStrength > MW_LOW_SIGNAL) {
+        } else if (signalStrength > WIFI_LOW_SIGNAL) {
             if (currentCategory == KyCategoryWiFi7)
                 m_trayIcon->setIcon(QIcon::fromTheme(KWifi7Low));
             else if (currentCategory == KyCategoryWiFi6Plus)
@@ -1043,13 +1045,13 @@ void MainWindow::onRefreshTrayIcon()
             m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
         } else if (iconStatus == IconActiveType::WLAN_CONNECTED ||
                    iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
-            if (signalStrength > MW_EXCELLENT_SIGNAL){
+            if (signalStrength > WIFI_EXCELLENT_SIGNAL){
                 m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_GOOD_SIGNAL) {
+            } else if (signalStrength > WIFI_GOOD_SIGNAL) {
                 m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_OK_SIGNAL) {
+            } else if (signalStrength > WIFI_OK_SIGNAL) {
                 m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_LOW_SIGNAL) {
+            } else if (signalStrength > WIFI_LOW_SIGNAL) {
                 m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
             } else {
                 m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
@@ -1075,13 +1077,41 @@ void MainWindow::onSetTrayIconLoading()
         currentIconIndex = 0;
     }
     m_trayIcon->setIcon(loadIcons.at(currentIconIndex));
-    iconStatus = IconActiveType::ACTIVATING;
+    //iconStatus = IconActiveType::ACTIVATING;
     currentIconIndex ++;
+}
+
+void MainWindow::onIconLoadingTimeout()
+{
+    if (m_iconTimeoutTimer && m_iconTimeoutTimer->isActive()) {
+        m_iconTimeoutTimer->stop();
+    }
+
+    qWarning() << Q_FUNC_INFO << __LINE__ << "3min Current iconStatus: " << iconStatus ;
+    if (iconStatus == IconActiveType::ACTIVATING) {
+        if (m_lanIsLoading || m_wlanIsLoading) {
+            //checkInternetLoading 判断了无线、有线和pppoe是否处于连接中
+            if (!m_wlanWidget->checkInternetLoading()) {
+                m_lanIsLoading = true;
+                m_wlanIsLoading = true;
+                onRefreshTrayIcon();
+            }
+        }
+    }
 }
 
 void MainWindow::onConnectStatusToChangeTrayIcon(int state)
 {
     if (state == 1 || state == 3){
+        NetworkManager::Connectivity connectivity = NetworkManager::Connectivity::UnknownConnectivity;
+        if (m_wlanWidget) {
+            m_wlanWidget->getConnectivity(connectivity);
+        }
+        if (connectivity == NetworkManager::Connectivity::Full) {
+            qDebug() << "Network already has full connectivity, skip loading icon";
+            return;
+        }
+
         iconStatus = IconActiveType::ACTIVATING;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
@@ -1094,12 +1124,30 @@ void MainWindow::onConnectStatusToChangeTrayIcon(int state)
 void MainWindow::onLanConnectStatusToChangeTrayIcon(int state)
 {
     qDebug() << "lan state:" << state << Q_FUNC_INFO << __LINE__;
-    if (state==1 || state==3){
+    if (state==1 || state==3) {
+        NetworkManager::Connectivity connectivity = NetworkManager::Connectivity::UnknownConnectivity;
+        if (m_wlanWidget) {
+            m_wlanWidget->getConnectivity(connectivity);
+        }
+        if (connectivity == NetworkManager::Connectivity::Full) {
+            qDebug() << "LAN event but network already full, skip loading icon";
+            m_lanIsLoading = false;
+            return;
+        }
+
         m_lanIsLoading = true;
+        iconStatus = IconActiveType::ACTIVATING;
+        currentIconIndex = 0;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
+        if (m_iconTimeoutTimer && !m_iconTimeoutTimer->isActive()) {
+            m_iconTimeoutTimer->start();
+        }
     } else {
         m_lanIsLoading = false;
         if (m_wlanIsLoading == false) {
+            if (m_iconTimeoutTimer && m_iconTimeoutTimer->isActive())
+                m_iconTimeoutTimer->stop();
+
             onRefreshTrayIcon();
         }
     }
@@ -1109,14 +1157,34 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
 {
     qDebug() << "wlan state:" << state << Q_FUNC_INFO << __LINE__;
     if (state==1 || state==3){
+        // If network already connected, skip spinner
+        NetworkManager::Connectivity connectivity = NetworkManager::Connectivity::UnknownConnectivity;
+        if (m_wlanWidget) {
+            m_wlanWidget->getConnectivity(connectivity);
+        }
+        if (connectivity == NetworkManager::Connectivity::Full) {
+            qDebug() << "WLAN event but network already full, skip loading icon";
+            m_wlanIsLoading = false;
+            return;
+        }
+
         m_wlanIsLoading = true;
+        iconStatus = IconActiveType::ACTIVATING;
+        currentIconIndex = 0;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
+        if (m_iconTimeoutTimer && !m_iconTimeoutTimer->isActive()) {
+            m_iconTimeoutTimer->start();
+        }
     } else {
         if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activating)) {
+            //该返回逻辑有些奇怪，不知道是为了规避什么问题
+            qWarning() << Q_FUNC_INFO << __LINE__ << "Current wlan network is activating!";
             return;
         }
         m_wlanIsLoading = false;
         if (m_lanIsLoading == false) {
+            if (m_iconTimeoutTimer && m_iconTimeoutTimer->isActive())
+                m_iconTimeoutTimer->stop();
             onRefreshTrayIcon();
         }
     }

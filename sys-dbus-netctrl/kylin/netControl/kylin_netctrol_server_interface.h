@@ -42,6 +42,15 @@ enum NETCONTROL_ERR_CODE{
     NETCT_UNKOWN_ERR= 1023,
 };
 
+enum E_KylinDeviceType{
+    KEYLIN_NC_NONE= 0, //无
+    KEYLIN_NC_WIRED=1ul<<0,//有线
+    KEYLIN_NC_WIRELESS=1ul<<1,//无线
+
+    KEYLIN_NC_ALL=KEYLIN_NC_WIRED|KEYLIN_NC_WIRELESS,
+};
+
+
 QT_BEGIN_NAMESPACE
 class QByteArray;
 template<class Key, class Value> class QMap;

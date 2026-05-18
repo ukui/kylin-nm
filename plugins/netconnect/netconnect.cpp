@@ -28,6 +28,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QtAlgorithms>
+#include "uisecurityconfig.h"
 
 #define WIRED_TYPE          0
 #define ITEMHEIGH           50
@@ -57,6 +58,13 @@ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 #define MAIN_LAYOUT_MARGINS 0,0,0,8
 #define SPACING 8
 #define ICON_SIZE 16,16
+enum E_KylinDeviceType{
+    KEYLIN_NC_NONE= 0, //无
+    KEYLIN_NC_WIRED=1ul<<0,//有线
+    KEYLIN_NC_WIRELESS=1ul<<1,//无线
+
+    KEYLIN_NC_ALL=KEYLIN_NC_WIRED|KEYLIN_NC_WIRELESS,
+};
 
 bool sortByVal(const QPair<QString, int> &l, const QPair<QString, int> &r) {
     return (l.second < r.second);
@@ -141,7 +149,8 @@ QWidget *NetConnect::pluginUi() {
 
         initSearchText();
         initComponent();
-        netComponnetSettings();
+        initNetCtrl();
+        componentSettings();
     }
     return pluginWidget;
 }
@@ -715,6 +724,7 @@ void NetConnect::addDeviceFrame(QString devName)
     ui->availableLayout->addWidget(itemFrame);
     itemFrame->deviceFrame->deviceLabel->setText(tr("card")+/*QString("%1").arg(count)+*/"："+devName);
     itemFrame->deviceFrame->deviceSwitch->setChecked(enable);
+    itemFrame->deviceFrame->deviceSwitch->setHidden(m_hideDeviceButton);//隐藏策略 需要复原现场
     if (enable) {
         itemFrame->lanItemFrame->show();
         itemFrame->deviceFrame->dropDownLabel->show();
@@ -726,9 +736,6 @@ void NetConnect::addDeviceFrame(QString devName)
         itemFrame->m_deviceSeparator->hide();
         itemFrame->deviceFrame->dropDownLabel->hide();
         itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(false);
-        if (itemFrame->addLanWidget){
-            itemFrame->addLanWidget->hide();
-        }
 
         if (itemFrame->m_addSeparator){
             itemFrame->m_addSeparator->hide();
@@ -738,6 +745,7 @@ void NetConnect::addDeviceFrame(QString devName)
         itemFrame->filletStyleChange();            
     }
     deviceFrameMap.insert(devName, itemFrame);
+    itemFrame->addLanWidget->setHidden(!enable || m_hideAddButton);//隐藏策略 需要复原现场
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
 
 //    connect(itemFrame->deviceFrame, &DeviceFrame::deviceSwitchClicked ,this, [=] (bool checked) {
@@ -755,7 +763,7 @@ void NetConnect::addDeviceFrame(QString devName)
             itemFrame->lanItemFrame->show();
             itemFrame->deviceFrame->dropDownLabel->show();
             itemFrame->m_deviceSeparator->show();
-            itemFrame->addLanWidget->show();
+            //itemFrame->addLanWidget->show();
             itemFrame->updateCornerStyle();
             itemFrame->filletStyleChange();
             itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
@@ -765,7 +773,7 @@ void NetConnect::addDeviceFrame(QString devName)
             itemFrame->lanItemFrame->hide();
             itemFrame->m_deviceSeparator->hide();
             itemFrame->deviceFrame->dropDownLabel->hide();
-            itemFrame->addLanWidget->hide();
+            //itemFrame->addLanWidget->hide();
             itemFrame->updateCornerStyle();
             itemFrame->filletStyleChange();
             deviceStatusMap[devName] = false;
@@ -785,6 +793,7 @@ void NetConnect::addDeviceFrame(QString devName)
             itemFrame->deviceFrame->deviceSwitch->setEnabled(true);
         });
         m_pSysBusIntfs->call(QStringLiteral("setDeviceSwitch"), devName, checked);
+		itemFrame->addLanWidget->setHidden(!checked || m_hideAddButton);//隐藏策略 需要复原现场
     });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
@@ -1186,37 +1195,7 @@ void NetConnect::openKylinm()
     sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
 }
 
-void NetConnect::netComponnetSettings()
-{
-    QDBusInterface m_interface( "org.ukui.ukcc.session",
-                               "/",
-                               "org.ukui.ukcc.session.interface",
-                               QDBusConnection::sessionBus());
 
-    QDBusReply<QVariantMap> reply = m_interface.call("getModuleHideStatus");
-    if (!reply.isValid()) {
-        qDebug()<<"execute dbus method getModuleHideStatus failed";
-    }
-    QMap<QString,QVariant> configData = reply.value();
-    QString moduleSettings = configData.value("netconnctSettings").toString();
-    QStringList setItems = moduleSettings.split(",");
-
-    foreach (QString setItem, setItems) {
-        QStringList item = setItem.split(":");
-        if (item.at(0) == "wlanAdvanced") {
-            ui->detailBtn->setVisible(item.at(1) == "true");
-        }
-    }
-
-    QString moduleEnable = configData.value("netconnctEnable").toString();
-    QStringList enableItems = moduleEnable.split(",");
-    foreach (QString setItem, enableItems) {
-        QStringList item = setItem.split(":");
-        if (item.at(0) == "wlanAdvanced") {
-            ui->detailBtn->setEnabled(item.at(1) == "true");
-        }
-    }
-}
 
 int NetConnect::getInsertPos(QString connName, QString deviceName)
 {
@@ -1302,3 +1281,110 @@ bool NetConnect::isDslConnection(const QString &uuid)
     QString output = process.readAllStandardOutput().trimmed();
     return (output == "pppoe");  // 如果是pppoe类型则返回true
 }
+/*显示添加按钮 未管控*/
+void NetConnect::updateAddButtonShow(bool netctlEnable)
+{
+    bool checked=false;
+    qInfo() << "[NetConnect]updateAddButtonShow" <<deviceStatusMap;
+    QMap<QString, ItemFrame *>::iterator iters;
+    for (iters = deviceFrameMap.begin(); iters != deviceFrameMap.end(); iters++) {
+        QString deviceName=iters.key();
+        if(deviceStatusMap.contains(deviceName)){
+            checked=deviceStatusMap.value(deviceName);
+            iters.value()->addLanWidget->setHidden(!checked || netctlEnable);
+        }else{
+            iters.value()->addLanWidget->setHidden(netctlEnable);
+        }
+        qInfo() << "[NetConnect]updateAddButtonShow" << netctlEnable<<checked<<deviceName<<deviceStatusMap;
+    }
+    m_hideAddButton=netctlEnable;
+}
+
+
+void NetConnect::updateNetCtrl(QString modName,QVariantMap value)
+{
+    bool enable=false;
+
+    if(modName!="Connect") return;
+
+    qInfo()<<"[NetConnect]"<<modName<<value;
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
+        QString key = it.key();
+        QVariant value = it.value();
+        if(key==QString("addConnectCtrol")) {
+            enable=((value.toUInt()&KEYLIN_NC_WIRED)==KEYLIN_NC_WIRED)? true:false;
+            updateAddButtonShow(enable);
+        }
+    }
+    return;
+}
+
+void NetConnect::initNetCtrl()
+{
+    QVariantMap map;
+    int errCode=0;
+    QString netCtrlConnectName="Connect";
+    QDBusInterface dbusInterface("com.kylin.networkCtrol",
+                                 "/com/kylin/networkCtrol",
+                                 "com.kylin.networkCtrol",
+                                 QDBusConnection::systemBus());
+    if (!dbusInterface.isValid()) {
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+    } else {
+        dbusInterface.setTimeout(2000);
+        QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlConnectName);
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[NetConnect]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"NetConnect"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlConnectName,map);
+                map.clear();
+            }
+        }
+    }
+
+    QDBusConnection::systemBus().connect("com.kylin.networkCtrol",
+                                         "/com/kylin/networkCtrol",
+                                         "com.kylin.networkCtrol",
+                                         "sigNetContrlRuleChanged",
+                                         this,
+                                         SLOT(updateNetCtrl(QString ,QVariantMap)));
+
+    qInfo()<<"initNetCtrl success";
+    return;
+}
+
+void NetConnect::componentSettings()
+{
+    QVariant configData=UiSecurityConfig::getInstance()->getConnectSettingsData("netconnect","netconnectSettings");
+    SDK_TYPE_PROJECT projectId=UiSecurityConfig::getInstance()->getProjectIdentity();
+    QString settings=configData.toString();
+
+    if (settings.contains("netAdvanced:false")){
+        ui->detailBtn->setVisible(false);
+    }
+
+
+    if (settings.contains("netMainSwitch:false") || projectId==SDK_TYPE_YDSYY){
+       qInfo() << Q_FUNC_INFO << __LINE__ << "netMainSwitch:false";
+       //wiredSwitch->hide();
+       ui->openWifiFrame->setHidden(true);
+    }
+
+    if (settings.contains("netDeviceSwitch:false") || projectId==SDK_TYPE_YDSYY){
+
+        QMap<QString, ItemFrame *>::iterator iters;
+        for (iters = deviceFrameMap.begin(); iters != deviceFrameMap.end(); iters++) {
+               iters.value()->deviceFrame->deviceSwitch->setHidden(true);
+           }
+        m_hideDeviceButton = true;
+     }
+
+}
+
+
+

@@ -29,18 +29,14 @@
 #include <QDebug>
 #include <QtAlgorithms>
 
+#include "uisecurityconfig.h"
+
 #define WIRELESS_TYPE 1
 
 #define SCANTIMER  20 * 1000
 #define UPDATETIMER 5 * 1000
 
 #define SPACING 8
-
-#define EXCELLENT_SIGNAL 80
-#define GOOD_SIGNAL 55
-#define OK_SIGNAL 30
-#define LOW_SIGNAL 5
-#define NONE_SIGNAL 0
 
 #define SIGNAL_EXCELLENT 1
 #define SIGNAL_GOOD      2
@@ -77,6 +73,13 @@ const QString KApSymbolic       = "network-wireless-hotspot-symbolic";
 const QString IsApConnection    = "1";
 const QString WarningIconName   = "dialog-warning";
 
+enum E_KylinDeviceType{
+    KEYLIN_NC_NONE= 0, //无
+    KEYLIN_NC_WIRED=1ul<<0,//有线
+    KEYLIN_NC_WIRELESS=1ul<<1,//无线
+
+    KEYLIN_NC_ALL=KEYLIN_NC_WIRED|KEYLIN_NC_WIRELESS,
+};
 void WlanConnect::showDesktopNotify(const QString &message)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
@@ -143,6 +146,8 @@ QWidget *WlanConnect::pluginUi()
         }
         initSearchText();
         initComponent();
+        initNetCtrl();
+        componentSettings();
     }
     return pluginWidget;
 }
@@ -297,7 +302,6 @@ void WlanConnect::initComponent() {
     setSwitchStatus();
 
     initNet();
-    wlanComponnetSettings();
 
     if (!getSwitchBtnState() || deviceList.isEmpty() || !m_interface->isValid()) {
         hideLayout(ui->availableLayout);
@@ -427,8 +431,8 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
             }
-            if (list.at(listIndex).size() > 4) {
-                updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3), list.at(listIndex).at(4).toInt());
+            if (list.at(listIndex).size() > 6) {
+                updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(4), list.at(listIndex).at(5).toInt());
             }
             frameIndex++;
         } else {
@@ -465,6 +469,17 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
 void WlanConnect::onDeviceStatusChanged()
 {
     qDebug()<<"[WlanConnect]onDeviceStatusChanged";
+
+    // 同步无线开关的实际状态
+    bool actualState = getWirelessSwitchBtnState();
+    if (actualState != getSwitchBtnState()) {
+        setSwitchBtnState(actualState);
+        if (actualState) {
+            showLayout(ui->availableLayout);
+        } else {
+            hideLayout(ui->availableLayout);
+        }
+    }
 
     // 如果无线开关关闭，则忽略设备状态变化
     if (!getSwitchBtnState()) {
@@ -921,13 +936,13 @@ int WlanConnect::setSignal(QString lv) {
     int signal = lv.toInt();
     int signalLv = 0;
 
-    if (signal > EXCELLENT_SIGNAL) {
+    if (signal > WIFI_EXCELLENT_SIGNAL) {
         signalLv = 1;
-    } else if (signal > GOOD_SIGNAL) {
+    } else if (signal > WIFI_GOOD_SIGNAL) {
         signalLv = 2;
-    } else if (signal > OK_SIGNAL) {
+    } else if (signal > WIFI_OK_SIGNAL) {
         signalLv = 3;
-    } else if (signal > LOW_SIGNAL) {
+    } else if (signal > WIFI_LOW_SIGNAL) {
         signalLv = 4;
     } else {
         signalLv = 5;
@@ -1044,6 +1059,8 @@ void WlanConnect::addDeviceFrame(QString devName)
     ItemFrame *itemFrame = new ItemFrame(devName, pluginWidget);
     ui->availableLayout->addWidget(itemFrame);
     itemFrame->deviceFrame->deviceLabel->setText(tr("card")+/*QString("%1").arg(count)+*/"："+devName);
+    itemFrame->addWlanWidget->setHidden(m_hideAddButton);//隐藏策略 需要复原现场
+
     deviceFrameMap.insert(devName, itemFrame);
 
     connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
@@ -1203,9 +1220,9 @@ QMap<QString, QList<QStringList>> WlanConnect::getWirelessList()
     getDeviceList(list);
 
     for (int i = 0; i < list.size(); ++i) {
-        qDebug() << "[NetConnect]call getWirelessList"  << __LINE__;
+        qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
         QDBusReply<QVariantList> reply = m_interface->call(QStringLiteral("getWirelessList"), list.at(i));
-        qDebug() << "[NetConnect]call getWirelessList respond"  << __LINE__;
+        qDebug() << "[WlanConnect]call getWirelessList respond"  << __LINE__;
         if(!reply.isValid())
         {
             qWarning() << "getWirelessList error:" << reply.error().message();
@@ -1273,54 +1290,80 @@ void WlanConnect::setSwitchStatus()
     }
 }
 
-QMap<QString, QVariant> WlanConnect::getModuleHideStatus()
+
+void WlanConnect::componentSettings()
 {
-    QDBusReply<QMap<QString,QVariant>> reply_res;
+    QVariant configData=UiSecurityConfig::getInstance()->getConnectSettingsData("wlanconnect","wlanconnectSettings");
+    QString settings=configData.toString();
 
-    QDBusInterface iface(DBUSSERVICE_UKCC,
-                         DBUSPATH_UKCC,
-                         DBUSINTERFACE_UKCC,
-                         QDBusConnection::sessionBus());
-
-    if (iface.isValid()) {
-        QDBusPendingCall pcall = iface.asyncCall("getModuleHideStatus");
-        pcall.waitForFinished();
-
-        QDBusMessage res = pcall.reply();
-
-        if (res.type() == QDBusMessage::ReplyMessage) {
-            if (res.arguments().size() > 0) {
-                reply_res = res;
-                qInfo() << reply_res.value();
-            }
-        } else {
-            qWarning()<< res.errorName() << ": "<< res.errorMessage();
-        }
-    } else {
-        qWarning()<< "dbus isValid";
+    if (settings.contains("wlanAdvanced:false")){
+        ui->detailBtn->setVisible(false);
     }
-    return reply_res.value();
 }
 
-void WlanConnect::wlanComponnetSettings()
+/*显示添加按钮 未管控*/
+void WlanConnect::updateAddButtonShow(bool netctlEnable)
 {
-    QMap<QString,QVariant> configData = getModuleHideStatus();
-    QString moduleSettings = configData.value("wlanconnectSettings").toString();
-    QStringList setItems = moduleSettings.split(",");
+    QMap<QString, ItemFrame *>::iterator iters;
+    for (iters = deviceFrameMap.begin(); iters != deviceFrameMap.end(); iters++) {
+       iters.value()->addWlanWidget->setHidden(netctlEnable);
+    }
+    m_hideAddButton=netctlEnable;
+}
 
-    foreach (QString setItem, setItems) {
-        QStringList item = setItem.split(":");
-        if (item.at(0) == "wlanAdvanced") {
-            ui->detailBtn->setVisible(item.at(1) == "true");
+void WlanConnect::updateNetCtrl(QString modName,QVariantMap value)
+{
+    bool enable=false;
+
+    if(modName!="Connect") return;
+
+    qInfo()<<modName<<value;
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
+        QString key = it.key();
+        QVariant value = it.value();
+        if(key==QString("addConnectCtrol")) {
+            enable=((value.toUInt()&KEYLIN_NC_WIRELESS)==KEYLIN_NC_WIRELESS)? true:false;
+            updateAddButtonShow(enable);
+        }
+    }
+    return;
+}
+
+void WlanConnect::initNetCtrl()
+{
+    QVariantMap map;
+    int errCode=0;
+    QString netCtrlConnectName="Connect";
+    QDBusInterface dbusInterface("com.kylin.networkCtrol",
+                                 "/com/kylin/networkCtrol",
+                                 "com.kylin.networkCtrol",
+                                 QDBusConnection::systemBus());
+    if (!dbusInterface.isValid()) {
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error!";
+    } else {
+        dbusInterface.setTimeout(2000);
+        QDBusMessage result = dbusInterface.call("getNetContrlRule",netCtrlConnectName);
+        if(result.type() == QDBusMessage::ErrorMessage) {
+            qWarning() << "[WlanConnect]getNetContrlRule error:" << result.errorMessage();
+        } else {
+            if( result.arguments().size()>=2) {
+                const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+                dbusArg1st >> map;
+                errCode = result.arguments().at( 1 ).toInt();
+                qInfo()<<"WlanConnect"<<map<<errCode;
+                if(errCode==0) updateNetCtrl(netCtrlConnectName,map);
+                map.clear();
+            }
         }
     }
 
-    QString moduleEnable = configData.value("wlanconnectEnable").toString();
-    QStringList enableItems = moduleEnable.split(",");
-    foreach (QString setItem, enableItems) {
-        QStringList item = setItem.split(":");
-        if (item.at(0) == "wlanAdvanced") {
-            ui->detailBtn->setEnabled(item.at(1) == "true");
-        }
-    }
+    QDBusConnection::systemBus().connect("com.kylin.networkCtrol",
+                                         "/com/kylin/networkCtrol",
+                                         "com.kylin.networkCtrol",
+                                         "sigNetContrlRuleChanged",
+                                         this,
+                                         SLOT(updateNetCtrl(QString ,QVariantMap)));
+
+    qInfo()<<"initNetCtrl success";
+    return;
 }

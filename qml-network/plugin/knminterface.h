@@ -36,6 +36,7 @@ class KnmInterface : public QObject
     Q_PROPERTY(bool cableStatus READ getCableStatus NOTIFY updateCable)
     Q_PROPERTY(QString fontSize READ fontSize NOTIFY fontSizeChanged)
     Q_PROPERTY(bool wirelessScanState WRITE setWirelessScanState) //wifi scan 事件
+    Q_PROPERTY(QVariantMap uiCtlData READ getUiCtlData NOTIFY updateUiCtlData)
 
 public:
     KnmInterface();
@@ -123,15 +124,19 @@ public slots:
 
     void setNetworkConnectAutoConnectState(int type , QString  uuid , bool state);
 
+    void updateNetCtrl(QString modName,QVariantMap value);
 private slots:
 
     void slotRefreshTimeout();
-	
+
+    void initNetCtrl();
+    void componentSettings();
 public:
     ConnectStatus getConnectionStatus();
     bool getCableStatusByDev(const QString &devName);
     bool getCableStatus();
     QString fontSize();
+    QVariantMap getUiCtlData();
 
 signals:
     void updateWiredDeviceList();
@@ -165,6 +170,8 @@ signals:
     void triggerButtonRequested(int index);
 
     void changeSelectWirelessDevice(int index);
+
+    void updateUiCtlData(QVariantMap uidata);
 private:
     QVariantList m_wiredDevConnList;
 
@@ -186,6 +193,8 @@ private:
     QString m_fontSize;
     class QGSettings *m_fontSettings = nullptr;
     QString m_inputSsid="";
+
+    QVariantMap m_uiCtlData;
 };
 
 typedef SingleTon<KnmInterface>  KInterface;

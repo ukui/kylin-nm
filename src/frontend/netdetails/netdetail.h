@@ -212,7 +212,7 @@ private:
 
     ThreadObject *m_object;
     QThread *m_objectThread;
-    NetworkModeType m_networkMode = DBUS_INVAILD;
+    NetworkModeType m_networkMode = DBUS_INVALID;
 
 private Q_SLOTS:
     void on_btnConfirm_clicked();

@@ -76,6 +76,9 @@ public:
     bool isEnable() const  Q_DECL_OVERRIDE;
     QString translationPath() const  Q_DECL_OVERRIDE;
 
+public Q_SLOTS:
+    void updateNetCtrl(QString modName,QVariantMap value);
+
 private:
     void initComponent();
     void runExternalApp();
@@ -141,9 +144,11 @@ private:
     bool getWirelessSwitchBtnState();
     void setSwitchStatus();
 
-    QMap<QString,QVariant> getModuleHideStatus();
-    void wlanComponnetSettings();
-
+    void initNetCtrl();
+    void updateAdvanceButtonShow(bool netctlEnable);
+    void updateAddButtonShow(bool netctlEnable);
+    void componentSettings();
+	
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -170,6 +175,7 @@ private:
     QMap<QString, QList<QStringList>> getWirelessList();
     QLabel *m_wirelessNoDeviceLabel=nullptr;
     QLabel *m_wirelessNoDeviceIconLabel=nullptr;
+    bool m_hideAddButton;
 private:
     KSwitchButton      *m_wifiSwitch;
     bool               m_firstLoad;

@@ -57,12 +57,33 @@ namespace KYLIN_NM
     };
 
 
-
+    //控制面板gsetting定义
     #define GSETTING_SCHEMA_UKCC                "org.ukui.control-center.plugins"
     #define GSETTING_PATH_UKCC_MOBILEHOTSPOT    "/org/ukui/control-center/plugins/mobilehotspot/"
     #define GSETTING_PATH_UKCC_NETCONNECT       "/org/ukui/control-center/plugins/netconnect/"
     #define GSETTING_PATH_UKCC_WLANCONNECT      "/org/ukui/control-center/plugins/wlanconnect/"
 
+    //WIFI 信号段
+    #define WIFI_EXCELLENT_SIGNAL   75 // 75状态更合理 保持长城反馈的信号显示问题
+    #define WIFI_GOOD_SIGNAL        55
+    #define WIFI_OK_SIGNAL          35 // 适配zy提供华为一格信号时的界限，且该点更合理
+    #define WIFI_LOW_SIGNAL         5
+    #define WIFI_NONE_SIGNAL        0
+
+    #define ST_CONNECTION_INFO_SSID         "Name"      //ssid 名称
+    #define ST_CONNECTION_INFO_UUID         "UUID"      //uuid
+    #define ST_CONNECTION_INFO_SIGNAL       "Signal"
+    #define ST_CONNECTION_INFO_PATH         "Path"
+    #define ST_CONNECTION_INFO_STATE        "State"
+    #define ST_CONNECTION_INFO_LOADING      "Loading"
+    #define ST_CONNECTION_INFO_SECURITY     "Security"
+    #define ST_CONNECTION_INFO_ISAPCONN     "isApConn"
+    #define ST_CONNECTION_INFO_CATEGORY     "category"
+    #define ST_CONNECTION_INFO_CONFIGURED   "Configured"
+    #define ST_CONNECTION_INFO_FREQUENCY    "frequency"
+    #define ST_CONNECTION_INFO_ISMIX        "isMix"
+    #define ST_CONNECTION_INFO_AUTOCONNECT  "autoConnect"
+    #define ST_CONNECTION_INFO_DEVICENAME   "DeviceName"
 
 
     const QString KWifiSymbolic     = "network-wireless-signal-excellent-symbolic";
@@ -93,7 +114,7 @@ namespace KYLIN_NM
     const QString KWifi7LockGood        = "ukui-wifi7-high-pwd-symbolic";
 
     const QString KWifi6OK              = "ukui-wifi6-medium-symbolic";
-    const QString KWifi6PlusOK          = "ukui-wifi6+-high-medium-symbolic";
+    const QString KWifi6PlusOK          = "ukui-wifi6+-medium-symbolic";
     const QString KWifi7OK              = "ukui-wifi7-medium-symbolic";
 
     const QString KWifi6LockOK          = "ukui-wifi6-medium-pwd-symbolic";

@@ -2,6 +2,8 @@ QT       += widgets network dbus gui core
 TEMPLATE = lib
 CONFIG += plugin
 
+include(../../pub/pub.pri)
+
 TARGET = $$qtLibraryTarget(mobilehotspot)
 DESTDIR = ../..
 
@@ -26,6 +28,7 @@ CONFIG += c++11 \
 
 PKGCONFIG += gsettings-qt \
              kysdk-qtwidgets \
+             kysdk-sysinfo
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 

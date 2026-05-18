@@ -5,6 +5,7 @@ QT       += widgets dbus
 TEMPLATE = lib
 CONFIG += plugin
 
+include(../../pub/pub.pri)
 TARGET = $$qtLibraryTarget(proxy)
 DESTDIR = ../..
 
@@ -30,7 +31,8 @@ CONFIG        += link_pkgconfig \
 PKGCONFIG     += gio-2.0 \
                  gio-unix-2.0 \
                  gsettings-qt \
-                 kysdk-qtwidgets
+                 kysdk-qtwidgets \
+                 kysdk-sysinfo
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -41,7 +43,6 @@ SOURCES += \
 
 HEADERS += \
     applistwidget.h \
-    aptinfo.h \
     aptproxydialog.h \
     proxy.h \
     certificationdialog.h

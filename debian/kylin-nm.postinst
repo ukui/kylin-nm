@@ -1,4 +1,13 @@
 #!/bin/sh
+
+file_path="/etc/NetworkManager/kylin_nm_ctrl.ini"
+
+if [ -f "$file_path" ]; then
+    rm -f "$file_path"
+    echo "$file_path文件已删除"
+else
+    echo "$file_path文件不存在"
+fi
  
 set -e
 

@@ -37,11 +37,13 @@ st_ItemCfgInfo gItemCfgInfo[]=
     {(char *)NET_CTRL_DNS_NAME,(char *)"netIPV4DNSModifyCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//DNS模块的修改管控
     {(char *)NET_CTRL_DNS_NAME,(char *)"netIPV6DNSModifyCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//DNS模块的修改管控
     {(char *)NET_CTRL_CONNECT_NAME,(char *)"netWireWirelessSyncConnectCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//连接模块的同时多连接管控（双跨管控）networkmanager没有对应配置
+    {(char *)NET_CTRL_CONNECT_NAME,(char *)"addConnectCtrol",(void *)g_variant_new_uint32(KEYLIN_NC_NONE),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//连接模块的禁止添加 参数为设备类型E_KylinDeviceType
+
     {(char *)NET_CTRL_IP4_NAME,(char *)"netMaskModifyCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//IPV4模块的掩码修改管控
     {(char *)NET_CTRL_IP4_NAME,(char *)"netGwModifyCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//IPV4模块的网关修改管控
     {(char *)NET_CTRL_IP6_NAME,(char *)"netMaskModifyCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//IPV6模块的掩码修改管控
     {(char *)NET_CTRL_IP6_NAME,(char *)"netGwModifyCtrol",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//IPV6模块的网关修改管控
-    {(char *)NET_CTRL_LOG_NAME,(char *)"netMonitorEnable",(void *)g_variant_new_boolean(false),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//网络ip gw等变化上报使能
+    {(char *)NET_CTRL_LOG_NAME,(char *)"netMonitorEnable",(void *)g_variant_new_boolean(true),KEYLIN_CFG_VARIANT,NULL,NULL,NULL,NULL},//网络ip gw等变化上报使能
 
 };
 

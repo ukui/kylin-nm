@@ -5,6 +5,7 @@ CONFIG += plugin
 include(../component/drownlabel.pri)
 include(../component/addbtn.pri)
 include(../../common/common.pri)
+include(../../pub/pub.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)
 DESTDIR = ../..
@@ -30,6 +31,7 @@ CONFIG += c++11 \
 
 PKGCONFIG += gsettings-qt \
              kysdk-qtwidgets \
+             kysdk-sysinfo
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 

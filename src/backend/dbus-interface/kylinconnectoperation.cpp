@@ -48,6 +48,7 @@ void KyConnectOperation::ipv4SettingSet(
 
     if (CONFIG_IP_DHCP == connectSettingsInfo.m_ipv4ConfigIpType) {
         ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Automatic);
+
         return;
     } else {
         ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Manual);

@@ -197,6 +197,7 @@ private:
     int currentIconIndex=0;
     QList<QIcon> loadIcons;
     QTimer *iconTimer = nullptr;
+    QTimer *m_iconTimeoutTimer = nullptr;
 
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
@@ -295,6 +296,8 @@ private Q_SLOTS:
     //唤起加入其他无线网络界面
     void onShowAddOtherWlanWidgetSlot(QString display, QString devName);
     void showControlCenter();
+
+    void onIconLoadingTimeout();
 };
 
 #endif // MAINWINDOW_H

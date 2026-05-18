@@ -60,7 +60,7 @@ ConnectDevListItem::ConnectDevListItem(QString staMac, QString staName, QWidget 
 bool ConnectDevListItem::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonRelease) {
-        if (w == m_dragIntoBlackListBtn) {
+        if (w == m_dragIntoBlackListBtn && m_dragIntoBlackListBtn->isEnabled()) {
             emit onBtnClicked(m_mac, m_hostName);
             return true;
         }

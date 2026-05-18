@@ -20,6 +20,7 @@
 
 #include "tabpage.h"
 #include "../dbus-interface/kylinnetworkdeviceresource.h"
+#include "common.h"
 QT_BEGIN_NAMESPACE
 class QByteArray;
 //template<class T> class QList;

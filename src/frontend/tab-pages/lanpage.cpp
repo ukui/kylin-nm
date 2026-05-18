@@ -193,10 +193,13 @@ void LanPage::initLanDeviceState()
         QString deviceName = m_devList.at(index);
         if (m_deviceResource->getDeviceManaged(deviceName)) {
             m_enableDeviceList<<deviceName;
+            qDebug()<<"initLanDeviceState enabledevice"<<deviceName;
         } else {
             m_disableDeviceList<<deviceName;
+            qDebug()<<"initLanDeviceState m_disableDeviceList"<<deviceName;
         }
     }
+    qDebug()<<"initLanDeviceState"<<m_devList;
 }
 
 void LanPage::initNetSwitch()
@@ -286,7 +289,9 @@ void LanPage::initDeviceCombox()
 
         } else if (enableDeviceCount == 1) {
             m_deviceFrame->hide();
-
+            flag=m_deviceState[m_enableDeviceList.at(0)];
+            deviceState=changeDeviceStateText(m_enableDeviceList.at(0),flag);
+            m_deviceComboBox->addItem(deviceState,m_enableDeviceList.at(0));
             if (m_currentDeviceName != m_enableDeviceList.at(0)) {
                 m_currentDeviceName = m_enableDeviceList.at(0);
             }
@@ -955,6 +960,8 @@ void LanPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap
     if (p_listWidgetItem) {
         LanListItem *p_lanItem = (LanListItem *)lanListWidget->itemWidget(p_listWidgetItem);
         p_lanItem->updateConnectionState(state);
+    } else {
+    	qDebug() << "is null" << Q_FUNC_INFO << __LINE__;
     }
 
     return;
@@ -1004,7 +1011,8 @@ void LanPage::onConnectionStateChange(QString uuid,
     updateDeviceConnectState(devName,state);
 
     if (m_activeConnectionMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
-        return;
+        qDebug() << "[LanPage]  in statechange no return"<<devName<<uuid;
+        //return;
     }
 
     qDebug()<<"[LanPage] connection uuid"<< uuid
@@ -1138,6 +1146,7 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
 
 void LanPage::sendLanStateChangeSignal(QString uuid, ConnectState state)
 {
+    qDebug() << Q_FUNC_INFO << __LINE__ << "uuid :" << uuid << " state:" << state ;
     if (state == Activating || state == Deactivating) {
         if (m_activeResourse->connectionIsVirtual(uuid)
                 && !m_connectResourse->isPppoeConnection(uuid)) {
@@ -1359,6 +1368,27 @@ void LanPage::onShowKylinNetworkCheck()
     process.startDetached("kylin-os-manager --diagnosis --mode=Network");
 }
 
+bool LanPage::hasInternetAccess()
+{
+    // 通过DBus接口获取系统的整体网络连接状态
+    QDBusInterface interface(NETWORK_MANAGER_SERVICE,
+                             NETWORK_MANAGER_PATH,
+                             DBUS_PROPERTIES_INTERFACE,
+                             QDBusConnection::systemBus());
+    
+    if (interface.isValid()) {
+        QDBusMessage result = interface.call("Get", NETWORK_MANAGER_SERVICE, "Connectivity");
+        if (result.type() == QDBusMessage::ReplyMessage && !result.arguments().isEmpty()) {
+            uint connectivity = result.arguments().at(0).value<QDBusVariant>().variant().toUInt();
+            if (connectivity == NetworkManager::Connectivity::Full) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void LanPage::onLanStateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason)
 {
     QTimer::singleShot(500, [this]() {
@@ -1367,13 +1397,15 @@ void LanPage::onLanStateChanged(NetworkManager::Device::State newstate, NetworkM
     
     if (newstate == NetworkManager::Device::Failed) {
         if (reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason) {
-            if (!m_showedNetTipFlag) {
+            if (!m_showedNetTipFlag && !hasInternetAccess()) {
                 showBallonTip();
                 m_showedNetTipFlag = true;
             }
         }
     }
 }
+
+
 
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {

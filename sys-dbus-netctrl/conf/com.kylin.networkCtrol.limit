@@ -5,6 +5,11 @@ key3=/usr/sbin/NetworkManager
 key4=/usr/bin/nm-connection-editor
 key5=/usr/sbin/kim-domain
 key6=/usr/sbin/kim-client
+key7=/usr/bin/ukui-control-center
+key8=/usr/bin/ukui-screensaver-dialog
+key9=/usr/sbin/ukui-greeter
+key10=/usr/bin/ukui-sidebar
+key11=/usr/sbin/kcm-daemon
 
 [rootcontrol]
 status=off

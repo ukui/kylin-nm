@@ -143,7 +143,15 @@ private:
     QStringList getCustomizedAppList(QString filePath);
     void recursiveSearchFile(const QString &_filePath);
 
-    void callSendSysProxyNetCtlLog(const QString& key, const QString& value, const QString& str, QString& lastValue);
+    // 日志上报函数
+    void callSendSysProxyNetCtlLog(const QString& key, const QString& value, const QString& str, QString& lastValue);    
+    void sendAppProxyNetCtlLog(const QStringList& preAppInfo, bool preStatus,
+                              const QStringList& currAppInfo, bool status,
+                              bool addApp = true, const QString& appName = QString());
+    void sendAptProxyNetCtlLog(const QHash<QString, QVariant>& preAptInfo,
+                              QString http_host, QString http_port,
+                              QString https_host, QString https_port, bool status);
+    void sendProxyNetCtlLog(const QString& logMessage);
 
 
 #ifdef ENABLE_ANDROIDAPP
@@ -211,14 +219,24 @@ private:
     QString m_sysSocksPort;
     QString m_sysIgnoreHosts;
 
+Q_SIGNALS:  // 添加信号声明
+    void proxyConfigChanged(const QStringList &configList);
+    void appProxyStateChanged(bool state);
+    void appProxyAppListChanged(const QString &desktopfp, bool added);  // 单个应用变化
+    void appProxyAllListChanged();  // 整个列表变化
+    void aptProxyChanged(const QHash<QString, QVariant> &aptInfo);
+
 public Q_SLOTS:
-    QStringList getProxyConfig();
-    void setProxyConfig(const QStringList configList);
-    QMap<QString, QStringList> getAppProxy();
+    QStringList getAppProxyConfig();
+    void setAppProxyConfig(const QStringList configList);
+    QMap<QString, QStringList> getAppProxyAppsInfo();
     void addAppIntoProxy(QString desktopfp);
     void delAppIntoProxy(QString desktopfp);
-    void setProxyStateDbus(bool state);
-    bool getProxyStateDbus();
+    void setAppProxyState(bool state);
+    bool getAppProxyState();
+    void setAptProxy(QString host , QString port , QString https_host, QString https_port, bool status); //  apt代理对应的配置文件的写入或删除
+    QHash<QString, QVariant> getAptProxy();
+    void setAptProxyState(bool state);
 
 private Q_SLOTS:
     void init();

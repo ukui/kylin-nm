@@ -38,6 +38,7 @@ SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
     initWindowTheme();
     m_uwin = new UkuiWindowHelper(this);
     m_uwin->setWindowRole(UkuiWindowHelper::WindowRole::SystemWindow);
+    m_uwin->setSlideEffect(UkuiWindowHelper::Position::Bottom);
 }
 
 SinglePage::~SinglePage()
@@ -73,11 +74,10 @@ void SinglePage::initUI()
     m_setDivider = new Divider(true, this);
 
     m_settingsFrame = new QFrame(this);
-    m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
+    m_settingsFrame->setFixedHeight(SETTING_FRAME_HEIGHT);
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
     m_settingsLabel = new KyLable(m_settingsFrame);
-    m_settingsLabel->setCursor(Qt::PointingHandCursor);
     m_settingsLabel->setText(tr("Settings"));
     m_settingsLabel->setScaledContents(true);
     m_settingsLayout->addWidget(m_settingsLabel);

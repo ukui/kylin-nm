@@ -27,6 +27,8 @@
 #include <QSettings>
 #include <QScrollBar>
 
+#include "uisecurityconfig.h"
+
 #define AP_SCAN_INTERVAL (20*1000)
 #define ICON_REFRESH_INTERVAL (5*1000)
 #define LOG_FLAG  "[WlanPage]"
@@ -67,6 +69,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessNetResource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
 
     connect(m_wirelessNetResource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::signalStrengthChange);
+    connect(m_wirelessNetResource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::onSignalStrengthChange);
     connect(m_wirelessNetResource, &KyWirelessNetResource::secuTypeChange, this, &WlanPage::onSecurityTypeChange);
 
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionAdd, this, &WlanPage::onConnectionAdd);
@@ -244,9 +247,9 @@ void WlanPage::initTimer()
     m_scanTimer = new QTimer(this);
     connect(m_scanTimer, &QTimer::timeout, this, &WlanPage::requestScan);
 
-    //m_refreshIconTimer = new QTimer(this);
-    //connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
-    //m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
+    m_refreshIconTimer = new QTimer(this);
+    connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
+    m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
 }
 
 /**
@@ -793,7 +796,7 @@ void WlanPage::onConnectionUpdate(QString deviceName, QString ssid)
         value.insert("DeviceName",deviceName);
         value.insert("autoConnect",p_wlanItem->getAutoConnect());
 
-        qDebug() << Q_FUNC_INFO << __LINE__ << "[DtTest===]emit sigNetworkPropChanged " << value;
+        qDebug() << Q_FUNC_INFO << __LINE__ << "emit sigNetworkPropChanged " << value;
         Q_EMIT sigNetworkPropChanged(value);//只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
     }
 }
@@ -839,6 +842,35 @@ void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuT
     return;
 }
 
+//#include <QRandomGenerator> // dt信号测试代码，随机信号
+//更新WIFI信号
+void WlanPage::onSignalStrengthChange(QString interface, QString ssid, int signalStrength)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << "[dtTest] interface :" << interface << " ssid:" << ssid << " signalStrength:" << signalStrength;
+    //signalStrength = QRandomGenerator::global()->bounded(100) + 1; //dt信号测试代码，随机信号
+
+    QListWidgetItem *p_listWidgetItem = nullptr;
+    WlanListItem *p_wlanItem = nullptr;
+
+    qWarning()<< LOG_FLAG << "signalStrength is chenged";
+
+    if (m_wirelessNetItemMap.contains(ssid)) {
+        p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
+        p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+    } else if (m_activateConnectionItemMap.contains(ssid)) {
+        p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
+        p_wlanItem = (WlanListItem*)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
+    }
+
+    if (nullptr != p_wlanItem) {
+        QVariantMap value;
+        value.insert("Name",ssid);
+        value.insert("Signal",signalStrength);
+        value.insert("DeviceName",interface);//m_currentDevice
+        qWarning() << LOG_FLAG << "emit sigNetworkPropChanged " << value;
+        Q_EMIT sigNetworkPropChanged(value);//只更新应该更新的，其他参数的更新有其他机制更新 在生命周期内基本不会变化
+    }
+}
 
 void WlanPage::addDeviceToCombox(QString deviceName)
 {
@@ -976,7 +1008,7 @@ void WlanPage::onDeviceRemove(QString deviceName)
         setSwitchBtnEnable(false);
         //设置控制面板热点界面 和 控制面板无线界面
         qWarning() << Q_FUNC_INFO << __LINE__ << "deviceRemove" << deviceName;
-        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+        if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC) && !UiSecurityConfig::getInstance()->getSysSleepState() ) {
             qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
 
             QGSettings* mobileHotspotSetting = new QGSettings(GSETTING_SCHEMA_UKCC, GSETTING_PATH_UKCC_MOBILEHOTSPOT);
@@ -1267,6 +1299,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         qDebug()<< LOG_FLAG << "it is not wireless connection" << uuid;
         return;
     }
+    qDebug()<< Q_FUNC_INFO << __LINE__ << "connection state :" << state;
 
     Q_EMIT this->wlanConnectChanged(state);
 

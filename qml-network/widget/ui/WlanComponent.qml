@@ -751,32 +751,63 @@ ListView {
             }
         }
     }
-    footer: Button {
-        id: addOtherBtn
-        visible: wlanDeviceComboBox.count >= 1
-        width: parent.width
-        height: 40
-        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-        hoverEnabled: true
-        flat: true
 
-        UkuiItems.DtThemeText {
-            text: qsTr("Add Others...")
-            anchors.top: parent.top
-            anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
-            anchors.left: parent.left
-            anchors.leftMargin: 26
-            elide: Text.ElideRight
+
+
+    /*不能使用visble在listview中footer要占位会有一行空白*/
+    footer: Loader {
+           width: parent.width
+           sourceComponent: (KInterface.uiCtlData.wlanAddButton && wlanDeviceComboBox.count >= 1) ?
+                           footerComponent : null
+
+           //!KInterface.uiCtlData.wlanAddButton &&
+       }
+
+       Component {
+           id: footerComponent
+           Button {
+               id: addOtherBtn
+               width: parent.width
+               height: 40
+               anchors.left: parent.left
+               hoverEnabled: true
+               flat: true
+               focusPolicy: Qt.StrongFocus
+
+               /*
+               // 添加视觉反馈
+               background: Rectangle {
+                   color: addOtherBtn.hovered ? "#f0f0f0" : "transparent"
+               }
+               */
+
+               UkuiItems.DtThemeText {
+                   text: qsTr("Add Others...")
+                   anchors.top: parent.top
+                   anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
+                   anchors.left: parent.left
+                   anchors.leftMargin: 26
+                   elide: Text.ElideRight
+               }
+
+               onClicked: {
+                   console.log("addOtherBtn onClicked")
+                   KInterface.showAddOtherWlanPage(wlanDeviceComboBox.currentText)
+                   mouse.accepted = true
+               }
+               onPressed: mouse.accepted = true
+           }
+       }
+
+    onVisibleChanged :{
+        if(!visible){
+            try {
+                KInterface.rebuildCurrentWirelessList() 
+            } catch(e) {
+                console.log("rebuildCurrentWirelessList error:", e) 
+            }
         }
-
-        onClicked: {
-            console.log("addOtherBtn onClicked ",parent.verticalCenter,anchors.verticalCenter)
-            KInterface.showAddOtherWlanPage(wlanDeviceComboBox.currentText);
-            mouse.accepted = true
-        }
-
     }
-
 
 }
 

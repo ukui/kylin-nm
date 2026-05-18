@@ -1,12 +1,9 @@
 #include "knmwlandatakeeper.h"
 #include "knminterface.h"
 #include "knmdbuscaller.h"
+#include "common.h"
 
-#define EXCELLENT_SIGNAL 80
-#define GOOD_SIGNAL 55
-#define OK_SIGNAL 30
-#define LOW_SIGNAL 5
-#define NONE_SIGNAL 0
+
 
 #define SIGNAL_EXCELLENT 1
 #define SIGNAL_GOOD      2
@@ -17,58 +14,6 @@
 
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
-
-const QString KWifiSymbolic     = "network-wireless-signal-excellent-symbolic";
-const QString KWifiLockSymbolic = "network-wireless-signal-excellent-secure-symbolic";
-const QString KWifiGood         = "network-wireless-signal-good-symbolic";
-const QString KWifiLockGood     = "network-wireless-signal-good-secure-symbolic";
-const QString KWifiOK           = "network-wireless-signal-ok-symbolic";
-const QString KWifiLockOK       = "network-wireless-signal-ok-secure-symbolic";
-const QString KWifiLow          = "network-wireless-signal-weak-symbolic";
-const QString KWifiLockLow      = "network-wireless-signal-weak-secure-symbolic";
-const QString KWifiNone         = "network-wireless-signal-none-symbolic";
-const QString KWifiLockNone     = "network-wireless-signal-none-secure-symbolic";
-
-
-const QString KWifi6Symbolic        = "ukui-wifi6-full-symbolic";
-const QString KWifi6PlusSymbolic    = "ukui-wifi6+-full-symbolic";
-const QString KWifi7Symbolic        = "ukui-wifi7-full-symbolic";
-
-const QString KWifi6LockSymbolic    = "ukui-wifi6-full-pwd-symbolic";
-const QString KWifi6PlusLockSymbolic= "ukui-wifi6+-full-pwd-symbolic";
-const QString KWifi7LockSymbolic    = "ukui-wifi7-full-pwd-symbolic";
-
-const QString KWifi6Good            = "ukui-wifi6-high-symbolic";
-const QString KWifi6PlusGood        = "ukui-wifi6+-high-symbolic";
-const QString KWifi7Good            = "ukui-wifi7-high-symbolic";
-
-const QString KWifi6LockGood        = "ukui-wifi6-high-pwd-symbolic";
-const QString KWifi6PlusLockGood    = "ukui-wifi6+-high-pwd-symbolic";
-const QString KWifi7LockGood        = "ukui-wifi7-high-pwd-symbolic";
-
-const QString KWifi6OK              = "ukui-wifi6-medium-symbolic";
-const QString KWifi6PlusOK          = "ukui-wifi6+-high-medium-symbolic";
-const QString KWifi7OK              = "ukui-wifi7-medium-symbolic";
-
-const QString KWifi6LockOK          = "ukui-wifi6-medium-pwd-symbolic";
-const QString KWifi6PlusLockOK      = "ukui-wifi6+-medium-pwd-symbolic";
-const QString KWifi7LockOK          = "ukui-wifi7-medium-pwd-symbolic";
-
-const QString KWifi6Low             = "ukui-wifi6-low-symbolic";
-const QString KWifi6PlusLow         = "ukui-wifi6+-low-symbolic";
-const QString KWifi7Low             = "ukui-wifi7-low-symbolic";
-
-const QString KWifi6LockLow         = "ukui-wifi6-low-pwd-symbolic";
-const QString KWifi6PlusLockLow     = "ukui-wifi6+-low-pwd-symbolic";
-const QString KWifi7LockLow         = "ukui-wifi7-low-pwd-symbolic";
-
-const QString KWifi6None            = "ukui-wifi6-none-symbolic";
-const QString KWifi6PlusNone        = "ukui-wifi6+-none-symbolic";
-const QString KWifi7None            = "ukui-wifi7-none-symbolic";
-
-const QString KWifi6LockNone        = "ukui-wifi6-none-pwd-symbolic";
-const QString KWifi6PlusLockNone    = "ukui-wifi6+-none-pwd-symbolic";
-const QString KWifi7LockNone        = "ukui-wifi7-none-pwd-symbolic";
 
 const QString KLanSymbolic      = ":/img/plugins/netconnect/eth.svg";
 const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
@@ -173,13 +118,13 @@ int KnmWlanDataKeeper::setSignal(QString sg)
     int signal = sg.toInt();
     int signalLv = 0;
 
-    if (signal > EXCELLENT_SIGNAL) {
+    if (signal > WIFI_EXCELLENT_SIGNAL) {
         signalLv = 1;
-    } else if (signal > GOOD_SIGNAL) {
+    } else if (signal > WIFI_GOOD_SIGNAL) {
         signalLv = 2;
-    } else if (signal > OK_SIGNAL) {
+    } else if (signal > WIFI_OK_SIGNAL) {
         signalLv = 3;
-    } else if (signal > LOW_SIGNAL) {
+    } else if (signal > WIFI_LOW_SIGNAL) {
         signalLv = 4;
     } else {
         signalLv = 5;

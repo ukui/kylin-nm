@@ -18,6 +18,7 @@
 
 #include <QDebug>
 #include "proxyservicemanager.h"
+#include "../../pub/aptinfo.h"
 
 #define PROXY_SCHEMA              "org.gnome.system.proxy"
 #define HTTP_PROXY_SCHEMA         "org.gnome.system.proxy.http"
@@ -288,6 +289,119 @@ void ProxyServiceManager::callSendSysProxyNetCtlLog(const QString& key, const QS
     m_pNetCtlInterface->call("sendSysProxyNetCtlLog", message);
     return;
 }
+
+void ProxyServiceManager::sendAppProxyNetCtlLog(const QStringList &preAppInfo, bool preStatus, const QStringList &currAppInfo, bool status, bool addApp, const QString &appName)
+{    /* 应用代理的日志上报 */
+    if (!m_pNetCtlInterface) {
+        return;
+    }
+
+    QString message;
+    if(preStatus != status){
+        message = status ? QString("应用代理开启") : QString("应用代理关闭");
+        sendProxyNetCtlLog(message);
+        return;
+    }else if(preAppInfo != currAppInfo){
+        /* 变量判空，若是赋值为"空",增强日志可读性 */
+        auto formatValue = [](const QString& value) {
+            return value.isEmpty() ? QString("空") : value;
+        };
+
+        QStringList changes;
+        auto checkChange = [&](const QString& field, const QString& preValue, const QString& currValue) {
+            if (preValue != currValue) {
+                changes << QString("原%1：%2，新%1：%3")
+                    .arg(field)
+                    .arg(formatValue(preValue))
+                    .arg(formatValue(currValue));
+            }
+        };
+        checkChange(QString("代理类型"), preAppInfo.value(0), currAppInfo.value(0));
+        checkChange(QString("IP地址"), preAppInfo.value(1), currAppInfo.value(1));
+        checkChange(QString("端口"), preAppInfo.value(2), currAppInfo.value(2));
+        checkChange(QString("用户名"), preAppInfo.value(3), currAppInfo.value(3));
+        checkChange(QString("密码"), preAppInfo.value(4), currAppInfo.value(4));
+
+        if (!changes.isEmpty()) {
+            sendProxyNetCtlLog("应用代理的配置变化，" + changes.join("; "));
+        }
+        //message= QString("应用代理的配置变化，原配置：{" + preAppInfo.join(",") + "}, 新配置：{" + currAppInfo.join(",")) +"}";
+        return;
+    }else if(!appName.isEmpty()){
+        if(addApp){
+            message= QString("应用代理的应用列表变化，勾选应用：" + appName);
+        }else{
+            message= QString("应用代理的应用列表变化，取消勾选应用：" + appName);
+        }
+        sendProxyNetCtlLog(message);
+    }
+    return;
+}
+
+void ProxyServiceManager::sendAptProxyNetCtlLog(const QHash<QString, QVariant> &preAptInfo, QString http_host, QString http_port, QString https_host, QString https_port, bool status)
+{   /* APT代理的日志上报 */
+    if (!m_pNetCtlInterface) {
+        return;
+    }
+
+    bool preStatus = preAptInfo["open"].toBool();
+    if(preStatus != status){
+        QString logMsg = status ? QString("APT代理开启") : QString("APT代理关闭");
+        sendProxyNetCtlLog(logMsg);
+    }
+
+    QString preAptHttpHost = preAptInfo["http_ip"].toString();
+    QString preAptHttpPort = preAptInfo["http_port"].toString();
+    QString preAptHttpsHost = preAptInfo["https_ip"].toString();
+    QString preAptHttpsPort = preAptInfo["https_port"].toString();
+
+    if(preAptHttpHost == http_host && preAptHttpPort == http_port && preAptHttpsHost == https_host && preAptHttpsPort == https_port){
+        return;
+    }
+
+    /* 变量判空，若是赋值为"空",增强日志可读性 */
+    auto formatValue = [](const QString& value) {
+        return value.isEmpty() ? QString("空") : value;
+    };
+    QStringList changes;
+    auto checkChange = [&](const QString& field, const QString& preValue, const QString& currValue) {
+        if (preValue != currValue) {
+            changes << QString("原%1：%2，新%1：%3")
+                .arg(field)
+                .arg(formatValue(preValue))
+                .arg(formatValue(currValue));
+        }
+    };
+    checkChange(QString("Http代理"), preAptHttpHost, http_host);
+    checkChange(QString("Http端口"), preAptHttpPort, http_port);
+    checkChange(QString("Https代理"), preAptHttpsHost, https_host);
+    checkChange(QString("Https端口"), preAptHttpsPort, https_port);
+
+    if (!changes.isEmpty()) {
+        sendProxyNetCtlLog("APT代理的配置变化，" + changes.join("; "));
+    }
+//    QString message = QString("APT代理变化, 原Http代理：%1，原Http端口：%2，原Https代理：%3，原Https端口：%4，新Http代理：%5，原Http端口：%6，新Https代理：%7，新Https端口：%8")
+//            .arg(formatValue(preAptHttpHost)).arg(formatValue(preAptHttpPort)).arg(formatValue(preAptHttpsHost)).arg(formatValue(preAptHttpsPort))
+//            .arg(formatValue(http_host)).arg(formatValue(http_port)).arg(formatValue(https_host)).arg(formatValue(https_port));
+
+//    sendProxyNetCtlLog(message);
+
+    return;
+}
+
+void ProxyServiceManager::sendProxyNetCtlLog(const QString &logMessage)
+{
+    if (!m_pNetCtlInterface) {
+        return;
+    }
+
+    qDebug()<<Q_FUNC_INFO<<__LINE__<< "Sent log message:" << logMessage;
+    QDBusMessage reply = m_pNetCtlInterface->call("sendSysProxyNetCtlLog", logMessage);
+    if (reply.type() == QDBusMessage::ErrorMessage) {
+        qWarning()<< "D-Bus call failed:"<< reply.errorMessage();
+    }
+}
+
 
 void ProxyServiceManager::initSystemProxyCtlLogSender() {
     const QByteArray proxy_id(PROXY_SCHEMA);
@@ -684,7 +798,7 @@ void ProxyServiceManager::stopProxy()
 }
 
 
-QStringList ProxyServiceManager::getProxyConfig()
+QStringList ProxyServiceManager::getAppProxyConfig()
 {
     QStringList proxyConfList;
     proxyConfList.clear();
@@ -701,14 +815,19 @@ QStringList ProxyServiceManager::getProxyConfig()
     return proxyConfList;
 }
 
-void ProxyServiceManager::setProxyConfig(const QStringList configList)
+void ProxyServiceManager::setAppProxyConfig(const QStringList configList)
 {
+    QStringList preAppInfo = getAppProxyConfig();
+
     QString jsonPath = QDir::homePath() + "/" + PROXYCONF_FILE;
     QJsonObject readObj = readJsonFile(jsonPath);
     QJsonObject configObj = dealJsonObj(configList);
     startProxy(configObj);
     if (configObj != readObj) {
         wirteJsonFile(jsonPath, configObj);
+
+        sendAppProxyNetCtlLog(preAppInfo, true, configList, true);
+        Q_EMIT proxyConfigChanged(configList);
     }
 }
 
@@ -773,6 +892,17 @@ void ProxyServiceManager::addAppIntoProxy(QString desktopfp)
     m_threadObj->setDesktopList(m_proxyDesktopList);
     m_threadObj->setExecList(m_proxyExecList);
     m_threadObj->setNameList(m_proxyNameList);
+
+    QString appName;
+    if(m_appInfoMap.contains(desktopfp)){
+        QMap<QString, QString> infoMap = m_appInfoMap[desktopfp];
+        if(infoMap.contains("Localname")){
+            appName = infoMap["Localname"];
+        }
+    }
+    sendAppProxyNetCtlLog(QStringList(), true, QStringList(), true, true, appName);
+
+    Q_EMIT appProxyAppListChanged(desktopfp, true);
 }
 
 void ProxyServiceManager::delAppIntoProxy(QString desktopfp)
@@ -792,10 +922,23 @@ void ProxyServiceManager::delAppIntoProxy(QString desktopfp)
     m_threadObj->setDesktopList(m_proxyDesktopList);
     m_threadObj->setExecList(m_proxyExecList);
     m_threadObj->setNameList(m_proxyNameList);
+
+    QString appName;
+    if(m_appInfoMap.contains(desktopfp)){
+        QMap<QString, QString> infoMap = m_appInfoMap[desktopfp];
+        if(infoMap.contains("Localname")){
+            appName = infoMap["Localname"];
+        }
+    }
+    sendAppProxyNetCtlLog(QStringList(), true, QStringList(), true, false, appName);
+
+    Q_EMIT appProxyAppListChanged(desktopfp, false);
 }
 
-void ProxyServiceManager::setProxyStateDbus(bool state)
+void ProxyServiceManager::setAppProxyState(bool state)
 {
+    bool preStatus = getAppProxyState();
+
     if (state) {
         initAppIntoProcessManager();
 
@@ -808,16 +951,87 @@ void ProxyServiceManager::setProxyStateDbus(bool state)
         clearProcessManagerApp();
         stopProxy();
     }
+
+    sendAppProxyNetCtlLog(QStringList(), preStatus, QStringList(), state);
+    Q_EMIT appProxyStateChanged(state);
 }
 
-bool ProxyServiceManager::getProxyStateDbus()
+bool ProxyServiceManager::getAppProxyState()
 {
     QString jsonPath = QDir::homePath() + "/" + PROXYCONF_FILE;
     QJsonObject readObj = readJsonFile(jsonPath);
     return readObj.value(PROTOJSON_KEY_STATE).toBool();
 }
 
-QMap<QString, QStringList> ProxyServiceManager::getAppProxy()
+void ProxyServiceManager::setAptProxy(QString http_host, QString http_port, QString https_host, QString https_port, bool status)
+{
+    QHash<QString, QVariant> preAptInfo = getAptProxy();
+    QDBusInterface *aptProxyDbus = new QDBusInterface("com.control.center.qt.systemdbus",
+                                                             "/",
+                                                             "com.control.center.interface",
+                                                             QDBusConnection::systemBus());
+    if (aptProxyDbus->isValid()) {
+        QDBusReply<bool> reply = aptProxyDbus->call("setaptproxy", http_host, http_port, https_host, https_port, status);
+        sendAptProxyNetCtlLog(preAptInfo, http_host, http_port, https_host, https_port, status);
+        QHash<QString, QVariant> aptInfo;
+        aptInfo.insert("http_ip", http_host);
+        aptInfo.insert("http_port", http_port);
+        aptInfo.insert("https_ip", https_host);
+        aptInfo.insert("https_port", https_port);
+        aptInfo.insert("open", status);
+        Q_EMIT aptProxyChanged(aptInfo);
+    }
+    delete aptProxyDbus;
+    aptProxyDbus = nullptr;
+}
+
+QHash<QString, QVariant> ProxyServiceManager::getAptProxy()
+{
+     QHash<QString, QVariant> mAptInfo;
+     QDBusInterface *aptProxyDbus = new QDBusInterface("com.control.center.qt.systemdbus",
+                                                              "/",
+                                                              "com.control.center.interface",
+                                                              QDBusConnection::systemBus());
+    if (aptProxyDbus->isValid()) {
+        QDBusMessage result = aptProxyDbus->call("getaptproxy");
+
+        QList<QVariant> outArgs = result.arguments();
+        QVariant first = outArgs.at(0);
+        QDBusArgument dbvFirst = first.value<QDBusArgument>();
+        QVariant vFirst = dbvFirst.asVariant();
+        const QDBusArgument &dbusArgs = vFirst.value<QDBusArgument>();
+
+        QVector<AptInfo> aptinfo;
+
+        dbusArgs.beginArray();
+        while (!dbusArgs.atEnd()) {
+            AptInfo info;
+            dbusArgs >> info;
+            aptinfo.push_back(info);
+        }
+        dbusArgs.endArray();
+
+        for (AptInfo it : aptinfo) {
+            mAptInfo.insert(it.arg, it.out.variant());
+        }
+    }
+    delete aptProxyDbus;
+    aptProxyDbus = nullptr;
+    return mAptInfo;
+}
+
+void ProxyServiceManager::setAptProxyState(bool state)
+{
+    QHash<QString, QVariant> currentAptInfo = getAptProxy();
+    QString httpIp = currentAptInfo["http_ip"].toString();
+    QString httpPort = currentAptInfo["http_port"].toString();
+    QString httpsIp = currentAptInfo["https_ip"].toString();
+    QString httpsPort = currentAptInfo["https_port"].toString();
+
+    setAptProxy(httpIp, httpPort, httpsIp, httpsPort, state);
+}
+
+QMap<QString, QStringList> ProxyServiceManager::getAppProxyAppsInfo()
 {
     initAppInfoMapTemp();
     m_proxyDesktopList = getAppProxyFromFile();

@@ -18,6 +18,7 @@ PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gset
 PKGCONFIG +=kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+INCLUDEPATH += $$PWD/../common
 
 LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysdk-ukuiwindowhelper
 #LIBS  +=  -lkysec
@@ -61,6 +62,7 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 include(singleapplication/qt-single-application.pri)
 include(backend/backend.pri)
 include(frontend/frontend.pri)
+include(../pub/pub.pri)
 
 RESOURCES += \
     ../nmqrc.qrc

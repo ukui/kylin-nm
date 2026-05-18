@@ -348,8 +348,9 @@ void KyActiveConnectResourse::getActiveConnectDnsInfo(
         qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
         return;
     }
-
+    /*详情页显示当前连接的所有dns配置 与win相同*/
     getActiveConnectDns(activeConnectPtr, ipv4Dns, ipv6Dns);
+    qDebug()<<"getActiveConnectDnsInfo dns is"<<ipv4Dns;
 
     return;
 }

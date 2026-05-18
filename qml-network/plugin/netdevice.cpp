@@ -34,11 +34,49 @@ void NetDevice::addConnection(QMap<QString, QVariant> connections)
 {
     if (m_connectionsList.contains(connections))
         return;
-    if (connections.value("State").toInt() == ACTIVATED
-            || connections.value("State").toInt() == ACTIVATING)
+
+    int status = connections.value("State").toInt();
+    // 已激活的连接放在最前面
+    if (status == ACTIVATED || status == ACTIVATING) {
         m_connectionsList.push_front(connections);
-    else
-        m_connectionsList.append(connections);
+        return;
+    }
+
+    // 对于未激活连接，按照排序规则插入
+    int insertIndex = 0;
+    bool isConfigured = connections.value("Configured", 0).toInt() == 1;
+    int signalStrength = connections.value("Signal", "0").toString().toInt();
+
+    // 找到第一个未激活连接的位置
+    while (insertIndex < m_connectionsList.count()) {
+        QMap<QString, QVariant> existingConn = m_connectionsList.at(insertIndex).toMap();
+        int existingStatus = existingConn.value("State").toInt();
+
+        // 跳过已激活的连接
+        if (existingStatus == ACTIVATED || existingStatus == ACTIVATING) {
+            insertIndex++;
+            continue;
+        }
+
+        bool existingConfigured = existingConn.value("Configured", 0).toInt() == 1;
+        int existingSignal = existingConn.value("Signal", "0").toString().toInt();
+
+        if (isConfigured && !existingConfigured) {
+            // 当前连接已配置，而对比的连接未配置，插入此处
+            break;
+        } else if (isConfigured == existingConfigured) {
+            // 配置状态相同，按信号强度排序；信号相同时新增的放前面
+            if (signalStrength >= existingSignal) {
+                break;
+            }
+        }
+        // 如果当前连接未配置，而已有连接已配置，则继续向后查找
+        // 如果信号强度更弱，也继续向后查找
+        insertIndex++;
+    }
+
+    // 插入到正确位置
+    m_connectionsList.insert(insertIndex, connections);
 }
 
 void NetDevice::removeConnection(QMap<QString, QVariant> connections)
@@ -171,6 +209,7 @@ QMap<QString, QVariant> NetDevice::updateConnectivity(QString uuid, int status, 
 
 void NetDevice::updateConnectionProp(QVariantMap parm)
 {
+    qDebug() << Q_FUNC_INFO << __LINE__ << parm;
     int i = 0;
 
     QMap<QString, QVariant> conn;

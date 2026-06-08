@@ -4,17 +4,17 @@
 <context>
     <name>SinglePage</name>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="79"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
         <translation>تور  تەڭشەگى</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="140"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
         <source>Kylin VPN</source>
         <translation>اسپاپVPN</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="143"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
         <source>kylin vpn applet desktop message</source>
         <translation>VPNتەڭشەگىن شىرە  بەتىندە كۅرسۅتۉۉ</translation>
     </message>
@@ -767,14 +767,19 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="248"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="257"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
         <source>VPN Settings</source>
         <translation>VPN تەڭشەكتەرى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+        <source>No VPN configuration available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -831,7 +836,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>vpnObject</name>
     <message>
-        <location filename="../frontend/vpnobject.cpp" line="57"/>
+        <location filename="../frontend/vpnobject.cpp" line="59"/>
         <source>VPN Tool</source>
         <translation>vpn قۇرالى</translation>
     </message>

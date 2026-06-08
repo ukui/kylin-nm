@@ -1370,19 +1370,15 @@ void LanPage::onShowKylinNetworkCheck()
 
 bool LanPage::hasInternetAccess()
 {
-    // 通过DBus接口获取系统的整体网络连接状态
-    QDBusInterface interface(NETWORK_MANAGER_SERVICE,
-                             NETWORK_MANAGER_PATH,
-                             DBUS_PROPERTIES_INTERFACE,
-                             QDBusConnection::systemBus());
-    
-    if (interface.isValid()) {
-        QDBusMessage result = interface.call("Get", NETWORK_MANAGER_SERVICE, "Connectivity");
-        if (result.type() == QDBusMessage::ReplyMessage && !result.arguments().isEmpty()) {
-            uint connectivity = result.arguments().at(0).value<QDBusVariant>().variant().toUInt();
-            if (connectivity == NetworkManager::Connectivity::Full) {
-                return true;
-            }
+    if (m_enableDeviceList.isEmpty()) {
+        return false;
+    }
+
+    for (const auto &devName : m_enableDeviceList) {
+        NetworkManager::Connectivity connectivity;
+        m_deviceResource->getDeviceConnectivity(devName, connectivity);
+        if (connectivity != NetworkManager::Connectivity::NoConnectivity) {
+            return true;
         }
     }
 

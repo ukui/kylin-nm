@@ -1,4 +1,4 @@
-kylin-nm (4.20.0.0-0ubuntu1) resolute; urgency=medium
+kylin-nm (4.20.0.0-1) unstable; urgency=medium
 
   * New upstream release for UKUI 4.20.
   * Port project to Qt6 and KF6:

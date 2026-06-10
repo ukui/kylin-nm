@@ -34,13 +34,10 @@
 #include "list-items/listitem.h"
 #include "list-items/lanlistitem.h"
 
+
 #define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
 #define SYSTEM_DBUS_PATH  "/"
 #define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
-
-#define NETWORK_MANAGER_SERVICE "org.freedesktop.NetworkManager"
-#define NETWORK_MANAGER_PATH "/org/freedesktop/NetworkManager"
-#define DBUS_PROPERTIES_INTERFACE "org.freedesktop.DBus.Properties"
 
 class LanListItem;
 

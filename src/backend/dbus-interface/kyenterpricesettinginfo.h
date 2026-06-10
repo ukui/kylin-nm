@@ -27,8 +27,8 @@
 #include <QObject>
 
 enum KyEapMethodType {
-    PEAP = 0,
-    TLS,
+    TLS = 0,
+    PEAP,
     TTLS,
     LEAP,
     PWD,

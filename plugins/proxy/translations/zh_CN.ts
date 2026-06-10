@@ -9,22 +9,40 @@
         <translation>设置 APT 代理</translation>
     </message>
     <message>
-        <location filename="../aptproxydialog.cpp" line="60"/>
         <source>Server Address</source>
-        <translation>服务器地址</translation>
+        <translation type="vanished">服务器地址</translation>
     </message>
     <message>
-        <location filename="../aptproxydialog.cpp" line="78"/>
         <source>Port</source>
-        <translation>端口</translation>
+        <translation type="vanished">端口</translation>
     </message>
     <message>
-        <location filename="../aptproxydialog.cpp" line="99"/>
+        <location filename="../aptproxydialog.cpp" line="60"/>
+        <source>Http Address</source>
+        <translation>Http 代理</translation>
+    </message>
+    <message>
+        <location filename="../aptproxydialog.cpp" line="80"/>
+        <source>Http Port</source>
+        <translation>Http 端口</translation>
+    </message>
+    <message>
+        <location filename="../aptproxydialog.cpp" line="100"/>
+        <source>Https Address</source>
+        <translation>Https 代理</translation>
+    </message>
+    <message>
+        <location filename="../aptproxydialog.cpp" line="119"/>
+        <source>Https Port</source>
+        <translation>Https 端口</translation>
+    </message>
+    <message>
+        <location filename="../aptproxydialog.cpp" line="140"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../aptproxydialog.cpp" line="103"/>
+        <location filename="../aptproxydialog.cpp" line="144"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
@@ -32,188 +50,198 @@
 <context>
     <name>Proxy</name>
     <message>
-        <location filename="../proxy.cpp" line="71"/>
+        <location filename="../proxy.cpp" line="72"/>
         <source>Proxy</source>
         <translation>代理</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="212"/>
+        <location filename="../proxy.cpp" line="213"/>
         <source>Start using</source>
         <translation>启用</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="226"/>
+        <location filename="../proxy.cpp" line="227"/>
         <source>Proxy mode</source>
         <translation>代理类型</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="231"/>
+        <location filename="../proxy.cpp" line="232"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="235"/>
+        <location filename="../proxy.cpp" line="236"/>
         <source>Manual</source>
         <translation>手动</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="390"/>
+        <location filename="../proxy.cpp" line="391"/>
         <source>Application Proxy</source>
         <translation>应用代理</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="477"/>
+        <location filename="../proxy.cpp" line="509"/>
         <source>System Proxy</source>
         <translation>系统代理</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="479"/>
+        <location filename="../proxy.cpp" line="511"/>
         <source>Auto url</source>
         <translation>配置 URL</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="481"/>
+        <location filename="../proxy.cpp" line="513"/>
         <source>Http Proxy</source>
         <translation>HTTP 代理</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="483"/>
+        <location filename="../proxy.cpp" line="515"/>
         <source>Https Proxy</source>
         <translation>HTTPS 代理</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="485"/>
+        <location filename="../proxy.cpp" line="517"/>
         <source>Ftp Proxy</source>
         <translation>FTP 代理</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="487"/>
+        <location filename="../proxy.cpp" line="519"/>
         <source>Socks Proxy</source>
         <translation>SOCKS 代理</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="488"/>
-        <location filename="../proxy.cpp" line="489"/>
-        <location filename="../proxy.cpp" line="490"/>
-        <location filename="../proxy.cpp" line="491"/>
-        <location filename="../proxy.cpp" line="1248"/>
+        <location filename="../proxy.cpp" line="520"/>
+        <location filename="../proxy.cpp" line="521"/>
+        <location filename="../proxy.cpp" line="522"/>
+        <location filename="../proxy.cpp" line="523"/>
+        <location filename="../proxy.cpp" line="1329"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="492"/>
+        <location filename="../proxy.cpp" line="524"/>
         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
         <translation>忽略的主机列表，请使用英文分号（;）</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="495"/>
+        <location filename="../proxy.cpp" line="527"/>
         <source>App Proxy</source>
         <translation>应用代理</translation>
         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="498"/>
+        <location filename="../proxy.cpp" line="530"/>
         <source>APT Proxy</source>
         <translation>APT 代理</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="499"/>
-        <location filename="../proxy.cpp" line="1185"/>
+        <location filename="../proxy.cpp" line="531"/>
+        <location filename="../proxy.cpp" line="1266"/>
         <source>Open</source>
         <translation>开启</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="500"/>
-        <source>Server Address : </source>
-        <translation>服务器地址： </translation>
+        <location filename="../proxy.cpp" line="532"/>
+        <source>Http Address : </source>
+        <translation>Http 地址：</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="501"/>
+        <source>Server Address : </source>
+        <translation type="vanished">服务器地址： </translation>
+    </message>
+    <message>
+        <location filename="../proxy.cpp" line="533"/>
+        <location filename="../proxy.cpp" line="535"/>
         <source>Port : </source>
         <translation>端口： </translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="502"/>
+        <location filename="../proxy.cpp" line="534"/>
+        <source>Https Address : </source>
+        <translation>Https 地址：</translation>
+    </message>
+    <message>
+        <location filename="../proxy.cpp" line="536"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="657"/>
+        <location filename="../proxy.cpp" line="711"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
         <translation>APT 代理已关闭，需要重启才能生效</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="658"/>
-        <location filename="../proxy.cpp" line="946"/>
+        <location filename="../proxy.cpp" line="712"/>
+        <location filename="../proxy.cpp" line="1043"/>
         <source>Reboot Later</source>
         <translation>稍后重启</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="659"/>
-        <location filename="../proxy.cpp" line="947"/>
+        <location filename="../proxy.cpp" line="713"/>
+        <location filename="../proxy.cpp" line="1044"/>
         <source>Reboot Now</source>
         <translation>立即重启</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="945"/>
+        <location filename="../proxy.cpp" line="1042"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
         <translation>设置 APT 代理需要重启系统后生效，是否重启系统</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1198"/>
+        <location filename="../proxy.cpp" line="1279"/>
         <source>Proxy type</source>
         <translation>代理类型</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1215"/>
+        <location filename="../proxy.cpp" line="1296"/>
         <source>IP address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1221"/>
-        <location filename="../proxy.cpp" line="1251"/>
+        <location filename="../proxy.cpp" line="1302"/>
+        <location filename="../proxy.cpp" line="1332"/>
         <source>Required</source>
         <translation>必填</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1241"/>
+        <location filename="../proxy.cpp" line="1322"/>
         <source>Invalid IP Address</source>
         <translation>无效的 IP 地址</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1262"/>
+        <location filename="../proxy.cpp" line="1343"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1265"/>
-        <location filename="../proxy.cpp" line="1279"/>
+        <location filename="../proxy.cpp" line="1346"/>
+        <location filename="../proxy.cpp" line="1360"/>
         <source>Optional</source>
         <translation>选填</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1275"/>
+        <location filename="../proxy.cpp" line="1356"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1298"/>
+        <location filename="../proxy.cpp" line="1379"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1299"/>
+        <location filename="../proxy.cpp" line="1380"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../proxy.cpp" line="1371"/>
+        <location filename="../proxy.cpp" line="1452"/>
         <source>The following applications are allowed to use this configuration:</source>
         <translation>允许以下应用使用该配置：</translation>
     </message>

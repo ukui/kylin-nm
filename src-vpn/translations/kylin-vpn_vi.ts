@@ -4,17 +4,17 @@
 <context>
     <name>SinglePage</name>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="79"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
         <translation>Mục cài đặt</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="140"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
         <source>Kylin VPN</source>
         <translation>Công cụ VPN</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="143"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
         <source>kylin vpn applet desktop message</source>
         <translation>Thông báo trên màn hình nền của VPN Kylin</translation>
     </message>
@@ -768,14 +768,19 @@ Nếu sử dụng hướng của khóa, nó phải ngược với phía VPN sử
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="248"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="257"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
         <source>VPN Settings</source>
         <translation>Cài đặt VPN</translation>
+    </message>
+    <message>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+        <source>No VPN configuration available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -832,7 +837,7 @@ Nếu sử dụng hướng của khóa, nó phải ngược với phía VPN sử
 <context>
     <name>vpnObject</name>
     <message>
-        <location filename="../frontend/vpnobject.cpp" line="57"/>
+        <location filename="../frontend/vpnobject.cpp" line="59"/>
         <source>VPN Tool</source>
         <translation>Công cụ VPN</translation>
     </message>

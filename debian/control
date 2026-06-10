@@ -1,6 +1,5 @@
 Source: kylin-nm
 Section: utils
-Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
 Uploaders: handsome_feng <jianfengli@ubuntukylin.com>,
            zhangpan <zhangpan@kylinos.cn>
@@ -26,11 +25,10 @@ Build-Depends: debhelper-compat (= 13),
                qtchooser,
                qt6-declarative-dev,
                qt6-tools-dev-tools,
-Standards-Version: 4.7.2
-Rules-Requires-Root: no
+Standards-Version: 4.7.4
 Homepage: https://gitee.com/openkylin/kylin-nm
-Vcs-Git: https://gitee.com/openkylin/kylin-nm.git
-Vcs-Browser: https://gitee.com/openkylin/kylin-nm
+Vcs-Git: https://salsa.debian.org/kylin-team/kylin-nm.git
+Vcs-Browser: https://salsa.debian.org/kylin-team/kylin-nm
 
 Package: kylin-nm
 Architecture: any

@@ -1,3 +1,4 @@
 Version: 5
-Source: https://gitee.com/openkylin/kylin-nm/releases/
-Matching-Pattern: download/debian/\d[\d.]*(?:-\d+)?/kylin-nm_(\d[\d.]*)\.orig\.tar\.gz
+
+Source: https://gitee.com/openkylin/@PACKAGE@/releases/
+Matching-Pattern: download/debian/\d[\d.]*(?:-\d+)?/@PACKAGE@_@ANY_VERSION@\.orig@ARCHIVE_EXT@

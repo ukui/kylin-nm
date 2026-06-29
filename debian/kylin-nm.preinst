@@ -1,0 +1,9 @@
+#!/bin/bash
+  
+set -e
+
+CONFLICT_FILE="/etc/nm_enhance/nm_enhance_dns.conf"
+dpkg-divert --package kylin-network-manager-enhance-daemon  --rename --divert "$CONFLICT_FILE"".old" --add $CONFLICT_FILE
+
+pkill -f "kylin-nm-sysdbus" || true
+exit 0

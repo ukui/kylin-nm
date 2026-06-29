@@ -561,6 +561,13 @@ void delete_server_to_resolv()
 
     while (fgets(line, MAXLINE, fp) != NULL)
     {
+        size_t len = strlen(line);
+        if (len == MAXLINE - 1 && line[len - 1] != '\n')
+        {
+            int c;
+            while ((c = fgetc(fp)) != '\n' && c != EOF);
+            continue;
+        }
         if (strncmp(line, "nameserver 127.0.0.1", 20) != 0)
         {
             fputs(line, temp_fp);
@@ -1031,7 +1038,8 @@ int checkEnviron(DBusConnection *conn,int pid) {
     fclose(file);
 
     data[sizeof(data) - 1] = '\0';
-    char *environVars = strtok(data, "\0");
+    char *saveptr = NULL;
+    char *environVars = strtok_r(data, "\0", &saveptr);
 
     while (environVars != NULL) {
         if (strnlen(environVars,1023) > 0) {
@@ -1046,7 +1054,7 @@ int checkEnviron(DBusConnection *conn,int pid) {
                 }
             }
         }
-        environVars = strtok(NULL, "\0");
+        environVars = strtok_r(NULL, "\0", &saveptr);
     }
 
     return 1;

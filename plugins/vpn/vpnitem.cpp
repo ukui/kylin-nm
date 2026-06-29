@@ -18,9 +18,11 @@
  *
  */
 #include "vpnitem.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
+#include "klabel.h"
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
@@ -28,6 +30,8 @@
 
 #define THEME_QT_SCHEMA  "org.ukui.style"
 #define MODE_QT_KEY      "style-name"
+
+using namespace kdk;
 
 VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     : m_isAcitve(bAcitve), QPushButton(parent)
@@ -40,15 +44,16 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     mLanLyt->setSpacing(16);
     m_iconLabel = new QLabel(this);
     m_iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    m_titileLabel = new FixLabel(this);
+    m_titileLabel = new KLabel(this);
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_infoLabel, "VPN", "", "details button of VPN");
 
-    m_moreButton = new QToolButton(this);
+    m_moreButton = new QPushButton(this);
     m_moreButton->setProperty("useButtonPalette", true);
-    m_moreButton->setPopupMode(QToolButton::InstantPopup);
-    m_moreButton->setAutoRaise(true);
+    m_moreButton->setFlat(true);
+    m_moreButton->setFixedSize(36, 36);
     m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
     m_moreMenu = new QMenu(m_moreButton);
     m_connectAction = new QAction(m_moreMenu);
@@ -57,7 +62,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
 
     m_moreMenu->addAction(m_connectAction);
     m_moreMenu->addAction(m_deleteAction);
-    m_moreButton->setMenu(m_moreMenu);
+
     mLanLyt->addWidget(m_iconLabel);
     mLanLyt->addWidget(m_titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
@@ -76,8 +81,13 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_waitTimer = new QTimer(this);
     connect(m_waitTimer, &QTimer::timeout, this, &VpnItem::updateIcon);
 
+    m_iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    m_titileLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    m_statusLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
     connect(m_connectAction, &QAction::triggered, this, &VpnItem::onConnectTriggered);
     connect(m_deleteAction, &QAction::triggered, this, &VpnItem::onDeletetTriggered);
+    connect(m_moreButton, &QPushButton::clicked, this, &VpnItem::onMoreButtonClicked);
     m_moreMenu->installEventFilter(this);
 }
 
@@ -130,10 +140,26 @@ void VpnItem::onDeletetTriggered()
     Q_EMIT deleteActionTriggered();
 }
 
+void VpnItem::onMoreButtonClicked()
+{
+    if (!m_moreMenu || !m_moreButton) {
+        return;
+    }
+    
+    // 计算菜单显示位置，使菜单右边界与按钮右边界对齐
+    QPoint buttonPos = m_moreButton->mapToGlobal(QPoint(0, 0));
+    int menuWidth = m_moreMenu->sizeHint().width();
+    int buttonWidth = m_moreButton->width();
+    int buttonHeight = m_moreButton->height();
+    
+    QPoint menuPos = QPoint(buttonPos.x() + buttonWidth - menuWidth, buttonPos.y() + buttonHeight);
+    m_moreMenu->popup(menuPos);
+}
+
 void VpnItem::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setRenderHint(QPainter::Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
 
@@ -144,44 +170,35 @@ void VpnItem::paintEvent(QPaintEvent *event)
     this->setPalette(pal);
 
     QRect rect = this->rect();
+    QPainterPath path;
+    const qreal radius = 8.0;
 
-#if 0
-    if (!m_useHalfFillet) {
-        painter.drawRect(rect);
+    if (m_cornerType == Top) {
+        // 左上右上圆角
+        path.moveTo(rect.left() + radius, rect.top());
+        path.lineTo(rect.right() - radius, rect.top());
+        path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);
+        path.lineTo(rect.right(), rect.bottom());
+        path.lineTo(rect.left(), rect.bottom());
+        path.lineTo(rect.left(), rect.top() + radius);
+        path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());
     } else {
-        QPainterPath path;
-//        path.addRoundedRect (rect, RADIUS, RADIUS);
-//        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
-//        path.addRect(temp_rect);
-        //设置起点
-        path.moveTo(rect.topLeft().x(), rect.topLeft().y());
-        path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
-        //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
-        path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
-        path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
-        //画圆弧
-        path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
-        path.lineTo(rect.topRight());
-        path.lineTo(rect.topLeft());
-        painter.drawPath(path);
+        path.addRect(rect);
     }
-#endif
 
-    painter.drawRect(rect);
+    painter.fillPath(path, this->palette().base().color());
     QPushButton::paintEvent(event);
 }
 
 bool VpnItem::eventFilter(QObject *watched, QEvent *event)
 {
-    //菜单右边界与按钮右边界对齐
-    if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuWidth = m_moreMenu->size().width();
-        int btnWidth = m_moreButton->size().width();
-        int btnGlobalXPos = mapToGlobal(m_moreButton->pos()).x();
-
-        QPoint pos = QPoint (btnGlobalXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
-        m_moreMenu->move(pos);
-        return true;
-    }
+    Q_UNUSED(watched)
+    Q_UNUSED(event)
     return false;
+}
+
+void VpnItem::setCornerType(CornerType type) 
+{
+    m_cornerType = type; 
+    update(); 
 }

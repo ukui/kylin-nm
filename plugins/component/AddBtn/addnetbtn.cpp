@@ -82,7 +82,6 @@ void AddNetBtn::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-
     painter.setBrush(this->palette().base().color());
 
     QPalette pal = qApp->palette();
@@ -94,17 +93,34 @@ void AddNetBtn::paintEvent(QPaintEvent *event)
     QRect rect = this->rect();
     QPainterPath path;
 
-    //设置起点
-    path.moveTo(rect.topLeft().x(), rect.topLeft().y());
-    path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
-    //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
-    path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
-    path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
-    //画圆弧
-    path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
-    path.lineTo(rect.topRight());
-    path.lineTo(rect.topLeft());
+    if (m_cornerType == All) {
+        path.addRoundedRect(rect, RADIUS, RADIUS);
+    } else {
+        //设置起点
+        path.moveTo(rect.topLeft().x(), rect.topLeft().y());
+        path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
+        //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
+        path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
+        path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
+        //画圆弧
+        path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
+        path.lineTo(rect.topRight());
+        path.lineTo(rect.topLeft());
+    }
 
     painter.drawPath(path);
     QPushButton::paintEvent(event);
+}
+
+void AddNetBtn::setUseRoundedCorners(bool useRounded) {
+    m_useRoundedCorners = useRounded;
+    update();
+}
+
+void AddNetBtn::setCornerType(CornerType type) { 
+    m_cornerType = type; update(); 
+}
+
+void AddNetBtn::setTextLabel(const QString str) {
+    m_textLabel->setText(str);
 }

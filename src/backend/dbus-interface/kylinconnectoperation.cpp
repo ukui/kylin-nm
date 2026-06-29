@@ -15,6 +15,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
  *
  */
+#include <QTimer>
 
 #include "kylinconnectoperation.h"
 
@@ -23,6 +24,10 @@
 #include <NetworkManagerQt/Ipv4Setting>
 #include <NetworkManagerQt/Ipv6Setting>
 #include <NetworkManagerQt/WiredSetting>
+
+#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 KyConnectOperation::KyConnectOperation(QObject *parent) : QObject(parent)
 {
@@ -43,6 +48,7 @@ void KyConnectOperation::ipv4SettingSet(
 
     if (CONFIG_IP_DHCP == connectSettingsInfo.m_ipv4ConfigIpType) {
         ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Automatic);
+
         return;
     } else {
         ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Manual);
@@ -136,7 +142,8 @@ void KyConnectOperation::deleteConnect(const QString &connectUuid)
     return ;
 }
 
-void KyConnectOperation::activateConnection(const QString connectUuid, const QString deviceName)
+// LCOV_EXCL_START
+void KyConnectOperation::activateConnection(const QString connectUuid, const QString deviceName,bool autoconnect)
 {
     QString connectPath = "";
     QString deviceIdentifier = "";
@@ -195,28 +202,54 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
              << "device name" << deviceName
              << "specific parameter"<< specificObject;
 
-    QDBusPendingCallWatcher * watcher;
-    watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {
-        if (watcher->isError() || !watcher->isValid()) {
-            QString errorMessage = tr("activate connection failed: ") + watcher->error().message();
-            qWarning()<<errorMessage;
-            Q_EMIT this->activateConnectionError(errorMessage);
-         } else {
-            qWarning()<<"active wired connect complete.";
-         }
+    //set autoconnect
+    if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
+    {
+        NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
 
-         watcher->deleteLater();
+        NetworkManager::WirelessSetting::Ptr wirelessSetting
+            = connectionSettings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+        if (!wirelessSetting.isNull() && NetworkManager::WirelessSetting::NetworkMode::Ap
+                                        == wirelessSetting->mode()) {
+            qDebug() << "[activateConnection]" <<"the active connect mode is ap.";
+        } else {
+            setAutoConnect(connectionSettings,true);
+            // 保存autoconnect设置到配置文件
+            connectPtr->update(connectionSettings->toMap());
+        }
+    }
+
+    /*v11 network-manager 不允许在连接中途修改配置 会导致连接失败，增加延时确保激活连接前配置已修改完毕*/
+    QTimer::singleShot(500,this,[this,connectPath,connectPtr, deviceIdentifier, specificObject,connectName, deviceName](){
+        QDBusPendingCallWatcher * watcher;
+        watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
+        connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {
+            if (watcher->isError() || !watcher->isValid()) {
+                QString errorMessage = tr("activate connection failed: ") + watcher->error().message();
+                qWarning()<<errorMessage;
+                Q_EMIT this->activateConnectionError(errorMessage);
+             } else {
+                qWarning()<<"active wired connect complete.";
+             }
+
+             watcher->deleteLater();
+        });
     });
 
     return ;
 }
+// LCOV_EXCL_STOP
 
-void KyConnectOperation::deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid)
+// LCOV_EXCL_START
+void KyConnectOperation::deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise, QString devName)
 {
     NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
 
-    qDebug()<<"deactivetate connect name"<<activeConnectName<<"uuid"<<activeConnectUuid;
+    qWarning() << Q_FUNC_INFO << __LINE__
+            << "deactivetate connect name" << activeConnectName
+            <<" uuid" << activeConnectUuid
+            <<" concise :" << concise
+            <<" devName:" << devName;
 
     activateConnectPtr = m_networkResourceInstance->getActiveConnect(activeConnectUuid);
     if (nullptr == activateConnectPtr) {
@@ -230,7 +263,7 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
     qDebug() <<"dead active connection path:"<< activateConnectPtr->path();
     QDBusPendingReply<> reply = NetworkManager::deactivateConnection(activateConnectPtr->path());
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, activateConnectPtr] (QDBusPendingCallWatcher * watcher) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this, activateConnectPtr, concise, devName] (QDBusPendingCallWatcher * watcher) {
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("deactivation of connection")
                         + activateConnectPtr->connection()->name() + tr("failed:")
@@ -240,9 +273,43 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
             Q_EMIT this->deactivateConnectionError(errorMessage);
         } else {
             qWarning() << "deactive connect operation finished" << activateConnectPtr->connection()->name();
+
+            //断开连接后删除网卡和连接信息
+            //只有当concise=false的时候即主动断开网络时需要清除网络信息，否则直接关闭网络或网卡，下次需要自动连接
+            QDBusInterface iface(SYSTEM_DBUS_SERVICE, SYSTEM_DBUS_PATH, SYSTEM_DBUS_INTERFACE, QDBusConnection::systemBus());
+            if (iface.isValid() && !concise) {
+                iface.call("writeNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect", devName, "");
+            }
+
+
         }
          watcher->deleteLater();
     });
 
+    //set autoconnect
+    NetworkManager::Connection::Ptr connectPtr =
+        NetworkManager::findConnectionByUuid(activeConnectUuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + activeConnectUuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+
+
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = connectionSettings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (!wirelessSetting.isNull() && NetworkManager::WirelessSetting::NetworkMode::Ap
+                                    == wirelessSetting->mode()) {
+        qDebug() << "[deactivateConnection]" <<"the active connect mode is ap.";
+    } else {
+        setAutoConnect(connectionSettings,false);
+        // 保存autoconnect设置到配置文件
+        connectPtr->update(connectionSettings->toMap());
+    }
+
     return;
 }
+// LCOV_EXCL_STOP

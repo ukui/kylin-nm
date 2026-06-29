@@ -4,19 +4,19 @@
 <context>
     <name>SinglePage</name>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="79"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
-        <translation>تەڭشەكلەر</translation>
+        <translation>تور تەڭشىكى</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="141"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
         <source>Kylin VPN</source>
-        <translation>Kylin VPN</translation>
+        <translation>ئەسۋابىVPN</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="144"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
         <source>kylin vpn applet desktop message</source>
-        <translation>kylin vpn applet ئۈستەل يۈزى ئۇچۇرى</translation>
+        <translation>VPNتەڭشىكىنى ئۈستەل يۈزىدە كۆرسىتىش</translation>
     </message>
 </context>
 <context>
@@ -29,12 +29,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
         <source>Use Stateful encryption</source>
-        <translation>دۆلەت شىفىرىنى ئىشلىتىش</translation>
+        <translation>ئىشلىتىش ھالىتى شىفىرلاشقان</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="829"/>
         <source>Send PPP echo packets</source>
-        <translation>PPP echo packets يوللاش</translation>
+        <translation>pppقايتىپ كۆرسىتىش بوغچىسىغا يوللاش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="830"/>
@@ -69,32 +69,32 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="836"/>
         <source>Compression Mode:</source>
-        <translation>قىسىش ھالىتى:</translation>
+        <translation>پىرېسلاش ھالىتى:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
         <source>Allow BSD data compression</source>
-        <translation>BSD سانلىق مەلۇمات قىستۇرمىسىغا يول قويۇش</translation>
+        <translation>BSD نى پېرىسلاشقا يول قويۇش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
         <source>Allow Default data compression</source>
-        <translation>كۆڭۈلدىكى سانلىق مەلۇماتنى قىسىشقا رۇخسەت قىلىش</translation>
+        <translation>Defaultنى پېرىسلاشقا يول قويۇش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="839"/>
         <source>Allow TCP header compression</source>
-        <translation>TCP بەت بېشىنى قىسىشقا رۇخسەت قىلىش</translation>
+        <translation>TCP نى پېرىسلاشقا يول قويۇش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="840"/>
         <source>Use protocol field compression negotiation</source>
-        <translation>كېلىشىملىك ساھەدىكى قىستۇرما سۆھبەتتىن پايدىلىنىش</translation>
+        <translation>ئىشلىتىش كېلىشىمى دائىرىسىدىكى پىرېسلاش كېلىشىمى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="841"/>
         <source>Use Address/Control compression</source>
-        <translation>ئادرېس/كونتىروللاش قىستۇرمىسىنى ئىشلىتىش</translation>
+        <translation>ئادرېس/كونتروللاپ پېرىسلاشنى ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="847"/>
@@ -114,12 +114,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
         <source>Use custom gateway port</source>
-        <translation>خاس دەرۋازا ئېغىزى ئىشلىتىش</translation>
+        <translation>ئېنىقلىما بېرىش تور ئۆتكىلى ئېغىزىنى ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
         <source>Use compression</source>
-        <translation>قىستۇرما ئىشلىتىش</translation>
+        <translation>پېرىسلاپ ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1048"/>
@@ -144,17 +144,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
         <source>Randomize remote hosts</source>
-        <translation>يىراقتىن رىياسەتچىنى خالىغانچە خالىغانچە قوزغىتىش</translation>
+        <translation>ئىختىيارىي ھالەتتە باش ئاپپاراتنى يىراقتىن كونترول قىلىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
         <source>IPv6 tun link</source>
-        <translation>IPv6 تۇنگى ۇلى</translation>
+        <translation>IPv6 tunئۇلاش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1054"/>
         <source>Specify ping interval</source>
-        <translation>پىڭ ئارىلىقىنى بەلگىلەش</translation>
+        <translation>pingدەۋرىيلىكىنى بەلگىلەش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1055"/>
@@ -164,17 +164,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1056"/>
         <source>Specify max routes</source>
-        <translation>Max لىنىيەلىرىنى كۆرسىتىپ</translation>
+        <translation>چەكلىك لىنىيەنى كۆرسىتىپ بېرىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1057"/>
         <source>Infinite retry on error</source>
-        <translation>خاتالىق ئۈستىدە چەكسىز قايتا تەكرارلاش</translation>
+        <translation>خاتالىق چىققاندا چەكسىز ھالەتتە قايتا تەكرارلاش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
         <source>Use custom key size</source>
-        <translation>خاس ئاچقۇچ چوڭلۇقىنى ئىشلىتىش</translation>
+        <translation>ئېنىقلىما بېرىلگەن مەخپىي ئاچقۇچ چوڭ كىچىكلىكىنى ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1059"/>
@@ -194,17 +194,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
         <source>Use custom UDP fragment size</source>
-        <translation>خاس UDP پارچىلاش چوڭلۇقىنى ئىشلىتىش</translation>
+        <translation>ئېنىقلىما بېرىلگەن UDP پارچىلاش چوڭلۇقىنى ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
         <source>Accept authenticated packets from any address (Float)</source>
-        <translation>ھەر قانداق ئادرىستىن دەلىللەنگەن بولاق قوبۇل قىلىش (Float)</translation>
+        <translation>ھەرقانداق ئادرېس قوبۇل قىلىش ( Float ) سالاھىيەت تەكشۈرۈش ئارقىلىق سانلىق مەلۇمات بوغچىسى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
         <source>Subject Match</source>
-        <translation>تېما سەرەڭگىسى</translation>
+        <translation>باش تېمىنى ماسلاشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1071"/>
@@ -219,27 +219,27 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1074"/>
         <source>Server Address</source>
-        <translation>مۇلازىمىتېر ئادرېسى</translation>
+        <translation>مۇلازىمېتىر ئادرېسى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
         <source>Port</source>
-        <translation>پورت</translation>
+        <translation>ئېغىزى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1076"/>
         <source>Proxy USername</source>
-        <translation>Proxy USername</translation>
+        <translation>ۋاكالىتەن ئابۇنت نامى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
         <source>Proxy Password</source>
-        <translation>Proxy مەخپىي نومۇرى</translation>
+        <translation>ۋاكالىتەن مەخپىي نومۇر</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1079"/>
         <source>General</source>
-        <translation>ارينا</translation>
+        <translation>ئادەتتىكى قائىدە</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
@@ -249,32 +249,32 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1081"/>
         <source>Server Certificate Check</source>
-        <translation>مۇلازىمىتېر كىنىشكىسىنى تەكشۈرۈش</translation>
+        <translation>مۇلازىمېتىر كىنىشكىسىنى تەكشۈرۈش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1083"/>
         <source>Use the previous authentication end (server) certificate</source>
-        <translation>بۇرۇنقى دەلىللەش ئاخىرى (مۇلازىمىتېر) كىنىشكىسىنى ئىشلىتىش</translation>
+        <translation>بۇرۇنقى دەلىللەش ئاخىرى (مۇلازىمېتىر) كىنىشكىسىنى ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1085"/>
         <source>Verify peer (server) certificate nsCertType specification</source>
-        <translation>كەسىپداش (مۇلازىمىتېر) كىنىشكىسى nsCertType نىڭ كونكرېتلىقىنى دەلىللەش</translation>
+        <translation>تەڭ نۇقتا (مۇلازىمېتىر) كىنىشكىسى nsCertType نىڭ كونكرېتلىقىنى دەلىللەش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1086"/>
         <source>Mode</source>
-        <translation>مودى</translation>
+        <translation>ئەندىزە</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
         <source>Proxies</source>
-        <translation>Proxies</translation>
+        <translation>ۋاكالىتەن</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
         <source>Proxy Type</source>
-        <translation>Proxy تۈرى</translation>
+        <translation>ۋاكالىتەن تۈرى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
@@ -289,7 +289,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1100"/>
         <source>Input content</source>
-        <translation>كىرگۈزۈش مەزمۇنى</translation>
+        <translation>مەزمۇن كىرگۈزۈش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1107"/>
         <source>Automatic</source>
-        <translation>ئاپتۇماتىك</translation>
+        <translation>ئاپتوماتىك</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
@@ -324,29 +324,29 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1116"/>
         <source>Verify the entire subject exactly</source>
-        <translation>پۈتۈن تېمىنى ئېنىقلاش</translation>
+        <translation>پۈتۈن تېمىنى تەلتۆكۈس ئېنىقلاش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1117"/>
         <source>Verify name exactly</source>
-        <translation>ئىسمىنى ئېنىق ئېنىقلاش</translation>
+        <translation>نامىنى ئېنىقلاپ دەلىللەش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1118"/>
         <source>Verify name by prefix</source>
-        <translation>ئىسىمنى ئالدى قوشۇلما بويىچە دەلىللەش</translation>
+        <translation>نامىنى ئالدى قوشۇلما بويىچە دەلىللەش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1120"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1123"/>
         <source>Server</source>
-        <translation>مۇلازىمىتېر</translation>
+        <translation>مۇلازىمېتىر</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1121"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1124"/>
         <source>Client</source>
-        <translation>خېرىدار</translation>
+        <translation>ئەپ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1126"/>
@@ -358,7 +358,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
         <source>TLS-Certification</source>
-        <translation>TLS-ئىسپاتلاش</translation>
+        <translation>TLS-دەلىللەش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1128"/>
@@ -373,7 +373,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1138"/>
         <source>Default</source>
-        <translation>كۆڭۈلدىكى سۆز</translation>
+        <translation>ئەسلىدىكى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1216"/>
@@ -393,12 +393,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1221"/>
         <source>Use IP compression</source>
-        <translation>IP قىستۇرما ئىشلىتىش</translation>
+        <translation>IP  پىرېسلاش ئىشلىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1222"/>
         <source>Enable custom password suggestions</source>
-        <translation>مەخپى شىفىر تەكلىپلىرىنى قوزغىتىش</translation>
+        <translation>ئۆزى بەلگىلىگەن مەخپىي نومۇر قوزغىتىش تەكلىپى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1382"/>
@@ -426,17 +426,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
         <source>Static Key</source>
-        <translation>ستاتىستىك ئاچقۇچ</translation>
+        <translation>تىنچ ھالەتتىكى مەخپىي ئاچقۇچ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
         <source>Local IP</source>
-        <translation>يەرلىك IP</translation>
+        <translation>يەرلىك  ئادرېسIP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
         <source>Remote IP</source>
-        <translation>يىراقتىكى IP</translation>
+        <translation>يىراقتىن كونترول قىلىدىغان ئادرېسIP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="336"/>
@@ -448,7 +448,7 @@
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="849"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="856"/>
         <source>Password</source>
-        <translation>ئىم</translation>
+        <translation>مەخپىي ئاچقۇچ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="340"/>
         <source>Server Address</source>
-        <translation>مۇلازىمىتېر ئادرېسى</translation>
+        <translation>مۇلازىمېتىر ئادرېسى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="341"/>
@@ -468,7 +468,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="342"/>
         <source>CA Certificate</source>
-        <translation>CA كېنىشكىسى</translation>
+        <translation>CA كىنىشكىسى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="343"/>
@@ -499,14 +499,13 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
         <source>Username</source>
-        <translation>ئىشلەتكۈچى نامى</translation>
+        <translation>ئابۇنت نامى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
         <source>Notice:
 If key direction is used, it must be opposite to the VPN side used. If &apos;1&apos; is used, the connection must use &apos;0&apos;. If you are not sure which value to use, please contact your system administrator.</source>
-        <translation>ئۇقتۇرۇش:
-ئەگەر ئاچقۇچلۇق يۆنىلىش ئىشلىتىلسە چوقۇم ئىشلەتكەن VPN تەرىپىنىڭ ئەكسىچە بولۇشى كېرەك. ئەگەر &apos;1&apos; ئىشلىتىلسە، ئۇلىنىش چوقۇم &apos;0&apos; نى قوللىنىشى كېرەك. ئەگەر قايسى قىممەتنى ئىشلىتىشنى بىلەلمىسىڭىز، سىستېما باشقۇرغۇچىڭىز بىلەن ئالاقىلىشىڭ.</translation>
+        <translation>دىققەت:ئەگەر مەخپىي ئاچقۇچ يۆنىلىشىنى ئىشلەتكەن بولسا، ئۇ چوقۇم ئىشلەتكەن VPN ئۇچى بىلەن قارىمۇقارشى بولۇشى كېرەك. ئەگەر «1» نى ئىشلەتكەن بولسا، ئۇلاشتا چوقۇم «0» نى ئىشلىتىش كېرەك. ئەگەر قايسى قىممەتنى ئىشلىتىشنى جەزملەشتۈرەلمىسىڭىز سىستېما باشقۇرغۇچى بىلەن ئالاقىلىشىڭ.</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="359"/>
@@ -525,13 +524,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="379"/>
         <source>Save password only for this user</source>
-        <translation>پارولنى پەقەت مۇشۇ ئىشلەتكۈچى ئۈچۈن ساقلاش</translation>
+        <translation>پەقەت نۆۋەتتىكى ئابۇنت مەخپىي نومۇر ساقلاش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="374"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="380"/>
         <source>Save password for all users</source>
-        <translation>بارلىق ئىشلەتكۈچىلەرگە مەخپىي نومۇر ساقلاش</translation>
+        <translation>بارلىق ئابونتلار ئۈچۈن مەخپىي نومۇر ساقلاش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
@@ -543,23 +542,23 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="382"/>
         <source>Don&apos;t require a password</source>
-        <translation>مەخپىي نومۇر تەلەپ قىلماڭ</translation>
+        <translation>مەخپىي نومۇر تەلەپ قىلماسلىق</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="386"/>
         <source>Required</source>
-        <translation>تەلەپ قىلىنىدۇ</translation>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
         <source>Certificate(TLS)</source>
-        <translation>كېنىشكا(TLS)</translation>
+        <translation>كىنىشكا(TLS)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="855"/>
         <source>Static key</source>
-        <translation>ستاتىستىكا ئاچقۇچى</translation>
+        <translation>تىنچ ھالەتتىكى ئاچقۇچ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="857"/>
@@ -574,7 +573,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="867"/>
         <source>Certificate/ssh-agent</source>
-        <translation>كېنىشكا/سش-ۋاكالەتچى</translation>
+        <translation>كىنىشكا/ ssh-agent</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="868"/>
@@ -611,7 +610,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="962"/>
         <source>Choose a Static key</source>
-        <translation>ستاتىستىكا ئاچقۇچى تاللاش</translation>
+        <translation>تىنچ ھالەتتىكى ئاچقۇچ تاللاش</translation>
     </message>
 </context>
 <context>
@@ -636,7 +635,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
         <source>Advanced</source>
-        <translation>ئىلغار</translation>
+        <translation>يۇقىرى دەرىجە</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
@@ -651,7 +650,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
         <source>Confirm</source>
-        <translation>جەزىملەشتۈرۈش</translation>
+        <translation>جەزملەشتۈرۈش</translation>
     </message>
 </context>
 <context>
@@ -659,7 +658,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="170"/>
         <source>IPv4 Config</source>
-        <translation>IPv4 Config</translation>
+        <translation>IPv4 تەڭشىكى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="171"/>
@@ -669,12 +668,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="172"/>
         <source>Netmask</source>
-        <translation>Netmask</translation>
+        <translation>تارماق تور يوشۇرۇن نومۇرى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="173"/>
         <source>Default Gateway</source>
-        <translation>كۆڭۈلدىكى دەرۋازا يولى</translation>
+        <translation>ئەسلىدىكى تور ئۆتكىلى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="174"/>
@@ -689,12 +688,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="176"/>
         <source>DHCP Client ID</source>
-        <translation>DHCP خېرىدار كىملىك</translation>
+        <translation>DHCP ئەپ IDسى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="178"/>
         <source>Auto(DHCP)</source>
-        <translation>ئاپتول(DHCP)</translation>
+        <translation>ئاپتوماتىك(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
@@ -707,7 +706,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="159"/>
         <source>IPv6 Config</source>
-        <translation>IPv6 Config</translation>
+        <translation>IPv6 تەڭشىكى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
@@ -717,12 +716,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="161"/>
         <source>Netmask</source>
-        <translation>Netmask</translation>
+        <translation>تارماق تور يوشۇرۇن نومۇرى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="162"/>
         <source>Default Gateway</source>
-        <translation>كۆڭۈلدىكى دەرۋازا يولى</translation>
+        <translation>ئەسلىدىكى تور ئۆتكىلى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="163"/>
@@ -737,7 +736,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
         <source>Auto(DHCP)</source>
-        <translation>ئاپتول(DHCP)</translation>
+        <translation>ئاپتوماتىك(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
@@ -748,34 +747,39 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>VpnListItem</name>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="61"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
         <source>Not connected</source>
-        <translation>ئۇلانمىدى</translation>
+        <translation>ئۇلانمىغان</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="146"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="161"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
-        <translation>ئۇلاشنى ئۈزۈۋېتىش</translation>
+        <translation>ئۈزۈۋېتىش</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="148"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="159"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
-        <translation>ئۇلاش</translation>
+        <translation>ئۇلىنىش</translation>
     </message>
 </context>
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="253"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="264"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
         <source>VPN Settings</source>
         <translation>VPN تەڭشەكلىرى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+        <source>No VPN configuration available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -799,12 +803,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="147"/>
         <source>Required</source>
-        <translation>تەلەپ قىلىنىدۇ</translation>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="142"/>
         <source>VPN Server</source>
-        <translation>VPN مۇلازىمىتېرى</translation>
+        <translation>VPN مۇلازىمېتىرى</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="168"/>
@@ -814,7 +818,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
         <source>Confirm</source>
-        <translation>جەزىملەشتۈرۈش</translation>
+        <translation>جەزملەشتۈرۈش</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>
@@ -832,8 +836,8 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>vpnObject</name>
     <message>
-        <location filename="../frontend/vpnobject.cpp" line="50"/>
-        <source>vpn tool</source>
+        <location filename="../frontend/vpnobject.cpp" line="59"/>
+        <source>VPN Tool</source>
         <translation>vpn قورالى</translation>
     </message>
 </context>

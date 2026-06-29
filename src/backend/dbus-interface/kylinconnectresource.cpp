@@ -143,11 +143,12 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
     QString ifaceUni = "";
     for (int index=0; index < interfaces.size(); index++) {
         ifaceUni = interfaces.at(index);
-        NetworkManager::Device:: Ptr devicePtr =
-              m_networkResourceInstance->findDeviceUni(ifaceUni);
-        deviceName = devicePtr->interfaceName();
-        if (deviceName == devName) {
-            return true;
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+        if (!devicePtr.isNull()) {
+            deviceName = devicePtr->interfaceName();
+            if (deviceName == devName) {
+                return true;
+            }
         }
     }
     return false;
@@ -454,6 +455,12 @@ void KyConnectResourse::getIpv4ConnectSetting(
                         NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
                         KyConnectSetting &connectSetting)
 {
+    if (ipv4Setting.isNull()) {
+        connectSetting.m_ipv4Dns.clear();
+        connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
+        connectSetting.m_ipv4Address.clear();
+        return;
+    }
     connectSetting.m_ipv4Dns = ipv4Setting->dns();
     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
         connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
@@ -468,6 +475,12 @@ void KyConnectResourse::getIpv6ConnectSetting(
                         NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                         KyConnectSetting &connectSetting)
 {
+    if (ipv6Setting.isNull()) {
+        connectSetting.m_ipv6Dns.clear();
+        connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
+        connectSetting.m_ipv6Address.clear();
+        return;
+    }
     connectSetting.m_ipv6Dns = ipv6Setting->dns();
     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
         connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
@@ -481,6 +494,11 @@ void KyConnectResourse::getIpv6ConnectSetting(
 void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivity)
 {
     m_networkResourceInstance->getConnectivity(connectivity);
+}
+
+NetworkManager::ActiveConnection::State KyConnectResourse::getActiveConnectionState(const QString uuid)
+{
+    return m_networkResourceInstance->getActiveConnectionState(uuid);
 }
 
 void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting)
@@ -622,81 +640,81 @@ void KyConnectResourse::getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectI
 }
 
 
-KyBluetoothConnectItem *KyConnectResourse::getBluetoothConnectItem(NetworkManager::Connection::Ptr connectPtr)
-{
-    if (nullptr == connectPtr) {
-        qWarning()<<"[KyConnectResourse]"<<"get bluetooth connection item failed, the connect is empty";
-        return nullptr;
-    }
+//KyBluetoothConnectItem *KyConnectResourse::getBluetoothConnectItem(NetworkManager::Connection::Ptr connectPtr)
+//{
+//    if (nullptr == connectPtr) {
+//        qWarning()<<"[KyConnectResourse]"<<"get bluetooth connection item failed, the connect is empty";
+//        return nullptr;
+//    }
 
-    KyBluetoothConnectItem *bluetoothItem = new KyBluetoothConnectItem();
-    bluetoothItem->m_connectName = connectPtr->name();
-    bluetoothItem->m_connectUuid = connectPtr->uuid();
-    bluetoothItem->m_state = NetworkManager::ActiveConnection::State::Deactivated;
+//    KyBluetoothConnectItem *bluetoothItem = new KyBluetoothConnectItem();
+//    bluetoothItem->m_connectName = connectPtr->name();
+//    bluetoothItem->m_connectUuid = connectPtr->uuid();
+//    bluetoothItem->m_state = NetworkManager::ActiveConnection::State::Deactivated;
 
-    NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
-    getConnectIp(settingPtr, bluetoothItem->m_ipv4Address, bluetoothItem->m_ipv6Address);
+//    NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+//    getConnectIp(settingPtr, bluetoothItem->m_ipv4Address, bluetoothItem->m_ipv6Address);
 
-    NetworkManager::BluetoothSetting::Ptr bluetoothSetting =
-            settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
-    bluetoothItem->m_deviceAddress = bluetoothSetting->bluetoothAddress();
-    QByteArray btAddrArray = bluetoothSetting->bluetoothAddress();
-    for (int index = 0; index < btAddrArray.size(); ++index) {
-        qDebug("bt address %d %s", index, btAddrArray[index]);
-    }
-   // qDebug()<<"bt address 0:"<< btAddrArray[0];
-   // qDebug()<<"bt address 1:"<< btAddrArray[1];
-   // qDebug()<<"array size:"<<btAddrArray.size();
-    qDebug()<<"bluetooth device address:"<<bluetoothItem->m_deviceAddress.toInt(nullptr, 16);
+//    NetworkManager::BluetoothSetting::Ptr bluetoothSetting =
+//            settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
+//    bluetoothItem->m_deviceAddress = bluetoothSetting->bluetoothAddress();
+//    QByteArray btAddrArray = bluetoothSetting->bluetoothAddress();
+//    for (int index = 0; index < btAddrArray.size(); ++index) {
+//        qDebug("bt address %d %s", index, btAddrArray[index]);
+//    }
+//   // qDebug()<<"bt address 0:"<< btAddrArray[0];
+//   // qDebug()<<"bt address 1:"<< btAddrArray[1];
+//   // qDebug()<<"array size:"<<btAddrArray.size();
+//    qDebug()<<"bluetooth device address:"<<bluetoothItem->m_deviceAddress.toInt(nullptr, 16);
 
-    return bluetoothItem;
-}
+//    return bluetoothItem;
+//}
 
-void KyConnectResourse::getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList)
-{
-    int index = 0;
-    NetworkManager::Connection::List connectList;
+//void KyConnectResourse::getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList)
+//{
+//    int index = 0;
+//    NetworkManager::Connection::List connectList;
 
-    qDebug()<<"[KyConnectResourse]"<<"get bluetooth connections";
+//    qDebug()<<"[KyConnectResourse]"<<"get bluetooth connections";
 
-    connectList.clear();
-    connectList = m_networkResourceInstance->getConnectList();
+//    connectList.clear();
+//    connectList = m_networkResourceInstance->getConnectList();
 
-    if (connectList.empty()) {
-        qWarning()<<"[KyConnectResourse]"<<"get bluetooth connections failed, the connect list is empty";
-        return;
-    }
+//    if (connectList.empty()) {
+//        qWarning()<<"[KyConnectResourse]"<<"get bluetooth connections failed, the connect list is empty";
+//        return;
+//    }
 
-    NetworkManager::Connection::Ptr connectPtr = nullptr;
-    for (index = 0; index < connectList.size(); index++) {
-        connectPtr = connectList.at(index);
-        if (connectPtr.isNull()) {
-            continue;
-        }
+//    NetworkManager::Connection::Ptr connectPtr = nullptr;
+//    for (index = 0; index < connectList.size(); index++) {
+//        connectPtr = connectList.at(index);
+//        if (connectPtr.isNull()) {
+//            continue;
+//        }
 
-        if (NetworkManager::ConnectionSettings::ConnectionType::Bluetooth
-                != connectPtr->settings()->connectionType()) {
-            qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
-                   <<"connect type:"<<connectPtr->settings()->connectionType();
-            continue;
-        }
+//        if (NetworkManager::ConnectionSettings::ConnectionType::Bluetooth
+//                != connectPtr->settings()->connectionType()) {
+//            qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
+//                   <<"connect type:"<<connectPtr->settings()->connectionType();
+//            continue;
+//        }
 
-        if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
-            qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
-            continue;
-        }
+//        if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+//            qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
+//            continue;
+//        }
 
-        KyBluetoothConnectItem *connectItem = getBluetoothConnectItem(connectPtr);
-        if (nullptr != connectItem) {
-            bluetoothConnectItemList << connectItem;
-            //connectItem->dumpInfo();
-        }
+//        KyBluetoothConnectItem *connectItem = getBluetoothConnectItem(connectPtr);
+//        if (nullptr != connectItem) {
+//            bluetoothConnectItemList << connectItem;
+//            //connectItem->dumpInfo();
+//        }
 
-        connectPtr = nullptr;
-    }
+//        connectPtr = nullptr;
+//    }
 
-    return;
-}
+//    return;
+//}
 
 
 KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection::Ptr connectPtr)
@@ -896,6 +914,33 @@ bool KyConnectResourse::isWirelessConnection(QString uuid)
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless ==
                 connectPtr->settings()->connectionType()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KyConnectResourse::isPppoeConnection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+        m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        qWarning()<<"[KyConnectResourse]"<<"can not find wireless connection"<<uuid;
+        return false;
+    }
+
+
+    if (connectPtr->isValid()) {
+        NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+
+        if (connectSettingPtr.isNull()) {
+            qWarning()<<"[KyConnectResourse]"<<"get connect setting failed, connect uuid"<<uuid;
+            return false;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Pppoe ==
+            connectPtr->settings()->connectionType()) {
             return true;
         }
     }

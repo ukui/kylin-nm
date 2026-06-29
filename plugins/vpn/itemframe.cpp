@@ -18,6 +18,7 @@
  *
  */
 #include "itemframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 
 #define LAYOUT_MARGINS 0,0,0,0
@@ -35,6 +36,7 @@ ItemFrame::ItemFrame(QWidget *parent)
     m_vpnVLayout->setContentsMargins(LAYOUT_MARGINS);
     m_vpnVLayout->setSpacing(1);
     m_addVpnWidget = new AddNetBtn(false, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_addVpnWidget, "VPN", "", "add VPN");
     m_addVpnWidget->setTextLabel(tr("Add VPN"));
 
     m_mainVLayout->setSpacing(1);
@@ -43,21 +45,29 @@ ItemFrame::ItemFrame(QWidget *parent)
 
     m_mainVLayout->addWidget(m_vpnFrame);
     m_mainVLayout->addWidget(m_addVpnWidget);
+    
+    // 初始化圆角样式
+    updateCornerStyle();
+}
+
+void ItemFrame::updateCornerStyle()
+{
+    bool hasVpnItems = (m_vpnVLayout->count() > 0);
+    if (hasVpnItems) {
+        m_addVpnWidget->setCornerType(AddNetBtn::BottomRight);
+    } else {
+        m_addVpnWidget->setCornerType(AddNetBtn::All);
+    }
 }
 
 void ItemFrame::filletStyleChange()
 {
-    if (m_vpnVLayout->isEmpty()) {
-        return;
-    }
-
     for (int i = 0; i < m_vpnVLayout->count(); ++i) {
-        QLayoutItem *it = m_vpnVLayout->itemAt(i);
-        VpnItem *itemFrame = (VpnItem*)(it->widget());
-        if (i != m_vpnVLayout->count()-1) {
-            itemFrame->setHalfFillet(false);
+        VpnItem *itemFrame = (VpnItem*)(m_vpnVLayout->itemAt(i)->widget());
+        if (i == 0) {
+            itemFrame->setCornerType(VpnItem::Top);
         } else {
-            itemFrame->setHalfFillet(true);
+            itemFrame->setCornerType(VpnItem::None);
         }
     }
 }

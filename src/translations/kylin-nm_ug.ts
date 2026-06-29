@@ -24,11 +24,11 @@
         <translation type="vanished">正在检测ip地址冲突</translation>
     </message>
     <message>
-        <source>IPV4 address conflict, Please change IP</source>
+        <source>IPv4 address conflict, Please change IP</source>
         <translation type="vanished">ip地址冲突，请更改ip</translation>
     </message>
     <message>
-        <source>IPV6 address conflict, Please change IP</source>
+        <source>IPv6 address conflict, Please change IP</source>
         <translation type="obsolete">ip地址冲突，请更改ip {6 ?}</translation>
     </message>
 </context>
@@ -37,70 +37,70 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
         <source>Network profile type</source>
-        <translation type="unfinished"></translation>
+        <translation>تور سەپلىمە ھۆججەت تىپى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>توردىكى ئاممىۋى (تەۋسىيە) ئۈسكۈنىلەر بۇ كومپيۇتېرنى بايقىيالمايدۇ. ئادەتتىكىچە قىلىپ ئېيتقاندا،  ئۇ، ئاممىۋى سورۇنلارنىڭ تورىغا ماس كېلىدۇ مەسىلەن، ئايرودروم ياكى قەھۋەخانا قاتارلىقلار.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
-        <translation type="unfinished"></translation>
+        <translation>توردىكى مەخسۇس ئۈسكۈنىلەر بۇ كومپيۇتېرنى بايقىيالايدۇ. ئادەتتە  توردىكى سىز چۈشىنىدىغان ۋە ئىشىنىدىغان شەخس ۋە ئۈسكۈنىلەر، ئائىلە ياكى خىزمەت تورىغا ماس كېلىدۇ.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ئوتتام ۋە بىخەتەرلىك تەڭشىكىنى سەپلەش</translation>
     </message>
 </context>
 <context>
     <name>ConnectivityPage</name>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="25"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
         <source>Network connectivity detection</source>
-        <translation type="unfinished"></translation>
+        <translation>تور ئۇلىنىشىنى تەكشۈرۈش</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="55"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>ئەگەر تورغا كىرىش چەكلىمىگە ئۇچرىسا، تور IP ئۇلىنىشىنى تەكشۈرۈش ئۇسۇلىنى ئالماشتۇرۇڭ، ئاندىن قايتا سىناڭ.</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="61"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
         <source>Public network (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>ئاممىۋى تور (كۆڭۈلدىكى)</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="63"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
         <source>Local area network (intranet)</source>
-        <translation type="unfinished"></translation>
+        <translation>تار دائىرىلىك تور (intranet)</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="74"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
         <source>Confirm</source>
-        <translation type="unfinished">جەزىملەشتۈرۈش</translation>
+        <translation>جەزملەش</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="161"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
         <source>The network is connected and can access the Internet normally.</source>
-        <translation type="unfinished"></translation>
+        <translation>تور ئۇلاندى، ئىنتېرنېت تورىنى نورمال زىيارەت قىلغىلى بولىدۇ.</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="166"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation type="unfinished"></translation>
+        <translation>تور ئۇلاندى، ئىنتېرنېت تورىغا بولغان زىيارەت چەكلىمىگە ئۇچرىدى.</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="177"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
         <source>Please enter the local area network (intranet) detection address</source>
-        <translation type="unfinished"></translation>
+        <translation>تار دائىرىلىك تور (intranet) تەكشۈرۈش ئادرېسىنى كىرگۈزۈڭ</translation>
     </message>
     <message>
-        <location filename="../frontend/connectivity/connectivitypage.cpp" line="196"/>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
         <source>Format error</source>
-        <translation type="unfinished"></translation>
+        <translation>فورمات خاتالىقى</translation>
     </message>
 </context>
 <context>
@@ -121,86 +121,107 @@
 <context>
     <name>CreatNetPage</name>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
         <source>Connection Name</source>
-        <translation>ئۇلىنىش نامى</translation>
+        <translation>تور نامى</translation>
     </message>
     <message>
-        <source>Ipv4Config</source>
-        <translation type="vanished">Ipv4Config</translation>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
+        <source>IPv4Config</source>
+        <translation>IPv4 ئىجرا بۇيرۇقى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
+        <source>Address</source>
+        <translation>ئادرىس</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
-        <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <source>Netmask</source>
+        <translation>تارماق تور يوشۇرۇن نومۇرى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
-        <source>Address</source>
-        <translation>ئادرېس</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="100"/>
-        <source>Netmask</source>
-        <translation>Netmask</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="101"/>
         <source>Default Gateway</source>
-        <translation>كۆڭۈلدىكى دەرۋازا يولى</translation>
+        <translation>ئەسلىدىكى تور ئۆتكىلى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="189"/>
-        <source>Invalid address</source>
-        <translation type="unfinished">ئىناۋەتسىز ئادرىسى</translation>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
+        <source>Connection name is empty or invalid</source>
+        <translation>ئۇلاش نامى قۇرۇق ياكى ئىناۋەتسىز</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="207"/>
-        <source>Invalid subnet mask</source>
-        <translation type="unfinished">ئىناۋەتسىز سۇب تور يۈز چاپلىقى</translation>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
+        <source>IPv4 address is empty or invalid</source>
+        <translation>Ipv4 ئادرېسى قۇرۇق ياكى قانۇنسىز</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="227"/>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="228"/>
-        <source>Required</source>
-        <translation type="unfinished">تەلەپ قىلىنىدۇ</translation>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
+        <source>IPv4 netMask is empty or invalid</source>
+        <translation>IPv4 netMask قۇرۇق ياكى ئىناۋەتسىز</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="327"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
+        <source>IPv4 gateway is empty or invalid</source>
+        <translation>IPv4 تور بېكىتى قۇرۇق ياكى ئىناۋەتسىز</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
+        <source> </source>
+        <translation> </translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>توقۇنۇشنى ھەل قىلىش</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">Prefs DNS</translation>
+        <translation type="vanished">首选 DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">باشقا DNS</translation>
+        <translation type="vanished">备选 DNS</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="120"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
         <source>Auto(DHCP)</source>
-        <translation>ئاپتول(DHCP)</translation>
+        <translation>ئاپتوماتىك(DHCP)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="121"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
         <source>Manual</source>
         <translation>قوللانما</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
+        <source>Invalid address</source>
+        <translation>ئىناۋەتسىز IPئادرېسى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
+        <source>Invalid subnet mask</source>
+        <translation>ئىناۋەتسىز تارماق تور يوشۇرۇن نومۇرى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
+        <source>Required</source>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
 </context>
 <context>
     <name>DetailPage</name>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="303"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <source>Auto Connection</source>
         <translation>ئاپتوماتىك ئۇلاش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="356"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="340"/>
         <source>SSID:</source>
-        <translation>SSID:</translation>
+        <translation>SSID：</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="151"/>
@@ -208,80 +229,68 @@
         <translation>مۇۋەپپەقىيەتلىك كۆچۈرۈلگەن!</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="228"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="212"/>
         <source>Copy all</source>
         <translation>ھەممىنى كۆچۈرۈش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="248"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="232"/>
         <source>Please input SSID:</source>
         <translation>SSID نى كىرگۈزۈڭ:</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="357"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
         <source>Protocol:</source>
         <translation>كېلىشىم:</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="358"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
         <source>Security Type:</source>
         <translation>بىخەتەرلىك تىپى:</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="269"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="359"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="343"/>
         <source>Hz:</source>
-        <translation>Hz:</translation>
+        <translation>تور چاستوتىسى:</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="273"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="360"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="344"/>
         <source>Chan:</source>
-        <translation>چاناققۇش:</translation>
+        <translation>تور يولى:</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
+        <source>BandWidth:</source>
+        <translation>كەڭ بەلۋاغ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="361"/>
-        <source>BandWidth:</source>
-        <translation>BandWidth:</translation>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
+        <source>IPv6:</source>
+        <translation>يەرلىك ئۇلانما IPv6 ئادرېسى:</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
+        <source>IPv4:</source>
+        <translation>IPv4 ئادرېس</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
+        <source>IPv4 DNS:</source>
+        <translation>IPv4 DNS مۇلازىمېتىرى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="362"/>
-        <source>IPv4:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="363"/>
-        <source>IPv4 DNS:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="293"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="364"/>
-        <source>IPv6:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IPV6:</source>
-        <translation type="vanished">IPV6:</translation>
-    </message>
-    <message>
-        <source>IPV4:</source>
-        <translation type="vanished">IPV4:</translation>
-    </message>
-    <message>
-        <source>IPV4 Dns:</source>
-        <translation type="vanished">IPV4 Dns:</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="297"/>
-        <location filename="../frontend/netdetails/detailpage.cpp" line="365"/>
+        <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation>ماك:</translation>
+        <translation>فىزىكىلىق ئادرېىس:</translation>
     </message>
 </context>
 <context>
@@ -517,612 +526,687 @@
 <context>
     <name>DnsSettingWidget</name>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="34"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
         <source>DNS Server Advanced Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS مۇلازىمېتىرى ئالىي دەرىجىلىك تەڭشىكى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="37"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
         <source>Tactic</source>
-        <translation type="unfinished"></translation>
+        <translation>تاكتىكا</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="40"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
         <source>Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>ۋاقىت ئېشىپ كەتتى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="43"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
         <source>Retry Count</source>
-        <translation type="unfinished"></translation>
+        <translation>قايتا ساناش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="46"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
         <source>order</source>
-        <translation type="unfinished"></translation>
+        <translation>رەت تەرتىپى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="47"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
         <source>rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>پىرقىراش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="48"/>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
         <source>concurrency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="53"/>
-        <source> s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="59"/>
-        <source> times</source>
-        <translation type="unfinished"></translation>
+        <translation>يانداش تارقىتىش</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
-        <source>Close</source>
-        <translation type="unfinished">关闭</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="73"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <source> s</source>
+        <translation> سېكۇنت</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
+        <source> times</source>
+        <translation> قېتىم سانى</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="vanished">ياپ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
+        <source>Cancel</source>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
         <source>Confirm</source>
-        <translation type="unfinished">جەزىملەشتۈرۈش</translation>
+        <translation>جەزملەش</translation>
     </message>
 </context>
 <context>
     <name>EnterpriseWlanDialog</name>
     <message>
         <source>Connect Enterprise WLAN</source>
-        <translation type="vanished">كارخانا WLAN نى باغلاش</translation>
+        <translation type="vanished">连接企业网</translation>
     </message>
     <message>
         <source>Close</source>
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="117"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi تورى سالاھىيەت دەلىللەشكە موھتاج</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="122"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi تورىغا ئۇلاش</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="124"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation type="unfinished"></translation>
+        <translation>مەخپىي نومۇر ياكى شىفىرلاشتۇرۇلغان ئاچقۇچ لازىم.</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="155"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
         <source>Cancel</source>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="156"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
         <source>Connect</source>
-        <translation>ئۇلاش</translation>
+        <translation>ئۇلىنىش</translation>
     </message>
 </context>
 <context>
     <name>FirewallDialog</name>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="89"/>
+        <source>Allow your computer to be discovered by other computers and devices on this network？</source>
+        <translation type="vanished">是否允许你的电脑被此网络上的其他电脑和设备发现？</translation>
+    </message>
+    <message>
+        <source>It is recommended that you enable this feature on your home and work networks rather than public networks.</source>
+        <translation type="vanished">建议你在家庭和工作网络上而非公共网络上启用此功能。</translation>
+    </message>
+    <message>
+        <source>Yse</source>
+        <translation type="vanished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="vanished">否</translation>
+    </message>
+    <message>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
         <source>Allow other devices on this network to discover this computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>بۇ توردىكى باشقا ئۈسكۈنىلەرنىڭ بۇ كومپيۇتېرنى بايقىشىغا يول قويامدۇ؟</translation>
     </message>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="91"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
         <source>It is not recommended to enable this feature on public networks</source>
-        <translation type="unfinished"></translation>
+        <translation>ئاممىۋى توردا بۇ ئىقتىدارنى قوزغىتىش تەۋسىيە قىلىنمايدۇ</translation>
     </message>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="93"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
         <source>Not allowed (recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>يول قويۇلمايدۇ (تەۋسىيە قىلىنىدۇ)</translation>
     </message>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="94"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="100"/>
         <source>Allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>يول قويۇلىدۇ</translation>
     </message>
 </context>
 <context>
     <name>Ipv4Page</name>
     <message>
-        <source>Ipv4Config</source>
-        <translation type="vanished">Ipv4Config</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="67"/>
-        <source>Address</source>
-        <translation>ئادرېس</translation>
-    </message>
-    <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
-        <source>Netmask</source>
-        <translation>Netmask</translation>
+        <source>IPv4Config</source>
+        <translation>IPv4 ئىجرا بۇيرۇقى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
+        <source>Address</source>
+        <translation>ئادرىس</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
+        <source>Netmask</source>
+        <translation>تارماق تور يوشۇرۇن نومۇرى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation>كۆڭۈلدىكى دەرۋازا يولى</translation>
+        <translation>ئەسلىدىكى تور ئۆتكىلى</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">Prefs DNS</translation>
+        <translation type="vanished">首选 DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">باشقا DNS</translation>
+        <translation type="vanished">备选 DNS</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="66"/>
-        <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="117"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
         <source>Auto(DHCP)</source>
-        <translation>ئاپتول(DHCP)</translation>
+        <translation>ئاپتوماتىك(DHCP)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="118"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
         <source>Manual</source>
         <translation>قوللانما</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="264"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
+        <source>IPv4 address is empty or invalid</source>
+        <translation>Ipv4 ئادرېسى قۇرۇق ياكى قانۇنسىز</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
+        <source>IPv4 netMask is empty or invalid</source>
+        <translation>IPv4 netMask قۇرۇق ياكى ئىناۋەتسىز</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
+        <source>IPv4 gateway is empty or invalid</source>
+        <translation>IPv4 تور بېكىتى قۇرۇق ياكى ئىناۋەتسىز</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
         <source>Invalid address</source>
-        <translation>ئىناۋەتسىز ئادرىسى</translation>
+        <translation>ئىناۋەتسىز IPئادرېسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="273"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
         <source>Invalid subnet mask</source>
-        <translation>ئىناۋەتسىز سۇب تور يۈز چاپلىقى</translation>
+        <translation>ئىناۋەتسىز تارماق تور يوشۇرۇن نومۇرى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="298"/>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="299"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
         <source>Required</source>
-        <translation>تەلەپ قىلىنىدۇ</translation>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="367"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>توقۇنۇشنى ھەل قىلىش</translation>
     </message>
 </context>
 <context>
     <name>Ipv6Page</name>
     <message>
-        <source>Ipv6Config</source>
-        <translation type="vanished">Ipv6Config</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="134"/>
-        <source>Address</source>
-        <translation>ئادرېس</translation>
-    </message>
-    <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
-        <source>Subnet prefix Length</source>
-        <translation>سۇب تورى ئالدى قوشۇلما ئۇزۇنلۇقى</translation>
+        <source>IPv6Config</source>
+        <translation>IPv6 ئىجرا بۇيرۇقى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
+        <source>Address</source>
+        <translation>ئادرىس</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
+        <source>Subnet prefix Length</source>
+        <translation>تارماق تور ئالدى قوشۇمچە ئۇزۇنلۇق</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation>كۆڭۈلدىكى دەرۋازا يولى</translation>
+        <translation>ئەسلىدىكى تور ئۆتكىلى</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
-        <translation type="vanished">Prefs DNS</translation>
+        <translation type="vanished">首选 DNS</translation>
     </message>
     <message>
         <source>Alternative DNS</source>
-        <translation type="vanished">باشقا DNS</translation>
+        <translation type="vanished">备选 DNS</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="133"/>
-        <source>IPv6Config</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="180"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
         <source>Auto(DHCP)</source>
-        <translation>ئاپتول(DHCP)</translation>
+        <translation>ئاپتوماتىك(DHCP)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="181"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
         <source>Manual</source>
         <translation>قوللانما</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="231"/>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="232"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
         <source>Required</source>
-        <translation>تەلەپ قىلىنىدۇ</translation>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="251"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
         <source>Invalid address</source>
-        <translation>ئىناۋەتسىز ئادرىسى</translation>
+        <translation>ئىناۋەتسىز IPئادرېسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="260"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
         <source>Invalid gateway</source>
-        <translation>ئىناۋەتسىز دەرۋازا</translation>
+        <translation>ئىناۋەتسىز تور ئۆتكىلى ئادرېسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv6page.cpp" line="299"/>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
+        <source>IPv6 address is empty or invalid</source>
+        <translation>IPv6 ئادرېسى قۇرۇق ياكى ئىناۋەتسىز</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
+        <source>IPv6 prefix length is empty or invalid</source>
+        <translation>ئالدى قوشۇمچە ئۇزۇنلۇقى قۇرۇق ياكى ئىناۋەتسىز IPv6</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>توقۇنۇشنى ھەل قىلىش</translation>
     </message>
 </context>
 <context>
     <name>JoinHiddenWiFiPage</name>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="140"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="219"/>
         <source>Please enter the network information</source>
-        <translation type="unfinished"></translation>
+        <translation>تور ئۇچۇرىنى كىرگۈزۈڭ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="145"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="224"/>
         <source>Network name(SSID)</source>
+        <translation>تور نامى (SSID)</translation>
+    </message>
+    <message>
+        <source>Remember the Network</source>
+        <translation type="vanished">记住该网络</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+        <source>Connect WIFI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="146"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+        <source>Please check network config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
         <source>Show Network List</source>
-        <translation type="unfinished"></translation>
+        <translation>تور تىزىملىكىنى كۆرسىتىش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="147"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="148"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>قوشۇلۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="153"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
         <source>Required</source>
-        <translation type="unfinished">تەلەپ قىلىنىدۇ</translation>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="155"/>
+        <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
         <source>Find and Join WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN نى تېپىش ۋە قوشۇش</translation>
     </message>
 </context>
 <context>
     <name>LanListItem</name>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="67"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="78"/>
         <source>Not connected</source>
         <translation>ئۇلانمىدى</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="124"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
         <source>Wired Device not carried</source>
-        <translation>سىملىق ئۈسكۈنە توشۇلمايدۇ</translation>
+        <translation>تور سىمى چېتىلمىغان</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="144"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="161"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="259"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="171"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
         <source>Disconnect</source>
-        <translation>ئۇلاشنى ئۈزۈۋېتىش</translation>
+        <translation>ئۇلىنىش ئۈزۈلدى</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="146"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="159"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="263"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="173"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
         <source>Connect</source>
-        <translation>ئۇلاش</translation>
+        <translation>ئۇلىنىش</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="150"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="166"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="193"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>خاسلىق</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="151"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="168"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۆچۈر</translation>
     </message>
 </context>
 <context>
     <name>LanPage</name>
     <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1311"/>
         <source>No ethernet device avaliable</source>
-        <translation type="vanished">ethernet ئۈسكۈنىسى ئىناۋەتسىز</translation>
+        <translation>سىملىق ئۈسكىنە ئۇلانمىغان</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
-        <source>conflict, unable to connect to the network normally!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="751"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="812"/>
         <source>LAN</source>
-        <translation>LAN</translation>
+        <translation>سىملىق تور</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="753"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
+        <source>conflict, unable to connect to the network normally!</source>
+        <translation>توقۇنۇش، تورغا نورمال ئۇلىغىلى بولمىدى!</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
+        <source>No wired network card detected</source>
+        <translation>سىملىق تور كارتىسىنى تەكشۈرمىگەن</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
         <source>Activated LAN</source>
-        <translation>ئاكتىپلانغان LAN</translation>
+        <translation>قورغىتىلدى</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="763"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
         <source>Inactivated LAN</source>
-        <translation>LAN نى تىنجىتما</translation>
+        <translation>قۇزغىتىلمىغان</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1348"/>
-        <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
+        <source>Connected, restricting access</source>
+        <translation>ئۇلاش، زىيارەت قىلىشنى چەكلەش</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
-        <source>(Limited)</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
+        <source>No internet access. Please click Network Check to specific reasons.</source>
+        <translation>ئىنتېرنېت تورىنى زىيارەت قىلغىلى بولمايدۇ. تورنى چېكىپ كونكرېت سەۋەبىنى بىلىپ بېقىڭ.</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1342"/>
-        <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
+        <source>Network Check</source>
+        <translation>تور تەكشۈرۈش</translation>
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
-        <translation type="vanished">LAN ئۇلىنىشنى مۇۋەپپەقىيەتلىك ئۈزۈۋەتتى</translation>
+        <translation type="vanished">有线网络已断开</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1244"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
         <source>Wired Device not carried</source>
-        <translation>سىملىق ئۈسكۈنە توشۇلمايدۇ</translation>
+        <translation>تور سىمى چېتىلمىغان</translation>
     </message>
     <message>
         <source>LAN Connected Successfully</source>
-        <translation type="vanished">LAN ئۇلاش مۇۋەپپەقىيەتلىك بولدى</translation>
+        <translation type="vanished">有线网络已连接</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1535"/>
+        <source>Connected: </source>
+        <translation>ئۇلانغانلىرى: </translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1522"/>
+        <source>Not Connected</source>
+        <translation>ئۇلانمىدى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
+        <source>(Limited)</source>
+        <translation>(چەكلەنگەن)</translation>
     </message>
 </context>
 <context>
     <name>ListItem</name>
     <message>
-        <location filename="../frontend/list-items/listitem.cpp" line="178"/>
+        <location filename="../frontend/list-items/listitem.cpp" line="183"/>
         <source>Kylin NM</source>
-        <translation>Kylin NM</translation>
+        <translation>تور تەسىس قىلىش قورالى</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/listitem.cpp" line="181"/>
+        <location filename="../frontend/list-items/listitem.cpp" line="186"/>
         <source>kylin network applet desktop message</source>
-        <translation>kylin تورى applet ئۈستەل يۈزى ئۇچۇرى</translation>
+        <translation>چىلىن تور قورالى ئۇچۇر كۆرسەتمىسى</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="229"/>
-        <location filename="../frontend/mainwindow.cpp" line="260"/>
+        <location filename="../frontend/mainwindow.cpp" line="271"/>
+        <location filename="../frontend/mainwindow.cpp" line="302"/>
         <source>kylin-nm</source>
-        <translation>kylin-nm</translation>
+        <translation>kylin-تور قۇرالى</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="353"/>
+        <location filename="../frontend/mainwindow.cpp" line="465"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
-        <translation>LAN</translation>
+        <translation>سىملىق تور</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="355"/>
+        <location filename="../frontend/mainwindow.cpp" line="467"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
-        <translation>WLAN</translation>
-    </message>
-    <message>
-        <location filename="../frontend/mainwindow.cpp" line="385"/>
-        <source>Network Connectivity Detection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/mainwindow.cpp" line="662"/>
-        <location filename="../frontend/mainwindow.cpp" line="915"/>
-        <source>Network tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/mainwindow.cpp" line="676"/>
-        <source>Network Card</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/mainwindow.cpp" line="898"/>
-        <source>Not connected to the network</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمسىز دائىرلىك تور</translation>
     </message>
     <message>
         <source>Show MainWindow</source>
-        <translation type="vanished">MainWindow نى كۆرسەت</translation>
+        <translation type="vanished">打开网络工具</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="384"/>
+        <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation>تەڭشەكلەر</translation>
+        <translation>تەڭشەك</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="501"/>
+        <source>Network Connectivity Detection</source>
+        <translation>تور ئۇلىنىشىنى تەكشۈرۈش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="842"/>
+        <location filename="../frontend/mainwindow.cpp" line="1204"/>
+        <source>Network tool</source>
+        <translation>تور قورالى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="856"/>
+        <source>Network Card</source>
+        <translation>تور كارتىسى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="950"/>
+        <source>Not Connected</source>
+        <translation>ئۇلانمىدى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="950"/>
+        <source>Connected</source>
+        <translation>ۇلاندى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="1187"/>
+        <source>Not connected to the network</source>
+        <translation>تورغا ئۇلانمىغان</translation>
     </message>
 </context>
 <context>
     <name>MultipleDnsWidget</name>
     <message>
-        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="57"/>
+        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
         <source>DNS server(Drag to sort)</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS مۇلازىمېتىرى (سۆرەلمە تەرتىپ بويىچە تىزىلدى)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="64"/>
+        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
         <source>Click &quot;+&quot; to configure DNS</source>
-        <translation type="unfinished"></translation>
+        <translation>+ نى چېكىپ DNS نى سەپلەڭ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="101"/>
+        <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished">تەڭشەكلەر</translation>
+        <translation>تەڭشەك</translation>
     </message>
 </context>
 <context>
     <name>NetDetail</name>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="80"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
         <source>Kylin NM</source>
-        <translation>Kylin NM</translation>
+        <translation>تور تەسىس قىلىش قورالى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="83"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
         <source>kylin network desktop message</source>
-        <translation>kylin تور ئۈستەل يۈزى ئۇچۇرى</translation>
+        <translation>تور ئەسكەرتمە ئۇچۇرى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
-        <translation>تەپسىلى مەزمۇنى</translation>
+        <translation>تەپسىلاتلار</translation>
     </message>
     <message>
-        <source>Ipv4</source>
-        <translation type="vanished">Ipv4</translation>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
     </message>
     <message>
-        <source>Ipv6</source>
-        <translation type="vanished">Ipv6</translation>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="385"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
         <source>Security</source>
         <translation>بىخەتەرلىك</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
+        <source>start check IPv4 address conflict</source>
+        <translation>IPv4 ئادرېس توقۇنۇشىنى تەكشۈرۈشنى باشلىدى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
+        <source>start check IPv6 address conflict</source>
+        <translation>IPv6 ئادرېس توقۇنۇشىنى تەكشۈرۈشنى باشلىدى</translation>
     </message>
     <message>
         <source>Close</source>
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="406"/>
-        <source>Confirm</source>
-        <translation>جەزىملەشتۈرۈش</translation>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
+        <source>Config</source>
+        <translation>ئاساسىي تەڭشەك</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="409"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
+        <source>Confirm</source>
+        <translation>جەزملەش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
         <source>Cancel</source>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="467"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
         <source>Forget this network</source>
         <translation>بۇ تورنى ئۇنتۇپ قاپسىز</translation>
     </message>
     <message>
-        <source>Add Lan Connect</source>
-        <translation type="vanished">لەن ئۇلاش</translation>
-    </message>
-    <message>
-        <source>connect hiddin wlan</source>
-        <translation type="vanished">uلاش hiddin wlan</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
-        <source>IPv4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="383"/>
-        <source>IPv6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="387"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="394"/>
-        <source>Config</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="448"/>
-        <source>Add LAN Connect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="453"/>
-        <source>Connect Hidden WLAN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="469"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
         <source>Delete this network</source>
-        <translation type="unfinished"></translation>
+        <translation>بۇ تورنى ئۆچۈرۈش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="633"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="645"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1186"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
+        <source>Add LAN Connect</source>
+        <translation>LAN ئۇلىنىشىنى قوشۇش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
+        <source>Connect Hidden WLAN</source>
+        <translation>يوشۇرۇن WLAN غا ئۇلاش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="683"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
         <source>None</source>
         <translation>يوق</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="757"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="758"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="759"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
         <source>Auto</source>
-        <translation>ئاپتۇماتىك</translation>
+        <translation>ماشىنا</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="900"/>
         <source>start check ipv4 address conflict</source>
-        <translation>ipv4 ئادرېس توقۇنۇشىنى تەكشۈرۈشنى باشلاڭ</translation>
+        <translation type="vanished">开始检测 ipv4 地址冲突</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="917"/>
         <source>start check ipv6 address conflict</source>
-        <translation>ipv6 ئادرېس توقۇنۇشىنى تەكشۈرۈشنى باشلاڭ</translation>
+        <translation type="vanished">开始检测 ipv6 地址冲突</translation>
     </message>
     <message>
         <source>ipv4 address conflict!</source>
-        <translation type="vanished">ipv4 ئادرېس توقۇنۇشى!</translation>
+        <translation type="vanished">ipv4地址冲突！</translation>
     </message>
     <message>
         <source>ipv6 address conflict!</source>
-        <translation type="vanished">ipv6 ئادرېس توقۇنۇشى!</translation>
+        <translation type="vanished">ipv6地址冲突！</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1182"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
         <source>this wifi no support enterprise type</source>
-        <translation>بۇ wifi قوللىمايدىغان كارخانا تىپى</translation>
+        <translation>بۇ سىمسىز تور كارخانا تور تىپىدىكىنى قوللىمايدۇ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1187"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
         <source>this wifi no support None type</source>
-        <translation>بۇ wifi no support None type</translation>
+        <translation>بۇسىمسىز تور قۇرۇق تىپتىتكىنى قوللىمايدۇ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1192"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
         <source>this wifi no support WPA2 type</source>
-        <translation>بۇ wifi ھىچكىمنى قوللىمايدۇ WPA2 تىپى</translation>
+        <translation>بۇ سىمسىز تور WPA2تىپىدىكىنى قوللىمايدۇ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1195"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
         <source>this wifi no support WPA3 type</source>
-        <translation>بۇ wifi ھىچكىمنى قوللىمايدۇ WPA3 تىپى</translation>
+        <translation>بۇ سىمسىز تور WPA3تىپىدىكىنى قوللىمايدۇ</translation>
     </message>
     <message>
         <source>SSID:</source>
@@ -1145,16 +1229,16 @@
         <translation type="obsolete">带宽：</translation>
     </message>
     <message>
-        <source>IPV4:</source>
-        <translation type="obsolete">IPV4地址：</translation>
+        <source>IPv4:</source>
+        <translation type="obsolete">IPv4地址：</translation>
     </message>
     <message>
-        <source>IPV4 Dns:</source>
-        <translation type="obsolete">IPV4 DNS服务器：</translation>
+        <source>IPv4 DNS:</source>
+        <translation type="obsolete">IPv4 DNS服务器：</translation>
     </message>
     <message>
-        <source>IPV6:</source>
-        <translation type="obsolete">本地链接IPV6地址：</translation>
+        <source>IPv6:</source>
+        <translation type="obsolete">本地链接IPv6地址：</translation>
     </message>
     <message>
         <source>Mac:</source>
@@ -1181,7 +1265,7 @@
     <message>
         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>شەكىل</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1209,7 +1293,7 @@
     <message>
         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>شەكىل</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1231,323 +1315,404 @@
 <context>
     <name>SecurityPage</name>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="107"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="110"/>
         <source>Remember the Network</source>
-        <translation type="unfinished"></translation>
+        <translation>مۇشۇ تورنى ئەستە ساقلاش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="215"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
         <source>Security</source>
         <translation>بىخەتەرلىك</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="216"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="236"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
         <source>Password</source>
         <translation>ئىم</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="220"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
         <source>EAP type</source>
         <translation>EAP تۈرى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="222"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
         <source>Identity</source>
         <translation>كىملىك</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
         <source>Domain</source>
         <translation>تور نامى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="224"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
         <source>CA certficate</source>
-        <translation>CA كەۋسەر</translation>
+        <translation>CA كېنىشكا</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
         <source>no need for CA certificate</source>
         <translation>CA كىنىشكىسىنىڭ ھاجىتى يوق</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
         <source>User certificate</source>
         <translation>ئىشلەتكۈچى كىنىشكىسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
         <source>User private key</source>
         <translation>ئىشلەتكۈچى شەخسىي ئاچقۇچ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="231"/>
         <source>User key password</source>
         <translation>ئىشلەتكۈچى ئاچقۇچ پارولى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="232"/>
         <source>Password options</source>
-        <translation type="unfinished"></translation>
+        <translation>مەخپىي نومۇر تاللانمىسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
-        <location filename="../frontend/netdetails/securitypage.h" line="125"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="233"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
+        <location filename="../frontend/netdetails/securitypage.h" line="128"/>
         <source>Required</source>
-        <translation type="unfinished">تەلەپ قىلىنىدۇ</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="234"/>
-        <source>Ineer authentication</source>
-        <translation>دەلىللەشنى ئەينەنلەشتۈرۈش</translation>
-    </message>
-    <message>
-        <source>Usename</source>
-        <translation type="vanished">ئىشلىتىش نامى</translation>
-    </message>
-    <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="235"/>
-        <source>Username</source>
-        <oldsource>Usename</oldsource>
-        <translation>用户名</translation>
+        <translation>مۇقەررەر تولدۇرۇش</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
-        <source>Ask pwd each query</source>
-        <translation>pwd دىن ھەر بىر سۈرۈشتۈرۈشنى سۈرۈشتۈرۈش</translation>
+        <source>Ineer authentication</source>
+        <translation>ئىچكى قىسىمنى دەلىللەش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="254"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
+        <source>Username</source>
+        <translation>ئىشلەتكۈچى نامى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
+        <source>Ask pwd each query</source>
+        <translation>ھەر قېتىم مەخپى نومۇرنى سوراش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="257"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="260"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="360"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="503"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1029"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1110"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1141"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1163"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1186"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1241"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="263"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="283"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="361"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="504"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1043"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1127"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1161"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1183"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
         <source>None</source>
         <translation>يوق</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="242"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
         <source>WPA&amp;WPA2 Personal</source>
         <translation>WPA&amp;WPA2 شەخسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="243"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="246"/>
         <source>WPA&amp;WPA2 Enterprise</source>
         <translation>WPA&amp;WPA2 كارخانا</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="247"/>
         <source>WPA3 Personal</source>
         <translation>WPA3 شەخسى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="255"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="258"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="261"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="284"/>
         <source>Choose from file...</source>
         <translation>ھۆججەتتىن تاللاش...</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store passwords only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>پەقەت بۇ ئىشلەتكۈچىنىڭ مەخپىي نومۇرىنى ساقلايدۇ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store password only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>پەقەت بۇ ئىشلەتكۈچىنىڭ مەخپىي نومۇرىنى ساقلاش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store passwords for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>بارلىق ئىشلەتكۈچىنىڭ مەخپىي نومۇرىنى ساقلاش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store password for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>بارلىق ئىشلەتكۈچىنىڭ مەخپىي نومۇرىنى ساقلاش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="268"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask this password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>ھەر قېتىم بۇ مەخپىي نومۇرنى سوراش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="268"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>ھەر قېتىم مەخپىي نومۇر سوراش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="273"/>
-        <source>PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
+        <source>Wifi password length less than 8</source>
+        <translation>مەخپىي نومۇرنىڭ ئۇزۇنلۇقى سەككىزدىن كىچىك بولىدۇ Wifi مەخپىي نومۇر</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="274"/>
-        <source>Allow automatic PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
+        <source>TLS identity is empty</source>
+        <translation>ئىمزاسىز سالاھىيەت قۇرۇق</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="275"/>
-        <source>PAC file</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
+        <source>CA cert filepath is invalid</source>
+        <translation>گۇۋاھنامە ھۆججىتىنىڭ يولى قانۇنسىز CA</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
-        <source>Anonymous</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
+        <source>Client cert filepath is invalid</source>
+        <translation>ئابونتلار تېرمىنالىدىكى گۇۋاھنامە ھۆججەت يولى ئىناۋەتسىز</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
-        <source>Authenticated</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
+        <source>Client private key filepath is invalid</source>
+        <translation>ئابونتلار تېرمىنالىنىڭ شەخسىي ئاچقۇچلۇق ھۆججەت يولى ئىناۋەتسىز</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
-        <source>Both</source>
-        <translation type="unfinished"></translation>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
+        <source>Client private key password is empty</source>
+        <translation>ئابونتلار تېرمىنالىنىڭ شەخسىي ئاچقۇچ مەخپىي نومۇرى</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1131"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1154"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1176"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
+        <source>User name or user password is empty</source>
+        <translation>ئابونت نامى ياكى ئابونت مەخپىي نومۇرى قۇرۇق بولىدۇ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
+        <source>No PAC file is selected </source>
+        <translation>PAC ھۆججىتىنى تاللىمىغان </translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
         <source>Choose a CA certificate</source>
         <translation>CA كىنىشكىسى تاللاش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1132"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1155"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1177"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+        <source>PAC Files ( *.pac)</source>
+        <translation>PAC ھۆججەت ( *pac )</translation>
+    </message>
+    <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation>CA ھۆججەتلىرى (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+        <translation type="vanished">CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1231"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
+        <source>PAC provisioning</source>
+        <translation>PAC بىلەن تەمىنلەش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
+        <source>Allow automatic PAC provisioning</source>
+        <translation>PAC نى ئاپتوماتىك تەڭشەشكە يول قويىدۇ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
+        <source>PAC file</source>
+        <translation>PAC ھۆججىتى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
+        <source>Anonymous</source>
+        <translation>نامسىز</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
+        <source>Authenticated</source>
+        <translation>راستلىق دەلىللەش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
+        <source>Both</source>
+        <translation>ئىككىلىسى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
+        <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+        <translation>CA ھۆججەت ( *pem*der.p12*crt *.cer.pfx)</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
         <source>Choose a PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC بىلەن تەمىنلەش</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1232"/>
         <source>PAC Files (*.pac)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">PAC 文件(*.pac)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.h" line="126"/>
+        <location filename="../frontend/netdetails/securitypage.h" line="129"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>TabPage</name>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="72"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
         <source>Current Device</source>
-        <translation>نۆۋەتتىكى ئۈسكۈنە</translation>
+        <translation>نۆۋەتتىكى تور كارتا</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="79"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
         <source>Devices Closed!</source>
         <translation>ئۈسكۈنىلەر تاقالدى!</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="136"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
         <source>Settings</source>
-        <translation>تەڭشەكلەر</translation>
+        <translation>تەڭشەك</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="329"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
         <source>Kylin NM</source>
-        <translation>Kylin NM</translation>
+        <translation>تور تەسىس قىلىش قورالى</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/tabpage.cpp" line="332"/>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
         <source>kylin network applet desktop message</source>
-        <translation>kylin تورى applet ئۈستەل يۈزى ئۇچۇرى</translation>
+        <translation>چىلىن تور قورالى ئۇچۇر كۆرسەتمىسى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
+        <source>connected</source>
+        <translation>ئۇلانغان</translation>
+    </message>
+</context>
+<context>
+    <name>VpnPage</name>
+    <message>
+        <source>Wired Device not carried</source>
+        <translation type="obsolete">未插入网线</translation>
+    </message>
+</context>
+<context>
+    <name>WarningDialog</name>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
+        <source>Unable to save modifications</source>
+        <translation>ساقلاپ تۈزىتىش كىرگۈزگىلى بولمايدۇ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
+        <source>Confirm</source>
+        <translation>جەزملەش</translation>
     </message>
 </context>
 <context>
     <name>WiFiConfigDialog</name>
     <message>
+        <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>دىئالوگ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
-        <translation type="vanished">WLAN دەلىللەش</translation>
+        <translation>كىملىك تەكشۈرۈش WLAN</translation>
     </message>
     <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
-        <translation type="vanished">WLAN ئۇچۇرىنى كىرگۈزۈشنى ئۆتۈنۈپ قالاي</translation>
+        <translation>WLAN ئۇچۇرىنى كىرگۈزۈڭ</translation>
     </message>
     <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
-        <translation type="vanished">WLAN ID:</translation>
+        <translation>سىمسىز رايون تورى ID:</translation>
     </message>
     <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
         <source>WLAN Name:</source>
-        <translation type="vanished">WLAN نامى:</translation>
+        <translation>WLAN نامى</translation>
     </message>
     <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
-        <translation type="vanished">مەخپىي نومۇرى:</translation>
+        <translation>مەخپىي نومۇر</translation>
     </message>
     <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation type="vanished">Cancl</translation>
+        <translation>كانكېر</translation>
     </message>
     <message>
+        <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation type="vanished">ماقۇل</translation>
+        <translation>ماقۇل</translation>
     </message>
 </context>
 <context>
     <name>WlanListItem</name>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="71"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="70"/>
         <source>Not connected</source>
         <translation>ئۇلانمىدى</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="176"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="202"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="648"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="667"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="677"/>
-        <source>Disconnect</source>
-        <translation>ئۇلاشنى ئۈزۈۋېتىش</translation>
-    </message>
-    <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="178"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="206"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="315"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="658"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="675"/>
-        <source>Connect</source>
-        <translation>ئۇلاش</translation>
-    </message>
-    <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="185"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="687"/>
-        <source>Property</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="186"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="195"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="664"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
-        <source>Forget</source>
-        <translation>ئۇنتۇش</translation>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
+        <source>Disconnect</source>
+        <translation>ئۇلىنىش ئۈزۈلدى</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="336"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="199"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="307"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
+        <source>Connect</source>
+        <translation>ئۇلىنىش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
+        <source>Forget</source>
+        <translation>بۇ تورنى ئۇنتۇش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
+        <source>Property</source>
+        <translation>خاسلىق</translation>
+    </message>
+    <message>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="328"/>
         <source>Auto Connect</source>
-        <translation>ئاپتوماتىك ئۇلاش</translation>
+        <translation>بۇ تورغا ئاپتوماتىك ئۇلاش</translation>
     </message>
 </context>
 <context>
@@ -1559,54 +1724,74 @@
     <message>
         <location filename="../frontend/list-items/wlanmoreitem.cpp" line="28"/>
         <source>Add Others...</source>
-        <translation>باشقىلارنى قوشۇ...</translation>
+        <translation>باشقا تورغا قوشۇلۇش...</translation>
     </message>
 </context>
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="132"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
         <source>WLAN</source>
-        <translation>WLAN</translation>
+        <translation>سىمسىز دائىرلىك تور</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="108"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="596"/>
         <source>No wireless network card detected</source>
         <translation>سىمسىز تور كارتىسى بايقالمىدى</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="134"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="149"/>
         <source>Activated WLAN</source>
-        <translation>ئاكتىپلانغان WLAN</translation>
+        <translation>قوزغىتىلدى</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="145"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
         <source>Other WLAN</source>
-        <translation>باشقا WLAN</translation>
-    </message>
-    <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1741"/>
-        <source>Connected: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1743"/>
-        <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>باشقا</translation>
     </message>
     <message>
         <source>More...</source>
         <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="972"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1184"/>
         <source>WLAN Connected Successfully</source>
-        <translation>WLAN ئۇلىنىش مۇۋەپپەقىيەتلىك بولدى</translation>
+        <translation>سىمسىز تور ئۇلىنىش مۇۋەپپەقىيەتلىك بولدى</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="968"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation>WLAN ئۇلىنىشنى مۇۋەپپەقىيەتلىك ئۈزۈۋەتتى</translation>
+        <translation>سىمسىز تور ئۇلىنىشى مۇۋەپپەقىيەتلىك ئۈزۈلدى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
+        <source>The routing end rejects the access of the device</source>
+        <translation>ئۈسكۈنىنىڭ زىيارىتىنى رەت قىلىش</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
+        <source>The network access at the routing end is full</source>
+        <translation>يول ئۇچىدىكى تور زىيارىتى توشۇپ كەتتى</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
+        <source>usd set offline mode failed: </source>
+        <translation>USD تەسىس قىلىش توردىن قېچىش ئەندىزىسى مەغلۇپ بولدى: </translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>
+        <source>Connected: </source>
+        <translation>ئۇلانغانلىرى: </translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1988"/>
+        <source>Not Connected</source>
+        <translation>ئۇلانمىدى</translation>
+    </message>
+    <message>
+        <source>(Limited)</source>
+        <translation type="vanished">(网络受限)</translation>
     </message>
 </context>
 <context>
@@ -1667,19 +1852,19 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="123"/>
+        <location filename="../main.cpp" line="124"/>
         <source>kylinnm</source>
-        <translation>kylinnm</translation>
-    </message>
-    <message>
-        <location filename="../main.cpp" line="127"/>
-        <source>show kylin-nm wifi page</source>
-        <translation>kylin-nm wifi بېتىنى كۆرسەت</translation>
+        <translation>يەككە تور ئەسۋابى</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
+        <source>show kylin-nm wifi page</source>
+        <translation>يەككە تورنىڭ سىمسىز تور بەت يۈزىنى كۆرسىتىش</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="129"/>
         <source>show kylin-nm lan page</source>
-        <translation>kylin-nm lan بېتىنى كۆرسەت</translation>
+        <translation>يەككە تورنىڭ تار دائىرىلىك تورىنىڭ بەت يۈزىنى كۆرسىتىش</translation>
     </message>
 </context>
 </TS>

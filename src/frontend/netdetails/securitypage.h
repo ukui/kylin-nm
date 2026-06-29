@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -61,6 +61,10 @@ public:
 
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
     bool getAutoConnectState();
+    void setAutoConnectVisible(bool visible);
+    void setOnlyPasswordEditable(bool enabled);
+
+    QString getErrorMessage();
 
 private:
     bool isDetailPage;
@@ -125,6 +129,8 @@ private:
     QString hintRequired = tr("Required"); //必填
     QString emptyhint = tr(" ");
 
+    QString m_errorMessage;
+
 private:
     void showNone();
     void showPsk();
@@ -144,6 +150,7 @@ private:
 
     bool checkConnectBtnIsEnabled();
 
+
 private Q_SLOTS:
     void onSecuTypeComboxIndexChanged();
     void onEapTypeComboxIndexChanged();
@@ -152,12 +159,12 @@ private Q_SLOTS:
     void onCaNeedBoxClicked();
     void onPacBoxClicked();
 
-    void onCaCertPathComboxIndexChanged(QString str);
-    void onClientCertPathComboxIndexChanged(QString str);
-    void onClientPrivateKeyComboxIndexChanged(QString str);
+    void onCaCertPathComboxIndexChanged();
+    void onClientCertPathComboxIndexChanged();
+    void onClientPrivateKeyComboxIndexChanged();
     void onPwdOptionComboxIndexChanged(QString str);
     void changeColumnWidthWithSecuType();
-    void onPacFilePathComboxIndexChanged(QString str);
+    void onPacFilePathComboxIndexChanged();
 
 Q_SIGNALS:
     void setSecuPageState(bool);

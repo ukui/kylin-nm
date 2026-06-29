@@ -4,17 +4,17 @@
 <context>
     <name>SinglePage</name>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="79"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
         <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="141"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
         <source>Kylin VPN</source>
         <translation>VPN ᠪᠠᠭᠠᠵᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/singlepage.cpp" line="144"/>
+        <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
         <source>kylin vpn applet desktop message</source>
         <translation>VPN ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ ᠤ᠋ᠨ ᠠᠩᠬᠠᠷᠤᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
@@ -748,19 +748,19 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>VpnListItem</name>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="61"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
         <source>Not connected</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠭᠡ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="146"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="161"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
         <translation>ᠳᠠᠰᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="148"/>
-        <location filename="../frontend/list-items/vpnlistitem.cpp" line="159"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
+        <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠬᠦ</translation>
     </message>
@@ -768,14 +768,19 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="253"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
         <translation>vpn</translation>
     </message>
     <message>
-        <location filename="../frontend/single-pages/vpnpage.cpp" line="264"/>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
         <source>VPN Settings</source>
         <translation>VPN ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+        <source>No VPN configuration available</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -836,8 +841,8 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
 <context>
     <name>vpnObject</name>
     <message>
-        <location filename="../frontend/vpnobject.cpp" line="50"/>
-        <source>vpn tool</source>
+        <location filename="../frontend/vpnobject.cpp" line="59"/>
+        <source>VPN Tool</source>
         <translation>vpn ᠪᠠᠭᠠᠵᠢ</translation>
     </message>
 </context>

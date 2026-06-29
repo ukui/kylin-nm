@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,20 +20,20 @@
 #ifndef WLANPAGE_H
 #define WLANPAGE_H
 
-#include "tabpage.h"
-#include "kywirelessnetresource.h"
-#include "kylinactiveconnectresource.h"
-#include "kylinnetworkdeviceresource.h"
-#include "kywirelessconnectoperation.h"
-#include "wlanlistitem.h"
-#include "wlanmoreitem.h"
-#include "kylinconnectoperation.h"
 #include <QGSettings>
-#include "netdetails/netdetail.h"
 #include <QProcess>
-#include "kylinactiveconnectresource.h"
-#include "kywirelessnetresource.h"
+#include "tabpage.h"
+#include "list-items/wlanlistitem.h"
+#include "list-items/wlanmoreitem.h"
+#include "netdetails/netdetail.h"
 #include "netdetails/joinhiddenwifipage.h"
+#include "../../backend/dbus-interface/kywirelessnetresource.h"
+#include "../../backend/dbus-interface/kylinactiveconnectresource.h"
+#include "../../backend/dbus-interface/kylinnetworkdeviceresource.h"
+#include "../../backend/dbus-interface/kywirelessconnectoperation.h"
+#include "../../backend/dbus-interface/kylinconnectoperation.h"
+#include "../../backend/dbus-interface/kylinactiveconnectresource.h"
+#include "../../backend/dbus-interface/kywirelessnetresource.h"
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
@@ -41,6 +41,9 @@
 
 #define LAN_PAGE_INDEX 0
 #define WLAN_PAGE_INDEX 1
+
+#define NETWORK_ACCESS_DENIED 68
+#define NETWORK_ACCESS_FULL 69
 
 class WlanListItem;
 
@@ -64,11 +67,14 @@ public:
 
     void activateWirelessConnection(const QString& devName, const QString& ssid);
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
-
+    void deactivateWirelessConnectionWithUuid(const QString devName, const QString uuid);
+    void deleteWirelessConnect(const QString &connectUuid);
+    void setWirelessConnectAutoConnectState(const QString &connectUuid,bool state);
     void showDetailPage(QString devName, QString uuid);
     void showAddOtherPage(QString devName);
 
     bool checkWlanStatus(NetworkManager::ActiveConnection::State state);
+    bool checkInternetLoading();
 
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
     //无线总开关
@@ -85,12 +91,18 @@ public:
     void getWirelssDeviceConnectState(QMap<QString, QString> &map);
 
     QString getCurrentDisplayDevice() {
+        qWarning() << Q_FUNC_INFO << __LINE__ << " m_currentDevice :" << m_currentDevice;
         return m_currentDevice;
     }
-
-    bool isWirelessDeviceUsable() {
-        return !m_devList.isEmpty();
+    void updateDefaultDevice(QString devName){
+        qWarning() << Q_FUNC_INFO << __LINE__ << " m_currentDevice :" << m_currentDevice << " updateDefaultDevice :" << devName;
+        m_currentDevice = devName;
     }
+    void getWirelssDeviceConnect(QMap<QString, QString> &map);
+
+    QString getWirelessDefaultDeviceName(void);
+
+    int getActivateWifiCategory(QString devName);
 
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
@@ -99,6 +111,8 @@ Q_SIGNALS:
     void wlanActiveConnectionStateChanged(QString interface, QString ssid, QString uuid, int status);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
+    void hotspotDeactivating(QString devName, QString ssid);
+    void hotspotActivating(QString devName, QString ssid);
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
@@ -111,12 +125,15 @@ Q_SIGNALS:
     void connectivityCheckSpareUriChanged();
 
     void wirelessSwitchBtnChanged(bool state);
+    void sigNetworkPropChanged(QVariantMap parm);
 
 public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);
     void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
     void requestScan();
     void onWlanPageVisibleChanged(int index);
+    void onSignalStrengthChange(QString interface, QString ssid, int signalStrength);
+    void onWifiNetworkIsMixChange(QString deviceName, QString ssid, bool isMix);
 
 private Q_SLOTS:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
@@ -184,7 +201,7 @@ private:
     void updateWlanItemState(QListWidget *p_wirelessListWidget,
                                        QListWidgetItem *p_listWidgetItem,
                                        ConnectState state);
-    void updateWlanListItem(QString ssid);
+    void updateWlanListItem(QString ssid, bool isConnnectRmove = false);
     void refreshActiveConnectionIcon(QString ssid, const int &signal);
 
     void constructWirelessNetArea();
@@ -202,6 +219,7 @@ private:
 //    void wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::State state,
 //                                  NetworkManager::ActiveConnection::Reason reason);
 
+    void initWirelssDeviceConnectState();
     //是否存在可用的无线网卡
     bool getWirelessDevieceUseable();
     void setWirelessEnable(bool state);
@@ -229,6 +247,7 @@ private:
 
     void checkShowWifi6Plus();
     bool m_showWifi6Plus = true;
+    QDBusInterface *m_usdInterface = nullptr;
 
 private:
     QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;
@@ -246,7 +265,7 @@ private:
     QString m_currentDevice;
 
     KyWirelessNetResource *m_wirelessNetResource = nullptr;
-    KyActiveConnectResourse *m_activatedConnectResource = nullptr;
+    KyActiveConnectResource *m_activatedConnectResource = nullptr;
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
     KyConnectResourse * m_connectResource = nullptr;

@@ -6,32 +6,20 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>باسقالاردٸ قوسۋ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>WiredNetork қосу</translation>
+        <translation>سىمدى تور  قوسۋ</translation>
     </message>
 </context>
 <context>
     <name>LanItem</name>
     <message>
-        <location filename="../lanitem.cpp" line="57"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lanitem.cpp" line="118"/>
-        <location filename="../lanitem.cpp" line="131"/>
-        <source>Disconnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lanitem.cpp" line="120"/>
-        <location filename="../lanitem.cpp" line="129"/>
-        <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <location filename="../lanitem.cpp" line="147"/>
+        <source>Connected, restricting access.</source>
+        <translation>ئۇلاندى، تور چەكلىمىگە ئۇچرايدۇ.</translation>
     </message>
 </context>
 <context>
@@ -39,72 +27,73 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation>Сымды желі</translation>
+        <translation>سىمدى تور</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="220"/>
+        <location filename="../netconnect.cpp" line="229"/>
         <source>open</source>
-        <translation>ашу</translation>
+        <translation>اچۇۇ</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="217"/>
+        <location filename="../netconnect.cpp" line="224"/>
         <source>Advanced settings</source>
-        <translation>Қосымша параметрлер</translation>
+        <translation>جوعارعى تەڭشەۋلەر</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
         <source>ukui control center</source>
-        <translation type="vanished">ukui басқару орталығы</translation>
+        <translation type="vanished">控制面板</translation>
     </message>
     <message>
         <source>ukui control center desktop message</source>
-        <translation type="vanished">ukui басқару орталығының жұмыс үстелі хабары</translation>
+        <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
         <source>WiredConnect</source>
-        <translation type="vanished">WiredConnect</translation>
+        <translation type="vanished">有线网络</translation>
     </message>
     <message>
-        <source>No ethernet device avaliable</source>
-        <translation type="vanished">Ethernet құрылғысы қол жетімді емес</translation>
-    </message>
-    <message>
-        <location filename="../netconnect.cpp" line="66"/>
+        <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تەڭشەۋلەر</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="69"/>
+        <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>شىرە  بەتى ۇچۇرۇ  تەڭشەگى</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="86"/>
-        <location filename="../netconnect.cpp" line="218"/>
-        <location filename="../netconnect.cpp" line="221"/>
+        <location filename="../netconnect.cpp" line="92"/>
+        <location filename="../netconnect.cpp" line="227"/>
+        <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمدۇۇ تور</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="513"/>
-        <location filename="../netconnect.cpp" line="966"/>
+        <location filename="../netconnect.cpp" line="346"/>
+        <source>No ethernet device avaliable</source>
+        <translation>سىمدى ماتەريال جالعانباعان</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="635"/>
+        <location filename="../netconnect.cpp" line="1137"/>
         <source>connected</source>
-        <translation>байланысқан</translation>
+        <translation>جالعانعان</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="515"/>
-        <location filename="../netconnect.cpp" line="818"/>
-        <location filename="../netconnect.cpp" line="976"/>
+        <location filename="../netconnect.cpp" line="637"/>
+        <location filename="../netconnect.cpp" line="952"/>
+        <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>جالعانباعان</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="595"/>
+        <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation>кәртішке</translation>
+        <translation>تور كارتاسى</translation>
     </message>
 </context>
 </TS>

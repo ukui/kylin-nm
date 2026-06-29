@@ -27,13 +27,14 @@
 #include <QScrollArea>
 #include <QListWidget>
 #include <QMap>
-#include <QGSettings>
+#include <QGSettings/QGSettings>
 
 #include <KWindowSystem>
 
 #include "list-items/listitem.h"
 #include "list-items/vpnlistitem.h"
 #include "single-pages/singlepage.h"
+#include "ukuiwindowhelper/ukuiwindowhelper.h"
 
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
 #define VPN_LIST_SPACING 0
@@ -42,9 +43,6 @@
 #define PAGE_SPACE 22
 
 #define LOG_FLAG "[VpnPage]"
-
-#define VISIBLE "visible"
-const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
 
 class VpnListItem;
 
@@ -66,6 +64,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
+    void initPanelGSettings();
     void initUI();
     void initVpnArea();
     void resetPageHeight();
@@ -82,7 +81,7 @@ private:
     void updateConnectionArea(KyConnectItem *p_newItem);
     void updateActivatedConnectionArea(KyConnectItem *p_newItem);
     void updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
-                                        QListWidget *vpnListWidget, QString uuid, ConnectState state);
+                               QListWidget *vpnListWidget, QString uuid, ConnectState state);
 
     void updateActiveConnectionProperty(KyConnectItem *p_connectItem);
     void updateConnectionProperty(KyConnectItem *p_connectItem);
@@ -120,14 +119,16 @@ private Q_SLOTS:
 
 private:
     KyVpnConnectOperation *m_vpnConnectOperation = nullptr;
-    KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
+    KyActiveConnectResource *m_activeResourse = nullptr;     //激活的连接
     KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
 
     QMap<QString, QListWidgetItem *> m_vpnItemMap;
     QMap<QString, QListWidgetItem *> m_activeItemMap;
 
-    QDBusInterface * m_positionInterface = nullptr;
-
+    //获取任务栏位置和大小
+    QGSettings *m_panelGSettings = nullptr;
+    int m_panelPosition;
+    int m_panelSize;
 
 
 public Q_SLOTS:

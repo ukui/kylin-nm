@@ -6,15 +6,15 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>Өшіру</translation>
+        <translation>شىعارىپ وتۋ</translation>
     </message>
 </context>
 <context>
     <name>BlacklistPage</name>
     <message>
-        <location filename="../blacklistpage.cpp" line="47"/>
+        <location filename="../blacklistpage.cpp" line="48"/>
         <source>Blacklist</source>
-        <translation>Қаратізім</translation>
+        <translation>جابدۇۇ قارا  تىزىمدىگى</translation>
     </message>
 </context>
 <context>
@@ -22,15 +22,15 @@
     <message>
         <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation>қаратізімге апарыңыз</translation>
+        <translation>قارا  تىزىمدىكە  قوشۇۇ</translation>
     </message>
 </context>
 <context>
     <name>ConnectdevPage</name>
     <message>
-        <location filename="../connectdevpage.cpp" line="48"/>
+        <location filename="../connectdevpage.cpp" line="49"/>
         <source>Connect device</source>
-        <translation>Құрылғыны қосу</translation>
+        <translation>اسپاپتى ۇلوو</translation>
     </message>
 </context>
 <context>
@@ -38,18 +38,54 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation>MobileHotspot</translation>
+        <translation>كۅچمۅ اعىم  تۉيۉنۉ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="101"/>
+        <location filename="../mobilehotspot.cpp" line="112"/>
+        <source>Mobile Hotspot</source>
+        <translation>كۅچمۅ قىزىق  رايون ،چۅلكۅم</translation>
+        <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="114"/>
+        <source>Open mobile hotspot</source>
+        <translation>ەسەپتەمەك  قىزىق  رايوندۇ  اچۇۇ</translation>
+        <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="116"/>
+        <source>Wi-Fi Name</source>
+        <translation>سەمىز تور  ناامى :</translation>
+        <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="118"/>
+        <source>Network Password</source>
+        <translation>تور  پارولۇ</translation>
+        <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="120"/>
+        <source>Network Frequency band</source>
+        <translation>تور  جىشتىق القاعى  قۇرۇ</translation>
+        <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="122"/>
+        <source>Shared NIC port</source>
+        <translation>ھەمبەھرلەنگەن NIC ووزۇ</translation>
+        <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
-        <translation>mobilehotspot</translation>
+        <translation>كۇشەمەكشى اعٸم نۇكتەسى</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="103"/>
+        <location filename="../mobilehotspot.cpp" line="110"/>
         <source>mobilehotspot open</source>
-        <translation>mobilehotspot ашық</translation>
+        <translation>كۇشەمەكشى اعٸم نۇكتەسى ٸشٸۋ</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
     </message>
 </context>
@@ -57,25 +93,25 @@
     <name>MobileHotspotWidget</name>
     <message>
         <source>ukui control center</source>
-        <translation type="vanished">ukui басқару орталығы</translation>
+        <translation type="vanished">控制面板</translation>
     </message>
     <message>
         <source>ukui control center desktop message</source>
-        <translation type="vanished">ukui басқару орталығының жұмыс үстелі хабары</translation>
+        <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="159"/>
+        <location filename="../mobilehotspotwidget.cpp" line="165"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation>сымсыз құрылғы жақын немесе жоқ</translation>
+        <translation>سەمىز ۋىكلىۇچاتەل تاقالدى كۅرۉنۉشتۅرۉ قىزىق  تۉيۉن  قۇرباتى  بار سەمىز تور  كارتوچكاسى  باربولۇۇسۇ  ەمەس</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
-        <translation type="vanished">ошақты жабуды бастау</translation>
+        <translation type="vanished">开始关闭热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="180"/>
+        <location filename="../mobilehotspotwidget.cpp" line="190"/>
         <source>hotpots name or device is invalid</source>
-        <translation>ошақтардың немесе құрылғының атауы жарамсыз</translation>
+        <translation>اعىم  تۉيۉن  ناامى  كۅرۉنۉشتۅرۉ شايمان ەسەپ ەمەس</translation>
     </message>
     <message>
         <source>can not  create hotspot with password length less than eight!</source>
@@ -83,74 +119,93 @@
     </message>
     <message>
         <source>start to open hotspot </source>
-        <translation type="vanished">ошақ ашуды бастау </translation>
+        <translation type="vanished">开始创建热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="563"/>
+        <location filename="../mobilehotspotwidget.cpp" line="644"/>
         <source>Contains at least 8 characters</source>
-        <translation>Құрамында кемінде 8 таңба бар</translation>
+        <translation>از دەگەندە  8 تامعانى ۅز ىچىنە  الات</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="233"/>
+        <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
-        <translation>Хотспот</translation>
+        <translation>اعىم  تۉيۉنۉ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تەڭشەۋلەر</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>شىرە  بەتى ۇچۇرۇ  تەڭشەگى</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="337"/>
+        <location filename="../mobilehotspotwidget.cpp" line="1103"/>
         <source>use </source>
-        <translation type="unfinished"></translation>
+        <translation>ىشتەتىش </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="338"/>
+        <location filename="../mobilehotspotwidget.cpp" line="1104"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation type="unfinished"></translation>
+        <translation> ورتوق باارلانۇۇ بولوتۇرعان تور ، جەردىك سەمىز ۇلانۇۇ ۉزۉلۉپ قالات</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="354"/>
-        <location filename="../mobilehotspotwidget.cpp" line="712"/>
+        <location filename="../mobilehotspotwidget.cpp" line="381"/>
+        <location filename="../mobilehotspotwidget.cpp" line="400"/>
+        <location filename="../mobilehotspotwidget.cpp" line="484"/>
+        <location filename="../mobilehotspotwidget.cpp" line="526"/>
+        <location filename="../mobilehotspotwidget.cpp" line="791"/>
         <source>hotspot already close</source>
-        <translation>ошақ қазірдің өзінде жабылды</translation>
+        <translation>اعىم  تۉيۉنۉ  تەە مۇردا  جابىلىپ بولدۇ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="509"/>
+        <location filename="../mobilehotspotwidget.cpp" line="550"/>
+        <source>Open mobile hotspot</source>
+        <translation>ەسەپتەمەك  قىزىق  رايوندۇ  اچۇۇ</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="633"/>
+        <source>Network Password</source>
+        <translation>تور  پارولۇ</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="672"/>
+        <source>Network Frequency band</source>
+        <translation>تور  جىشتىق القاعى  قۇرۇ</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="697"/>
+        <source>Shared NIC port</source>
+        <translation>ھەمبەھرلەنگەن NIC ووزۇ</translation>
+    </message>
+    <message>
         <source>Open</source>
-        <translation>Ашу</translation>
+        <translation type="vanished">ٸشٸۋ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="530"/>
+        <location filename="../mobilehotspotwidget.cpp" line="611"/>
         <source>Wi-Fi Name</source>
-        <translation>Wi-Fi атауы</translation>
+        <translation>سەمىز تور  ناامى :</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="551"/>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation type="vanished">قۇپيا نومەر</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="595"/>
         <source>Frequency band</source>
-        <translation>Жиілік жолағы</translation>
+        <translation type="vanished">تور جيىلىگى</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="619"/>
         <source>Net card</source>
-        <translation>Нетто-карта</translation>
+        <translation type="vanished">ورتاق ٴلاززاتتانۋ بولاتٸن تور كارتاسى</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="742"/>
-        <location filename="../mobilehotspotwidget.cpp" line="750"/>
+        <location filename="../mobilehotspotwidget.cpp" line="823"/>
+        <location filename="../mobilehotspotwidget.cpp" line="835"/>
         <source>hotspot already open</source>
-        <translation>ошақ қазірдің өзінде ашылған</translation>
+        <translation>اعىم  تۉيۉنۉ  تەە مۇردا  ئېچىۋېتىلدى</translation>
     </message>
 </context>
 </TS>

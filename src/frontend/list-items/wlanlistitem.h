@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -19,20 +19,21 @@
  */
 #ifndef WLANLISTITEM_H
 #define WLANLISTITEM_H
-#include "listitem.h"
-#include "kywirelessnetitem.h"
-#include "kywirelessnetresource.h"
-#include "wlanpage.h"
-#include "kywirelessconnectoperation.h"
 #include <QCheckBox>
-#include "kylinactiveconnectresource.h"
 #include <QAction>
-#include "enterprisewlandialog.h"
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>
 
+#include "listitem.h"
+#include "wlanpage.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
+#include "enterprise-wlan/enterprisewlandialog.h"
+
+#include "../../backend/dbus-interface/kywirelessnetitem.h"
+#include "../../backend/dbus-interface/kywirelessnetresource.h"
+#include "../../backend/dbus-interface/kywirelessconnectoperation.h"
+#include "../../backend/dbus-interface/kylinactiveconnectresource.h"
 
 using namespace kdk;
 
@@ -41,12 +42,8 @@ using namespace kdk;
 #define NORMAL_HEIGHT 48
 #define EXPANDED_HEIGHT 120
 #define PWD_LENGTH_LIMIT 8
+#define PWD_LENGTH_MAX 63
 
-#define EXCELLENT_SIGNAL 80
-#define GOOD_SIGNAL 55
-#define OK_SIGNAL 30
-#define LOW_SIGNAL 5
-#define NONE_SIGNAL 0
 
 #define FREQ_5GHZ 5000
 
@@ -61,7 +58,6 @@ public:
 
 public:
     QString getSsid();
-
     QString getUuid();
 
     QString getPath();
@@ -84,6 +80,7 @@ public:
 
     void setFrequency();
 
+    bool getAutoConnect();
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
@@ -95,10 +92,12 @@ protected:
 
 Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
+    void sigNetworkPropChanged(QVariantMap parm);
 
 private:
     void initWlanUI();
     void refreshIcon(bool isActivated);
+    void requestInputPasswdAgent(QString netName, QString deviceName, int type);
 
 private:
     KyWirelessNetItem m_wirelessNetItem;
@@ -130,8 +129,12 @@ private:
 protected Q_SLOTS:
     void onInfoButtonClicked();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void onNetButtonClicked();
+
+private Q_SLOTS:
+
+    void onNetButtonReleased();
     void onPwdEditorTextChanged();
     void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);

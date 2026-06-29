@@ -21,6 +21,17 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kywirelessnetitem.h"
 #include "kylinutil.h"
+#include <QFile>
+#include <QTextStream>
+#include <QRegularExpression>
+#include <QFileInfo>
+#include <QDir>
+#include <QSettings>
+#include <QVector>
+#include <QPair>
+#include <QProcess>
+#include "../../pub/appsettings.h"
+#include "../../pub/uisecurityconfig.h"
 
 #define VIRTURAL_DEVICE_PATH "/sys/devices/virtual/net"
 #define LOG_FLAG "KyNetworkDeviceResourse"
@@ -31,6 +42,22 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
     qRegisterMetaType<NetworkManager::Connectivity>("NetworkManager::Connectivity");
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+
+    const QStringList keys = AppSettings::instance().getHiddenUsbPairs();
+    for (const QString &k : keys) {
+        QString v = k.trimmed().toLower();
+        if (v.isEmpty()) continue;
+        QStringList vp = v.split(':');
+        if (vp.size() != 2) continue;
+        QString vendor = vp.at(0).trimmed();
+        QString product = vp.at(1).trimmed();
+        if (vendor.length() < 4) vendor = vendor.rightJustified(4, '0');
+        if (product.length() < 4) product = product.rightJustified(4, '0');
+        m_hiddenVidPid.append(qMakePair(vendor, product));
+    }
+
+    qWarning() << Q_FUNC_INFO << __LINE__ <<  "ProjectInfo m_hiddenVidPid :" << m_hiddenVidPid;
+    
 
     m_deviceMap.clear();
 
@@ -113,7 +140,15 @@ void KyNetworkDeviceResourse::getNetworkDeviceList(
                     continue;
                 }
             }
-
+            bool vendorSpecial = UiSecurityConfig::getInstance()->isSeewoOrMaxhub();
+            if (vendorSpecial) {
+                if (!devicePtr->managed() && devicePtr->interfaceName() == QLatin1String("meeting-rpc-net")) {
+                    continue;
+                }
+                if (isInterfaceFromHiddenUsb(devicePtr->interfaceName())) {
+                    continue;
+                }
+            }
             networkDeviceList<<devicePtr->interfaceName();
         }
     }
@@ -400,6 +435,74 @@ uint KyNetworkDeviceResourse::kyFindChannel(uint freq)
     return channel;
 }
 
+bool KyNetworkDeviceResourse::isInterfaceFromHiddenUsb(const QString &ifName)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << "ifName:" << ifName;
+    if (m_hiddenVidPid.isEmpty())
+        return false;
+
+    // 构造网卡路径
+    const QString devDir = QStringLiteral("/sys/class/net/") + ifName;
+    QString devPath = devDir + QLatin1String("/device");
+
+    // 兼容驱动：device 目录不存在就用网卡自身目录
+    if (!QFileInfo::exists(devPath)) {
+        devPath = devDir;
+        if (!QFileInfo::exists(devPath)) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "设备路径不存在：" << devPath;
+            return false;
+        }
+    }
+
+    // ======================
+    // 读取 modalias 文件
+    // 格式示例：usb:v0BDApB711d0200dc00dsc00dp00icFFiscFFipFF
+    // ======================
+    QString modaliasPath = devPath + QLatin1String("/modalias");
+    QFile modFile(modaliasPath);
+
+    if (!modFile.open(QIODevice::ReadOnly)) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "无法打开 modalias：" << modaliasPath;
+        return false;
+    }
+
+    QString modalias = modFile.readAll().trimmed();
+    modFile.close();
+
+    qDebug() << Q_FUNC_INFO << __LINE__ << "modalias：" << modalias;
+
+    // ======================
+    // 正则提取 VID(PID)
+    // vxxxx = VID
+    // pxxxx = PID
+    // ======================
+    QRegularExpression re(R"(v([0-9a-fA-F]{4})p([0-9a-fA-F]{4}))");
+    QRegularExpressionMatch match = re.match(modalias);
+
+    if (!match.hasMatch()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "modalias 格式不正确，不是 USB 设备";
+        return false;
+    }
+
+    // 提取并转小写（和 udevadm 输出保持一致）
+    QString vid = match.captured(1).toLower();
+    QString pid = match.captured(2).toLower();
+
+    qDebug() << "========================================";
+    qDebug() << "ID_VENDOR_ID    = " << vid;   // 0bda
+    qDebug() << "ID_USB_MODEL_ID = " << pid;   // b711
+    qDebug() << "========================================";
+
+    for (const auto &vp : qAsConst(m_hiddenVidPid)) {
+        if (vp.first == vid && vp.second == pid)
+            return true;
+    }
+
+    qDebug() << LOG_FLAG << "device" << devPath << "with vendor" << vid << "and product" << pid << "is not in hidden list";
+
+    return false;
+}
+
 void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType)
 {
     strMac.clear();
@@ -477,6 +580,15 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
 
 void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType)
 {
+    bool vendorSpecial = UiSecurityConfig::getInstance()->isSeewoOrMaxhub();
+    if (vendorSpecial) {
+        if (deviceName == "meeting-rpc-net") {
+            return;
+        }
+        if (isInterfaceFromHiddenUsb(deviceName)) {
+            return;
+        }
+    }
     m_deviceMap.insert(uni, deviceName);
     Q_EMIT deviceAdd(deviceName, deviceType);
     return;

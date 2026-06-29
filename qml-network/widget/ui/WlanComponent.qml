@@ -1,0 +1,924 @@
+import QtQuick 2.15
+import QtQuick.Window 2.15
+import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.1
+import QtQuick.Controls.Material 2.3
+import org.ukui.shortcut.network 1.0
+import org.ukui.quick.items 1.0 as UkuiItems
+import org.ukui.quick.platform 1.0 as Platform
+
+
+ListView {
+    id: wlanlistView
+    visible: true
+    model: KInterface.wirelessConLists
+    spacing: 0
+    property int baseItemHeight: 56
+    property int expandedItemHeight: 145
+    Component.onCompleted: {
+        // map font size to heights (simple scaling)
+        function updateHeights(fontSize) {
+            var size = parseInt(fontSize)
+            if (!isNaN(size)) {
+                baseItemHeight = Math.round(56 * size / 10)
+            }
+        }
+        updateHeights(KInterface.fontSize)
+    }
+    Connections {
+        target: KInterface
+        function onFontSizeChanged(fontSize) {
+            var size = parseInt(fontSize)
+            if (!isNaN(size)) {
+                wlanlistView.baseItemHeight = Math.round(56 * size / 10)
+            }
+        }
+    }
+    Connections {
+        target: KInterface
+        function onTriggerButtonRequested(index) {
+                console.log("Triggering button for index:", index)
+                const delegate = wlanlistView.itemAtIndex(index)
+                if (delegate) {
+                    // 滚动到视图中间
+                    Qt.callLater(function() {
+
+                               // 计算在外部滚动视图中的位置
+                               var itemPos = delegate.mapToItem(outerFlickable, 0, 0);
+
+                               // 计算目标位置
+                               var targetY = itemPos.y-(outerFlickable.height - delegate.height) / 2;
+
+                               // 边界检查
+                               targetY = Math.max(0, Math.min(targetY, outerFlickable.contentHeight - outerFlickable.height));
+
+                               // 应用滚动位置
+                               outerFlickable.contentY = targetY;
+                        })
+                    delegate.triggerButtonClick();
+                }
+         }
+    }
+    property bool connectMac : false
+    property int detailShowIndex : -1
+    property var currentOpenMenu: null
+    property bool wlanListReorderPaused: false
+
+    function syncWirelessListReorderPaused() {
+        var shouldPause = false
+        for (var i = 0; i < wlanlistView.count; i++) {
+            var d = wlanlistView.itemAtIndex(i)
+            if (d && d.height > wlanlistView.baseItemHeight) {
+                shouldPause = true
+                break
+            }
+        }
+        if (wlanListReorderPaused !== shouldPause) {
+            wlanListReorderPaused = shouldPause
+            KInterface.setWirelessListReorderPaused(shouldPause)
+        }
+    }
+
+    function updateMacConnAttr(ipos, status) {
+        if (0 === ipos) {
+            connectMac = status
+        }
+    }
+
+    function updateShowDetailIndex(ipos) {
+        console.log("detail index: ", ipos)
+        detailShowIndex = ipos
+        for(var i=0; i<wlanlistView.count; i++) {
+            if(i !== detailShowIndex) {
+                var d = wlanlistView.itemAtIndex(i);
+                if (d) {
+                    d.hideDetail()
+                }
+
+            }
+        }
+    }
+
+    // 定义每个项的显示方式
+    delegate: ItemDelegate {
+        id: listItem
+        highlighted: enteritem && wlanlistView.currentIndex === index
+        width: parent.width
+        height: wlanlistView.baseItemHeight
+        onHeightChanged: Qt.callLater(wlanlistView.syncWirelessListReorderPaused)
+        property bool enteritem : false
+        property bool conConnected:   model.status === 2
+        property bool canDisconnect:  model.status === 1 || model.status === 2
+        property int freqForDisplay: (model.frequency === 0 && model.ssid && model.ssid.toUpperCase().indexOf("5G") !== -1) ? 5200 : model.frequency
+        property int signalForDisplay: (isNaN(parseInt(model.signal)) ? -1 : (parseInt(model.signal) === 0 ? (model.status === 2 ? 100 : -1) : parseInt(model.signal)))
+        property bool menuLoaded: false
+        property bool textEditLoaded: false
+        property bool pwdConnectBtnLoaded: false
+        property bool autoConnectCheckBoxLoaded: false
+        property bool passwordError: false  // 标记当前项是否密码错误
+        property bool waitingForPassword: false
+
+        onConConnectedChanged: {
+            updateMacConnAttr(index, conConnected)
+        }
+
+        Component.onCompleted: {
+            updateMacConnAttr(index, conConnected)
+        }
+
+        Connections {
+            target: KInterface
+            function onPasswordErrorOccurred(ssid, password) {
+                if (ssid === model.ssid) {
+                    // 如果当前未展开，则展开
+                    if (listItem.height === wlanlistView.baseItemHeight) {
+                        listItem.height = wlanlistView.expandedItemHeight;
+                    }
+
+                    // 加载密码输入框和连接按钮（关键修复）
+                    if (!textEditLoaded) {
+                        loadTextEdit();
+                    }
+                    if (!pwdConnectBtnLoaded) {
+                        loadPwdConnectBtn();
+                    }
+
+                    // 确保密码输入区域可见
+                    if (!textEditLayout.visible) {
+                        textEditLayout.visible = true;
+                        connectBtn.visible = false;
+                    }
+
+                    // 加载并显示自动连接复选框
+                    if (!autoConnectCheckBoxLoaded) {
+                        loadAutoConnectCheckBox();
+                    }
+                    autoConnectRow.visible = true;
+                    if (autoConnectCheckBoxLoader.item) {
+                        autoConnectCheckBoxLoader.item.visible = true;
+                    }
+
+                    // 显示错误提示
+                    errorText.visible = true;
+                    passwordError = true;
+
+                    // 将错误密码回显到输入框，并聚焦选中 ---
+                    if (textEditLoader.item) {
+                        textEditLoader.item.text = password;          // 设置密码内容
+                        textEditLoader.item.forceActiveFocus();       // 获取焦点
+                        textEditLoader.item.selectAll();              // 全选文本，方便直接修改
+                    }
+                    // 滚动视图使当前项可见
+                    updateItemPos();
+
+                    waitingForPassword = true;   // 标记等待用户输入
+                }
+            }
+        }
+
+
+        function hideDetail() {
+            if (waitingForPassword) {
+                KInterface.cancelWirelessPassword(model.uuid, model.ssid);
+                waitingForPassword = false;
+            }
+
+            if (textEditLayout.visible) {
+                listItem.height = wlanlistView.baseItemHeight
+                textEditLayout.visible = false
+            }
+            if (autoConnectCheckBoxLoader.item) {
+                autoConnectCheckBoxLoader.item.visible = false
+                autoConnectRow.visible = false
+            }
+
+            errorText.visible = false;
+            passwordError = false;
+            Qt.callLater(wlanlistView.syncWirelessListReorderPaused)
+        }
+
+        function loadMenu() {
+            if (!menuLoaded) {
+                menuLoader.active = true
+                menuLoaded = true
+            }
+        }
+
+        function loadTextEdit() {
+            if (!textEditLoaded) {
+                textEditLoader.active = true
+                textEditLoaded = true
+            }
+        }
+
+        function loadPwdConnectBtn() {
+            if (!pwdConnectBtnLoaded) {
+                pwdConnectBtnLoader.active = true
+                pwdConnectBtnLoaded = true
+            }
+        }
+
+        function loadAutoConnectCheckBox() {
+            if (!autoConnectCheckBoxLoaded) {
+                autoConnectCheckBoxLoader.active = true
+                autoConnectCheckBoxLoaded = true
+            }
+        }
+
+        function updateItemPos() {
+            Qt.callLater(function() {
+                var itemPos = listItem.mapToItem(outerFlickable, 0, 0);
+            
+                // 计算目标位置
+                var targetY = outerFlickable.height - itemPos.y ;
+
+                console.log("updateItemPos itemPos.y:", itemPos.y, " outerFlickable.contentY:",  outerFlickable.contentY, 
+                            " outerFlickable.height:", outerFlickable.height, " targetY:", targetY, " listItem.height:", listItem.height,
+                            "listItem.contentHeight:", outerFlickable.contentHeight);
+
+                if (targetY < listItem.height) {
+                    outerFlickable.contentY += (listItem.height - targetY);
+                    console.log("updateItemPos adjust outerFlickable.contentY to :", outerFlickable.contentY)
+                }
+            });
+            
+        }
+
+        //改函数逻辑待梳理优化点击事件后可合并为公共方法 暂不处理
+        function triggerButtonClick(){
+
+            if (model.status !== 2 ) {
+                console.log("model.security:", model.security, model.security.length)
+                if (listItem.height == wlanlistView.expandedItemHeight ||  model.Configured || model.security.includes("802.1X") || !model.security) {
+                    listItem.height = wlanlistView.baseItemHeight
+                } else {
+                    listItem.height = wlanlistView.expandedItemHeight
+                }
+
+                if(textEditLayout.visible) {
+                    listItem.height = wlanlistView.baseItemHeight
+                    textEditLayout.visible = false
+                    connectBtn.visible = true
+                } else {
+                    // 动态加载textEdit和pwdConnectBtn
+                    if (!textEditLoaded) {
+                        loadTextEdit()
+                        loadPwdConnectBtn()
+                    }
+                    textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && model.security)
+                    connectBtn.visible = !textEditLayout.visible
+                }
+            }
+
+            if(!textEditLayout.visible) {
+                if (canDisconnect) {
+                    KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                } else if (model.status === 4) {
+                    KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                    connectBtn.visible=false
+                }
+                return
+            } else {
+                if(textEditLoader.item) textEditLoader.item.forceActiveFocus()
+            }
+
+            if(autoConnectCheckBoxLoader.item && autoConnectCheckBoxLoader.item.visible) {
+                autoConnectCheckBoxLoader.item.visible = false
+                autoConnectRow.visible = false
+            } else if (model.status !== 2){
+                if (!autoConnectCheckBoxLoaded) {
+                    loadAutoConnectCheckBox()
+                }
+                autoConnectRow.visible = (textEditLayout.visible || model.Configured)
+                autoConnectCheckBoxLoader.item.visible = (textEditLayout.visible || model.Configured)
+            }
+        }
+
+        //嵌套MouseArea最好统一顶层调度
+        MouseArea {
+            anchors.fill: listItem
+            acceptedButtons: Qt.AllButtons
+            hoverEnabled: true
+
+            onEntered: {
+                if (textEditLayout.visible)
+                    return
+                enteritem = true
+                connectBtn.visible = true
+                speedLabel.visible = false
+            }
+            onExited: {
+                wlanlistView.currentIndex = -1
+                enteritem = false
+                connectBtn.visible = false
+                speedLabel.visible = (model.status === 2)
+
+            }
+
+            onWheel: {
+                wheel.accepted = false;
+                if (wlanlistView.currentOpenMenu && wlanlistView.currentOpenMenu.visible) {
+                    wlanlistView.currentOpenMenu.close();
+                }
+                wlanlistView.currentOpenMenu = null;
+            }
+
+            // 点击Item时候焦点聚焦
+            onClicked: {
+                mouse.accepted = false
+
+                if (mouse.button == Qt.RightButton && model.status !== 2) {
+                    if (!menuLoaded) {
+                        loadMenu()
+                    }
+                    if (menuLoader.item) {
+                        menuLoader.item.popup()
+                        wlanlistView.currentOpenMenu = menuLoader.item;
+                    }
+                    mouse.accepted = true
+                    return
+                }
+
+                if (model.status !== 2 ) {
+                    console.log("model.security:", model.security, model.security.length)
+                    if (listItem.height == wlanlistView.expandedItemHeight ||  model.Configured || model.security.includes("802.1X") || !model.security) {
+                        listItem.height = wlanlistView.baseItemHeight
+                    } else {
+                        listItem.height = wlanlistView.expandedItemHeight
+                    }
+
+                    if(textEditLayout.visible) {
+                        listItem.height = wlanlistView.baseItemHeight
+                        textEditLayout.visible = false
+                        connectBtn.visible = true
+                    } else {
+                        // 动态加载textEdit和pwdConnectBtn
+                        if (!textEditLoaded) {
+                            loadTextEdit()
+                            loadPwdConnectBtn()
+                        }
+                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && model.security)
+                        connectBtn.visible = !textEditLayout.visible
+                    }
+		   //增加无密码或者802.1X网络左键点击后，直接触发连接
+                    if ((mouse.button == Qt.LeftButton) && (model.status === 4) && ((model.security.includes("802.1X") || !model.security)) ) {
+
+                        KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                    }
+                } else if ((model.status === 2) && (mouse.button == Qt.LeftButton) ) {
+                    console.log("onClicked return")
+                    KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                }
+
+                if(connectBtnHandler.containsMouse) {
+                    if (canDisconnect) {
+                        KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                    } else if (model.status === 4) {
+                        KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                    }
+                    return
+                }
+
+                if(autoConnectCheckBoxLoader.item && autoConnectCheckBoxLoader.item.visible) {
+                    autoConnectCheckBoxLoader.item.visible = false
+                    autoConnectRow.visible = false
+                } else if (model.status !== 2){
+                    if (!autoConnectCheckBoxLoaded) {
+                        loadAutoConnectCheckBox()
+                    }
+                    autoConnectRow.visible =  (textEditLayout.visible || model.Configured)
+                    autoConnectCheckBoxLoader.item.visible = (textEditLayout.visible || model.Configured)
+                }
+
+                if (mouse.button == Qt.LeftButton) {
+                    if(textEditLayout.visible && textEditLoader.item) textEditLoader.item.forceActiveFocus()
+                } else if (mouse.button == Qt.RightButton) {
+                    if (!menuLoaded) {
+                        loadMenu()
+                    }
+                    if (menuLoader.item) {
+                        menuLoader.item.popup()
+                        wlanlistView.currentOpenMenu = menuLoader.item;
+                    }
+                }
+            }
+        }
+        ColumnLayout {
+            anchors.fill: parent
+            width: parent.width
+            height:parent.height
+            RowLayout {
+                id: itemRowLayout
+
+                // 动态加载Menu
+                Loader {
+                    id: menuLoader
+                    active: false
+                    sourceComponent: Menu {
+                        id: propertyMenu
+
+                        Component.onCompleted: {
+                            console.log("Menu completed for SSID:", model.ssid);
+                            console.log("model.Configured:", model.Configured);
+                        }
+
+                        MenuItem {//connect/disconnect
+                            text: canDisconnect ? qsTr("Disconnect network") : qsTr("Connect network")
+                            onTriggered: {
+                                console.log("connect/disconnect network")
+
+                                if (canDisconnect) {
+                                    KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                                } else if (model.status === 4) {
+                                    // 对于需要密码但未配置的网络，展开输入框
+                                    if (!model.Configured && model.security && !model.security.includes("802.1X")) {
+                                        // 展开项目显示密码输入区域
+                                        listItem.height = wlanlistView.expandedItemHeight
+
+                                        // 动态加载textEdit和pwdConnectBtn
+                                        if (!textEditLoaded) {
+                                            loadTextEdit()
+                                            loadPwdConnectBtn()
+                                        }
+                                        textEditLayout.visible = true
+                                        connectBtn.visible = false
+
+                                        // 显示自动连接复选框
+                                        if (!autoConnectCheckBoxLoaded) {
+                                            loadAutoConnectCheckBox()
+                                        }
+                                        autoConnectRow.visible =  true
+                                        autoConnectCheckBoxLoader.item.visible = true
+
+                                        // 更新显示详情索引
+                                        updateShowDetailIndex(index)
+                                        updateItemPos()
+
+                                    } else {
+                                        /* 对于已配置或开放网络，直接连接 */
+                                        KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                                    }
+                                }
+                            }
+                        }
+
+                        MenuItem {//property
+                            text:qsTr("Network property")
+                            visible: {
+                                console.log("Property MenuItem visible check - model.Configured:", model.Configured);
+                                return model.Configured;
+                            }
+                            Component.onCompleted: {
+                                console.log("Property MenuItem loaded for SSID:", model.ssid);
+                            }
+                            onTriggered: {
+                                console.log("network property")
+                                console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
+
+                                KInterface.showPropertyWidget(wlanDeviceComboBox.currentText, model.ssid)
+                            }
+                        }
+
+                        MenuItem {
+                            text:qsTr("Forget the network")
+                            visible: {
+                                console.log("Forget MenuItem visible check - model.Configured:", model.Configured);
+                                return model.Configured;
+                            }
+                            Component.onCompleted: {
+                                console.log("Forget MenuItem loaded for SSID:", model.ssid);
+                            }
+                            onTriggered: {
+                                console.log("Forget the network",model.uuid)
+                                KInterface.deleteConnect(1,model.uuid)
+                            }
+                        }
+                    }
+                }
+
+
+                Item {
+                    Layout.alignment: Qt.AlignLeft
+                    enabled: false
+                    Layout.leftMargin: 26
+                    width: 36
+                    height: 36
+
+                    UkuiItems.IconButton {
+                        id: typeicon
+                        visible: model.status === 2 || model.status === 4
+                        // use signalForDisplay for icon selection; when unknown (-1) fall back to 0
+                        iconSource: KInterface.getWiFiIcon(signalForDisplay === -1 ? 0 : signalForDisplay, model.security, model.isApConn, model.category)
+                        anchors.fill: parent
+                        radius: 19
+                        isHighLight: model.status === 2
+                        width: parent.width
+                        height: parent.height
+                    }
+
+                    UkuiItems.IconButton {
+                        id: loadingicon
+                        visible: model.status === 1 || model.status === 3
+                        iconSource: "ukui-loading-" + String(loadingicon.loading_num % 8) + "-symbolic"
+                        anchors.fill: parent
+                        radius: 19
+                        isHighLight: model.status === 3
+                        width: parent.width
+                        height: parent.height
+                        property int  loading_num : 0
+                    }
+                    Timer {
+                        interval: 100
+                        running: model.status === 1 || model.status === 3
+                        repeat: true
+                        onTriggered:{
+                            loadingicon.loading_num += 1;
+                            loadingicon.iconSource =  "ukui-loading-" + String(loadingicon.loading_num % 8) + "-symbolic";
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 0
+
+                    RowLayout {
+                        Layout.leftMargin: 7
+                        Label {
+                            id: nameLabel
+                            Layout.alignment: Qt.AlignLeft
+                            Layout.bottomMargin: 0
+                            Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)  // 限制最大宽度，为其他元素预留空间
+                            Layout.maximumWidth: listItem.width - 250  // 确保不会挤压其他元素
+                            text: model.ssid
+                            elide: Text.ElideRight
+                        }
+
+                        Rectangle {
+                            id: roundedRect
+                            Layout.alignment: Qt.AlignLeft
+                            Layout.bottomMargin: 0
+                            width: textMetrics.tightBoundingRect.width + 6
+                            height: textMetrics.tightBoundingRect.height + 6
+
+                            // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
+                            property int wlan_type : model.isMix ? 0 : freqForDisplay > 5000 ? 1 : 2;
+
+                            color: "transparent"
+                            radius: 4
+
+                            border {
+                                color: Platform.GlobalTheme.kFontPlaceholderText.pureColor
+                                width: 1
+                            }
+
+                            TextMetrics {
+                                id: textMetrics
+                                font: dtThemeText.font
+                                text: dtThemeText.text
+                            }
+
+                            UkuiItems.DtThemeText {
+                                id: dtThemeText
+                                anchors.centerIn: parent
+                                property int wlan_type : model.isMix ? 0 : freqForDisplay > 5000 ? 1 : 2;
+                                text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"
+                                textColor: Platform.GlobalTheme.kFontPlaceholderText
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        visible: false
+                        id: textEditLayout
+                        Layout.topMargin: 10
+                        Layout.leftMargin: 6
+
+                        // 动态加载TextField
+                        Loader {
+                            id: textEditLoader
+                            active: false
+                            sourceComponent: TextField {
+                                Layout.leftMargin: 0
+                                id: textEdit
+                                width: 208
+                                echoMode: TextInput.Password
+                                property bool passMode: true
+                                property int textLength: textEdit.text.length
+                                validator: RegExpValidator { regExp: /^[a-zA-Z0-9\s\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^_\`\{\|\}\~]*$/}
+
+                                onTextLengthChanged: {
+                                    if(textLength>=8) {
+                                        if (pwdConnectBtnLoader.item) {
+                                            pwdConnectBtnLoader.item.enabled = true
+                                        }
+                                    } else {
+                                        if (pwdConnectBtnLoader.item) {
+                                            pwdConnectBtnLoader.item.enabled = false
+                                        }
+                                    }
+                                }
+
+                                onAccepted: {
+
+                                    KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text,
+                                                               autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
+                                }
+                            }
+                        }
+                        // 动态加载Button
+                        Loader {
+                            id: pwdConnectBtnLoader
+                            active: false
+                            sourceComponent: Button {
+                                id: pwdConnectBtn
+                                highlighted: true
+                                width: 88
+                                height: 36
+                                Layout.rightMargin: 24
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                text: qsTr("connect")
+                                property var maxWidth: 88
+
+                                onClicked: {
+                                    errorText.visible = false;// 在点击连接按钮后也隐藏错误（无论成功与否）
+                                    if (waitingForPassword) {
+                                        // 提交新密码
+                                        KInterface.submitWirelessPassword(model.uuid, model.ssid, textEditLoader.item.text);
+                                        waitingForPassword = false;
+                                        hideDetail();
+                                    }else{
+                                        KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security,
+                                                               textEditLoader.item ? textEditLoader.item.text : "",
+                                                               autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
+                                    }
+
+                                }
+
+                                Component.onCompleted: {
+                                    pwdConnectBtn.enabled = (textEditLoader.item && textEditLoader.item.textLength>=8 ? true : false)
+                                }
+                            }
+                        }
+                    }
+
+                    // 新增密码错误提示文本
+                    UkuiItems.DtThemeText {
+                        id: errorText
+                        visible:false
+                        Layout.topMargin: 4
+                        Layout.leftMargin: 7
+                        text: qsTr("Incorrect password")
+                        color: "red"
+                        font.pixelSize: 12
+                    }
+
+
+                    RowLayout {
+                        id: autoConnectRow
+                        UkuiItems.DtThemeText {
+                            visible: model.status === 2
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                            Layout.topMargin: 0
+                            Layout.leftMargin: 7
+                            Layout.preferredWidth: Math.min(implicitWidth, listItem.width - 250)
+
+                            text: qsTr("connected");
+
+                            textColor: Platform.GlobalTheme.kFontPlaceholderText
+                            height: 16
+                            elide: Text.ElideRight
+                        }
+                        // 动态加载CheckBox
+                        Loader {
+                            id: autoConnectCheckBoxLoader
+                            active: false
+                            sourceComponent: CheckBox {
+                                id: autoConnectCheckBox
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                width: Math.min(implicitWidth, listItem.width - 250)
+                                visible: false
+                                Layout.topMargin: 0
+                                text: qsTr("AutoConnect")
+                                checked: model.Configured ? model.autoConnect : true
+
+                                // 使用TextMetrics来准确测量文本宽度
+                                TextMetrics {
+                                    id: checkboxTextMetrics
+                                    font: autoConnectCheckBox.font
+                                    text: autoConnectCheckBox.text
+                                }
+
+                                // 自定义contentItem以支持省略号
+                                contentItem: Label {
+                                    text: autoConnectCheckBox.text
+                                    font: autoConnectCheckBox.font
+                                    verticalAlignment: Text.AlignVCenter
+                                    leftPadding: autoConnectCheckBox.indicator.width + autoConnectCheckBox.spacing
+                                    elide: Text.ElideRight  // 文本省略号
+                                }
+
+                                onClicked: {
+                                    mouse.accepted = true
+                                }
+
+                                onVisibleChanged: {
+                                    if (visible) {
+                                        updateShowDetailIndex(index)
+                                        updateItemPos()
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: autoConnectCheckBoxMouseAreaHandler
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+
+                                    onClicked: {
+                                        autoConnectCheckBox.checked = !autoConnectCheckBox.checked
+                                        console.log("Dttest autoConnectCheckBoxLoader onClicked :", model.ssid , model.uuid , model.Configured ,autoConnectCheckBoxLoader.item.checkState)
+
+                                        model.autoConnect = autoConnectCheckBox.checked;
+                                        console.log("Dttest autoConnectCheckBoxLoader onClicked :", model.autoConnect)
+
+                                        KInterface.setNetworkConnectAutoConnectState(1, model.uuid, autoConnectCheckBoxLoader.item.checkState);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                Rectangle {
+                    id: speedLabel
+                    visible: true
+                    Layout.preferredWidth: 140
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+
+
+                    Image {
+                        id: upLoadicon
+                        visible: model.status === 2
+                        anchors.right: upLoadWirelessText.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-up.png"
+                    }
+
+                    UkuiItems.DtThemeText {
+                        id: upLoadWirelessText
+                        visible: model.status === 2
+                        anchors.right: downLoadIcon.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "0KB/s"
+                        Connections {
+                            target: KInterface
+                            function onUpdateUpLoadWirelessStr(str) {
+                                upLoadWirelessText.text = str
+                            }
+                        }
+                    }
+
+                    Image {
+                        id: downLoadIcon
+                        visible: model.status === 2
+                        anchors.right: downLoadWirelessText.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-down.png"
+                    }
+
+                    UkuiItems.DtThemeText {
+                        id: downLoadWirelessText
+                        visible: model.status === 2
+                        anchors.rightMargin: 32
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "0KB/s"
+                        Connections {
+                            target: KInterface
+                            function onUpdateDownLoadWirelessStr(str)  {
+                                downLoadWirelessText.text = str
+                            }
+                        }
+                    }
+                }
+
+                Button {
+                    id: connectBtn
+                    visible: false
+                    width: 88
+                    Layout.preferredWidth: 88  /* 在布局中的首选宽度 */
+                    Layout.maximumWidth: 88
+                    height: 36
+                    Layout.rightMargin: 24
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    text: canDisconnect ? qsTr("disconnect") : qsTr("connect")
+                    highlighted: canDisconnect ? 0 : 1
+
+                    /* 在连接按钮文本缩略情况下，添加tooltip显示完整的文本 */
+                    ToolTip.visible: connectBtnHandler.containsMouse && contentItem.truncated
+                    ToolTip.text: text
+                    ToolTip.delay: 500
+                    property var maxWidth: 88
+
+                    MouseArea {
+                        id: connectBtnHandler
+                        propagateComposedEvents: true
+                        hoverEnabled: true
+                        property bool showButton: containsMouse
+                        anchors.fill: parent
+                        onEntered: {
+                            if (textEditLayout.visible)
+                                return
+                            enteritem = true
+                            connectBtn.visible = true
+                            speedLabel.visible = false
+                        }
+
+                        onExited: {
+                            wlanlistView.currentIndex = -1
+                            enteritem = false
+                            connectBtn.visible = false
+                            speedLabel.visible = (model.status === 2)
+                        }
+
+                        onClicked: {
+                            mouse.accepted = false
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /*不能使用visble在listview中footer要占位会有一行空白*/
+    footer: Loader {
+           width: parent.width
+           sourceComponent: (KInterface.uiCtlData.wlanAddButton && wlanDeviceComboBox.count >= 1) ?
+                           footerComponent : null
+
+           //!KInterface.uiCtlData.wlanAddButton &&
+       }
+
+       Component {
+           id: footerComponent
+           Button {
+               id: addOtherBtn
+               width: parent.width
+               height: 40
+               anchors.left: parent.left
+               hoverEnabled: true
+               flat: true
+               focusPolicy: Qt.StrongFocus
+
+               /*
+               // 添加视觉反馈
+               background: Rectangle {
+                   color: addOtherBtn.hovered ? "#f0f0f0" : "transparent"
+               }
+               */
+
+               UkuiItems.DtThemeText {
+                   text: qsTr("Add Others...")
+                   anchors.top: parent.top
+                   anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
+                   anchors.left: parent.left
+                   anchors.leftMargin: 26
+                   elide: Text.ElideRight
+               }
+
+               onClicked: {
+                   console.log("addOtherBtn onClicked")
+                   KInterface.showAddOtherWlanPage(wlanDeviceComboBox.currentText)
+                   mouse.accepted = true
+               }
+               onPressed: mouse.accepted = true
+           }
+       }
+
+    onVisibleChanged :{
+        if (visible) {
+            // 每次显示时立即请求一次扫描
+            KInterface.rescanWirelessConn();
+        } else {
+            try {
+                if (wlanListReorderPaused) {
+                    wlanListReorderPaused = false
+                    KInterface.setWirelessListReorderPaused(false)
+                } else {
+                    KInterface.rebuildCurrentWirelessList()
+                }
+            } catch(e) {
+                console.log("rebuildCurrentWirelessList error:", e)
+            }
+        }
+    }
+}
+
+
+

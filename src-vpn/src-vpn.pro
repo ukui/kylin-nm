@@ -14,12 +14,21 @@ TEMPLATE = app
 CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 #CONFIG += release
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
-PKGCONFIG +=kysdk-sysinfo
+PKGCONFIG +=gio-2.0 \
+            glib-2.0 \
+            gio-unix-2.0 \
+            libnm \
+            libcap \
+            libsecret-1 \
+            gtk+-3.0 \
+            gsettings-qt \
+            kysdk-qtwidgets \
+            kysdk-waylandhelper \
+            kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysdk-ukuiwindowhelper
 #LIBS    += -lkysec
 
 target.path = /usr/bin
@@ -56,6 +65,7 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 include(singleapplication/qt-single-application.pri)
 include(backend/backend.pri)
 include(frontend/frontend.pri)
+include(../pub/pub.pri)
 
 SOURCES += \
     main.cpp
@@ -80,6 +90,9 @@ TRANSLATIONS += \
         translations/kylin-vpn_fr.ts \
         translations/kylin-vpn_es.ts \
         translations/kylin-vpn_de.ts \
+        translations/kylin-vpn_vi.ts \
+        translations/kylin-vpn_th.ts \
+        translations/kylin-vpn_ms.ts \
         translations/kylin-vpn_bo.ts\
         translations/kylin-vpn_bo_CN.ts
 

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -21,9 +21,9 @@
 #include <QEvent>
 #include <QPainter>
 #include <QApplication>
-
 #include <QFontMetrics>
 #include <QGSettings>
+#include <QToolTip>
 
 #define FOREGROUND_COLOR_NORMAL this->palette().text().color()
 
@@ -90,15 +90,31 @@ void FixLabel::changedLabelSlot() {
     }
 }
 
+bool FixLabel::event(QEvent *event)
+{
+    if (event->type() == QEvent::Paint) {
+        QPalette tooltipPal = this->palette();
+        tooltipPal.setColor(QPalette::ToolTipBase, this->palette().toolTipBase().color());
+        tooltipPal.setColor(QPalette::ToolTipText, this->palette().toolTipText().color());
+        QToolTip::setPalette(tooltipPal);
+    }
+    return QWidget::event(event);
+}
+
+
 KyLable::KyLable(QWidget *parent) : QLabel(parent)
 {
     connect(qApp, &QApplication::paletteChanged, this, &KyLable::onPaletteChanged);
     onPaletteChanged();
+    m_origForegroundColor = FOREGROUND_COLOR_NORMAL;
+    this->setAttribute(Qt::WA_Hover, true);
+    this->setMouseTracking(true);
 }
 
 void KyLable::onPaletteChanged()
 {
-    m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+    m_origForegroundColor = FOREGROUND_COLOR_NORMAL;
+    m_foregroundColor = m_origForegroundColor;
     this->repaint();
 }
 
@@ -111,22 +127,22 @@ void KyLable::setPressColor()
 
 void KyLable::setHoverColor()
 {
-//    QColor hightlight = this->palette().color(QPalette::Active,QPalette::Highlight);
-//    QColor mix = this->palette().color(QPalette::Active,QPalette::BrightText);
-//    m_foregroundColor = mixColor(hightlight, mix, 0.2);
-    m_foregroundColor = this->palette().color(QPalette::Active,QPalette::Highlight);
+    m_foregroundColor = this->palette().color(QPalette::Active, QPalette::Highlight);
 }
 
 void KyLable::setNormalColor()
 {
-    m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+    m_foregroundColor = m_origForegroundColor;
 }
 
 void KyLable::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
     pal.setColor(QPalette::WindowText, m_foregroundColor);
+    pal.setColor(QPalette::Text, m_foregroundColor);
+    pal.setColor(QPalette::ButtonText, m_foregroundColor);
     this->setPalette(pal);
+
     return QLabel::paintEvent(event);
 }
 
@@ -134,12 +150,14 @@ void KyLable::enterEvent(QEvent *event)
 {
     setHoverColor();
     this->update();
+    QWidget::enterEvent(event);
 }
 
 void KyLable::leaveEvent(QEvent *event)
 {
     setNormalColor();
     this->update();
+    QWidget::leaveEvent(event);
 }
 
 void KyLable::mousePressEvent(QMouseEvent *event)
@@ -151,7 +169,7 @@ void KyLable::mousePressEvent(QMouseEvent *event)
 
 void KyLable::mouseReleaseEvent(QMouseEvent *event)
 {
-    setHoverColor();
+    setNormalColor();
     this->update();
     return QLabel::mouseReleaseEvent(event);
 }

@@ -14,12 +14,22 @@ TEMPLATE = app
 CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 #CONFIG += release
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
-PKGCONFIG +=kysdk-sysinfo
+PKGCONFIG +=gio-2.0 \
+            glib-2.0 \
+            gio-unix-2.0 \
+            libnm \
+            libsecret-1 \
+            gtk+-3.0 \
+            gsettings-qt \
+            libcap \
+            kysdk-qtwidgets \
+            kysdk-waylandhelper \
+            kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+INCLUDEPATH += $$PWD/../common
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysdk-ukuiwindowhelper
 #LIBS  +=  -lkysec
 
 CONFIG(release, debug|release) {
@@ -30,15 +40,16 @@ target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
-gschema.files = org.ukui.kylin-nm.switch.gschema.xml
-gschema.path = /usr/share/glib-2.0/schemas/
-qm_files.path = $${PREFIX}/share/kylin-nm/kylin-nm/
+qm_files.path = /usr/share/kylin-nm/kylin-nm/
 qm_files.files = translations/*.qm
+
+ts_files.path = /usr/share/kylin-nm/kylin-nm/
+ts_files.files = translations/*.ts
 
 INSTALLS += target \
         desktop \
-        gschema \
         qm_files \
+        ts_files
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -60,9 +71,10 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 include(singleapplication/qt-single-application.pri)
 include(backend/backend.pri)
 include(frontend/frontend.pri)
+include(../pub/pub.pri)
 
-RESOURCES += \
-    ../nmqrc.qrc
+#RESOURCES += \
+#    ../nmqrc.qrc
 
 SOURCES += \
     main.cpp
@@ -73,11 +85,12 @@ unix {
     OBJECTS_DIR = .obj
 }
 
-DISTFILES += \
-    org.ukui.kylin-nm.switch.gschema.xml
+# DISTFILES += \
+#     org.ukui.kylin-nm.switch.gschema.xml
 
 TRANSLATIONS += \
         translations/kylin-nm_zh_Hant.ts \
+        translations/kylin-nm_zh_HK.ts \
         translations/kylin-nm_zh_CN.ts \
         translations/kylin-nm_ug.ts \
         translations/kylin-nm_tr.ts \
@@ -87,5 +100,8 @@ TRANSLATIONS += \
         translations/kylin-nm_fr.ts \
         translations/kylin-nm_es.ts \
         translations/kylin-nm_de.ts \
+        translations/kylin-nm_th.ts\
+        translations/kylin-nm_vi.ts\
+        translations/kylin-nm_ms.ts\
         translations/kylin-nm_bo.ts\
         translations/kylin-nm_bo_CN.ts

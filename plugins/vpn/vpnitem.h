@@ -29,11 +29,12 @@
 #include <QGSettings>
 #include <QImage>
 #include <QPainter>
-#include <QToolButton>
 #include <QMenu>
 #include <QEvent>
-#include "fixlabel.h"
+#include "klabel.h"
 #include "../component/AddBtn/grayinfobutton.h"
+
+using namespace kdk;
 
 class VpnItem : public QPushButton
 {
@@ -43,9 +44,9 @@ public:
 public:
     QLabel * m_iconLabel = nullptr;
     GrayInfoButton * m_infoLabel = nullptr;
-    FixLabel * m_titileLabel = nullptr;
+    KLabel * m_titileLabel = nullptr;
     QLabel * m_statusLabel = nullptr;
-    QToolButton* m_moreButton = nullptr;
+    QPushButton* m_moreButton = nullptr;
     QMenu* m_moreMenu = nullptr;
     QAction* m_connectAction = nullptr;
     QAction* m_deleteAction = nullptr;
@@ -62,6 +63,14 @@ public:
     bool m_isAcitve = false;
     bool m_loading = false;
 
+    enum CornerType {
+        None,
+        Top
+    };
+    void setCornerType(CornerType type);
+private:
+    CornerType m_cornerType = None;
+
 protected:
     void paintEvent(QPaintEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
@@ -76,6 +85,7 @@ private slots:
     void updateIcon();
     void onConnectTriggered();
     void onDeletetTriggered();
+    void onMoreButtonClicked();
 
 Q_SIGNALS:
     void connectActionTriggered();

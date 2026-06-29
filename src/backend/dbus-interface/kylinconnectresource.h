@@ -24,7 +24,7 @@
 #include "kylinnetworkresourcemanager.h"
 #include "kylinconnectitem.h"
 #include "kylinvpnconnectitem.h"
-#include "kylinbluetoothconnectitem.h"
+//#include "kylinbluetoothconnectitem.h"
 #include "kylinnetworkdeviceresource.h"
 #include "kylinconnectsetting.h"
 #include "kylinapconnectitem.h"
@@ -46,7 +46,7 @@ public:
                            QList<KyConnectItem *> &connectItemList);
  //   void getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList);
     void getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectItemList);
-    void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
+//    void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
     void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
     KyApConnectItem *getApConnectionByUuid(QString connectUuid);
     QString getApConnectionPathByUuid(QString connectUuid);
@@ -55,10 +55,12 @@ public:
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
     bool getInterfaceByUuid(QString &deviceName, const QString connUuid);
     void getConnectivity(NetworkManager::Connectivity &connectivity);
+    NetworkManager::ActiveConnection::State getActiveConnectionState(const QString uuid);
 
     bool isVirtualConncection(QString uuid);
     bool isWiredConnection(QString uuid);
     bool isWirelessConnection(QString uuid);
+    bool isPppoeConnection(QString uuid);
     bool isActivatedConnection(QString uuid);
     bool isApConnection(QString uuid);
 
@@ -73,7 +75,7 @@ private:
     void getVpnConnectData(NetworkManager::ConnectionSettings::Ptr settingPtr,
                            KyVpnConnectItem *vpnItem);
     KyVpnConnectItem *getVpnConnectItem(NetworkManager::Connection::Ptr connectPtr);
-    KyBluetoothConnectItem *getBluetoothConnectItem(NetworkManager::Connection::Ptr connectPtr);
+//    KyBluetoothConnectItem *getBluetoothConnectItem(NetworkManager::Connection::Ptr connectPtr);
     KyApConnectItem *getApConnectItem(NetworkManager::Connection::Ptr connectPtr);
 
     void getIpv4ConnectSetting(NetworkManager::Ipv4Setting::Ptr &ipv4Setting,

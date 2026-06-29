@@ -18,7 +18,7 @@
  *
  */
 #include "itemframe.h"
-
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 #include <QPalette>
 
@@ -31,18 +31,28 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     lanItemFrame = new QFrame(this);
     lanItemFrame->setFrameShape(QFrame::Shape::NoFrame);
 
-    lanItemLayout = new QVBoxLayout(this);
+    lanItemLayout = new QVBoxLayout(lanItemFrame);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
-    lanItemLayout->setSpacing(1);
-    addLanWidget = new AddNetBtn(false, this);
+    lanItemLayout->setSpacing(0);
 
-    deviceLanLayout->setSpacing(1);
+    addLanWidget = new AddNetBtn(false, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(addLanWidget, "NetConnect", "", "add a wired network");
+
+    deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);
     lanItemFrame->setLayout(lanItemLayout);
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
+    m_deviceSeparator = new KHLineFrame(this);
+    deviceLanLayout->addWidget(m_deviceSeparator);
+
     deviceLanLayout->addWidget(lanItemFrame);
+
+    m_addSeparator = new KHLineFrame(this);
+    m_addSeparator->setVisible(false);
+    deviceLanLayout->setSpacing(0);
+    deviceLanLayout->addWidget(m_addSeparator);
     deviceLanLayout->addWidget(addLanWidget);
 
     //下拉按钮
@@ -57,5 +67,78 @@ void ItemFrame::onDrownLabelClicked()
     } else {
         lanItemFrame->hide();
         deviceFrame->dropDownLabel->setDropDownStatus(false);
+    }
+    updateCornerStyle();
+    filletStyleChange();
+}
+
+void ItemFrame::updateCornerStyle()
+{
+    bool hasItems = (lanItemLayout->count() > 0);
+    bool deviceEnabled = true;
+    if (deviceFrame && deviceFrame->deviceSwitch) {
+        deviceEnabled = deviceFrame->deviceSwitch->isChecked();
+    }
+
+    if (!deviceEnabled) {
+        if (m_deviceSeparator) {
+            m_deviceSeparator->hide();
+        }
+        if (m_addSeparator) {
+            m_addSeparator->hide();
+        }
+        for (int i = 0; i < lanItemLayout->count(); ++i) {
+            QLayoutItem *it = lanItemLayout->itemAt(i);
+            LanItem *item = qobject_cast<LanItem *>(it ? it->widget() : nullptr);
+            if (!item) {
+                continue;
+            }
+            item->setTopSeparatorVisible(false);
+            item->setBottomSeparatorVisible(false);
+        }
+        addLanWidget->setCornerType(AddNetBtn::All);
+        return;
+    }
+
+    if (hasItems) {
+        if (m_deviceSeparator) {
+            m_deviceSeparator->hide();
+        }
+        if (m_addSeparator) {
+            m_addSeparator->setVisible(true);
+        }
+        addLanWidget->setCornerType(AddNetBtn::BottomRight);
+    } else {
+        if (m_deviceSeparator) {
+            m_deviceSeparator->show();
+        }
+        if (m_addSeparator) {
+            m_addSeparator->setVisible(false);
+        }
+        addLanWidget->setCornerType(AddNetBtn::All);
+    }
+
+    int cnt = lanItemLayout->count();
+    for (int i = 0; i < cnt; ++i) {
+        QLayoutItem *it = lanItemLayout->itemAt(i);
+        LanItem *item = qobject_cast<LanItem *>(it ? it->widget() : nullptr);
+        if (!item) {
+            continue;
+        }
+        item->setTopSeparatorVisible(i == 0 ? hasItems : false);
+        item->setBottomSeparatorVisible(i < cnt - 1);
+    }
+}
+
+void ItemFrame::filletStyleChange()
+{
+    int cnt = lanItemLayout->count();
+    for (int i = 0; i < cnt; ++i) {
+        QLayoutItem *it = lanItemLayout->itemAt(i);
+        LanItem *item = qobject_cast<LanItem *>(it ? it->widget() : nullptr);
+        if (!item) {
+            continue;
+        }
+        item->setBottomSeparatorVisible(i < cnt - 1);
     }
 }

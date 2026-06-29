@@ -1,0 +1,8 @@
+com:kylin:network:qt:systemdbus:
+  1.0.0.1:
+    audit:
+      _type: b
+      _default: false
+    whitelist:
+      _type: as
+      _default: '["/usr/bin/kylin-nm","/usr/bin/ukui-control-center","/usr/bin/ukui-screensaver-dialog","/usr/bin/ukui-sidebar"]'

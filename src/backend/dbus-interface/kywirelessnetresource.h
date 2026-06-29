@@ -40,6 +40,7 @@ public:
 
     //ui层调用接口
     bool getWifiNetwork(const QString &devIfaceName, const QString &ssid, KyWirelessNetItem &wirelessNetResource);
+    bool getActiveWifiNetwork(const QString &devIfaceName,KyWirelessNetItem &wirelessNetResource);
     bool getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem>> &map);
     bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource);
 
@@ -54,6 +55,7 @@ public:
     bool getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem);
 
     QString getActiveConnectSsidByDevice(QString deviceName);
+    QString getActiveConnectUuidByDevice(QString deviceName);
     void getSsidByUuid(const QString uuid, QString &ssid);
     void getDeviceByUuid(const QString uuid, QString &deviceName);
 
@@ -82,6 +84,8 @@ Q_SIGNALS:
     void signalStrengthChange(QString, QString, int);
     void bssidChange(QString, QString, QString);
     void secuTypeChange(QString, QString, QString);
+    /** Emitted when dual-band (2.4G/5G) detection changes for an SSID. */
+    void wifiNetworkIsMixChange(QString interface, QString ssid, bool isMix);
     void connectionRemove(QString, QString, QString);
     void connectionAdd(QString, QString);
     void connectionUpdate(QString, QString);

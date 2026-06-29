@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -38,23 +38,10 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
-EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : QWidget(parent)
+EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : KDialog(parent)
 {
-//    //设置窗口无边框，阴影
-//#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
-//    MotifWmHints window_hints;
-//    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
-//    window_hints.functions = MWM_FUNC_ALL;
-//    window_hints.decorations = MWM_DECOR_BORDER;
-//    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
-//#else
-//    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-//#endif
-    this->setAttribute(Qt::WA_DeleteOnClose);
-//    this->setWindowFlag(Qt::Window);
-    this->setWindowFlags(Qt::Dialog);
-//    this->setWindowTitle(tr("Connect Enterprise WLAN"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
+
     KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     m_wirelessNetItem = wirelessNetItem;
@@ -104,7 +91,6 @@ void EnterpriseWlanDialog::paintEvent(QPaintEvent *event)
 void EnterpriseWlanDialog::initUI()
 {
     m_mainLayout = new QVBoxLayout(this);
-    this->setLayout(m_mainLayout);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
 
@@ -155,6 +141,11 @@ void EnterpriseWlanDialog::initUI()
     m_cancelBtn->setText(tr("Cancel"));
     m_connectBtn->setText(tr("Connect"));
     m_connectBtn->setEnabled(false);
+    m_cancelBtn->setProperty("useButtonPalette", true);
+    m_cancelBtn->setProperty("isImportant", false);
+    m_connectBtn->setProperty("useButtonPalette", false);
+    m_connectBtn->setProperty("isImportant", true);
+
     btnLayout->addStretch();
     btnLayout->addWidget(m_cancelBtn);
     btnLayout->addWidget(m_connectBtn);
@@ -162,6 +153,8 @@ void EnterpriseWlanDialog::initUI()
     m_mainLayout->addWidget(m_enterWlanScrollArea);
     m_mainLayout->addWidget(m_bottomDivider);
     m_mainLayout->addWidget(bottomWidget);
+
+    this->mainWidget()->setLayout(m_mainLayout);
 
     this->setFixedSize(MAIN_SIZE_EXPAND);
     this->setWindowTitle(m_wirelessNetItem.m_NetSsid);
@@ -203,7 +196,6 @@ void EnterpriseWlanDialog::initConnections()
     }
 #endif
 }
-
 #if 0
 void EnterpriseWlanDialog::onPaletteChanged()
 {

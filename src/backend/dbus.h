@@ -15,11 +15,12 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusMetaType>
-#include "dbus_adaptor.h"
+
 #include "dbus_interface.h"
 
 #include "tabpage.h"
 #include "../dbus-interface/kylinnetworkdeviceresource.h"
+#include "common.h"
 QT_BEGIN_NAMESPACE
 class QByteArray;
 //template<class T> class QList;
@@ -33,6 +34,9 @@ QT_END_NAMESPACE
 /*
  * Adaptor class for interface com.kylin.weather
  */
+#define SYSTEM_DBUS_SERVICE   "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH      "/"
+#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 #include "mainwindow.h"
 
@@ -40,8 +44,279 @@ class DbusAdaptor: public QObject, protected QDBusContext
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.kylin.network")
+    Q_CLASSINFO("D-Bus Introspection", ""
+"  <interface name=\"com.kylin.network\">\n"
+"    <signal name=\"lanAdd\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"as\" name=\"info\"/>\n"
+"    </signal>\n"
+"    <signal name=\"lanRemove\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"dbusPath\"/>\n"
+"    </signal>\n"
+"    <signal name=\"lanUpdate\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"as\" name=\"info\"/>\n"
+"    </signal>\n"
+"    <signal name=\"wlanAdd\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"as\" name=\"info\"/>\n"
+"    </signal>\n"
+"    <signal name=\"wlanRemove\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"    </signal>\n"
+"    <signal name=\"wlanactiveConnectionStateChanged\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"uuid\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"status\"/>\n"
+"    </signal>\n"
+"    <signal name=\"lanActiveConnectionStateChanged\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"uuid\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"status\"/>\n"
+"    </signal>\n"
+"    <signal name=\"activateFailed\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"errorMessage\"/>\n"
+"    </signal>\n"
+"    <signal name=\"deactivateFailed\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"errorMessage\"/>\n"
+"    </signal>\n"
+"    <signal name=\"deviceStatusChanged\"/>\n"
+"    <signal name=\"wirelessDeviceStatusChanged\"/>\n"
+"    <signal name=\"deviceNameChanged\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"oldName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"newName\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"type\"/>\n"
+"    </signal>\n"
+"    <signal name=\"wirelessSwitchBtnChanged\">\n"
+"      <arg direction=\"out\" type=\"b\" name=\"state\"/>\n"
+"    </signal>\n"
+"    <signal name=\"wiredMainSwitchBtnChanged\">\n"
+"      <arg direction=\"out\" type=\"b\" name=\"state\"/>\n"
+"    </signal>\n"
+"    <signal name=\"hotspotDeactivated\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"    </signal>\n"
+"    <signal name=\"hotspotActivated\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"uuid\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"activePath\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"settingPath\"/>\n"
+"    </signal>\n"
+"    <signal name=\"signalStrengthChange\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"strength\"/>\n"
+"    </signal>\n"
+"    <signal name=\"secuTypeChange\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"secuType\"/>\n"
+"    </signal>\n"
+"    <signal name=\"timeToUpdate\"/>\n"
+"    <signal name=\"showKylinNMSignal\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"display\"/>\n"
+"      <arg direction=\"out\" type=\"i\" name=\"type\"/>\n"
+"    </signal>\n"
+"    <signal name=\"sigRequestInputPasswdAgent\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"agentName\"/>\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"value\"/>\n"
+"    </signal>\n"
+"    <signal name=\"showPropertyWidgetSignal\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"display\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
+"    </signal>\n"
+"    <signal name=\"showCreateWiredConnectWidgetSignal\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"display\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"    </signal>\n"
+"    <signal name=\"showAddOtherWlanWidgetSignal\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"display\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
+"    </signal>\n"
+"    <signal name=\"sigNetworkPropChanged\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\" name=\"parm\"/>\n"
+"    </signal>\n"
+"    <signal name=\"sigPasswordError\">\n"
+"      <arg direction=\"out\" type=\"s\" name=\"requestId\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"ssid,\"/>\n"
+"      <arg direction=\"out\" type=\"s\" name=\"password\"/>\n"
+"    </signal>\n"
+"    <method name=\"getWirelessList\">\n"
+"      <arg direction=\"out\" type=\"av\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"    </method>\n"
+"    <method name=\"getWiredList\">\n"
+"      <arg direction=\"out\" type=\"av\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"    </method>\n"
+"    <method name=\"setWiredSwitchEnable\">\n"
+"      <arg direction=\"in\" type=\"b\" name=\"enable\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"setWirelessSwitchEnable\">\n"
+"      <arg direction=\"in\" type=\"b\" name=\"enable\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"setDeviceEnable\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"enable\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"activateConnect\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"deleteConnect\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"deActivateConnect\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"setDeviceAutoConnectState\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"state\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"deActivateConnectConcise\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"concise\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getDeviceListAndEnabled\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\"/>\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"in\" type=\"i\" name=\"devType\"/>\n"
+"    </method>\n"
+"    <method name=\"getWirelessDeviceCap\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\"/>\n"
+"      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"    </method>\n"
+"    <method name=\"showPropertyWidget\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"showCreateWiredConnectWidget\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"showAddOtherWlanWidget\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"activeWirelessAp\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"apName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"apPassword\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"band\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"apDevice\"/>\n"
+"    </method>\n"
+"    <method name=\"deactiveWirelessAp\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"apName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
+"    </method>\n"
+"    <method name=\"getStoredApInfo\">\n"
+"      <arg direction=\"out\" type=\"as\"/>\n"
+"    </method>\n"
+"    <method name=\"passwordConnect\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"psk\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"autoConnect\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getApConnectionPath\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
+"    </method>\n"
+"    <method name=\"getActiveConnectionPath\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
+"    </method>\n"
+"    <method name=\"reScan\"/>\n"
+"    <method name=\"registerInputPasswdAgent\">\n"
+"      <arg direction=\"out\" type=\"i\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"agentName\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"value\"/>\n"
+"    </method>\n"
+"    <method name=\"requestInputPasswdAgent\">\n"
+"      <arg direction=\"out\" type=\"i\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"value\"/>\n"
+"    </method>\n"
+"    <method name=\"keyRingInit\"/>\n"
+"    <method name=\"keyRingClear\"/>\n"
+"    <method name=\"showKylinNM\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"    </method>\n"
+"    <method name=\"getWirelessSwitchBtnState\">\n"
+"      <arg direction=\"out\" type=\"b\"/>\n"
+"    </method>\n"
+"    <method name=\"getWiredMainSwitchBtnState\">\n"
+"      <arg direction=\"out\" type=\"b\"/>\n"
+"    </method>\n"
+"    <method name=\"getDeviceConnectivity\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"i\"/>\n"
+"    </method>\n"
+"    <method name=\"getCableStateByDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"b\"/>\n"
+"    </method>\n"
+"    <method name=\"setNetworkConnectionAutoConnectState\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"netType\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"state\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getNetworkDeviceData\">\n"
+"      <arg direction=\"out\" type=\"a{sv}\"/>\n"
+"      <annotation value=\"QVariantList\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
+"      <arg direction=\"in\" type=\"i\" name=\"devType\"/>\n"
+"    </method>\n"
+"    <method name=\"setDefaultWiredDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getDefaultWiredDevice\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"    </method>\n"
+"    <method name=\"setDefaultWirelessDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
+"    <method name=\"getDefaultWirelessDevice\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"    </method>\n"
+"    <method name=\"sendPasswordError\">\n"
+"      <arg direction=\"in\" type=\"s\"/>requestId\n"
+"      <arg direction=\"in\" type=\"s\"/>deviceName\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"password\"/>\n"
+"      <arg direction=\"in\" type=\"a{sv}\" name=\"enterpriseInfo\"/>\n"
+"    </method>\n"
+"    <method name=\"refreshTrayIcon\">\n"
+"    </method>\n"
+
+"  </interface>\n"
+        "")
 public:
     explicit DbusAdaptor(QString display, MainWindow *m, QObject *parent = nullptr);
+    ~DbusAdaptor();
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
@@ -55,17 +330,22 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void setWirelessSwitchEnable(bool enable);
     //有线网卡开关
     Q_NOREPLY void setDeviceEnable(QString devName, bool enable);
-    //设置默认网卡
-//    Q_NOREPLY void setDefaultWiredDevice(QString deviceName);
-//    QString getDefaultWiredDevice();
-//    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
-//    QString  getDefaultWirelessDevice();
-    //刪除 根据网络名称 参数1 0:lan 1:wlan 参数2 为ssid/uuid
-    void deleteConnect(int type, QString ssid);
+
     //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
+
+    //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数2 true:只断开 false:断开并清除连接的网络信息 参数3 为ssid/uuid
+    Q_NOREPLY void deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid);
+
+    //delete network connect
+    Q_NOREPLY void deleteConnect(int type,QString Uuid);
+    //dev autoconnect
+    Q_NOREPLY void setDeviceAutoConnectState(QString devName, bool state);
+    //networkconnect autoconnect
+    Q_NOREPLY void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool state);
+
     //获取设备列表和启用/禁用状态
     QVariantMap getDeviceListAndEnabled(int devType);
     //获取无线设备能力
@@ -80,6 +360,8 @@ public Q_SLOTS: // METHODS
     void activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice);
     //断开热点
     void deactiveWirelessAp(const QString apName, const QString uuid);
+    //连接新wifi
+    void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect);
     //获取热点
     QStringList getStoredApInfo();
     QStringList getApInfoBySsid(QString devName, QString ssid);
@@ -94,6 +376,28 @@ public Q_SLOTS: // METHODS
     void showKylinNM(int type);
 
     bool getWirelessSwitchBtnState();
+    bool getWiredMainSwitchBtnState();
+
+    int getDeviceConnectivity(const QString deviceName);
+
+    //获取网卡是否插入了网线
+    bool getCableStateByDevice(const QString deviceName);
+
+    int registerInputPasswdAgent(QString agentName,QVariantMap value);
+    int requestInputPasswdAgent(QVariantMap value);
+
+    QVariantList getNetworkDeviceData(int devType);
+    //设置默认网卡
+    void setDefaultWiredDevice(QString deviceName);
+    QString getDefaultWiredDevice();
+    void setDefaultWirelessDevice(QString deviceName);
+    QString  getDefaultWirelessDevice();
+    void sendPasswordError(const QString &requestId, const QString &deviceName, const QString &ssid, const QString &password, const QVariantMap &enterpriseInfo = QVariantMap());
+
+    void submitWirelessPassword(const QString &requestId, const QString &deviceName, const QString &ssid, const QString &password);
+    void cancelWirelessPassword(const QString &requestId, const QString &deviceName, const QString &ssid);
+    //刷新托盘图标
+    void refreshTrayIcon();
 
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
@@ -113,6 +417,7 @@ Q_SIGNALS: // SIGNALS
     void wirelessDeviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
@@ -124,8 +429,6 @@ Q_SIGNALS: // SIGNALS
     //列表排序
     void timeToUpdate();
 
-
-
     void showKylinNMSignal(QString display, int type);
 
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
@@ -134,18 +437,29 @@ Q_SIGNALS: // SIGNALS
     void showCreateWiredConnectWidgetSignal(QString display, QString devName);
     //唤起加入其他无线网络界面
     void showAddOtherWlanWidgetSignal(QString display, QString devName);
+    //需要用户输入
+    void sigRequestInputPasswdAgent(QString agentName,QVariantMap value);
+
+    //无线列表各项属性更新 未来使用该信号更新就行 其他冗余信号与更新逻辑应该删掉
+    void sigNetworkPropChanged(QVariantMap parm);
+    void sigPasswordError(const QString requestId, const QString deviceName, const QString ssid, const QString password);
 
 private:
     MainWindow *m_mainWindow;
     QString m_display;
+    QStringList m_proxyDesktopList;
     QDBusServiceWatcher *m_watcher = nullptr;
+    QDBusInterface *m_pSysBusInterfaces;
 
     QString checkDisplay();
     QString displayFromPid(uint pid);
     void connectToMainwindow();
     bool registerService();
+    QString m_agentName="";
+
 private Q_SLOT:
     void onServiceOwnerChanged(const QString &service, const QString &oldOwner, const QString &newOwner);
+    void onWiredMainSwitchBtnChanged(bool);
 };
 
 #endif

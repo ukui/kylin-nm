@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -62,6 +62,9 @@ InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 void InfoButton::initUI()
 {
     this->setFixedSize(BUTTON_SIZE);
+    this->setIcon(QIcon::fromTheme("preferences-system-details-symbolic"));
+    this->setProperty("useButtonPalette", true);
+    this->setFlat(true);
     m_backgroundColor = BACKGROUND_COLOR;
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
 }
@@ -89,36 +92,6 @@ void InfoButton::onPaletteChanged()
     this->repaint();
 }
 
-void InfoButton::paintEvent(QPaintEvent *event)
-{
-    QPalette pal = this->palette();
-    pal.setColor(QPalette::Base, m_backgroundColor);
-    pal.setColor(QPalette::Text, m_foregroundColor);
-
-    QPainterPath cPath;
-    cPath.addRect(0, 0, ICON_SIZE);
-    cPath.addEllipse(0, 0, ICON_SIZE);
-
-    QPainterPath outerPath;
-    outerPath.addEllipse(OUTER_PATH);
-
-    QPainterPath innerPath;
-    innerPath.addEllipse(INNER_PATH);
-    outerPath -= innerPath;
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
-    painter.setPen(Qt::NoPen);
-
-    painter.setBrush(pal.color(QPalette::Base));
-    painter.drawPath(cPath);
-
-    painter.fillPath(outerPath, pal.color(QPalette::Text));
-    painter.setPen(m_foregroundColor);
-    QFont font("Noto Sans CJK SC", 11, QFont::Normal, false);
-    painter.setFont(font);
-    painter.drawText(TEXT_POS, "i");
-}
 
 void InfoButton::enterEvent(QEvent *event)
 {

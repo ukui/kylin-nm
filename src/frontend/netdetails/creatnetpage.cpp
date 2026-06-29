@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -53,15 +53,14 @@ void CreatNetPage::initUI()
     QLabel *nameEmptyLabel = new QLabel(this);
     QLabel *configEmptyLabel = new QLabel(this);
     QLabel *gateWayEmptyLabel = new QLabel(this);
-
     QLabel *firstDnsEmptyLabel = new QLabel(this);
     nameEmptyLabel->setFixedHeight(LABEL_HEIGHT);
     configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
     gateWayEmptyLabel->setFixedHeight(LABEL_HEIGHT);
     firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_addressHintLabel = new QLabel(this);
-    m_maskHintLabel = new QLabel(this);
+    m_addressHintLabel = new KLabel(this);
+    m_maskHintLabel = new KLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_maskHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
@@ -73,10 +72,10 @@ void CreatNetPage::initUI()
     pPwdLayout->addStretch();
     pPwdLayout->addWidget(m_statusLabel);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_addressHintLabel->setPalette(hintTextColor);
-    m_maskHintLabel->setPalette(hintTextColor);
+    m_addressHintLabel->setFontColorRole(QPalette::WindowText);
+    m_addressHintLabel->setFontColor(Qt::red);
+    m_maskHintLabel->setFontColorRole(QPalette::WindowText);
+    m_maskHintLabel->setFontColor(Qt::red);
 
     QWidget *addressWidget = new QWidget(this);
     QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);
@@ -84,7 +83,6 @@ void CreatNetPage::initUI()
     addressLayout->setSpacing(0);
     addressLayout->addWidget(ipv4addressEdit);
     addressLayout->addWidget(m_addressHintLabel);
-
     initConflictHintLable();
 
     QWidget *maskWidget = new QWidget(this);
@@ -93,6 +91,12 @@ void CreatNetPage::initUI()
     maskLayout->setSpacing(0);
     maskLayout->addWidget(netMaskEdit);
     maskLayout->addWidget(m_maskHintLabel);
+
+    QWidget *connNameWidget = new QWidget(this);
+    QVBoxLayout *connNameLayout = new QVBoxLayout(connNameWidget);
+    connNameLayout->setContentsMargins(0, 0, 0, 0);
+    connNameLayout->setSpacing(0);
+    connNameLayout->addWidget(connNameEdit);
 
     m_connNameLabel->setText(tr("Connection Name"));
     m_configLabel->setText(tr("IPv4Config"));
@@ -103,7 +107,7 @@ void CreatNetPage::initUI()
     m_detailLayout = new QFormLayout(this);
     m_detailLayout->setVerticalSpacing(0);
     m_detailLayout->setContentsMargins(0, 0, 0, 0);
-    m_detailLayout->addRow(m_connNameLabel,connNameEdit);
+    m_detailLayout->addRow(m_connNameLabel, connNameWidget);
     m_detailLayout->addRow(nameEmptyLabel);
     m_detailLayout->addRow(m_configLabel,ipv4ConfigCombox);
     m_detailLayout->addRow(configEmptyLabel);
@@ -111,7 +115,6 @@ void CreatNetPage::initUI()
     m_detailLayout->addRow(m_maskLabel, maskWidget);
     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
     m_detailLayout->addRow(gateWayEmptyLabel);
-
     m_addressLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);  //解决布局错位问题
     m_maskLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);
 
@@ -152,22 +155,31 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
 {
     if (connNameEdit->text().isEmpty()) {
         qDebug() << "create connName empty or invalid";
+        m_errorMessage = tr("Connection name is empty or invalid");
         return false;
     }
     qDebug() << "checkConnectBtnIsEnabled currentIndex" << ipv4ConfigCombox->currentIndex();
-    if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
-        return true;
-    } else {
+    if (ipv4ConfigCombox->currentIndex() != AUTO_CONFIG) {
         if (ipv4addressEdit->text().isEmpty() || !getTextEditState(ipv4addressEdit->text())) {
             qDebug() << "create ipv4address empty or invalid";
+            m_errorMessage = tr("IPv4 address is empty or invalid");
             return false;
         }
 
         if (netMaskEdit->text().isEmpty() || !netMaskIsValide(netMaskEdit->text())) {
             qDebug() << "create ipv4 netMask empty or invalid";
+            m_errorMessage = tr("IPv4 netMask is empty or invalid");
             return false;
         }
+
+        if (/*gateWayEdit->text().isEmpty() ||*/ !getTextEditState(gateWayEdit->text())) {
+            qDebug() << "create ipv4 gateway empty or invalid";
+            m_errorMessage = tr("IPv4 gateway is empty or invalid");
+            return false;
+        }
+
     }
+    m_errorMessage.clear();
     return true;
 }
 
@@ -223,9 +235,11 @@ void CreatNetPage::setLineEnabled(bool check) {
 
         ipv4addressEdit->setPlaceholderText(" ");
         netMaskEdit->setPlaceholderText(" ");
+        gateWayEdit->setPlaceholderText(" ");
     } else {
         ipv4addressEdit->setPlaceholderText(tr("Required")); //必填
-        netMaskEdit->setPlaceholderText(tr("Required")); //必填
+        netMaskEdit->setPlaceholderText(tr("Required")); //必填        
+        gateWayEdit->setPlaceholderText(tr(" ")); //必填
     }
 }
 
@@ -277,8 +291,8 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
         setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
         setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
     }
-
     setting.ipv4DnsConstruct(ipv4dnsList);
+
 }
 
 bool CreatNetPage::netMaskIsValide(QString text)
@@ -323,8 +337,10 @@ void CreatNetPage::initConflictHintLable()
     QIcon icon = QIcon::fromTheme("dialog-warning");
     m_iconLabel = new QLabel(m_addressHintLabel);
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
-    m_textLabel = new QLabel(m_addressHintLabel);
+    m_textLabel = new KLabel(m_addressHintLabel);
     m_textLabel->setText(tr("Address conflict"));
+    m_textLabel->setFontColorRole(QPalette::WindowText);
+    m_textLabel->setFontColor(Qt::red);
     QHBoxLayout *conflictHintLayout = new QHBoxLayout(m_addressHintLabel);
     conflictHintLayout->setContentsMargins(0, 0, 0, 0);
     conflictHintLayout->addWidget(m_iconLabel);
@@ -377,4 +393,10 @@ void CreatNetPage::showIpv4AddressConflict(bool isConflict)
         m_iconLabel->hide();
         m_textLabel->hide();
     }
+}
+
+QString CreatNetPage::getErrorMessage()
+{
+    checkConnectBtnIsEnabled();
+    return m_errorMessage;
 }

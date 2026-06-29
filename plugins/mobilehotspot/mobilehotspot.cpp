@@ -33,12 +33,19 @@ MobileHotspot::MobileHotspot() :  mFirstLoad(true) {
     QApplication::installTranslator(translator);
 
     pluginName = tr("MobileHotspot");
-    qDebug() << pluginName;
+    qDebug() << Q_FUNC_INFO << __LINE__ << pluginName;
     pluginType = NETWORK;
 
     qDBusRegisterMetaType<QMap<QString, bool> >();
     qDBusRegisterMetaType<QMap<QString, int> >();
     needLoad = isExitWirelessDevice();
+    //规避控制面板逻辑问题，isEnable状态改变时，需要组件自己更新显示的gsetting
+    if (QGSettings::isSchemaInstalled(GSETTING_SCHEMA_UKCC)) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "Init QGSettings Success";
+
+        ukccGsetting = new QGSettings(GSETTING_SCHEMA_UKCC,GSETTING_PATH_UKCC);
+        ukccGsetting->set("show",needLoad);
+    }
 }
 
 MobileHotspot::~MobileHotspot()
@@ -101,13 +108,26 @@ void MobileHotspot::initSearchText()
     tr("mobilehotspot");
     //~ contents_path /mobilehotspot/mobilehotspot open
     tr("mobilehotspot open");
+    //~ contents_path /mobilehotspot/Mobile Hotspot
+    tr("Mobile Hotspot");
+    //~ contents_path /mobilehotspot/Open mobile hotspot
+    tr("Open mobile hotspot");
+    //~ contents_path /mobilehotspot/Wi-Fi Name
+    tr("Wi-Fi Name");
+    //~ contents_path /mobilehotspot/Network Password
+    tr("Network Password");
+    //~ contents_path /mobilehotspot/Network Frequency band
+    tr("Network Frequency band");
+    //~ contents_path /mobilehotspot/Shared NIC port
+    tr("Shared NIC port");
 }
 
 bool MobileHotspot::isExitWirelessDevice()
 {
-    QDBusInterface *interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
-                                     "com.kylin.network",
-                                     QDBusConnection::sessionBus());
+    QDBusInterface *interface = new QDBusInterface("com.kylin.network",
+                                                   "/com/kylin/network",
+                                                   "com.kylin.network",
+                                                   QDBusConnection::sessionBus());
     if (!interface->isValid()) {
         qDebug() << "/com/kylin/network is invalid";
         return false;
@@ -150,7 +170,7 @@ bool MobileHotspot::isExitWirelessDevice()
                 iter++;
                 continue;
             }
-            if (deviceListMap[interfaceName] & 0x01) {
+            if (devCapMap[interfaceName] & 0x01) {
                 qDebug() << "wireless device" <<  interfaceName << "support hotspot";
                 return true;
             }

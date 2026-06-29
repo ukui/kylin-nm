@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -18,14 +18,20 @@
  *
  */
 #include "lanitem.h"
+#include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
 #include <QApplication>
+#include <QProcess>
 
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
+#define MIN_TITLE_Width 80
 
 #define THEME_QT_SCHEMA  "org.ukui.style"
 #define MODE_QT_KEY      "style-name"
+#define ICON_THEME       "iconThemeName"
+
 
 LanItem::LanItem(bool isAcitve, QWidget *parent)
     : QPushButton(parent),isAcitve(isAcitve)
@@ -33,40 +39,52 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-//    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
-    QHBoxLayout *mLanLyt = new QHBoxLayout(this);
+    /* 创建主垂直布局 */
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+
+    QHBoxLayout *mLanLyt = new QHBoxLayout();
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);
+    mLanLyt->setAlignment(Qt::AlignVCenter);
     iconLabel = new QLabel(this);
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    titileLabel = new FixLabel(this);
+    titileLabel = new KLabel(this);
+    titileLabel->setMinimumWidth(MIN_TITLE_Width);
     statusLabel = new QLabel(this);
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-//    statusLabel->setMinimumSize(36,36);
     infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(infoLabel, "NetConnect", "", "details info button of wired network");
 
-    //【更多】菜单
-    m_moreButton = new QToolButton(this);
-    m_moreButton->setProperty("useButtonPalette", true);
-    m_moreButton->setPopupMode(QToolButton::InstantPopup);
-    m_moreButton->setAutoRaise(true);
-    m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
-    m_moreMenu = new QMenu(m_moreButton);
-    m_connectAction = new QAction(m_moreMenu);
-    m_deleteAction = new QAction(tr("Delete"), m_moreMenu);
-    setConnectActionText(isAcitve);
-
-    m_moreMenu->addAction(m_connectAction);
-    m_moreMenu->addAction(m_deleteAction);
-    m_moreButton->setMenu(m_moreMenu);
+    m_networkCheckFrame = new QFrame(this);
+    m_warnLabel = new QLabel(this);
+    m_warnLabel->setContentsMargins(0,0,0,0);
+    m_warnLabel->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(16,16));
+    m_warnTextLabel = new QLabel(this);
+    QHBoxLayout *netCheckFrameLyt = new QHBoxLayout(m_networkCheckFrame);
+    netCheckFrameLyt->setContentsMargins(0, 0, 0, 0);
+    netCheckFrameLyt->setSpacing(5);
+    netCheckFrameLyt->addWidget(m_warnLabel);
+    netCheckFrameLyt->addWidget(m_warnTextLabel);
+    m_networkCheckFrame->setHidden(true);
 
     mLanLyt->addWidget(iconLabel);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
+    mLanLyt->addWidget(m_networkCheckFrame);
     mLanLyt->addWidget(infoLabel);
-    mLanLyt->addWidget(m_moreButton);
+
+    m_topSeparator = new KHLineFrame(this);
+    m_topSeparator->setVisible(false);
+    mainLayout->addWidget(m_topSeparator);
+
+    mainLayout->addLayout(mLanLyt);
+
+    m_bottomSeparator = new KHLineFrame(this); 
+    mainLayout->addWidget(m_bottomSeparator);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
@@ -77,9 +95,17 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
     waitTimer = new QTimer(this);
     connect(waitTimer, &QTimer::timeout, this, &LanItem::updateIcon);
-    connect(m_connectAction, &QAction::triggered, this, &LanItem::onConnectTriggered);
-    connect(m_deleteAction, &QAction::triggered, this, &LanItem::onDeletetTriggered);
-    m_moreMenu->installEventFilter(this);
+
+    const QByteArray id(THEME_QT_SCHEMA);
+    if (QGSettings::isSchemaInstalled(id)) {
+        QGSettings * styleGsettings = new QGSettings(id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if (ICON_THEME == key && m_warnLabel) {
+                m_warnLabel->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(16,16));
+            }
+        });
+    }
+
 }
 
 LanItem::~LanItem()
@@ -107,38 +133,46 @@ void LanItem::stopLoading(){
     loading = false;
 }
 
-/**
- * @brief LanItem::setConnectActionText
- * 【更多】菜单状态切换 连接/断开
- * @param isAcitve
- */
-void LanItem::setConnectActionText(bool isAcitve)
+void LanItem::setNetworkCheckFrameHidden(bool state)
 {
-    if (isAcitve) {
-        m_connectAction->setText(tr("Disconnect"));
-    } else {
-        m_connectAction->setText(tr("Connect"));
+    m_networkCheckFrame->setHidden(state);
+    statusLabel->setVisible(state);
+}
+
+void LanItem::setTopSeparatorVisible(bool visible)
+{
+    if (m_topSeparator){
+        m_topSeparator->setVisible(visible);
     }
 }
 
-void LanItem::onConnectTriggered()
+void LanItem::setBottomSeparatorVisible(bool visible)
 {
-    if (!m_connectAction) {
-        return;
+    if (m_bottomSeparator){
+        m_bottomSeparator->setVisible(visible);
     }
-    if (m_connectAction->text() == tr("Connect")) {
-        Q_EMIT connectActionTriggered();
-    } else if (m_connectAction->text() == tr("Disconnect")) {
-        Q_EMIT disconnectActionTriggered();
-    }
+        
 }
 
-void LanItem::onDeletetTriggered()
+void LanItem::setConnectivityWarn(ConnectivityType connectivityType)
 {
-    if (!m_deleteAction) {
-        return;
+    QString text;
+    switch (connectivityType) {
+    case NoConnectivity:
+        text = QString("");
+        setNetworkCheckFrameHidden(true);
+        break;
+    case Portal:
+    case Limited:
+        text = QString(tr("Connected, restricting access."));
+        break;
+    case Full:
+    default:
+        text = QString("");
+        setNetworkCheckFrameHidden(true);
+        break;
     }
-    Q_EMIT deleteActionTriggered();
+    m_warnTextLabel->setText(text);
 }
 
 void LanItem::paintEvent(QPaintEvent *event)
@@ -160,17 +194,3 @@ void LanItem::paintEvent(QPaintEvent *event)
     QPushButton::paintEvent(event);
 }
 
-bool LanItem::eventFilter(QObject *watched, QEvent *event)
-{
-    //菜单右边界与按钮右边界对齐
-    if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuXPos = mapToGlobal(m_moreButton->pos()).x();
-        int menuWidth = m_moreMenu->size().width();
-        int btnWidth = m_moreButton->size().width();
-
-        QPoint pos = QPoint (menuXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
-        m_moreMenu->move(pos);
-        return true;
-    }
-    return false;
-}

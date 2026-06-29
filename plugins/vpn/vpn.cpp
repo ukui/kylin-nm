@@ -19,6 +19,8 @@
  */
 #include "vpn.h"
 #include "ui_vpn.h"
+#include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
 
 #include <QProcess>
 #include <QMouseEvent>
@@ -114,7 +116,7 @@ QWidget *Vpn::pluginUi(){
 
 const QString Vpn::name() const {
 
-    return QStringLiteral("VPN");
+    return QStringLiteral("Vpn");
 }
 
 bool Vpn::isShowOnHomePage() const
@@ -157,6 +159,7 @@ void Vpn::initComponent(){
     m_showLabel = new QLabel(tr("Show on Taskbar"), m_showFrame);
     m_showLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_showBtn = new KSwitchButton(m_showFrame);
+    KDK_EXTEND_ALL_INFO_FORMAT(m_showBtn, "VPN", "", "show icon in the taskbar");
     showLayout->setContentsMargins(ITEM_MARGINS);
     showLayout->addWidget(m_showLabel);
     showLayout->addStretch();
@@ -164,26 +167,7 @@ void Vpn::initComponent(){
 
     m_showFrame->setLayout(showLayout);
 
-//    m_Line = myLine();
-
-//    m_timeFrame = new QFrame(m_topFrame);
-//    m_timeFrame->setFrameShape(QFrame::Shape::NoFrame);
-//    m_timeFrame->setMinimumSize(FRAME_MIN_SIZE);
-//    m_timeFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
-//    QHBoxLayout *timeLayout = new QHBoxLayout(m_timeFrame);
-//    m_timeLabel = new QLabel(tr("Open"), m_timeFrame);
-//    m_timeLabel->setMinimumWidth(LABLE_MIN_WIDTH);
-//    m_timeBtn = new KSwitchButton(m_timeFrame);
-//    timeLayout->setContentsMargins(ITEM_MARGINS);
-//    timeLayout->addWidget(m_timeLabel);
-//    timeLayout->addStretch();
-//    timeLayout->addWidget(m_timeBtn);
-
-//    m_timeFrame->setLayout(timeLayout);
-
     hotspotLyt->addWidget(m_showFrame);
-//    hotspotLyt->addWidget(m_Line);
-//    hotspotLyt->addWidget(m_timeFrame);
     hotspotLyt->setSpacing(0);
 
     //列表
@@ -223,12 +207,11 @@ void Vpn::initComponent(){
         UkccCommon::buriedSettings(QString("VPN"), QString("Show on Taskbar"),  QString("settings"), checked ? "true":"false");
     });
 
-//    connect(m_timeBtn, &KSwitchButton::stateChanged, this, [=](bool state){
-//        if (m_switchGsettings != nullptr) {
-//            m_switchGsettings->set(VISIBLE, state);
-//        }
-//    });
+
     ui->pushButton->hide();
+    if (!QFile::exists("/usr/bin/nm-connection-editor")) {
+        m_listFrame->m_addVpnWidget->hide();
+    }
 }
 
 void Vpn::initConnect()
@@ -265,6 +248,10 @@ void Vpn::initNet()
         QStringList vpnInfo = variantList.at(i);
         addOneVirtualItem(vpnInfo);
     }
+    
+    // 初始化完成后更新圆角样式
+    m_listFrame->filletStyleChange();
+    m_listFrame->updateCornerStyle();
     return;
 }
 
@@ -287,10 +274,6 @@ void Vpn::initSearchText()
 }
 
 void Vpn::runExternalApp(){
-//    QString cmd = "nm-connection-editor";
-//    QProcess process(this);
-//    process.startDetached(cmd);
-
     if (m_interface->isValid()) {
         m_interface->call(QStringLiteral("showVpnAddWidget"));
     }
@@ -298,13 +281,7 @@ void Vpn::runExternalApp(){
 
 QFrame* Vpn::myLine()
 {
-    QFrame *line = new QFrame(m_pluginWidget);
-    line->setMinimumSize(QSize(LINE_MIN_SIZE));
-    line->setMaximumSize(QSize(LINE_MAX_SIZE));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
+    KHLineFrame *line = new KHLineFrame(m_pluginWidget);
     return line;
 }
 
@@ -349,6 +326,7 @@ void Vpn::addOneVirtualItem(QStringList infoList)
     QString connDbusPath = infoList.at(2);
     int status = infoList.at(3).toInt(); //1-连接中 2-已连接 3-断开中 4-已断开
     VpnItem * item = new VpnItem(m_pluginWidget);
+    KDK_EXTEND_ALL_INFO_FORMAT(item, "VPN", "", "VPN item");
 
     QIcon searchIcon = QIcon::fromTheme(KVpnSymbolic);
     item->m_iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
@@ -397,6 +375,11 @@ void Vpn::addOneVirtualItem(QStringList infoList)
     int index = getInsertPos(connName);
     qDebug()<<"[Vpn]addOneVirtualItem " << connName << " at pos:" << index;
     m_listFrame->m_vpnVLayout->insertWidget(index, item);
+
+    // 只在这里调用filletStyleChange
+    m_listFrame->filletStyleChange();
+    // 每次都调用updateCornerStyle，确保圆角正确
+    m_listFrame->updateCornerStyle();
 }
 
 void Vpn::removeOneVirtualItem(QString dbusPath)
@@ -414,6 +397,10 @@ void Vpn::removeOneVirtualItem(QString dbusPath)
            break;
        }
    }
+   // 只在这里调用filletStyleChange
+   m_listFrame->filletStyleChange();
+   // 每次都调用updateCornerStyle，确保圆角正确
+   m_listFrame->updateCornerStyle();
 }
 
 //增加

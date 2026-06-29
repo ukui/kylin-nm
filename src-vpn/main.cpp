@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
     vpnObject vpnobject;
     a.setActivationWindow(&vpnobject);
     vpnobject.setProperty("useStyleWindowManager", false); //禁用拖动
-    a.setWindowIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
+    a.setWindowIcon(QIcon::fromTheme("network-vpn-symbolic"));
 
     VpnDbusAdaptor vpnAdaptor(&vpnobject);
     Q_UNUSED(vpnAdaptor);

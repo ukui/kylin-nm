@@ -4,6 +4,8 @@ CONFIG += plugin
 
 include(../component/drownlabel.pri)
 include(../component/addbtn.pri)
+include(../../common/common.pri)
+include(../../pub/pub.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)
 DESTDIR = ../..
@@ -27,8 +29,10 @@ LIBS          +=  -L$$[QT_INSTALL_LIBS] -lgsettings-qt -lukcc
 CONFIG += c++11 \
           link_pkgconfig \
 
+
 PKGCONFIG += gsettings-qt \
              kysdk-qtwidgets \
+             kysdk-sysinfo
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -53,16 +57,16 @@ INSTALLS += target \
             trans
 
 TRANSLATIONS += \
-        translations/zh_Hant.ts \
+        translations/zh_HK.ts \
         translations/zh_CN.ts \
-        translations/ug.ts \
         translations/tr.ts \
-        translations/mn.ts \
-        translations/ky.ts \
-        translations/kk.ts \
-        translations/fr.ts \
-        translations/es.ts \
+        translations/bo.ts \
+        translations/bo_CN.ts \
         translations/en_US.ts \
-        translations/de.ts \
-        translations/bo.ts\
-        translations/bo_CN.ts
+        translations/vi.ts \
+        translations/th.ts \
+        translations/ms.ts \
+        translations/mn.ts \
+        translations/ug.ts \
+        translations/kk.ts \
+        translations/ky.ts \

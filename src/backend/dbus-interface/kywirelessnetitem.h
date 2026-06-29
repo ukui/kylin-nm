@@ -36,6 +36,10 @@ public:
         return m_device;
     }
 
+    QString getDeviceName() {
+        return m_deviceName;
+    }
+
 private:
     void init(NetworkManager::WirelessNetwork::Ptr net);
 
@@ -56,15 +60,23 @@ public:
     QString                                 m_connDbusPath;
     uint                                    m_channel;
 
+    bool                                    m_autoconnect;
+
     int getCategory(QString uni);
     void setKySecuType(QString strSecuType);
+    /** Rescan AP list for this SSID/device and refresh m_isMix (2.4G + 5G). */
+    void calculateIsMix();
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     QString                                 m_device;
+    QString                                 m_deviceName;
 
 };
 
-void updatewirelessItemConnectInfo(KyWirelessNetItem& item);
+bool updatewirelessItemConnectInfo(KyWirelessNetItem& item);
+void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item);
+int updateKylinWirelessItemInfo(KyWirelessNetItem& item);
+
 
 #endif // KYWIRELESSNETITEM_H

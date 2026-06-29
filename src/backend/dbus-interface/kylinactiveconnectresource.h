@@ -25,15 +25,15 @@
 #include "kylinconnectitem.h"
 #include "kylinnetworkdeviceresource.h"
 #include "kylinvpnconnectitem.h"
-#include "kylinbluetoothconnectitem.h"
+//#include "kylinbluetoothconnectitem.h"
 #include "kylinapconnectitem.h"
 
-class KyActiveConnectResourse : public QObject
+class KyActiveConnectResource : public QObject
 {
     Q_OBJECT
 public:
-    explicit KyActiveConnectResourse(QObject *parent = nullptr);
-    ~KyActiveConnectResourse();
+    explicit KyActiveConnectResource(QObject *parent = nullptr);
+    ~KyActiveConnectResource();
 
 public:
     KyConnectItem *getActiveConnectionByUuid(QString connectUuid);
@@ -50,7 +50,7 @@ public:
 
     //void getWiredActivateConnect(QList<KyWiredConnectItem *> &wiredActiveConnectItemList);
     void getVpnActivateConnect(QList<KyVpnConnectItem *> &vpnActiveConnectItemList);
-    void getBtActivateConnect(QList<KyBluetoothConnectItem *> &btActiveConnectItemList);
+//    void getBtActivateConnect(QList<KyBluetoothConnectItem *> &btActiveConnectItemList);
 
     void getApActivateConnect(QList<KyApConnectItem *> &apConnectItemList);
 
@@ -62,6 +62,8 @@ public:
     QString getAcitveConnectionPathByUuid(QString uuid);
 
     int getActivateWifiSignal(QString devName = "");
+    bool checkInternetLoading();
+    QString getActivateWifiUni(QString devName);
 
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
@@ -75,7 +77,7 @@ private:
 
    // KyWiredConnectItem *getWiredActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyVpnConnectItem *getVpnActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
-    KyBluetoothConnectItem *getBtActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
+//    KyBluetoothConnectItem *getBtActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyApConnectItem *getApActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 
 Q_SIGNALS:

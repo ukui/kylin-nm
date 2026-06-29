@@ -18,6 +18,7 @@
  *
  */
 #include "applistwidget.h"
+#include "proxy.h"
 #include <QDebug>
 
 AppListWidget::AppListWidget(QString path, QWidget *parent)
@@ -137,10 +138,10 @@ void AppListWidget::initUI()
 
 void AppListWidget::initDbus()
 {
-    m_dbusInterface = new QDBusInterface("org.ukui.SettingsDaemon",
-                       "/org/ukui/SettingsDaemon/AppProxy",
-                       "org.ukui.SettingsDaemon.AppProxy",
-                       QDBusConnection::sessionBus());
+    m_dbusInterface = new QDBusInterface("com.kylin.network",
+                                         "/com/kylin/proxy",
+                                         "com.kylin.network.proxy",
+                                         QDBusConnection::sessionBus());
     if(!m_dbusInterface->isValid()) {
         qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
     }

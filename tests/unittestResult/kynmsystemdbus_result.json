@@ -1,0 +1,11 @@
+{
+    "cpp_path": "sys-dbus-register/kynmsystemdbus.cpp",
+    "is_library": false,
+    "module_directory": "",
+    "module_built_finish": true,
+    "test_cpp_path": "tests/sys-dbus-register/test_kynmsystemdbus.cpp",
+    "build_result": "success",
+    "reason": "",
+    "failed_test_items": ["test_setWiredMainSwitch", "test_getWiredMainSwitch", "test_setWiredDeviceSwitch", "test_getWiredDeviceSwitch", "test_setOptionsEnhance", "test_getExtraDnsEnhance", "test_setDeviceSwitch"],
+    "coverage": 29.85
+}

@@ -1,0 +1,11 @@
+bool extara_dns_conf_is_exist(char *config);
+int set_extra_dns(char *con_name, char *extradns);
+int set_extra_dns_domian(char *con_name, char *domian);
+int set_extra_dns_search(char *con_name, char *search);
+int set_extra_dns_options(char *con_name, char* timeout,char* attempts,char* type);
+void file_monitor();
+char *read_extra_dns_conf(GKeyFile *key_file, char *flags);
+char *read_extra_dns_options(GKeyFile *key_file, char *flags);
+char *read_extra_dns_domian(GKeyFile *key_file, char *flags);
+char *read_extra_dns_search(GKeyFile *key_file, char *flags);
+char *get_file_path(char *con_name);

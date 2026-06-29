@@ -1,0 +1,945 @@
+[
+  {
+    "cpp_path": "src/main.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/test_main.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/wifi-auth-thread.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_wifi-auth-thread.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_dbus.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/sysdbusregister.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_sysdbusregister.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/vpndbusadaptor.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_vpndbusadaptor.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/kylinipv6arping.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_kylinipv6arping.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/proxyservicemanager.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_proxyservicemanager.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/kylinipv4arping.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_kylinipv4arping.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus_interface.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_dbus_interface.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/utils.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/test_utils.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/hotspot/dlghotspotcreate.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/hotspot/test_dlghotspotcreate.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinactiveconnectresource.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinactiveconnectresource.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinutil.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinutil.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinvpnconnectitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinvpnconnectitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinapconnectitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinapconnectitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinnetworkresourcemanager.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinnetworkresourcemanager.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinnetworkdeviceresource.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinnetworkdeviceresource.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinconnectsetting.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinconnectsetting.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinconnectresource.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinconnectresource.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinagent.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinagent.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinwiredconnectoperation.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinwiredconnectoperation.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinbluetoothconnectitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinbluetoothconnectitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kywirelessnetitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kywirelessnetitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinsecretagent.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinsecretagent.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kyvpnconnectoperation.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kyvpnconnectoperation.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kywirelessnetresource.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kywirelessnetresource.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinvpnrequest.c",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinvpnrequest.c",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinconnectoperation.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinconnectoperation.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kyenterpricesettinginfo.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kyenterpricesettinginfo.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kylinconnectitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kylinconnectitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/backend/dbus-interface/kywirelessconnectoperation.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/backend/dbus-interface/test_kywirelessconnectoperation.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/customstyle.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/test_customstyle.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/wificonfigdialog.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/test_wificonfigdialog.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/mainwindow.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/test_mainwindow.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/customtabstyle.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_customtabstyle.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/multiplednswidget.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_multiplednswidget.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/joinhiddenwifipage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_joinhiddenwifipage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/ipv6page.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_ipv6page.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/detailpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_detailpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/configpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_configpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/detailwidget.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_detailwidget.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/netdetail.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_netdetail.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/ipv4page.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_ipv4page.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/dnssettingwidget.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_dnssettingwidget.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/creatnetpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_creatnetpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/netdetails/securitypage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/netdetails/test_securitypage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/connectivity/connectivitypage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/connectivity/test_connectivitypage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/infobutton.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_infobutton.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/kylable.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_kylable.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/loadingdiv.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_loadingdiv.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/divider.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_divider.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/radioitembutton.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_radioitembutton.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/listitemedit.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_listitemedit.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tools/switchbutton.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tools/test_switchbutton.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/xatom/xatom-helper.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/xatom/test_xatom-helper.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/list-items/listitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/list-items/test_listitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/list-items/wlanlistitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/list-items/test_wlanlistitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/list-items/lanlistitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/list-items/test_lanlistitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/list-items/wlanmoreitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/list-items/test_wlanmoreitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/enterprise-wlan/enterprisewlandialog.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/enterprise-wlan/test_enterprisewlandialog.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tab-pages/tabpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tab-pages/test_tabpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tab-pages/lanpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tab-pages/test_lanpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/tab-pages/wlanpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/tab-pages/test_wlanpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/networkmode/firewalldialog.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/networkmode/test_firewalldialog.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/frontend/networkmode/networkmodeconfig.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/frontend/networkmode/test_networkmodeconfig.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/singleapplication/qt-locked-file.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/singleapplication/test_qt-locked-file.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/singleapplication/qt-single-application.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/singleapplication/test_qt-single-application.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/singleapplication/qt-locked-file-unix.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/singleapplication/test_qt-locked-file-unix.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src/singleapplication/qt-local-peer.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src/singleapplication/test_qt-local-peer.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/main.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/test_main.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/backend/vpndbusadaptor.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/backend/test_vpndbusadaptor.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpnobject.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/test_vpnobject.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/list-items/listitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/list-items/test_listitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/list-items/vpnlistitem.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/list-items/test_vpnlistitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/single-pages/vpnpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/single-pages/test_vpnpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/single-pages/singlepage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/single-pages/test_singlepage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpndetails/vpnipv6page.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/vpndetails/test_vpnipv6page.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpndetails/vpnaddpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/vpndetails/test_vpnaddpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpndetails/vpndetail.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/vpndetails/test_vpndetail.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpndetails/vpnipv4page.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/vpndetails/test_vpnipv4page.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpndetails/vpnadvancedpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/vpndetails/test_vpnadvancedpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/frontend/vpndetails/vpnconfigpage.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/frontend/vpndetails/test_vpnconfigpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/singleapplication/qt-locked-file.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/singleapplication/test_qt-locked-file.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/singleapplication/qt-single-application.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/singleapplication/test_qt-single-application.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/singleapplication/qt-locked-file-unix.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/singleapplication/test_qt-locked-file-unix.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "src-vpn/singleapplication/qt-local-peer.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/src-vpn/singleapplication/test_qt-local-peer.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-register/main.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-register/test_main.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-register/kynmsystemdbus.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-register/test_kynmsystemdbus.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-register/proxyServer/proxyapphandler.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-register/proxyServer/test_proxyapphandler.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-register/kyarping/kylinipv6arping.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-register/kyarping/test_kylinipv6arping.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-register/kyarping/kylinipv4arping.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-register/kyarping/test_kylinipv4arping.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-netctrl/main.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-netctrl/test_main.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-netctrl/kylin/common/kylin_async_task.c",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-netctrl/kylin/common/test_kylin_async_task.c",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-netctrl/kylin/common/kylin_common.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-netctrl/kylin/common/test_kylin_common.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-netctrl/kylin/common/kylin_cfgInfo.c",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-netctrl/kylin/common/test_kylin_cfgInfo.c",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-netctrl/kylin/netControl/kylin_netctrol_server_interface.cpp",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-netctrl/kylin/netControl/test_kylin_netctrol_server_interface.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "sys-dbus-netctrl/kylin/netControl/kylin_hedron_log.c",
+    "type": "add",
+    "module_directory": "",
+    "test_cpp_path": "tests/sys-dbus-netctrl/kylin/netControl/test_kylin_hedron_log.c",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/knmwlandatakeeper.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_knmwlandatakeeper.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/knminterface.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_knminterface.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/networkqml_plugin.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_networkqml_plugin.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/netdevice.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_netdevice.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/wirelessconnectionmodel.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_wirelessconnectionmodel.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/knmdbuscaller.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_knmdbuscaller.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/knmlandatakeeper.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_knmlandatakeeper.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "qml-network/plugin/knmdatakeeper.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "qml-network",
+    "test_cpp_path": "tests/qml-network/plugin/test_knmdatakeeper.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/vpn/vpnitem.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/vpn/test_vpnitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/vpn/itemframe.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/vpn/test_itemframe.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/vpn/vpn.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/vpn/test_vpn.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/mobilehotspot/connectdevlistitem.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/mobilehotspot/test_connectdevlistitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/mobilehotspot/mobilehotspotwidget.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/mobilehotspot/test_mobilehotspotwidget.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/mobilehotspot/blacklistitem.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/mobilehotspot/test_blacklistitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/mobilehotspot/connectdevpage.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/mobilehotspot/test_connectdevpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/mobilehotspot/mobilehotspot.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/mobilehotspot/test_mobilehotspot.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/mobilehotspot/blacklistpage.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/mobilehotspot/test_blacklistpage.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/netconnect/netconnect.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/netconnect/test_netconnect.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/netconnect/lanitem.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/netconnect/test_lanitem.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/netconnect/itemframe.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/netconnect/test_itemframe.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/netconnect/deviceframe.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/netconnect/test_deviceframe.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/proxy/applistwidget.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/proxy/test_applistwidget.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/proxy/aptproxydialog.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/proxy/test_aptproxydialog.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/proxy/proxy.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/proxy/test_proxy.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/component/AddBtn/addnetbtn.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/component/AddBtn/test_addnetbtn.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/component/AddBtn/grayinfobutton.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/component/AddBtn/test_grayinfobutton.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/component/DrownLabel/drownlabel.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/component/DrownLabel/test_drownlabel.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/component/InfoButton/infobutton.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/component/InfoButton/test_infobutton.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/component/SwitchButton/switchbutton.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/component/SwitchButton/test_switchbutton.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/wlanconnect/itemframe.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/wlanconnect/test_itemframe.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/wlanconnect/wlanconnect.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/wlanconnect/test_wlanconnect.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/wlanconnect/deviceframe.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/wlanconnect/test_deviceframe.cpp",
+    "build_system": "qmake"
+  },
+  {
+    "cpp_path": "plugins/wlanconnect/wlanitem.cpp",
+    "type": "add",
+    "is_library": true,
+    "module_directory": "plugins",
+    "test_cpp_path": "tests/plugins/wlanconnect/test_wlanitem.cpp",
+    "build_system": "qmake"
+  }
+]

@@ -18,6 +18,7 @@
  *
  */
 #include "blacklistpage.h"
+#include "klineframe.h"
 #include <QDebug>
 
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -43,8 +44,9 @@ BlacklistPage::BlacklistPage(QWidget *parent) : QWidget(parent)
     m_blacklistLayout->setContentsMargins(0, 0, 0, 0);
     m_blacklistLayout->setSpacing(0);
 
-    m_titleLabel = new TitleLabel(this);
+    m_titleLabel = new KLabel(this);
     m_titleLabel->setText(tr("Blacklist"));
+    m_titleLabel->setContentsMargins(16, 0, 0, 0);
 
     Vlayout->addWidget(m_titleLabel);
     Vlayout->addSpacing(8);
@@ -53,13 +55,7 @@ BlacklistPage::BlacklistPage(QWidget *parent) : QWidget(parent)
 
 QFrame* BlacklistPage::myLine()
 {
-    QFrame *line = new QFrame(this);
-    line->setMinimumSize(QSize(LINE_MIN_SIZE));
-    line->setMaximumSize(QSize(LINE_MAX_SIZE));
-    line->setLineWidth(0);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-
+    KHLineFrame *line = new KHLineFrame(this);
     return line;
 }
 
@@ -160,7 +156,7 @@ bool BlacklistPage::removeStaFromBlacklist(QString staMac, QString staName)
 void BlacklistPage::resetLayoutHight()
 {
     int height = 0;
-    for (int i = 0; i < m_blacklistLayout->count(); i ++) {
+    for (int i = 0; i < m_blacklistLayout->count(); i++) {
         QWidget *w = m_blacklistLayout->itemAt(i)->widget();
         if (w != nullptr) {
             height += w->height();
@@ -168,6 +164,7 @@ void BlacklistPage::resetLayoutHight()
     }
     m_blacklistFrame->setFixedHeight(height);
 
+    // 根据黑名单是否为空决定是否显示
     if (m_blacklistMap.isEmpty()) {
         this->hide();
     } else {

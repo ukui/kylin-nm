@@ -4,6 +4,7 @@ CONFIG += plugin
 
 include(../component/drownlabel.pri)
 include(../component/addbtn.pri)
+include(../../pub/pub.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)
 DESTDIR = ../..
@@ -29,6 +30,7 @@ CONFIG += c++11 \
 
 PKGCONFIG += gsettings-qt \
              kysdk-qtwidgets \
+             kysdk-sysinfo
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -54,6 +56,7 @@ INSTALLS += target \
 
 TRANSLATIONS += \
         translations/zh_Hant.ts \
+        translations/zh_HK.ts \
         translations/zh_CN.ts \
         translations/ug.ts \
         translations/tr.ts \
@@ -64,5 +67,8 @@ TRANSLATIONS += \
         translations/es.ts \
         translations/en_US.ts \
         translations/de.ts \
+        translations/vi.ts \
+        translations/ms.ts \
+        translations/th.ts \
         translations/bo.ts\
         translations/bo_CN.ts

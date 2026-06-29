@@ -18,6 +18,8 @@
  *
  */
 #include "itemframe.h"
+#include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
 #include <QPainter>
 
 #define LAYOUT_MARGINS 0,0,0,0
@@ -30,18 +32,22 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
     lanItemFrame->setFrameShape(QFrame::Shape::NoFrame);
     lanItemFrame->setContentsMargins(LAYOUT_MARGINS);
 
-    lanItemLayout = new QVBoxLayout(this);
+    lanItemLayout = new QVBoxLayout(lanItemFrame);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
-    lanItemLayout->setSpacing(1);
+    lanItemLayout->setSpacing(0);
     addWlanWidget = new AddNetBtn(true, this);
+    KDK_EXTEND_ALL_INFO_FORMAT(addWlanWidget, "WlanConnect", "", "add others of wlanconnect");
 
-    deviceLanLayout->setSpacing(1);
+    deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);
     lanItemFrame->setLayout(lanItemLayout);
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
+    KHLineFrame *separator = new KHLineFrame(this);
+    deviceLanLayout->addWidget(separator);
     deviceLanLayout->addWidget(lanItemFrame);
+    deviceLanLayout->addSpacing(0);
     deviceLanLayout->addWidget(addWlanWidget);
 
     //下拉按钮

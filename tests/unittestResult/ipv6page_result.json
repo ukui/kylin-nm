@@ -1,0 +1,11 @@
+{
+"cpp_path": "src/frontend/netdetails/ipv6page.cpp",
+"is_library": false,
+"module_directory": "",
+"module_built_finish": true,
+"test_cpp_path": "tests/src/frontend/netdetails/ipv6page/test_ipv6page.cpp",
+"build_result": "success",
+"reason": "",
+"failed_test_items": ["testSetIpv6", "testSetIpv6Perfix", "testCheckIsChanged_ManualConfig_NoChange", "testGetErrorMessage_Valid"],
+"coverage": "92.28"
+}

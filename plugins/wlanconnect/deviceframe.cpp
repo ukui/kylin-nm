@@ -18,10 +18,11 @@
  *
  */
 #include "deviceframe.h"
+#include <kysdk/applications/accessinfohelper.h>
 #include <QPainter>
 #include <QPainterPath>
 
-#define LAYOUT_MARGINS 18,0,8,0
+#define LAYOUT_MARGINS 16,0,8,0
 #define FRAME_HEIGHT 58
 #define LAYOUT_SPACING 16
 #define RADIUS 6.0
@@ -37,6 +38,7 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
+    kdk::KDK_EXTEND_ALL_INFO_FORMAT(dropDownLabel, "WlanConnect", "", "the drop-down button of wireless network card");
 
     deviceLayout->addWidget(deviceLabel);
     deviceLayout->addStretch();
@@ -51,18 +53,27 @@ DeviceFrame::~DeviceFrame()
 void DeviceFrame::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
-
     QPainter painter(this);
-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    
+    QRect rect = this->rect();
+    const int radius = RADIUS;
+    
+    // 创建单一路径实现上圆角下直角
+    QPainterPath path;
+    path.moveTo(rect.topLeft() + QPointF(0, radius));
+    path.arcTo(rect.left(), rect.top(), radius * 2, radius * 2, 180, -90);
+    path.lineTo(rect.right() - radius, rect.top());
+    path.arcTo(rect.right() - radius * 2, rect.top(), radius * 2, radius * 2, 90, -90);
+    path.lineTo(rect.right(), rect.bottom());
+    path.lineTo(rect.left(), rect.bottom());
+    path.lineTo(rect.left(), rect.top() + radius);
+    
+    // 绘制背景
     painter.setPen(Qt::NoPen);
     painter.setBrush(pal.color(QPalette::Base));
-
-    QRect rect = this->rect();
-    QPainterPath path;
-    path.addRoundedRect (rect, RADIUS, RADIUS);
-    QRect temp_rect(rect.left(), rect.top() + rect.height()/2, rect.width(), rect.height()/2);
-    path.addRect(temp_rect);
     painter.drawPath(path);
+    
+    // 保持基类绘制
     QFrame::paintEvent(event);
 }
-

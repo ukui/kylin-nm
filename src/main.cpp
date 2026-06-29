@@ -30,6 +30,8 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"
 #endif
+#include "../pub/uisecurityconfig.h"
+#include "../pub/appsettings.h"
 
 #define LOG_IDENT "ukui_kylin_nm"
 
@@ -142,6 +144,11 @@ int main(int argc, char *argv[])
     qDebug() << sessionType << display;
     qApp->setProperty("sessionType", sessionType);
 
+    // 初始化项目项目环境
+    UiSecurityConfig::getInstance();
+    // 初始化gsetting配置
+    AppSettings::instance();
+
     QDBusInterface interface("com.kylin.network",
                              "/com/kylin/network",
                              "com.kylin.network",
@@ -201,6 +208,9 @@ int main(int argc, char *argv[])
     while (!p_networkResource->NetworkManagerIsInited()) {
         ::usleep(1000);
     }
+
+    //初始化配置文件
+    UiSecurityConfig *securityConfig = UiSecurityConfig::getInstance();
 
     MainWindow w(display, nullptr);
     a.setActivationWindow(&w);

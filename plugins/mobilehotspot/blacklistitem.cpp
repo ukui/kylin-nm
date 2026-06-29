@@ -60,7 +60,7 @@ BlacklistItem::BlacklistItem(QString staMac, QString staName, QWidget *parent) :
 bool BlacklistItem::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonRelease) {
-        if (w == m_removeFromBlacklistBtn) {
+        if (w == m_removeFromBlacklistBtn && m_removeFromBlacklistBtn->isEnabled()) {
             emit onBtnClicked(m_mac, m_hostName);
             return true;
         }

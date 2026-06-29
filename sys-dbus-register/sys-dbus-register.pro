@@ -13,19 +13,33 @@ inst1.files += conf/com.kylin.network.qt.systemdbus.service
 inst1.path = /usr/share/dbus-1/system-services/
 inst2.files += conf/com.kylin.network.qt.systemdbus.conf
 inst2.path = /etc/dbus-1/system.d/
+inst3.files += conf/kylin-nm-sysdbus.service
+inst3.path = /etc/systemd/system/
+#服务集管控 配置.yaml
+inst4.files += conf/com.kylin.network.qt.systemdbus.yaml
+inst4.path = /etc/kylin-config/basic/
 target.source += $$TARGET
 target.path = /usr/bin
+
+INCLUDEPATH += /usr/include/KF5/NetworkManagerQt /usr/include/libnm
+
+LIBS    +=  -L/usr/lib/  -lKF5NetworkManagerQt
 
 INSTALLS += \
          target \
          inst1 \
          inst2 \
+         inst3 \
+         inst4
 
 include(kyarping/kyarping.pri)
 
 SOURCES += \
         kynmsystemdbus.cpp \
+        proxyServer/proxyapphandler.cpp\
         main.cpp
 
 HEADERS += \
-        kynmsystemdbus.h
+        authority-base.h \
+        kynmsystemdbus.h \
+        proxyServer/proxyapphandler.h

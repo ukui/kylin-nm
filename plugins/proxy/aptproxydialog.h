@@ -23,11 +23,9 @@
 #include <QObject>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QGSettings>
 #include <QLabel>
 #include <QLineEdit>
 #include <QDialog>
-#include "fixlabel.h"
 
 #define APT_PROXY_SCHEMA              "org.ukui.control-center.apt.proxy"
 #define APT_PROXY_ENABLED            "enabled"
@@ -43,8 +41,10 @@ public:
 
     void initUi();
 private:
-    QLineEdit *mHostEdit;
-    QLineEdit *mPortEdit;
+    QLineEdit *m_pHttpHostEdit = nullptr;
+    QLineEdit *m_pHttpPortEdit = nullptr;
+    QLineEdit *m_pHttpsHostEdit = nullptr;
+    QLineEdit *m_pHttpsPortEdit = nullptr;
 
     QPushButton *mCancelBtn;
     QPushButton *mConfirmBtn;

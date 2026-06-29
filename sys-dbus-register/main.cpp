@@ -17,6 +17,7 @@
  */
 
 #include "kynmsystemdbus.h"
+#include "proxyServer/proxyapphandler.h"
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDBusError>
@@ -33,7 +34,12 @@ int main(int argc, char *argv[]){
     }
 
     if (!systemBus.registerObject("/", new KynmSystemDbus(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
-        qCritical() << "QDbus register object failed reason:" << systemBus.lastError();
+        qCritical() << "QDbus network interface register object failed reason:" << systemBus.lastError();
+        exit(2);
+    }
+
+    if (!systemBus.registerObject("/com/kylin/proxy", new ProcAddServer(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
+        qCritical() << "QDbus proxy interface register object failed reason:" << systemBus.lastError();
         exit(2);
     }
 

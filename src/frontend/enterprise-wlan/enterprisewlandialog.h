@@ -24,12 +24,15 @@
 #include <QScrollArea>
 #include <QPainter>
 
-#include "securitypage.h"
+#include "../netdetails/securitypage.h"
 #include "divider.h"
-#include "kywirelessnetitem.h"
-#include "coninfo.h"
+#include "../netdetails/coninfo.h"
+#include "../../backend/dbus-interface/kywirelessnetitem.h"
 
-class EnterpriseWlanDialog : public QWidget
+#include <kdialog.h>
+using namespace kdk;
+
+class EnterpriseWlanDialog : public KDialog
 {
     Q_OBJECT
 public:

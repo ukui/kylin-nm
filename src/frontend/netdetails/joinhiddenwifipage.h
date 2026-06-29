@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -24,16 +24,15 @@
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QDesktopWidget>
+#include <QTimer>
 
-#include "windowmanager/windowmanager.h"
 #include "coninfo.h"
-#include "kywirelessconnectoperation.h"
 #include "securitypage.h"
 #include "divider.h"
 #include "kwidget.h"
 #include "kdialog.h"
 #include "kborderlessbutton.h"
+#include "../../backend/dbus-interface/kywirelessconnectoperation.h"
 
 using namespace kdk;
 
@@ -45,7 +44,8 @@ public:
     JoinHiddenWiFiPage(QString devName, KDialog *parent = nullptr);
     ~JoinHiddenWiFiPage();
 
-    void centerToScreen();
+    void setEnterpriseInfo(const QVariantMap &info);
+
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -82,16 +82,30 @@ private:
     bool m_isJoinBtnEnable = false;
     bool m_isSecuOk = false;
     ConInfo      m_info;
+    QTimer *m_timeoutTimer = nullptr;
+    bool m_bReConnectNet = false;
+    /* 企业wifi密码重连：已向 SecretAgent onSubmitPassword 提交后为 true，避免 close 时再 onCancelPassword */
+    bool m_reConnectNetSecretSubmitted = false;
 
 private Q_SLOTS:
     void onBtnJoinClicked();
     void onBtnShowListClicked();
     void onSecuTypeChanged(const KySecuType &type);
     void onEapTypeChanged(const KyEapMethodType &type);
+    void resetTimeout();
 
 Q_SIGNALS:
     void hiddenWiFiPageClose(QString);
+    /* 仅在企业重连场景下，用户关闭对话框且未点「连接」提交凭据时发出（用于 onCancelPassword） */
+    void cancelReConnectEnterprise(QString);
     void showWlanList(int type);
+
+    void reConnectTlsConnect(KyEapMethodTlsInfo info, KyWirelessConnectSetting connSettingInfo);
+    void reConnectPeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void reConnectTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
+    void reConnectLeapConnect(KyEapMethodLeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void reConnectPwdConnect(KyEapMethodPwdInfo info, KyWirelessConnectSetting connSettingInfo);
+    void reConnectFastConnect(KyEapMethodFastInfo info, KyWirelessConnectSetting connSettingInfo);
 };
 
 #endif // JOINHIDDENWIFIPAGE_H

@@ -21,6 +21,15 @@
 #include "kylinutil.h"
 
 #define LOG_FLAG "[KyWirelessNetResource]"
+
+namespace {
+void refreshIsMixInList(QList<KyWirelessNetItem> &list)
+{
+    for (int i = 0; i < list.size(); ++i) {
+        list[i].calculateIsMix();
+    }
+}
+} // namespace
 const QString ENTERPRICE_TYPE = "802.1X";
 const QString WPA1_AND_WPA2 = "WPA";
 const QString WPA3 = "WPA3";
@@ -96,6 +105,7 @@ bool KyWirelessNetResource::getAllDeviceWifiNetwork(QMap<QString, QList<KyWirele
     } else {
         QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
         while (iter != m_WifiNetworkList.end()) {
+            refreshIsMixInList(iter.value());
             wifiListSort(m_WifiNetworkList[iter.key()]);
             iter++;
         }
@@ -110,8 +120,10 @@ bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyW
    if (!m_WifiNetworkList.contains(devIfaceName)) {
         return false;
     } else {
-        wifiListSort(m_WifiNetworkList[devIfaceName]);
-        wirelessNetResource = m_WifiNetworkList[devIfaceName];
+        QList<KyWirelessNetItem> &lst = m_WifiNetworkList[devIfaceName];
+        refreshIsMixInList(lst);
+        wifiListSort(lst);
+        wirelessNetResource = lst;
         return true;
     }
 }
@@ -126,7 +138,9 @@ bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName,
     } else {
         for (int index = 0; index < m_WifiNetworkList[devIfaceName].size(); index++){
             if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid == ssid) {
-                wirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
+                KyWirelessNetItem &entry = m_WifiNetworkList[devIfaceName][index];
+                entry.calculateIsMix();
+                wirelessNetResource = entry;
                 qDebug()<< LOG_FLAG << "getWifiNetwork success";
                 return true;
             }
@@ -137,6 +151,34 @@ bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName,
 
     return false;
 }
+
+bool KyWirelessNetResource::getActiveWifiNetwork(const QString &devIfaceName,KyWirelessNetItem &wirelessNetResource)
+{
+    QString uuid="";
+    if (!m_WifiNetworkList.contains(devIfaceName)) {
+         qDebug()<< LOG_FLAG << "getWifiNetwork fail, not contain " << devIfaceName;
+        return false;
+    } else {
+        uuid=getActiveConnectUuidByDevice(devIfaceName);
+        if(uuid.isEmpty()) {
+            qDebug()<< LOG_FLAG << "getWifiNetwork fail, uuid is null " << devIfaceName;
+            return false;
+        }
+        for (int index = 0; index < m_WifiNetworkList[devIfaceName].size(); index++){
+           qDebug()<< LOG_FLAG << "getActiveWifiNetwork uuid "<<m_WifiNetworkList[devIfaceName].at(index).m_connectUuid<<m_WifiNetworkList[devIfaceName].at(index).m_NetSsid;
+            if (m_WifiNetworkList[devIfaceName].at(index).m_connectUuid == uuid) {
+                wirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
+                qDebug()<< LOG_FLAG << "getWifiNetwork success";
+                return true;
+            }
+        }
+    }
+
+    qDebug()<< LOG_FLAG << "getActiveWifiNetwork fail, not contain " << devIfaceName<<uuid;
+
+    return false;
+}
+
 
 void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map)
 {
@@ -217,8 +259,12 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
         }
 
         QString ifaceUni = interfaces.at(0);
-        NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+
+        if (deviceName.isNull()) {
+            continue;
+        }
+
         if (deviceName != devicePtr->interfaceName()) {
             continue;
         }
@@ -237,6 +283,59 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
     return ssid;
 }
 
+
+QString KyWirelessNetResource::getActiveConnectUuidByDevice(QString deviceName)
+{
+    QString uuid = "";
+
+    NetworkManager::ActiveConnection::List activeConnectionList;
+    activeConnectionList.clear();
+    activeConnectionList = m_networkResourceInstance->getActiveConnectList();
+    if (activeConnectionList.isEmpty()) {
+        return uuid;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
+    for (int index = 0; index < activeConnectionList.size(); index++) {
+        activeConnectionPtr = activeConnectionList.at(index);
+        if (activeConnectionPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectionPtr->type()) {
+            continue;
+        }
+
+        if (NetworkManager::ActiveConnection::State::Activated != activeConnectionPtr->state()) {
+            continue;
+        }
+
+        QStringList interfaces = activeConnectionPtr->devices();
+        if(interfaces.isEmpty()) {
+            qWarning()<< LOG_FLAG <<"get active device failed.";
+            continue;
+        }
+
+        QString ifaceUni = interfaces.at(0);
+        NetworkManager::Device::Ptr devicePtr =
+                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+        if (devicePtr == nullptr) {
+            continue;
+        }
+        if (deviceName != devicePtr->interfaceName()) {
+            continue;
+        }
+
+        NetworkManager::Connection::Ptr connectPtr = activeConnectionPtr->connection();
+        NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+
+        uuid=settingPtr->uuid();
+        break;
+    }
+
+    return uuid;
+}
+
 bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem)
 {
     if (!m_WifiNetworkList.contains(deviceName)) {
@@ -253,6 +352,7 @@ bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirel
         if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
             wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
             updatewirelessItemConnectInfo(wirelessNetItem);
+            m_WifiNetworkList[deviceName].replace(index,wirelessNetItem);
             qDebug()<< LOG_FLAG << "getWifiNetwork success";
             return true;
         }
@@ -292,9 +392,7 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     }
 
     QString ifaceUni = interfaces.at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-                m_networkResourceInstance->findDeviceUni(ifaceUni);
-
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
     if (devicePtr.isNull()) {
         return QString();
     }
@@ -334,10 +432,11 @@ void KyWirelessNetResource::getDeviceByUuid(const QString uuid, QString &deviceN
         QStringList interfaces = activeConnectionPtr->devices();
         if (interfaces.size() > 0) {
             QString ifaceUni = interfaces.at(0);
-            NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
-            deviceName = devicePtr->interfaceName();
-            return;
+            NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+            if (!devicePtr.isNull()) {
+                deviceName = devicePtr->interfaceName();
+                return;
+            }
         } else {
             qDebug() << LOG_FLAG << "get device of active connection failed.";
         }
@@ -396,7 +495,7 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::WirelessNetwork::P
 
 void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssid)
 {
-
+    qDebug() << Q_FUNC_INFO << __LINE__ << devIfaceName << ssid;
     NetworkManager::Device::Ptr dev = m_networkResourceInstance->findDeviceInterface(devIfaceName);
     if (dev.isNull()) {
         return;
@@ -496,6 +595,14 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(QString interface, QStri
                 if (iter->m_secuType != sec) {
                     iter->setKySecuType(sec);
                     Q_EMIT secuTypeChange(interface, ssid, sec);
+                }
+
+                const bool wasMix = iter->m_isMix;
+                iter->calculateIsMix();
+                if (wasMix != iter->m_isMix) {
+                    qDebug() << LOG_FLAG << "isMix changed" << ssid << "on" << interface
+                             << wasMix << "->" << iter->m_isMix;
+                    Q_EMIT wifiNetworkIsMixChange(interface, ssid, iter->m_isMix);
                 }
 
                 break;
@@ -847,61 +954,24 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
 
 }
 
-
+/*uuid是唯一的，不需要那么多前置判断，冗余且无用*/
+/*分层要清楚 KyWirelessNetItem条目封装的数据结构 ssid应该来自扫描列表 其他来自配置*/
 void KyWirelessNetResource::onConnectionUpdate(QString uuid)
 {
     qDebug()<< LOG_FLAG << "onConnectionUpdate " << uuid;
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull()) {
-        qDebug()<< LOG_FLAG  << "onConnectionAdd can not find connection" << uuid;
-        return;
-    }
-
-    NetworkManager::ConnectionSettings::Ptr sett= conn->settings();
-    if (sett->connectionType() != NetworkManager::ConnectionSettings::ConnectionType::Wireless) {
-        return;
-    }
-
-    QString ssid, dev;
-    getSsidByUuid(uuid, ssid);
-    getDeviceByUuid(uuid, dev);
-
-    if (!dev.isEmpty()) {
-        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(dev);
-        if (devicePtr.isNull() || !m_WifiNetworkList.contains(dev)) {
-            return;
-        }
-    }
-
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter;
     for (iter = m_WifiNetworkList.begin(); iter != m_WifiNetworkList.end(); ++iter) {
+        qDebug() << Q_FUNC_INFO << __LINE__ << "interfaceName :"<< iter.key();
         QList<KyWirelessNetItem>::iterator itemIter;
         for (itemIter = iter.value().begin(); itemIter != iter.value().end(); ++itemIter) {
             //判断是否有其他wifi配置 更新WIFI-bd 的connect相关变量 emit update
             if (uuid == itemIter->m_connectUuid) {
-                if (itemIter->m_NetSsid != ssid ||
-                        (iter.key() != dev && !dev.isEmpty())) {
-                    updatewirelessItemConnectInfo(*itemIter);
-                    Q_EMIT connectionUpdate(iter.key(), itemIter->m_NetSsid);
+                //更新WIFI 的connect相关变量 emit update to ui
 
-                    //判断netptr是否为空 空返回
-                    //否则 更新ssid 的connect相关变量 emit update ssid
-                    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(dev);
-                    NetworkManager::WirelessNetwork::Ptr netPtr = m_networkResourceInstance->findWifiNetwork(ssid, devicePtr->uni());
-                    if (netPtr.isNull()) {
-                        qDebug() << LOG_FLAG << ssid << "netPtr is Null";
-                        return;
-                    }
-                }
+                updateKylinWirelessItemInfo(*itemIter);
+                Q_EMIT connectionUpdate(iter.key(), itemIter->m_NetSsid);
+                break;
             }
-            //更新WIFI 的connect相关变量 emit update to ui
-            if (ssid == itemIter->m_NetSsid) {
-                if (iter.key() == dev || dev.isEmpty()) {
-                    updatewirelessItemConnectInfo(*itemIter);
-                    Q_EMIT connectionUpdate(dev, itemIter->m_NetSsid);
-                }
-            }
-            break;
         }
     }
     Q_EMIT wifiNetworkUpdate();

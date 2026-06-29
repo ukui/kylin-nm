@@ -71,13 +71,19 @@ void KyIpv4Arping::monoGetTime (struct timespec *ts)
 
 void KyIpv4Arping::saveMacAddress(const uint8_t *ptr, size_t len)
 {
+    // 添加长度验证
+    if (ptr == nullptr || len == 0 || len > 21) {
+        qWarning() << "[KyIpv4Arping] Invalid MAC address length:" << len;
+        return;
+    }
+
     int index;
     char macAddress[64] = {0};
 
     for (index = 0; index < len; index++) {
-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", ptr[index]);
+        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", ptr[index]);
         if (index != len - 1) {
-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
+            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
         }
     }
 

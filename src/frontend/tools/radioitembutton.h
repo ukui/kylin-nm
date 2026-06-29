@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QVariantAnimation>
-#include <QGSettings>
+#include <QGSettings/QGSettings>
 
 #define MIDDLE_COLOR 178
 

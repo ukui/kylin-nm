@@ -27,12 +27,12 @@
 #include <QAbstractItemView>
 #include <QMenu>
 #include <QContextMenuEvent>
-#include "kywirelessnetitem.h"
-#include "kylinconnectresource.h"
-#include "kylinactiveconnectresource.h"
-#include "kywirelessconnectoperation.h"
-#include "kywirelessnetresource.h"
-#include "kyenterpricesettinginfo.h"
+#include "../../backend/dbus-interface/kywirelessnetitem.h"
+#include "../../backend/dbus-interface/kylinconnectresource.h"
+#include "../../backend/dbus-interface/kylinactiveconnectresource.h"
+#include "../../backend/dbus-interface/kywirelessconnectoperation.h"
+#include "../../backend/dbus-interface/kywirelessnetresource.h"
+#include "../../backend/dbus-interface/kyenterpricesettinginfo.h"
 
 #define AUTO_CONFIG  0
 #define MANUAL_CONFIG  1

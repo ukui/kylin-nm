@@ -62,13 +62,13 @@ int KyIpv6Arping::getLocalMacAddress(const char *ifname, unsigned char *addr)
     struct ifreq req;
     memset (&req, 0, sizeof (req));
 
-    if (((unsigned)strlen (ifname)) >= (unsigned)IFNAMSIZ) {
+    if (((unsigned)qstrlen (ifname)) >= (unsigned)IFNAMSIZ) {
         return -1; /* buffer overflow = local root */
     }
 
-    strcpy (req.ifr_name, ifname);
+    snprintf(req.ifr_name, IFNAMSIZ, "%s", ifname);
 
-    int fd = socket (AF_INET6, SOCK_DGRAM, 0);
+    int fd = socket (AF_INET, SOCK_DGRAM, 0);
     if (fd == -1) {
         return -1;
     }
@@ -154,13 +154,19 @@ int KyIpv6Arping::buildSolicitationPacket(solicit_packet *ns, struct sockaddr_in
 
 void KyIpv6Arping::saveMacAddress (const uint8_t *ptr, size_t len)
 {
+    // 添加长度验证
+    if (ptr == nullptr || len == 0 || len > 32) {
+        qWarning() << "[KyIpv4Arping] Invalid MAC address length:" << len;
+        return;
+    }
+
     int index;
     char macAddress[64] = {0};
 
     for (index = 0; index < len; index++) {
-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", ptr[index]);
+        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", ptr[index]);
         if (index != len - 1) {
-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
+            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
         }
     }
 
@@ -192,9 +198,9 @@ int KyIpv6Arping::parseIpv6Packet(const uint8_t *buf, size_t len, const struct s
     uint8_t hw_addr[6] = {0};
     getLocalMacAddress(m_ifaceName.toUtf8().constData(), hw_addr);
     for (index = 0; index < 6; index++) {
-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", hw_addr[index]);
+        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", hw_addr[index]);
         if (index != 5) {
-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
+            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
         }
     }
     QString localAddr(macAddress);

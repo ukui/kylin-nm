@@ -1,0 +1,11 @@
+[Unit]
+Description=kylin network enhancement optimization
+After=lightdm.service
+[Service]
+Type=dbus
+BusName=com.kylin.network.enhancement.optimization
+ExecStart=/usr/bin/nm-enhance-optimization
+User=root
+
+[Install]
+WantedBy=multi-user.target

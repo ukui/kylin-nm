@@ -28,8 +28,6 @@
 #include <QDialog>
 #include <QLineEdit>
 #include "certificationdialog.h"
-
-#include <QGSettings>
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -46,7 +44,7 @@
 #include <QtDBus/QDBusMetaType>
 
 #include "interface.h"
-#include "titlelabel.h"
+#include "klabel.h"
 #include "hoverwidget.h"
 #include "applistwidget.h"
 
@@ -86,6 +84,7 @@ Q_DECLARE_METATYPE(GSData)
 namespace Ui {
 class Proxy;
 }
+class TextEdit;
 
 class Proxy : public QObject, CommonInterface
 {
@@ -119,12 +118,15 @@ public:
     void initIgnoreHostStatus();
     void initDbus();
     void initAppProxyStatus();
-
     void manualProxyTextChanged(QString txt);
+    void manualProxyTextChanged();
     int _getCurrentProxyMode();
     void _setSensitivity();
+    bool isManualProxyEnable();
+    void refreshSystemProxyState(bool isChecked);
+
     bool getAptProxyInfo(bool status);
-    static void setAptProxy(QString host ,QString port ,bool status); //  apt代理对应的配置文件的写入或删除
+    static void setAptProxy(QString host , QString port , QString https_host, QString https_port, bool status); //  apt代理对应的配置文件的写入或删除
     static QHash<QString, QVariant> getAptProxy();
     void setAptInfo();
     void reboot(); // 调用重启接口
@@ -138,7 +140,8 @@ public:
     void setAppProxyConf(QStringList list); //设置应用代理配置信息--调用Dbus
     static QMap<QString, QStringList> getAppListProxy();
 //    bool checkIsChanged(QStringList info);
-    void setUkccProxySettings();  // 设置控制面板代理模块显示/隐藏
+    void setUkccProxySettings();  // 设置控制面板管控代理模块
+
 private:
     void setAppProxyFrameUi(QWidget *widget);
     void setAppListFrameUi(QWidget *widget);
@@ -148,7 +151,13 @@ private:
     void setSystemProxyFrameHidden(bool state);
     void setAppProxyFrameHidden(bool state);
     void setAPTProxyFrameHidden(bool state);
+    void setAPTProxyInfoFrameVisible(bool state);
+    bool isKylinProxyProcessRunning();
+    void setSystemProxyFrameEnable(bool enable);
+    void setAppProxyFrameEnable(bool enable);
+    void setAPTProxyFrameEnable(bool enable);
 
+private:
     QFrame *m_sysSpacerFrame;
     QFrame *m_appListSpacerFrame;
     QFrame *m_appSpacerFrame;
@@ -157,9 +166,9 @@ private:
     int pluginType;
     QWidget * pluginWidget;
 
-    TitleLabel *mTitleLabel;
-    TitleLabel *m_appProxyLabel;
-    TitleLabel *mAptProxyLabel;
+    KLabel *mTitleLabel;
+    KLabel *m_appProxyLabel;
+    KLabel *mAptProxyLabel;
     QLabel *mUrlLabel;
     QLabel *mHTTPLabel;
     QLabel *mHTTPPortLabel;
@@ -171,10 +180,14 @@ private:
     QLabel *mSOCKSPortLabel;
     QLabel *mIgnoreLabel;
     QLabel *mAptLabel;
-    QLabel *mAPTHostLabel_1;
-    QLabel *mAPTHostLabel_2;
-    QLabel *mAPTPortLabel_1;
-    QLabel *mAPTPortLabel_2;
+    QLabel *m_pAPTHttpHostTipsLabel;
+    QLabel *m_pAPTHttpHostInfoLabel;
+    QLabel *m_pAPTHttpPortTipsLabel;
+    QLabel *m_pAPTHttpPortInfoLabel;
+    QLabel *m_pAPTHttpsHostTipsLabel;
+    QLabel *m_pAPTHttpsHostInfoLabel;
+    QLabel *m_pAPTHttpsPortTipsLabel;
+    QLabel *m_pAPTHttpsPortInfoLabel;
 
     QLabel *mCertificationLabel;
     QLabel *mUserNameLabel;
@@ -183,7 +196,7 @@ private:
     QLabel *m_appEnableLabel;
     QLabel *m_proxyTypeLabel;
     QLabel *m_ipAddressLabel;
-    QLabel *m_ipHintsLabel;
+    KLabel *m_ipHintsLabel;
     QLabel *m_portLabel;
     QLabel *m_userNameLabel;
     QLabel *m_pwdLabel;
@@ -213,7 +226,8 @@ private:
 
     QFrame *mAPTFrame;
     QFrame *mAPTFrame_1;
-    QFrame *mAPTFrame_2;
+    QFrame *m_pAPTHttpFrame;
+    QFrame *m_pAPTHttpsFrame;
 
     QFrame *line_1;
     QFrame *line_2;
@@ -221,8 +235,9 @@ private:
     QFrame *line_4;
     QFrame *line_5;
     QFrame *line_6;
-    QFrame *line_7;
+    QFrame *m_pLineHttp;
     QFrame *line_8;
+    QFrame *m_pLineHttps;
     QFrame *m_appLine1;
     QFrame *m_appLine2;
     QFrame *m_appLine3;
@@ -233,7 +248,7 @@ private:
     QRadioButton *mManualBtn;
     KSwitchButton *mEnableBtn;
     KSwitchButton *mAptBtn;
-    QPushButton *mEditBtn;
+    QPushButton *m_pEditBtn;
     QCheckBox *mCertificationBtn;
 
     QButtonGroup *mProxyBtnGroup;
@@ -261,7 +276,7 @@ private:
     QListWidget *m_appListWidget = nullptr;
     QWidget *m_appProxyInfoWidget;
 
-    QTextEdit *mIgnoreLineEdit;
+    TextEdit *mIgnoreLineEdit;
 
     QGSettings * proxysettings;
     QGSettings * httpsettings;
@@ -279,6 +294,7 @@ private:
     bool isExistSettings = false;
     bool settingsCreate;
     bool mFirstLoad;
+    bool m_isPreviousManualProxy = false;
     QStringList m_appProxyInfo;
     QStringList m_appCheckedList;
 
@@ -292,6 +308,33 @@ private slots:
 //    void onCancelBtnClicked();
 //    void onSaveBtnClicked();
 //    void setBtnEnable();
+
+    // 新增：处理D-Bus信号
+    void onProxyConfigChanged(const QStringList &configList);
+    void onAppProxyStateChanged(bool state);
+    void onAppProxyAppListChanged();
+    void onAppProxySingleAppChanged(const QString &desktopfp, bool added);
+    void onAptProxyChanged(const QHash<QString, QVariant> &aptInfo);
+};
+
+class TextEdit : public QTextEdit
+{
+    Q_OBJECT
+public:
+    explicit TextEdit(QWidget *parent = nullptr);
+
+Q_SIGNALS:
+    void editingFinished();
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+
+private:
+    void paintBackgroundOn(QWidget *widget) const;
+
+    static constexpr int kRadius = 6;
 };
 
 #endif // PROXY_H

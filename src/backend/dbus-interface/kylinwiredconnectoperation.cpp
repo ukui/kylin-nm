@@ -156,11 +156,11 @@ void KyWiredConnectOperation::activateWiredConnection(const QString connectUuid,
     return ;
 }
 
-void KyWiredConnectOperation::deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid)
+void KyWiredConnectOperation::deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise,  QString devName)
 {
     qDebug()<<"deactivetate connect name"<<activeConnectName<<"uuid"<<activeConnectUuid;
 
-    deactivateConnection(activeConnectName, activeConnectUuid);
+    deactivateConnection(activeConnectName, activeConnectUuid, concise, devName);
 
     return;
 }
@@ -226,6 +226,25 @@ int KyWiredConnectOperation::closeWiredNetworkWithDevice(QString deviceName)
     return 0;
 }
 
+int KyWiredConnectOperation::setWiredDeviceAutoconnect(QString deviceName,bool autoconnectstate)
+{
+    NetworkManager::Device::Ptr wiredDevicePtr =
+        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (wiredDevicePtr.isNull() || !wiredDevicePtr->isValid()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
+        return -ENXIO;
+    }
+
+    if (NetworkManager::Device::Type::Ethernet != wiredDevicePtr->type()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the device type"
+                   << wiredDevicePtr->type() <<"is not Ethernet.";
+        return -EINVAL;
+    }
+
+    wiredDevicePtr->setAutoconnect(autoconnectstate);
+    return 0;
+}
+
 int KyWiredConnectOperation::openWiredNetworkWithDevice(QString deviceName)
 {
     NetworkManager::Device::Ptr wiredDevicePtr =
@@ -258,4 +277,20 @@ int KyWiredConnectOperation::openWiredNetworkWithDevice(QString deviceName)
     wiredDevicePtr->setAutoconnect(true);
 
     return 0;
+}
+
+void KyWiredConnectOperation::setWiredAutoConnect(const QString &uuid, bool bAutoConnect)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(uuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + uuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+    setAutoConnect(connectionSettings, bAutoConnect);
+    connectPtr->update(connectionSettings->toMap());
+    return;
 }

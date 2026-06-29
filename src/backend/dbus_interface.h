@@ -36,13 +36,24 @@ public:
     ~ComKylinNetworkInterface();
 
 public Q_SLOTS: // METHODS
+    inline Q_NOREPLY void deleteConnect(int type, const QString ssid)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(type) << QVariant::fromValue(ssid);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("deleteConnect"), argumentList);
+    }
     inline Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid)
     {
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(type) << QVariant::fromValue(devName) << QVariant::fromValue(ssid);
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("activateConnect"), argumentList);
     }
-
+    inline Q_NOREPLY void setDeviceAutoConnectState(const QString &devName,bool stated)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devName) << QVariant::fromValue(stated) ;
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDeviceAutoConnectState"), argumentList);
+    }
     inline QDBusPendingReply<> activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice)
     {
         QList<QVariant> argumentList;
@@ -55,6 +66,13 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(type) << QVariant::fromValue(devName) << QVariant::fromValue(ssid);
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("deActivateConnect"), argumentList);
+    }
+
+    inline Q_NOREPLY void deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(type) << QVariant::fromValue(concise) << QVariant::fromValue(devName) << QVariant::fromValue(ssid);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("deActivateConnectConcise"), argumentList);
     }
 
     inline QDBusPendingReply<> deactiveWirelessAp(const QString &apName, const QString &uuid)
@@ -123,7 +141,11 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("getWirelessSwitchBtnState"), argumentList);
     }
-
+    inline QDBusPendingReply<bool> getWiredMainSwitchBtnState()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("getWiredMainSwitchBtnState"), argumentList);
+    }
     inline QDBusPendingReply<> keyRingClear()
     {
         QList<QVariant> argumentList;
@@ -140,6 +162,17 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("reScan"), argumentList);
+    }
+
+    inline Q_NOREPLY void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devName)
+                     << QVariant::fromValue(ssid)
+                     << QVariant::fromValue(type)
+                     << QVariant::fromValue(psk)
+                     << QVariant::fromValue(autoConnect);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("passwordConnect"), argumentList);
     }
 
     inline Q_NOREPLY void setDeviceEnable(const QString &devName, bool enable)
@@ -191,6 +224,62 @@ public Q_SLOTS: // METHODS
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("showPropertyWidget"), argumentList);
     }
 
+    inline QDBusPendingReply<int> getDeviceConnectivity(const QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getDeviceConnectivity"), argumentList);
+    }
+
+    inline QDBusPendingReply<bool> getCableStateByDevice(const QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getCableStateByDevice"), argumentList);
+    }
+
+    inline Q_NOREPLY void setNetworkConnectionAutoConnectState(int netType, QString uuid, bool autoConnect)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(netType)
+                     << QVariant::fromValue(uuid)
+                     << QVariant::fromValue(autoConnect);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setNetworkConnectionAutoConnectState"), argumentList);
+    }
+
+    inline QDBusPendingReply<QVariantList> getNetworkDeviceData(int devType)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devType);
+        return asyncCallWithArgumentList(QStringLiteral("getNetworkDeviceData"), argumentList);
+    }
+
+    inline Q_NOREPLY void setDefaultWiredDevice(QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDefaultWiredDevice"), argumentList);
+    }
+
+    inline QDBusPendingReply<QString> getDefaultWiredDevice()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("getDefaultWiredDevice"), argumentList);
+    }
+
+    inline Q_NOREPLY void setDefaultWirelessDevice(QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDefaultWirelessDevice"), argumentList);
+    }
+
+    inline QDBusPendingReply<QString> getDefaultWirelessDevice()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("getDefaultWirelessDevice"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);
@@ -211,6 +300,7 @@ Q_SIGNALS: // SIGNALS
     void timeToUpdate();
     void wirelessDeviceStatusChanged();
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     void wlanAdd(const QString &devName, const QStringList &info);
     void wlanRemove(const QString &devName, const QString &ssid);
     void wlanactiveConnectionStateChanged(const QString &devName, const QString &ssid, const QString &uuid, int status);

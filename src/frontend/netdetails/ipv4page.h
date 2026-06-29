@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -32,6 +32,7 @@
 #include <QDebug>
 
 //#include "kylinconnectsetting.h"
+#include "klabel.h"
 #include "coninfo.h"
 #include "multiplednswidget.h"
 #include "divider.h"
@@ -58,6 +59,9 @@ public:
     void startLoading();
     void stopLoading();
     void showIpv4AddressConflict(bool isConflict);
+
+    QString getErrorMessage();
+
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -72,8 +76,8 @@ private:
     QLabel *m_gateWayLabel;
 
     QLabel *m_configEmptyLabel;
-    QLabel *m_addressHintLabel;
-    QLabel *m_maskHintLabel;
+    KLabel *m_addressHintLabel;
+    KLabel *m_maskHintLabel;
     QLabel *m_gateWayEmptyLabel;
     QLabel *m_dnsEmptyLabel;
 
@@ -85,7 +89,15 @@ private:
     int m_currentIconIndex =0;
 
     QLabel *m_iconLabel;
-    QLabel *m_textLabel;
+    KLabel *m_textLabel;
+
+    QString m_errorMessage;
+
+    //kylin 网络设置控制接口
+    bool m_ipv4addressCtrl = false;
+    bool m_netMaskCtrl     = false;
+    bool m_gateWayCtrl     = false;
+    bool m_dnsWayCtrl      = false;
 
 private:
     void initUI();
@@ -98,6 +110,11 @@ private:
     bool checkConnectBtnIsEnabled();
     void initConflictHintLable();
     void initLoadingIcon();
+    void initNetCtrl();
+    void updateUi();
+
+
+
 
 private Q_SLOTS:
     void setEnableOfSaveBtn();
@@ -106,6 +123,8 @@ private Q_SLOTS:
     void onNetMaskTextChanged();
     void onAddressEditFinished();
     void updateIcon();
+    void updateNetCtrl(QString modName, QVariantMap value);
+
 
 Q_SIGNALS:
     void setIpv4PageState(bool);

@@ -20,10 +20,21 @@
 #include "kylinutil.h"
 #include <QTextCodec>
 
+// Save Qt signals macro before glib includes, restore after
+#ifdef signals
+#pragma push_macro("signals")
+#undef signals
+#define QT_SIGNALS_RESTORED
+#endif
+
 #include <dbus/dbus.h>
 #include <glib-2.0/glib.h>
 #include <dbus/dbus-glib.h>
 #include <gio/gio.h>
+
+#ifdef QT_SIGNALS_RESTORED
+#pragma pop_macro("signals")
+#endif
 
 #define  LOG_FLAG  "[kylin-util]"
 

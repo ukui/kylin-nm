@@ -31,11 +31,15 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusMetaType>
+#include <QGSettings>
 
 #include "interface.h"
 #include "switchbutton.h"
 #include "hoverbtn.h"
 #include "mobilehotspotwidget.h"
+
+#define GSETTING_SCHEMA_UKCC "org.ukui.control-center.plugins"
+#define GSETTING_PATH_UKCC "/org/ukui/control-center/plugins/mobilehotspot/"
 
 
 namespace Ui {
@@ -69,6 +73,7 @@ private:
     QString            pluginName;
     int                pluginType;
     MobileHotspotWidget            *pluginWidget;
+    QGSettings * ukccGsetting = nullptr;
 
 private:
     bool               mFirstLoad;

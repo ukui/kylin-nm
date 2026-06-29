@@ -18,6 +18,9 @@
  *
  */
 #include "wlanitem.h"
+#include <kysdk/applications/accessinfohelper.h>
+#include "klineframe.h"
+
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
@@ -36,22 +39,40 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
 
-    QHBoxLayout *mLanLyt = new QHBoxLayout(this);
-    mLanLyt->setContentsMargins(16,0,16,0);
+    /* 创建主垂直布局 */
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+
+    /* 创建水平布局用于内容 */
+    QHBoxLayout *mLanLyt = new QHBoxLayout();
+    mLanLyt->setContentsMargins(16, 0, 16, 0);
     mLanLyt->setSpacing(16);
+    mLanLyt->setAlignment(Qt::AlignVCenter);
+
     iconLabel = new QLabel(this);
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    titileLabel = new FixLabel(this);
+    titileLabel = new KLabel(this);
     statusLabel = new QLabel(this);
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-//    statusLabel->setMinimumSize(36,36);
     infoLabel = new GrayInfoButton(this);
+    KDK_EXTEND_ALL_INFO_FORMAT(infoLabel, "WlanConnect", "", "details button of wireless network");
+
+    iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    titileLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    statusLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
     mLanLyt->addWidget(iconLabel);
-    mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
+    mLanLyt->addWidget(titileLabel, Qt::AlignLeft);
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
     mLanLyt->addWidget(infoLabel);
+
+
+    mainLayout->addLayout(mLanLyt);/* 将水平布局添加到主布局 */
+    KHLineFrame *separator = new KHLineFrame(this); /* 分割线 */
+    mainLayout->addWidget(separator);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
@@ -104,29 +125,6 @@ void WlanItem::paintEvent(QPaintEvent *event)
     this->setPalette(pal);
 
     QRect rect = this->rect();
-
-#if 0
-    if (!useHalfFillet) {
-        painter.drawRect(rect);
-    } else {
-        QPainterPath path;
-//        path.addRoundedRect (rect, RADIUS, RADIUS);
-//        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
-//        path.addRect(temp_rect);
-        //设置起点
-        path.moveTo(rect.topLeft().x(), rect.topLeft().y());
-        path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
-        //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
-        path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
-        path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
-        //画圆弧
-        path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
-        path.lineTo(rect.topRight());
-        path.lineTo(rect.topLeft());
-        painter.drawPath(path);
-    }
-#endif
-
     painter.drawRect(rect);
-    QPushButton::paintEvent(event);
+    return QPushButton::paintEvent(event);
 }

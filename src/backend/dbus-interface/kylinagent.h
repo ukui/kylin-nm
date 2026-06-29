@@ -17,63 +17,27 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef __KYLINNMANGENT_H__
-#define __KYLINNMANGENT_H__
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+#ifndef KYLINAGENT_H
+#define KYLINAGENT_H
 
-#include <libnm/NetworkManager.h>
-#include <libnm/nm-secret-agent-old.h>
-#include <gio/ginitable.h>
-#include <gio/gdbusintrospection.h>
-#include <libsecret/secret.h>
+#include "kylinsecretagent.h"
 
-#define APPLET_TYPE_AGENT            (applet_agent_get_type ())
-#define APPLET_AGENT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), APPLET_TYPE_AGENT, AppletAgent))
-#define APPLET_AGENT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), APPLET_TYPE_AGENT, AppletAgentClass))
-#define APPLET_IS_AGENT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), APPLET_TYPE_AGENT))
-#define APPLET_IS_AGENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), APPLET_TYPE_AGENT))
-#define APPLET_AGENT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), APPLET_TYPE_AGENT, AppletAgentClass))
+#include <QObject>
 
-#define APPLET_AGENT_GET_SECRETS "get-secrets"
-#define APPLET_AGENT_CANCEL_SECRETS "cancel-secrets"
+class KylinAgent : public QObject
+{
+public:
+    explicit KylinAgent(QObject *parent = nullptr);
+    ~KylinAgent();
 
-typedef struct {
-    NMSecretAgentOld parent;
-} AppletAgent;
+public:
+    void stopKylinAgent();
+    KylinSecretAgent* kylinSecretAgent(){return m_secretAgnet;}
 
-typedef void (*AppletAgentSecretsCallback) (AppletAgent *self,
-                                            GVariant *secrets,
-                                            GError *error,
-                                            gpointer user_data);
-
-typedef struct {
-    NMSecretAgentOldClass parent_class;
-
-    void (*get_secrets)        (AppletAgent *self,
-                                void *request_id,
-                                NMConnection *connection,
-                                const char *setting_name,
-                                const char **hints,
-                                guint32 flags,
-                                AppletAgentSecretsCallback callback,
-                                gpointer callback_data);
-
-    void (*cancel_secrets)     (AppletAgent *self,
-                                void *request_id);
-} AppletAgentClass;
+private:
+    KylinSecretAgent *m_secretAgnet;
+};
 
 
-GType applet_agent_get_type (void) G_GNUC_CONST;
-
-AppletAgent *applet_agent_new (GError **error);
-
-void applet_agent_handle_vpn_only (AppletAgent *agent, gboolean vpn_only);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
+#endif // KYLINAGENT_H

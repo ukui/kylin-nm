@@ -12,7 +12,7 @@
 <context>
     <name>BlacklistPage</name>
     <message>
-        <location filename="../blacklistpage.cpp" line="47"/>
+        <location filename="../blacklistpage.cpp" line="48"/>
         <source>Blacklist</source>
         <translation>Schwarze Liste</translation>
     </message>
@@ -28,7 +28,7 @@
 <context>
     <name>ConnectdevPage</name>
     <message>
-        <location filename="../connectdevpage.cpp" line="48"/>
+        <location filename="../connectdevpage.cpp" line="49"/>
         <source>Connect device</source>
         <translation>Gerät anschließen</translation>
     </message>
@@ -41,13 +41,49 @@
         <translation>Mobiler Hotspot</translation>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="101"/>
+        <location filename="../mobilehotspot.cpp" line="112"/>
+        <source>Mobile Hotspot</source>
+        <translation>Mobiler Hotspot</translation>
+        <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="114"/>
+        <source>Open mobile hotspot</source>
+        <translation>Mobiler Hotspot öffnen</translation>
+        <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="116"/>
+        <source>Wi-Fi Name</source>
+        <translation>Name des drahtlosen Netzwerks</translation>
+        <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="118"/>
+        <source>Network Password</source>
+        <translation>Netzwerkpasswort</translation>
+        <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="120"/>
+        <source>Network Frequency band</source>
+        <translation>Netzwerkbandbreite</translation>
+        <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="122"/>
+        <source>Shared NIC port</source>
+        <translation>Gemeinsamer Netzwerkkartenport</translation>
+        <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
+    </message>
+    <message>
+        <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
         <translation>Mobiler Hotspot</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
     <message>
-        <location filename="../mobilehotspot.cpp" line="103"/>
+        <location filename="../mobilehotspot.cpp" line="110"/>
         <source>mobilehotspot open</source>
         <translation>MobileHotspot geöffnet</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
@@ -64,7 +100,7 @@
         <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="159"/>
+        <location filename="../mobilehotspotwidget.cpp" line="165"/>
         <source>wirless switch is close or no wireless device</source>
         <translation>Der kabellose Schalter ist in der Nähe oder kein drahtloses Gerät</translation>
     </message>
@@ -73,7 +109,7 @@
         <translation type="vanished">开始关闭热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="180"/>
+        <location filename="../mobilehotspotwidget.cpp" line="190"/>
         <source>hotpots name or device is invalid</source>
         <translation>Der Name oder das Gerät des Hotpots ist ungültig</translation>
     </message>
@@ -86,12 +122,12 @@
         <translation type="vanished">开始创建热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="563"/>
+        <location filename="../mobilehotspotwidget.cpp" line="644"/>
         <source>Contains at least 8 characters</source>
         <translation>Enthält mindestens 8 Zeichen</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="233"/>
+        <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
         <translation>Hotspot (Hotspot)</translation>
     </message>
@@ -106,49 +142,68 @@
         <translation>Desktop-Meldung für Einstellungen</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="337"/>
+        <location filename="../mobilehotspotwidget.cpp" line="1103"/>
         <source>use </source>
         <translation>gebrauchen </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="338"/>
+        <location filename="../mobilehotspotwidget.cpp" line="1104"/>
         <source> share network, will interrupt local wireless connection</source>
         <translation> Netzwerk freigeben, unterbricht die lokale drahtlose Verbindung</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="354"/>
-        <location filename="../mobilehotspotwidget.cpp" line="712"/>
+        <location filename="../mobilehotspotwidget.cpp" line="381"/>
+        <location filename="../mobilehotspotwidget.cpp" line="400"/>
+        <location filename="../mobilehotspotwidget.cpp" line="484"/>
+        <location filename="../mobilehotspotwidget.cpp" line="526"/>
+        <location filename="../mobilehotspotwidget.cpp" line="791"/>
         <source>hotspot already close</source>
         <translation>Hotspot bereits geschlossen</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="509"/>
-        <source>Open</source>
-        <translation>Offen</translation>
+        <location filename="../mobilehotspotwidget.cpp" line="550"/>
+        <source>Open mobile hotspot</source>
+        <translation>Mobiler Hotspot aktivieren</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="530"/>
+        <location filename="../mobilehotspotwidget.cpp" line="633"/>
+        <source>Network Password</source>
+        <translation>Netzwerkpasswort</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="672"/>
+        <source>Network Frequency band</source>
+        <translation>Netzwerkbandbreite</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="697"/>
+        <source>Shared NIC port</source>
+        <translation>Gemeinsamer Netzwerkkartenport</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="vanished">Offen</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="611"/>
         <source>Wi-Fi Name</source>
         <translation>Wi-Fi-Name</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="551"/>
         <source>Password</source>
-        <translation>Passwort</translation>
+        <translation type="vanished">Passwort</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="595"/>
         <source>Frequency band</source>
-        <translation>Frequenzband</translation>
+        <translation type="vanished">Frequenzband</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="619"/>
         <source>Net card</source>
-        <translation>Netzkarte</translation>
+        <translation type="vanished">Netzkarte</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="742"/>
-        <location filename="../mobilehotspotwidget.cpp" line="750"/>
+        <location filename="../mobilehotspotwidget.cpp" line="823"/>
+        <location filename="../mobilehotspotwidget.cpp" line="835"/>
         <source>hotspot already open</source>
         <translation>Hotspot bereits geöffnet</translation>
     </message>

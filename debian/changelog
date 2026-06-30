@@ -1,3 +1,12 @@
+kylin-nm (4.24.0.0-ok0.2) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: ukui4.24传包
+  * 其他改动影响域: ukui4.24传包
+
+ -- dengtuo <dengtuo@kylinos.cn>  Tue, 30 Jun 2026 14:53:07 +0800
+
 kylin-nm (4.24.0.0-ok0.1) huanghe; urgency=medium
 
   * BUG: 无

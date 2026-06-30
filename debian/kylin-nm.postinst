@@ -1,0 +1,38 @@
+#!/bin/sh
+
+file_path="/etc/NetworkManager/kylin_nm_ctrl.ini"
+
+if [ -f "$file_path" ]; then
+    rm -f "$file_path"
+    echo "$file_path文件已删除"
+else
+    echo "$file_path文件不存在"
+fi
+ 
+set -e
+
+# Handle systemd service
+if [ "$1" = "configure" ]; then
+    # Enable and start the systemd service
+    if command -v systemctl >/dev/null 2>&1; then
+        systemctl daemon-reload
+        systemctl enable kylin-nm-sysdbus.service
+        systemctl start kylin-nm-sysdbus.service
+		
+        systemctl enable nm-enhance-optimization.service
+        systemctl restart nm-enhance-optimization.service
+    fi
+
+    # 处理DBus安全策略配置文件：将临时目录中的配置文件复制到目标目录，然后删除临时目录
+    if [ -d "/usr/share/dbus-1/conf/.kylin-nm-yaml" ]; then
+        cp -f /usr/share/dbus-1/conf/.kylin-nm-yaml/* /etc/kylin-config/basic/
+        rm -rf /usr/share/dbus-1/conf/.kylin-nm-yaml
+        echo "DBus安全管控配置文件已更新"
+    fi
+fi
+
+PROGRAM=$(dpkg-divert --truename /usr/bin/kylin-nm)
+
+
+exit 0
+

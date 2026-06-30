@@ -1,3 +1,12 @@
+kylin-nm (4.24.0.0-ok0.1) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: 上游代码同步
+  * 其他改动影响域: 上游代码同步
+
+ -- dengtuo <dengtuo@kylinos.cn>  Mon, 30 Jun 2026 09:18:48 +0800
+
 kylin-nm (4.23.0.0-0k0.1update21) v11-2603-preview; urgency=medium
 
   * BUG: 无

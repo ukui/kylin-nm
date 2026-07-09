@@ -180,7 +180,7 @@ applet_secrets_request_new (size_t totsize,
          gtk_init ();
 #else
          int argc = 0;
-         char *argv = NULL;
+         char **argv = NULL;
          gtk_init (&argc, &argv);
 #endif
     return req;
@@ -350,7 +350,7 @@ external_ui_from_child_response (VpnSecretsInfo *info, GError **error)
 	 * create a dialog and display it. */
 	if (num_ask > 0) {
 		dialog = (NMAVpnPasswordDialog *) nma_vpn_password_dialog_new (title, message, NULL);
-		req_data->dialog = g_object_ref_sink (dialog);
+        req_data->dialog = (GtkDialog *)g_object_ref_sink (dialog);
 
 		nma_vpn_password_dialog_set_show_password (dialog, FALSE);
 		nma_vpn_password_dialog_set_show_password_secondary (dialog, FALSE);

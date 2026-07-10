@@ -164,7 +164,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1056"/>
         <source>Specify max routes</source>
-        <translation type="unfinished"></translation>
+        <translation>路由上限ᦒᦜᦺᦸᦞᦔᦷᦟᦰ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1057"/>
@@ -542,7 +542,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="382"/>
         <source>Don&apos;t require a password</source>
-        <translation type="unfinished"></translation>
+        <translation>密码不必要</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
@@ -787,7 +787,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="58"/>
         <source>create VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>VPN ᦙཱའ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
@@ -797,7 +797,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
         <source>VPN Name</source>
-        <translation type="unfinished"></translation>
+        <translation>VPN ᨣᩴ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>

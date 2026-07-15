@@ -45,4 +45,5 @@ void write_options_to_resolv(char *options);
 char *get_active_connection_uuid(char *path);
 char* get_primaryconnection();
 int write_nameserver_to_resolv();
+void write_server_to_resolv();
 #endif

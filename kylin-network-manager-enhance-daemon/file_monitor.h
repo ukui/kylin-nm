@@ -3,7 +3,7 @@ int set_extra_dns(char *con_name, char *extradns);
 int set_extra_dns_domian(char *con_name, char *domian);
 int set_extra_dns_search(char *con_name, char *search);
 int set_extra_dns_options(char *con_name, char* timeout,char* attempts,char* type);
-void file_monitor();
+void* file_monitor(void* arg);
 char *read_extra_dns_conf(GKeyFile *key_file, char *flags);
 char *read_extra_dns_options(GKeyFile *key_file, char *flags);
 char *read_extra_dns_domian(GKeyFile *key_file, char *flags);

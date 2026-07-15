@@ -18,6 +18,7 @@ extern "C" {
 
 pthread_t file_tid;
 pthread_t con_tid;
+pthread_t dbus_tid;
 
 const struct DBusObjectPathVTable server_vtable = {.message_function = server_message_handler};
 const struct DBusObjectPathVTable server_vtable_dns = {.message_function = server_message_handler_dns};
@@ -28,17 +29,89 @@ DBusConnection *BUS = NULL;
 int MONITOR_FLAG = -1;
 }
 
-// Wrapper function for pthread_create to call con_monitor with correct signature
-static void* con_monitor_wrapper(void* arg) {
-    con_monitor((DBusConnection*)arg);
-    return NULL;
+
+
+static void *startExtraDnsThread(void *args)
+{
+    DBusConnection *conn;
+    DBusError err;
+    int rv;
+    void * in_data;
+
+    printf("DBUS SetUp init\n");
+    dbus_error_init(&err);
+
+    conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+    if (!conn)
+    {
+        goto fail;
+    }
+    BUS=conn;
+    rv = dbus_bus_request_name(conn,
+                               "com.kylin.network.enhancement.unitest",
+                               DBUS_NAME_FLAG_REPLACE_EXISTING, //one of the standard flag
+                               &err);
+
+    if (rv != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+    {
+        printf("fail to request a dbus name!,err name=%s,err msg = %s\n",err.name,err.message);
+        goto fail;
+    }
+
+    if (!dbus_connection_try_register_object_path(conn,
+                                                  NETWORK_ENHANCEMENT_OPTIMIZATION_DBUS_OBJECT_PATH,
+                                                  &server_vtable,
+                                                  in_data,
+                                                  &err))
+    {
+
+        printf("fail to register a object path!,err name=%s,err msg = %s\n",err.name,err.message);
+
+        goto fail;
+    }
+    if (!dbus_connection_try_register_object_path(conn,
+                                                  DNS_OPTIMIZATION_DBUS_OBJECT_PATH,
+                                                  &server_vtable_dns,
+                                                  in_data,
+                                                  &err))
+    {
+
+        printf("fail to register a object path!,err name=%s,err msg = %s\n",err.name,err.message);
+
+        goto fail;
+    }
+    printf("DBUS服务启动成功，进入DBUS消息循环监听状态...\n");
+    
+    /*
+    mainloop = g_main_loop_new(NULL, false);
+
+    dbus_connection_setup_with_g_main(conn, NULL);
+
+    g_main_loop_run(mainloop);
+    */
+
+ GMainContext *context;
+ GMainLoop *loop;
+      // 创建线程私有的主上下文
+    context = g_main_context_new();
+    loop = g_main_loop_new(context, false);
+    
+    // 关键修改：使用线程私有的主上下文
+    dbus_connection_setup_with_g_main(conn, context);
+    
+    // 运行属于该线程的 mainloop
+    g_main_loop_run(loop);
+    
+    g_main_loop_unref(loop);
+    g_main_context_unref(context);
+
+    return (void*)0;
+
+fail:
+    dbus_error_free(&err);
+    return (void *)-1;
 }
 
-// Wrapper function for pthread_create to call file_monitor with correct signature
-static void* file_monitor_wrapper(void* arg) {
-    file_monitor();
-    return NULL;
-}
 
 // Local implementation of strstartswith for testing
 // Returns 0 if str starts with prefix, 1 otherwise
@@ -343,6 +416,7 @@ TEST_F(TestSetExtraDns, SetExtraDnsSearchNonExistent)
 }
 
 
+
 // TestCheckEnviron implementation
 void DbusServerConstants::SetUp()
 {
@@ -417,17 +491,33 @@ fail:
     dbus_error_free(&err);
     return ;
 #endif
+    if(!pthread_create(&dbus_tid,NULL,startExtraDnsThread,NULL))
+    {
+       printf("con startExtraDnsThread pthread_create\n");
+    }
+
+    if(!pthread_create(&con_tid,NULL,con_monitor,BUS))
+    {
+       printf("con monitor pthread_create\n");
+    }
+
+    if(!pthread_create(&file_tid,NULL,file_monitor,NULL))
+    {
+       printf("file monitor pthread_create\n");
+    }
+
 }
 
 
 void DbusServerConstants::TearDown()
 {
+    
 }
 
 TEST_F(DbusServerConstants, DbusNameFormat)
 {
-#if 0
-    
+#if 1
+    sleep(2);
     // Execute gdbus call command
     const char* gdbus_cmd = "gdbus call --session --dest com.kylin.network.enhancement.unitest "
                             "--object-path /com/kylin/network/enhancement/optimization/DNS "

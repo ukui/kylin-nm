@@ -57,7 +57,7 @@
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+        <translation>配置项</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>

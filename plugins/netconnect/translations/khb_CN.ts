@@ -31,7 +31,7 @@
     <message>
         <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation>ᦓᧂᦑ ᦥᧄ ᦖᧂᦑ ᦖᧂᦑ ᦕᧂᦑ</translation>
+        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ，ᦃᦻᧈ ᦏᦹᧅᦂᧄᦓᦳᧆ 。</translation>
     </message>
 </context>
 <context>
@@ -39,20 +39,20 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation>ᦖᧂᦑ ᦓᧂᦑ</translation>
+        <translation>ᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="229"/>
         <source>open</source>
-        <translation>ᦅᧄ ᦓᧂᦑ</translation>
+        <translation>ᦺᦃ</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
         <location filename="../netconnect.cpp" line="224"/>
         <source>Advanced settings</source>
-        <translation>ᦥᧄ ᦓᧂᦑ ᦶ ᦎᧂᦑ</translation>
+        <translation>ᦶᦔᧂᦏᦱᧃᧉᦉᦳᧂ</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -70,42 +70,42 @@
     <message>
         <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation>ᦓᧂᦑ</translation>
+        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation>ᦓᧂᦑ ᦵ ᦖᧂᦑ ᦖᧂᦑ ᦓᧂᦑ ᦶ ᦎᧂᦑ</translation>
+        <translation>ᦎᧂᧉ ᦷᦎᧅᦵᦂᧉᦊᦴᧈᦵᦞᧃᧈ ᦉᦳᧃᦃᦱᧁ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="92"/>
         <location filename="../netconnect.cpp" line="227"/>
         <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation>ᦖᧂᦑ ᦓᧂᦑ</translation>
+        <translation>ᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>ᦂᦸ ᦵ ᦖᧂᦑ ᦖᧂᦑ ᦓᧂᦑ</translation>
+        <translation>ᦢᧁᧈ ᦌᦱᧉᦶᦋᧆ ᦑᦹᧅᦺᦔ ᦃᦻᧈᦙᦲᦉᦻ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>
         <location filename="../netconnect.cpp" line="1137"/>
         <source>connected</source>
-        <translation>ᦓᧂᦑᧄ</translation>
+        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="637"/>
         <location filename="../netconnect.cpp" line="952"/>
         <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation>ᦂᦸ ᦓᧂᦑ</translation>
+        <translation>ᦢᧁᧈᦺᦡᧉᦎᦸᦰᦈᧇ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation>ᦖᧂᦑ ᦓᧂᦑ</translation>
+        <translation>ᦞᦱᧂᦆᦱ</translation>
     </message>
 </context>
 </TS>

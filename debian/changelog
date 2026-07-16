@@ -1,3 +1,12 @@
+kylin-nm (4.24.0.0-ok0.5) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: 解决编译问题
+  * 其他改动影响域: 无
+
+ -- dengtuo <dengtuo@kylinos.cn>  Thu, 16 Jul 2026 09:03:18 +0800
+
 kylin-nm (4.24.0.0-ok0.4) huanghe; urgency=medium
 
   * BUG: 无

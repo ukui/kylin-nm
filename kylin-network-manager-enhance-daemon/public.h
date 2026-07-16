@@ -48,7 +48,7 @@ extern pthread_t con_tid;
 #define PASS 1
 extern DBusConnection *BUS; //global variable
 #define _GNU_SOURCE
-void con_monitor(DBusConnection *conn);
+void* con_monitor(void *arg);
 
 
 #endif

@@ -833,7 +833,7 @@ void update_extra_conf_to_resolv(char *path)
     char *uuid =get_active_connection_uuid(path);
     char *file =get_file_path(uuid);
     if(path == NULL)
-        return NULL;
+        return;
     if (extara_dns_conf_is_exist(file))
     {
         syslog(LOG_INFO,"EXTARA DNS CONF");
@@ -843,7 +843,7 @@ void update_extra_conf_to_resolv(char *path)
         {
             if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
                 g_warning("Error loading key file: %s", error->message);
-            return NULL;
+            return;
         }
         type = g_key_file_get_string(key_file,OPTIONS, "type", &error);
         if(!strnlen(type,MAX_FILE_LENGTH))
@@ -924,23 +924,25 @@ static DBusHandlerResult filter_func(DBusConnection *BUS, DBusMessage *message, 
     }
     return (handled ? DBUS_HANDLER_RESULT_HANDLED : DBUS_HANDLER_RESULT_NOT_YET_HANDLED);
 }
-void con_monitor(DBusConnection *conn)
+void* con_monitor(void *arg)
 {
     DBusError error;
     DBusMessage *message;
     dbus_error_init(&error);
+    DBusConnection *conn=(DBusConnection*)arg;
     if (!conn)
     {
         dbus_error_free(&error);
-        return;
+        return (void*)(-1);
     }
     dbus_bus_add_match(conn, "type='signal',interface='org.freedesktop.NetworkManager.Connection.Active'", &error);
     if (!dbus_connection_add_filter(conn, filter_func, NULL, NULL))
-        return;
+        return (void*)(-1);
     if (dbus_error_is_set(&error))
     {
         dbus_error_free(&error);
     }
+    return NULL;
 }
 
 char *get_primaryconnection()

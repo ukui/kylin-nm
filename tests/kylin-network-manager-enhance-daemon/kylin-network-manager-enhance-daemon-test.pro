@@ -26,8 +26,10 @@ LIBS += -lglib-2.0
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-QMAKE_CXXFLAGS += --coverage
-QMAKE_LFLAGS += -lgcov
+
+QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
+QMAKE_CFLAGS += --coverage -fno-inline
+QMAKE_CXXFLAGS += --coverage -fno-inline -fno-access-control -fno-exceptions
 
 SOURCES += main.cpp \
            test_daemon.cpp \

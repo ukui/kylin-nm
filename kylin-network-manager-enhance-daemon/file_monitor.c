@@ -269,7 +269,7 @@ void update_options_to_resolv(char *file)
     char val[200]={0};
     char *options_val = calloc(200, sizeof(char *));
     if(file == NULL)
-        return NULL;
+        return;
     if (extara_dns_conf_is_exist(file))
     {
         syslog(LOG_INFO,"EXTARA DNS CONF");
@@ -279,7 +279,7 @@ void update_options_to_resolv(char *file)
         {
             if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
                 g_warning("Error loading key file: %s", error->message);
-            return FAIL;
+            return;
         }
         type = g_key_file_get_string(key_file,OPTIONS, "type", &error);
         if(!strnlen(type,MAXLINE))
@@ -334,7 +334,8 @@ static void _inotify_event_handler(struct inotify_event *event)
         }
     }
 }
-void file_monitor()
+
+void* file_monitor(void* arg)
 {
     unsigned char buf[1024] = {0};
     struct inotify_event *event = NULL;
@@ -371,5 +372,5 @@ void file_monitor()
     syslog(LOG_INFO, "删除对指定文件的监控");
     inotify_rm_watch(fd, wd); //删除对指定文件的监控。
 
-    return;
+    return NULL;
 }

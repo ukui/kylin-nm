@@ -66,19 +66,19 @@
     <message>
         <location filename="../vpnitem.cpp" line="60"/>
         <source>Delete</source>
-        <translation>ᦟᦸᧇ ᦓᦲᦰ ᦃᦻᧈ</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="117"/>
         <location filename="../vpnitem.cpp" line="130"/>
         <source>Disconnect</source>
-        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
+        <translation>断开连接</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="119"/>
         <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
-        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+        <translation>ᦆᦱᧆᦔᦲᧃᦖᦱᧃᧈ</translation>
     </message>
 </context>
 </TS>

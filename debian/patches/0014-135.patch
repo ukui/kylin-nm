@@ -1,0 +1,321 @@
+From: =?utf-8?b?6YKT5omY?= <dengtuo@kylinos.cn>
+Date: Thu, 16 Jul 2026 01:02:10 +0000
+Subject: =?utf-8?b?ITEzNSDkv67lpI3nvJbor5Hpl67popg=?=
+
+Merge pull request !135 from mq/openkylin/huanghe
+---
+ kylin-network-manager-enhance-daemon/dbus-server.c |  12 ++-
+ kylin-network-manager-enhance-daemon/dbus-server.h |   1 +
+ .../file_monitor.c                                 |   9 +-
+ .../file_monitor.h                                 |   2 +-
+ kylin-network-manager-enhance-daemon/public.h      |   2 +-
+ .../kylin-network-manager-enhance-daemon-test.pro  |   6 +-
+ .../test_daemon.cpp                                | 114 ++++++++++++++++++---
+ 7 files changed, 121 insertions(+), 25 deletions(-)
+
+diff --git a/kylin-network-manager-enhance-daemon/dbus-server.c b/kylin-network-manager-enhance-daemon/dbus-server.c
+index 3d9c89a..f3838d8 100644
+--- a/kylin-network-manager-enhance-daemon/dbus-server.c
++++ b/kylin-network-manager-enhance-daemon/dbus-server.c
+@@ -833,7 +833,7 @@ void update_extra_conf_to_resolv(char *path)
+     char *uuid =get_active_connection_uuid(path);
+     char *file =get_file_path(uuid);
+     if(path == NULL)
+-        return NULL;
++        return;
+     if (extara_dns_conf_is_exist(file))
+     {
+         syslog(LOG_INFO,"EXTARA DNS CONF");
+@@ -843,7 +843,7 @@ void update_extra_conf_to_resolv(char *path)
+         {
+             if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+                 g_warning("Error loading key file: %s", error->message);
+-            return NULL;
++            return;
+         }
+         type = g_key_file_get_string(key_file,OPTIONS, "type", &error);
+         if(!strnlen(type,MAX_FILE_LENGTH))
+@@ -924,23 +924,25 @@ static DBusHandlerResult filter_func(DBusConnection *BUS, DBusMessage *message,
+     }
+     return (handled ? DBUS_HANDLER_RESULT_HANDLED : DBUS_HANDLER_RESULT_NOT_YET_HANDLED);
+ }
+-void con_monitor(DBusConnection *conn)
++void* con_monitor(void *arg)
+ {
+     DBusError error;
+     DBusMessage *message;
+     dbus_error_init(&error);
++    DBusConnection *conn=(DBusConnection*)arg;
+     if (!conn)
+     {
+         dbus_error_free(&error);
+-        return;
++        return (void*)(-1);
+     }
+     dbus_bus_add_match(conn, "type='signal',interface='org.freedesktop.NetworkManager.Connection.Active'", &error);
+     if (!dbus_connection_add_filter(conn, filter_func, NULL, NULL))
+-        return;
++        return (void*)(-1);
+     if (dbus_error_is_set(&error))
+     {
+         dbus_error_free(&error);
+     }
++    return NULL;
+ }
+ 
+ char *get_primaryconnection()
+diff --git a/kylin-network-manager-enhance-daemon/dbus-server.h b/kylin-network-manager-enhance-daemon/dbus-server.h
+index 0bc6a20..9e2601e 100644
+--- a/kylin-network-manager-enhance-daemon/dbus-server.h
++++ b/kylin-network-manager-enhance-daemon/dbus-server.h
+@@ -45,4 +45,5 @@ void write_options_to_resolv(char *options);
+ char *get_active_connection_uuid(char *path);
+ char* get_primaryconnection();
+ int write_nameserver_to_resolv();
++void write_server_to_resolv();
+ #endif
+diff --git a/kylin-network-manager-enhance-daemon/file_monitor.c b/kylin-network-manager-enhance-daemon/file_monitor.c
+index 1290be8..ea08db0 100644
+--- a/kylin-network-manager-enhance-daemon/file_monitor.c
++++ b/kylin-network-manager-enhance-daemon/file_monitor.c
+@@ -269,7 +269,7 @@ void update_options_to_resolv(char *file)
+     char val[200]={0};
+     char *options_val = calloc(200, sizeof(char *));
+     if(file == NULL)
+-        return NULL;
++        return;
+     if (extara_dns_conf_is_exist(file))
+     {
+         syslog(LOG_INFO,"EXTARA DNS CONF");
+@@ -279,7 +279,7 @@ void update_options_to_resolv(char *file)
+         {
+             if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+                 g_warning("Error loading key file: %s", error->message);
+-            return FAIL;
++            return;
+         }
+         type = g_key_file_get_string(key_file,OPTIONS, "type", &error);
+         if(!strnlen(type,MAXLINE))
+@@ -334,7 +334,8 @@ static void _inotify_event_handler(struct inotify_event *event)
+         }
+     }
+ }
+-void file_monitor()
++
++void* file_monitor(void* arg)
+ {
+     unsigned char buf[1024] = {0};
+     struct inotify_event *event = NULL;
+@@ -371,5 +372,5 @@ void file_monitor()
+     syslog(LOG_INFO, "删除对指定文件的监控");
+     inotify_rm_watch(fd, wd); //删除对指定文件的监控。
+ 
+-    return;
++    return NULL;
+ }
+diff --git a/kylin-network-manager-enhance-daemon/file_monitor.h b/kylin-network-manager-enhance-daemon/file_monitor.h
+index dfca5fc..ca1ddc9 100644
+--- a/kylin-network-manager-enhance-daemon/file_monitor.h
++++ b/kylin-network-manager-enhance-daemon/file_monitor.h
+@@ -3,7 +3,7 @@ int set_extra_dns(char *con_name, char *extradns);
+ int set_extra_dns_domian(char *con_name, char *domian);
+ int set_extra_dns_search(char *con_name, char *search);
+ int set_extra_dns_options(char *con_name, char* timeout,char* attempts,char* type);
+-void file_monitor();
++void* file_monitor(void* arg);
+ char *read_extra_dns_conf(GKeyFile *key_file, char *flags);
+ char *read_extra_dns_options(GKeyFile *key_file, char *flags);
+ char *read_extra_dns_domian(GKeyFile *key_file, char *flags);
+diff --git a/kylin-network-manager-enhance-daemon/public.h b/kylin-network-manager-enhance-daemon/public.h
+index 3a24a4c..7be0d8a 100644
+--- a/kylin-network-manager-enhance-daemon/public.h
++++ b/kylin-network-manager-enhance-daemon/public.h
+@@ -48,7 +48,7 @@ extern pthread_t con_tid;
+ #define PASS 1
+ extern DBusConnection *BUS; //global variable
+ #define _GNU_SOURCE
+-void con_monitor(DBusConnection *conn);
++void* con_monitor(void *arg);
+ 
+ 
+ #endif
+diff --git a/tests/kylin-network-manager-enhance-daemon/kylin-network-manager-enhance-daemon-test.pro b/tests/kylin-network-manager-enhance-daemon/kylin-network-manager-enhance-daemon-test.pro
+index cffefc8..87de08c 100644
+--- a/tests/kylin-network-manager-enhance-daemon/kylin-network-manager-enhance-daemon-test.pro
++++ b/tests/kylin-network-manager-enhance-daemon/kylin-network-manager-enhance-daemon-test.pro
+@@ -26,8 +26,10 @@ LIBS += -lglib-2.0
+ 
+ DEFINES += QT_DEPRECATED_WARNINGS
+ 
+-QMAKE_CXXFLAGS += --coverage
+-QMAKE_LFLAGS += -lgcov
++
++QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
++QMAKE_CFLAGS += --coverage -fno-inline
++QMAKE_CXXFLAGS += --coverage -fno-inline -fno-access-control -fno-exceptions
+ 
+ SOURCES += main.cpp \
+            test_daemon.cpp \
+diff --git a/tests/kylin-network-manager-enhance-daemon/test_daemon.cpp b/tests/kylin-network-manager-enhance-daemon/test_daemon.cpp
+index d4e3d1f..07c15e6 100644
+--- a/tests/kylin-network-manager-enhance-daemon/test_daemon.cpp
++++ b/tests/kylin-network-manager-enhance-daemon/test_daemon.cpp
+@@ -18,6 +18,7 @@ extern "C" {
+ 
+ pthread_t file_tid;
+ pthread_t con_tid;
++pthread_t dbus_tid;
+ 
+ const struct DBusObjectPathVTable server_vtable = {.message_function = server_message_handler};
+ const struct DBusObjectPathVTable server_vtable_dns = {.message_function = server_message_handler_dns};
+@@ -28,18 +29,90 @@ DBusConnection *BUS = NULL;
+ int MONITOR_FLAG = -1;
+ }
+ 
+-// Wrapper function for pthread_create to call con_monitor with correct signature
+-static void* con_monitor_wrapper(void* arg) {
+-    con_monitor((DBusConnection*)arg);
+-    return NULL;
+-}
+ 
+-// Wrapper function for pthread_create to call file_monitor with correct signature
+-static void* file_monitor_wrapper(void* arg) {
+-    file_monitor();
+-    return NULL;
++
++static void *startExtraDnsThread(void *args)
++{
++    DBusConnection *conn;
++    DBusError err;
++    int rv;
++    void * in_data;
++
++    printf("DBUS SetUp init\n");
++    dbus_error_init(&err);
++
++    conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
++    if (!conn)
++    {
++        goto fail;
++    }
++    BUS=conn;
++    rv = dbus_bus_request_name(conn,
++                               "com.kylin.network.enhancement.unitest",
++                               DBUS_NAME_FLAG_REPLACE_EXISTING, //one of the standard flag
++                               &err);
++
++    if (rv != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
++    {
++        printf("fail to request a dbus name!,err name=%s,err msg = %s\n",err.name,err.message);
++        goto fail;
++    }
++
++    if (!dbus_connection_try_register_object_path(conn,
++                                                  NETWORK_ENHANCEMENT_OPTIMIZATION_DBUS_OBJECT_PATH,
++                                                  &server_vtable,
++                                                  in_data,
++                                                  &err))
++    {
++
++        printf("fail to register a object path!,err name=%s,err msg = %s\n",err.name,err.message);
++
++        goto fail;
++    }
++    if (!dbus_connection_try_register_object_path(conn,
++                                                  DNS_OPTIMIZATION_DBUS_OBJECT_PATH,
++                                                  &server_vtable_dns,
++                                                  in_data,
++                                                  &err))
++    {
++
++        printf("fail to register a object path!,err name=%s,err msg = %s\n",err.name,err.message);
++
++        goto fail;
++    }
++    printf("DBUS服务启动成功，进入DBUS消息循环监听状态...\n");
++    
++    /*
++    mainloop = g_main_loop_new(NULL, false);
++
++    dbus_connection_setup_with_g_main(conn, NULL);
++
++    g_main_loop_run(mainloop);
++    */
++
++ GMainContext *context;
++ GMainLoop *loop;
++      // 创建线程私有的主上下文
++    context = g_main_context_new();
++    loop = g_main_loop_new(context, false);
++    
++    // 关键修改：使用线程私有的主上下文
++    dbus_connection_setup_with_g_main(conn, context);
++    
++    // 运行属于该线程的 mainloop
++    g_main_loop_run(loop);
++    
++    g_main_loop_unref(loop);
++    g_main_context_unref(context);
++
++    return (void*)0;
++
++fail:
++    dbus_error_free(&err);
++    return (void *)-1;
+ }
+ 
++
+ // Local implementation of strstartswith for testing
+ // Returns 0 if str starts with prefix, 1 otherwise
+ static inline int strstartswith(const char *str, const char *prefix)
+@@ -343,6 +416,7 @@ TEST_F(TestSetExtraDns, SetExtraDnsSearchNonExistent)
+ }
+ 
+ 
++
+ // TestCheckEnviron implementation
+ void DbusServerConstants::SetUp()
+ {
+@@ -417,17 +491,33 @@ fail:
+     dbus_error_free(&err);
+     return ;
+ #endif
++    if(!pthread_create(&dbus_tid,NULL,startExtraDnsThread,NULL))
++    {
++       printf("con startExtraDnsThread pthread_create\n");
++    }
++
++    if(!pthread_create(&con_tid,NULL,con_monitor,BUS))
++    {
++       printf("con monitor pthread_create\n");
++    }
++
++    if(!pthread_create(&file_tid,NULL,file_monitor,NULL))
++    {
++       printf("file monitor pthread_create\n");
++    }
++
+ }
+ 
+ 
+ void DbusServerConstants::TearDown()
+ {
++    
+ }
+ 
+ TEST_F(DbusServerConstants, DbusNameFormat)
+ {
+-#if 0
+-    
++#if 1
++    sleep(2);
+     // Execute gdbus call command
+     const char* gdbus_cmd = "gdbus call --session --dest com.kylin.network.enhancement.unitest "
+                             "--object-path /com/kylin/network/enhancement/optimization/DNS "
+@@ -458,4 +548,4 @@ TEST_F(DbusServerConstants, DbusGetPath)
+         return;
+     uuid = get_active_connection_uuid(active_con);
+     EXPECT_TRUE(uuid);
+-}
+\ No newline at end of file
++}

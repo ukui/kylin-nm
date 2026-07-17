@@ -19,7 +19,7 @@
     <message>
         <location filename="../itemframe.cpp" line="40"/>
         <source>Add VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>VPN 추가</translation>
     </message>
 </context>
 <context>
@@ -39,26 +39,26 @@
         <location filename="../vpn.cpp" line="159"/>
         <location filename="../vpn.cpp" line="291"/>
         <source>Show on Taskbar</source>
-        <translation type="unfinished"></translation>
+        <translation>임무줄에 아이콘 보이기</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="293"/>
         <source>Add VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>VPN 련결 추가</translation>
         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="374"/>
         <location filename="../vpn.cpp" line="490"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>련결됨</translation>
     </message>
     <message>
         <location filename="../vpn.cpp" line="376"/>
         <location filename="../vpn.cpp" line="500"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>련결안됨</translation>
     </message>
 </context>
 <context>
@@ -66,19 +66,19 @@
     <message>
         <location filename="../vpnitem.cpp" line="60"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>삭제</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="117"/>
         <location filename="../vpnitem.cpp" line="130"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>련결끊기</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="119"/>
         <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>련결</translation>
     </message>
 </context>
 </TS>

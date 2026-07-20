@@ -1,0 +1,106 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Mon, 20 Jul 2026 08:47:12 +0000
+Subject: Translated using Weblate (Indonesian)
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/wlanconnect/id/
+---
+ plugins/wlanconnect/translations/id.ts | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/plugins/wlanconnect/translations/id.ts b/plugins/wlanconnect/translations/id.ts
+index 901afb6..520f070 100644
+--- a/plugins/wlanconnect/translations/id.ts
++++ b/plugins/wlanconnect/translations/id.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>Gabung ke Jaringan Lain</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>Tambah Jaringan Kabel</translation>
+     </message>
+     <message>
+         <source>Add WiredNetwork</source>
+@@ -23,7 +23,7 @@
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+         <source>WlanConnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Jaringan Nirkabel</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+@@ -31,19 +31,19 @@
+         <location filename="../wlanconnect.cpp" line="283"/>
+         <location filename="../wlanconnect.cpp" line="285"/>
+         <source>WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Jaringan Nirkabel</translation>
+         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>Aktifkan</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+         <location filename="../wlanconnect.cpp" line="280"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Pengaturan Lanjutan</translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -57,36 +57,36 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="137"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Pengaturan</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="140"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>Atur Notifikasi Desktop</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="278"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>Gabung ke Jaringan Lain</translation>
+         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="301"/>
+         <location filename="../wlanconnect.cpp" line="1299"/>
+         <source>No wireless network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Tidak Mendeteksi Kartu Nirkabel</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="433"/>
+         <location filename="../wlanconnect.cpp" line="1137"/>
+         <location filename="../wlanconnect.cpp" line="1206"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Terhubung</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="1075"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>Kartu Jaringan</translation>
+     </message>
+ </context>
+ </TS>

@@ -37,22 +37,22 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
         <source>Network profile type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع ملف تكوين الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>عام (موصى به) لا يمكن لأجهزة الشبكة اكتشاف هذا الكمبيوتر. ينطبق بشكل عام على الشبكات في الأماكن العامة، مثل المطارات أو المقاهي وما إلى ذلك.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
-        <translation type="unfinished"></translation>
+        <translation>يمكن لأجهزة الشبكة الخاصة اكتشاف هذا الكمبيوتر. عموماً ينطبق هذا على شبكات المنزل أو العمل، حيث تعرف وتوثق الأشخاص والأجهزة الموجودة على الشبكة.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تهيئة جدار الحماية وإعدادات الأمان</translation>
     </message>
 </context>
 <context>
@@ -60,47 +60,47 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
         <source>Network connectivity detection</source>
-        <translation type="unfinished"></translation>
+        <translation>اختبار اتصال الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>إذا كان الوصول إلى الإنترنت محدودًا، يرجى تغيير طريقة اكتشاف اتصال الشبكة وإعادة المحاولة.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
         <source>Public network (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>الإنترنت (افتراضي)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
         <source>Local area network (intranet)</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكة المنطقة المحلية (الشبكة الداخلية)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>موافق</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
         <source>The network is connected and can access the Internet normally.</source>
-        <translation type="unfinished"></translation>
+        <translation>الشبكة متصلة ويمكن الوصول إلى الإنترنت بشكل طبيعي.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation type="unfinished"></translation>
+        <translation>الشبكة متصلة، الوصول إلى الإنترنت محدود.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
         <source>Please enter the local area network (intranet) detection address</source>
-        <translation type="unfinished"></translation>
+        <translation>يرجى إدخال عنوان اكتشاف الشبكة المحلية (الشبكة الداخلية)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
         <source>Format error</source>
-        <translation type="unfinished"></translation>
+        <translation>تنسيق خاطئ</translation>
     </message>
 </context>
 <context>
@@ -123,47 +123,47 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
         <source>Connection Name</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
         <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <translation>تكوين IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>قناع الشبكة الفرعية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>البوابة الافتراضية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
         <source>Connection name is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم الشبكة فارغ أو غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IPv4 فارغ أو غير قانوني</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>قناع الشبكة الفرعية IPv4 فارغ أو غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>بوابة IPv4 فارغة أو غير صالحة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
@@ -173,7 +173,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>تعارض في العناوين</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -186,28 +186,28 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>تلقائي (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>يدوي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
         <source>Invalid address</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IP غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
         <source>Invalid subnet mask</source>
-        <translation type="unfinished"></translation>
+        <translation>قناع الشبكة الفرعية غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>مطلوب</translation>
     </message>
 </context>
 <context>
@@ -215,82 +215,82 @@
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <source>Auto Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال تلقائي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="340"/>
         <source>SSID:</source>
-        <translation type="unfinished"></translation>
+        <translation>SSID:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="151"/>
         <source>Copied successfully!</source>
-        <translation type="unfinished"></translation>
+        <translation>تم النسخ بنجاح!</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="212"/>
         <source>Copy all</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخ الكل</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="232"/>
         <source>Please input SSID:</source>
-        <translation type="unfinished"></translation>
+        <translation>يرجى إدخال SSID:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
         <source>Protocol:</source>
-        <translation type="unfinished"></translation>
+        <translation>البروتوكول:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
         <source>Security Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع الأمان:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="343"/>
         <source>Hz:</source>
-        <translation type="unfinished"></translation>
+        <translation>نطاق الشبكة:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="344"/>
         <source>Chan:</source>
-        <translation type="unfinished"></translation>
+        <translation>قناة الشبكة:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
         <source>BandWidth:</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض النطاق:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IPv6 للارتباط المحلي:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
         <source>IPv4:</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IPv4:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
         <source>IPv4 DNS:</source>
-        <translation type="unfinished"></translation>
+        <translation>خادم DNS IPv4:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation type="unfinished"></translation>
+        <translation>العنوان الفيزيائي:</translation>
     </message>
 </context>
 <context>
@@ -528,47 +528,47 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
         <source>DNS Server Advanced Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>إعدادات متقدمة لخادم DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
         <source>Tactic</source>
-        <translation type="unfinished"></translation>
+        <translation>السياسة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
         <source>Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>وقت انتهاء الصلاحية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
         <source>Retry Count</source>
-        <translation type="unfinished"></translation>
+        <translation>عدد المحاولات</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
         <source>order</source>
-        <translation type="unfinished"></translation>
+        <translation>تسلسلي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
         <source>rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>عشوائي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
         <source>concurrency</source>
-        <translation type="unfinished"></translation>
+        <translation>متزامن</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source> s</source>
-        <translation type="unfinished"></translation>
+        <translation> ثانية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
         <source> times</source>
-        <translation type="unfinished"></translation>
+        <translation> مرة</translation>
     </message>
     <message>
         <source>Close</source>
@@ -577,12 +577,12 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>موافق</translation>
     </message>
 </context>
 <context>
@@ -598,27 +598,27 @@
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>تتطلب شبكة Wi-Fi مصادقة</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>الوصول إلى شبكة Wi-Fi</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation type="unfinished"></translation>
+        <translation>كلمة المرور أو مفتاح التشفير مطلوب.</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال</translation>
     </message>
 </context>
 <context>
@@ -642,22 +642,22 @@
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
         <source>Allow other devices on this network to discover this computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>هل تريد السماح للأجهزة الأخرى على هذه الشبكة باكتشاف هذا الكمبيوتر؟</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
         <source>It is not recommended to enable this feature on public networks</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يُنصح بتفعيل هذه الميزة على الشبكات العامة</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
         <source>Not allowed (recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>غير مسموح (موصى به)</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="100"/>
         <source>Allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>السماح</translation>
     </message>
 </context>
 <context>
@@ -665,22 +665,22 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
         <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <translation>تكوين IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>العنوان</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
         <source>Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>قناع الشبكة الفرعية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>البوابة الافتراضية</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -693,48 +693,48 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>تلقائي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>يدوي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IPv4 فارغ أو غير قانوني</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>قناع شبكة IPv4 فارغ أو غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>البوابة IPv4 فارغة أو غير صالحة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
         <source>Invalid address</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IP غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
         <source>Invalid subnet mask</source>
-        <translation type="unfinished"></translation>
+        <translation>قناع الشبكة غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>مطلوب</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>تعارض في العناوين</translation>
     </message>
 </context>
 <context>
@@ -742,22 +742,22 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
         <source>IPv6Config</source>
-        <translation type="unfinished"></translation>
+        <translation>تكوين IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>العنوان</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
         <source>Subnet prefix Length</source>
-        <translation type="unfinished"></translation>
+        <translation>طول بادئة الشبكة الفرعية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>بوابة افتراضية</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -770,43 +770,43 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>تلقائي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>يدوي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>مطلوب</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
         <source>Invalid address</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IP غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
         <source>Invalid gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان البوابة غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
         <source>IPv6 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان IPv6 فارغ أو غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
         <source>IPv6 prefix length is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>طول بادئة الشبكة الفرعية IPv6 فارغ أو غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>تعارض في العناوين</translation>
     </message>
 </context>
 <context>
@@ -814,12 +814,12 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="219"/>
         <source>Please enter the network information</source>
-        <translation type="unfinished"></translation>
+        <translation>يرجى إدخال معلومات الشبكة التي ترغب في الانضمام إليها</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="224"/>
         <source>Network name(SSID)</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم الشبكة (SSID)</translation>
     </message>
     <message>
         <source>Remember the Network</source>
@@ -828,7 +828,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
         <source>Connect WIFI</source>
-        <translation type="unfinished"></translation>
+        <translation>الاتصال بالواي فاي</translation>
     </message>
     <message>
         <source>Please enter the network information to connect</source>
@@ -837,37 +837,37 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
         <source>Please check network config</source>
-        <translation type="unfinished"></translation>
+        <translation>يرجى التحقق من تكوين الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
         <source>Show Network List</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض قائمة الشبكات</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>انضمام</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>مطلوب</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
         <source>Find and Join WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>البحث عن شبكات محلية لاسلكية والانضمام إليها</translation>
     </message>
 </context>
 <context>
@@ -875,12 +875,12 @@
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="78"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>غير متصل</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
         <source>Wired Device not carried</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم توصيل كابل الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
@@ -888,7 +888,7 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع الاتصال</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
@@ -896,19 +896,19 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="193"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>الخصائص</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف هذه الشبكة</translation>
     </message>
 </context>
 <context>
@@ -916,32 +916,32 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1311"/>
         <source>No ethernet device avaliable</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف جهاز سلكي</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="812"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكة سلكية</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
         <source>conflict, unable to connect to the network normally!</source>
-        <translation type="unfinished"></translation>
+        <translation>تعارض، لا يمكن الاتصال بالشبكة بشكل طبيعي!</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
         <source>No wired network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف بطاقة شبكة سلكية</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
         <source>Activated LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكتي</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
         <source>Inactivated LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكات أخرى</translation>
     </message>
     <message>
         <source>Connected, no internet access</source>
@@ -950,17 +950,17 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
         <source>Connected, restricting access</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل، الشبكة مقيدة</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
         <source>No internet access. Please click Network Check to specific reasons.</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يمكن الوصول إلى الإنترنت. يرجى النقر على اختبار الشبكة لرؤية السبب المحدد.</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
         <source>Network Check</source>
-        <translation type="unfinished"></translation>
+        <translation>اكتشاف الشبكة</translation>
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
@@ -969,7 +969,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
         <source>Wired Device not carried</source>
-        <translation type="unfinished"></translation>
+        <translation>غير موصول بكابل الشبكة</translation>
     </message>
     <message>
         <source>LAN Connected Successfully</source>
@@ -979,17 +979,17 @@
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1535"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>متصل: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1522"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>غير متصل</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
         <source>(Limited)</source>
-        <translation type="unfinished"></translation>
+        <translation>(الشبكة محدودة)</translation>
     </message>
 </context>
 <context>
@@ -997,12 +997,12 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="183"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>أداة إعداد الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="186"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>رسالة تنبيه الشبكة</translation>
     </message>
 </context>
 <context>
@@ -1011,19 +1011,19 @@
         <location filename="../frontend/mainwindow.cpp" line="271"/>
         <location filename="../frontend/mainwindow.cpp" line="302"/>
         <source>kylin-nm</source>
-        <translation type="unfinished"></translation>
+        <translation>أدوات الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="465"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>شبكة سلكية</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="467"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>الشبكة المحلية اللاسلكية</translation>
     </message>
     <message>
         <source>Show MainWindow</source>
@@ -1033,38 +1033,38 @@
         <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>إعداد عنصر الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="501"/>
         <source>Network Connectivity Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>اختبار اتصال الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="842"/>
         <location filename="../frontend/mainwindow.cpp" line="1204"/>
         <source>Network tool</source>
-        <translation type="unfinished"></translation>
+        <translation>أدوات الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="856"/>
         <source>Network Card</source>
-        <translation type="unfinished"></translation>
+        <translation>بطاقة الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>غير متصل</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1187"/>
         <source>Not connected to the network</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكة غير متصلة</translation>
     </message>
     <message>
         <source>Connection Failed</source>
@@ -1080,17 +1080,17 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
         <source>DNS server(Drag to sort)</source>
-        <translation type="unfinished"></translation>
+        <translation>إعدادات متقدمة لخادم DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
         <source>Click &quot;+&quot; to configure DNS</source>
-        <translation type="unfinished"></translation>
+        <translation>انقر على &quot;+&quot; لتهيئة DNS</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>إعدادات متقدمة</translation>
     </message>
 </context>
 <context>
@@ -1098,17 +1098,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>أداة إعداد الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
         <source>kylin network desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>رسالة تلميح الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>التفاصيل</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
@@ -1123,17 +1123,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>الأمان</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
         <source>start check IPv4 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>بدء اكتشاف تعارض عناوين IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
         <source>start check IPv6 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>بدء اكتشاف تعارض عناوين IPv6</translation>
     </message>
     <message>
         <source>Close</source>
@@ -1142,51 +1142,51 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
         <source>Config</source>
-        <translation type="unfinished"></translation>
+        <translation>التهيئة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>موافق</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
         <source>Forget this network</source>
-        <translation type="unfinished"></translation>
+        <translation>نسيان هذه الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
         <source>Delete this network</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف هذه الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
         <source>Add LAN Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>إضافة شبكة سلكية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
         <source>Connect Hidden WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>الاتصال بشبكة WLAN مخفية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="683"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>لا شيء</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>تلقائي</translation>
     </message>
     <message>
         <source>start check ipv4 address conflict</source>
@@ -1207,22 +1207,22 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
         <source>this wifi no support enterprise type</source>
-        <translation type="unfinished"></translation>
+        <translation>هذه الشبكة اللاسلكية لا تدعم نوع الشبكة المؤسسية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
         <source>this wifi no support None type</source>
-        <translation type="unfinished"></translation>
+        <translation>هذه الشبكة اللاسلكية لا تدعم النوع الفارغ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
         <source>this wifi no support WPA2 type</source>
-        <translation type="unfinished"></translation>
+        <translation>هذه الشبكة اللاسلكية لا تدعم نوع WPA2</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
         <source>this wifi no support WPA3 type</source>
-        <translation type="unfinished"></translation>
+        <translation>هذه الشبكة اللاسلكية لا تدعم نوع WPA3</translation>
     </message>
     <message>
         <source>SSID:</source>
@@ -1333,85 +1333,85 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="110"/>
         <source>Remember the Network</source>
-        <translation type="unfinished"></translation>
+        <translation>تذكر هذه الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>الأمان</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>المفتاح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
         <source>EAP type</source>
-        <translation type="unfinished"></translation>
+        <translation>طريقة EAP</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
         <source>Identity</source>
-        <translation type="unfinished"></translation>
+        <translation>الهوية المجهولة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>النطاق</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
         <source>CA certficate</source>
-        <translation type="unfinished"></translation>
+        <translation>شهادة CA</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
         <source>no need for CA certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>لا حاجة لشهادة CA</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
         <source>User certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>شهادة المستخدم</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
         <source>User private key</source>
-        <translation type="unfinished"></translation>
+        <translation>المفتاح الخاص للمستخدم</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="231"/>
         <source>User key password</source>
-        <translation type="unfinished"></translation>
+        <translation>كلمة مرور المفتاح الخاص بالمستخدم</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="232"/>
         <source>Password options</source>
-        <translation type="unfinished"></translation>
+        <translation>خيارات كلمة المرور</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="233"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>مطلوب</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
         <source>Ineer authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>المصادقة الداخلية</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم المستخدم</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
         <source>Ask pwd each query</source>
-        <translation type="unfinished"></translation>
+        <translation>السؤال عن كلمة المرور في كل مرة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
@@ -1428,22 +1428,22 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>لا شيء</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
         <source>WPA&amp;WPA2 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA&amp;WPA2 شخصي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="246"/>
         <source>WPA&amp;WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA&amp;WPA2 المؤسسي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="247"/>
         <source>WPA3 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA3 شخصي</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="258"/>
@@ -1451,85 +1451,85 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="284"/>
         <source>Choose from file...</source>
-        <translation type="unfinished"></translation>
+        <translation>اختر من ملف...</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store passwords only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>تخزين كلمة المرور لهذا المستخدم فقط</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store password only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>تخزين كلمة المرور لهذا المستخدم فقط</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store passwords for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ كلمة المرور لجميع المستخدمين</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store password for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ كلمة المرور لجميع المستخدمين</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask this password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>السؤال عن كلمة المرور هذه في كل مرة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>السؤال عن كلمة المرور هذه في كل مرة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
         <source>Wifi password length less than 8</source>
-        <translation type="unfinished"></translation>
+        <translation>طول مفتاح wifi أقل من ثماني خانات</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
         <source>TLS identity is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>هوية TLS المجهولة فارغة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
         <source>CA cert filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>مسار ملف شهادة CA غير قانوني</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
         <source>Client cert filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>مسار ملف شهادة المستخدم غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
         <source>Client private key filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>مسار ملف المفتاح الخاص للمستخدم غير صالح</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
         <source>Client private key password is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>كلمة مرور المفتاح الخاص بالمستخدم فارغة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
         <source>User name or user password is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم المستخدم أو المفتاح فارغ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
         <source>No PAC file is selected </source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم تحديد ملف PAC </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
         <source>Choose a CA certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>اختر شهادة CA</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
@@ -1543,44 +1543,44 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
         <source>PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>تكوين PAC</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
         <source>Allow automatic PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>السماح بالتهيئة التلقائية لـ PAC</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
         <source>PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>ملف PAC</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
         <source>Anonymous</source>
-        <translation type="unfinished"></translation>
+        <translation>مجهول</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
         <source>Authenticated</source>
-        <translation type="unfinished"></translation>
+        <translation>تمت المصادقة</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>استخدام كلاهما</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>ملفات CA ( *.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
         <source>Choose a PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>اختر ملف PAC</translation>
     </message>
     <message>
         <source>PAC Files (*.pac)</source>
@@ -1597,32 +1597,32 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
         <source>Current Device</source>
-        <translation type="unfinished"></translation>
+        <translation>بطاقة الشبكة الحالية</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
         <source>Devices Closed!</source>
-        <translation type="unfinished"></translation>
+        <translation>الجهاز مغلق!</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>إعدادات الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>أداة إعداد الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>رسالة تنبيه الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل</translation>
     </message>
 </context>
 <context>
@@ -1637,12 +1637,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
         <source>Unable to save modifications</source>
-        <translation type="unfinished"></translation>
+        <translation>تعذر حفظ التعديلات</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>موافق</translation>
     </message>
 </context>
 <context>
@@ -1655,37 +1655,37 @@
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>مصادقة WLAN</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
-        <translation type="unfinished"></translation>
+        <translation>يرجى إدخال معلومات WLAN</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
-        <translation type="unfinished"></translation>
+        <translation>معرف WLAN:</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
         <source>WLAN Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم WLAN:</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
-        <translation type="unfinished"></translation>
+        <translation>كلمة المرور:</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation type="unfinished"></translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>تأكيد</translation>
     </message>
 </context>
 <context>
@@ -1693,7 +1693,7 @@
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="70"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>غير متصل</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
@@ -1702,7 +1702,7 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع الاتصال</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
@@ -1711,24 +1711,24 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
         <source>Forget</source>
-        <translation type="unfinished"></translation>
+        <translation>نسيان هذه الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>الخصائص</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="328"/>
         <source>Auto Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>الانضمام التلقائي إلى هذه الشبكة</translation>
     </message>
 </context>
 <context>
@@ -1740,7 +1740,7 @@
     <message>
         <location filename="../frontend/list-items/wlanmoreitem.cpp" line="28"/>
         <source>Add Others...</source>
-        <translation type="unfinished"></translation>
+        <translation>الانضمام إلى شبكة أخرى...</translation>
     </message>
 </context>
 <context>
@@ -1748,23 +1748,23 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكة محلية لاسلكية</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="596"/>
         <source>No wireless network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف بطاقة شبكة لاسلكية</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="149"/>
         <source>Activated WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكتي</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
         <source>Other WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>شبكات أخرى</translation>
     </message>
     <message>
         <source>More...</source>
@@ -1773,37 +1773,37 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1184"/>
         <source>WLAN Connected Successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>الشبكة اللاسلكية متصلة</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>تم قطع اتصال الشبكة اللاسلكية</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
         <source>The routing end rejects the access of the device</source>
-        <translation type="unfinished"></translation>
+        <translation>رفضت الشبكة الانضمام، فشل الاتصال</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
         <source>The network access at the routing end is full</source>
-        <translation type="unfinished"></translation>
+        <translation>تم الوصول إلى حد الشبكة</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
         <source>usd set offline mode failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>فشل في تعيين وضع عدم الاتصال: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>متصل: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1988"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>غير متصل</translation>
     </message>
     <message>
         <source>(Limited)</source>
@@ -1870,17 +1870,17 @@
     <message>
         <location filename="../main.cpp" line="124"/>
         <source>kylinnm</source>
-        <translation type="unfinished"></translation>
+        <translation>أدوات الشبكة</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
         <source>show kylin-nm wifi page</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض صفحة الشبكة اللاسلكية</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="129"/>
         <source>show kylin-nm lan page</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض صفحة الشبكة السلكية</translation>
     </message>
 </context>
 </TS>

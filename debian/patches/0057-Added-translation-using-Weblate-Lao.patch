@@ -1,0 +1,363 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Tue, 21 Jul 2026 17:32:01 +0800
+Subject: Added translation using Weblate (Lao)
+
+---
+ plugins/netconnect/translations/lo.ts |  24 ++--
+ plugins/proxy/translations/lo.ts      | 251 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 263 insertions(+), 12 deletions(-)
+ create mode 100644 plugins/proxy/translations/lo.ts
+
+diff --git a/plugins/netconnect/translations/lo.ts b/plugins/netconnect/translations/lo.ts
+index 0c008b9..b010a81 100644
+--- a/plugins/netconnect/translations/lo.ts
++++ b/plugins/netconnect/translations/lo.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເພີ່ມເຄືອຂ່າຍແບບມີສາຍ</translation>
+     </message>
+ </context>
+ <context>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເຊື່ອມຕໍ່ແລ້ວ, ເຄືອຂ່າຍຖືກຈຳກັດ.</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,20 +39,20 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເຄືອຂ່າຍແບບມີສາຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເປີດ</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+         <location filename="../netconnect.cpp" line="224"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>ການຕັ້ງຄ່າຂັ້ນສູງ</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -70,42 +70,42 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>ການຕັ້ງຄ່າ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>ຕັ້ງຄ່າການແຈ້ງເຕືອນແບບເດັສທັອບ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເຄືອຂ່າຍແບບມີສາຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation type="unfinished"></translation>
++        <translation>ບໍ່ພົບອຸປະກອນແບບມີສາຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເຊື່ອມຕໍ່ແລ້ວ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>ແຜ່ນເຄືອຂ່າຍ</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/proxy/translations/lo.ts b/plugins/proxy/translations/lo.ts
+new file mode 100644
+index 0000000..ef1306f
+--- /dev/null
++++ b/plugins/proxy/translations/lo.ts
+@@ -0,0 +1,251 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1" language="lo">
++<context>
++    <name>AptProxyDialog</name>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="43"/>
++        <source>Set APT Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <source>Server Address</source>
++        <translation type="vanished">服务器地址</translation>
++    </message>
++    <message>
++        <source>Port</source>
++        <translation type="vanished">端口</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="60"/>
++        <source>Http Address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="80"/>
++        <source>Http Port</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="100"/>
++        <source>Https Address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="119"/>
++        <source>Https Port</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="140"/>
++        <source>Cancel</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="144"/>
++        <source>Confirm</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++<context>
++    <name>Proxy</name>
++    <message>
++        <location filename="../proxy.cpp" line="72"/>
++        <source>Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="213"/>
++        <source>Start using</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="227"/>
++        <source>Proxy mode</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="232"/>
++        <source>Auto</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="236"/>
++        <source>Manual</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="391"/>
++        <source>Application Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="510"/>
++        <source>System Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="512"/>
++        <source>Auto url</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Auto url</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="514"/>
++        <source>Http Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="516"/>
++        <source>Https Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="518"/>
++        <source>Ftp Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="520"/>
++        <source>Socks Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="521"/>
++        <location filename="../proxy.cpp" line="522"/>
++        <location filename="../proxy.cpp" line="523"/>
++        <location filename="../proxy.cpp" line="524"/>
++        <location filename="../proxy.cpp" line="1334"/>
++        <source>Port</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="525"/>
++        <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="529"/>
++        <location filename="../proxy.cpp" line="531"/>
++        <source>App Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="535"/>
++        <source>APT Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="536"/>
++        <location filename="../proxy.cpp" line="1271"/>
++        <source>Open</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="537"/>
++        <source>Http Address : </source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <source>Server Address : </source>
++        <translation type="vanished">服务器地址： </translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="538"/>
++        <location filename="../proxy.cpp" line="540"/>
++        <source>Port : </source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="539"/>
++        <source>Https Address : </source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="541"/>
++        <source>Edit</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="716"/>
++        <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="717"/>
++        <location filename="../proxy.cpp" line="1048"/>
++        <source>Reboot Later</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="718"/>
++        <location filename="../proxy.cpp" line="1049"/>
++        <source>Reboot Now</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1047"/>
++        <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1284"/>
++        <source>Proxy type</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1301"/>
++        <source>IP address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1307"/>
++        <location filename="../proxy.cpp" line="1337"/>
++        <source>Required</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1327"/>
++        <source>Invalid IP Address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1348"/>
++        <source>Username</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1351"/>
++        <location filename="../proxy.cpp" line="1365"/>
++        <source>Optional</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1361"/>
++        <source>Password</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1384"/>
++        <source>Cancel</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1385"/>
++        <source>Save</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1457"/>
++        <source>The following applications are allowed to use this configuration:</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++</TS>

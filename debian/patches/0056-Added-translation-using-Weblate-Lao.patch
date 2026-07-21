@@ -1,0 +1,194 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Tue, 21 Jul 2026 17:29:05 +0800
+Subject: Added translation using Weblate (Lao)
+
+---
+ plugins/netconnect/translations/lo.ts | 111 ++++++++++++++++++++++++++++++++++
+ plugins/vpn/translations/lo.ts        |  16 ++---
+ 2 files changed, 119 insertions(+), 8 deletions(-)
+ create mode 100644 plugins/netconnect/translations/lo.ts
+
+diff --git a/plugins/netconnect/translations/lo.ts b/plugins/netconnect/translations/lo.ts
+new file mode 100644
+index 0000000..0c008b9
+--- /dev/null
++++ b/plugins/netconnect/translations/lo.ts
+@@ -0,0 +1,111 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1" language="lo">
++<context>
++    <name>AddNetBtn</name>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
++        <source>Add Others</source>
++        <translation></translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
++        <source>Add WiredNetork</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++<context>
++    <name>LanItem</name>
++    <message>
++        <source>Delete</source>
++        <translation type="vanished">删除</translation>
++    </message>
++    <message>
++        <source>Disconnect</source>
++        <translation type="vanished">断开</translation>
++    </message>
++    <message>
++        <source>Connect</source>
++        <translation type="vanished">连接</translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="147"/>
++        <source>Connected, restricting access.</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++<context>
++    <name>NetConnect</name>
++    <message>
++        <location filename="../netconnect.ui" line="50"/>
++        <source>Wired Network</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.ui" line="112"/>
++        <location filename="../netconnect.cpp" line="229"/>
++        <source>open</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/netconnect/open</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../netconnect.ui" line="198"/>
++        <location filename="../netconnect.cpp" line="224"/>
++        <source>Advanced settings</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
++    </message>
++    <message>
++        <source>ukui control center</source>
++        <translation type="vanished">控制面板</translation>
++    </message>
++    <message>
++        <source>ukui control center desktop message</source>
++        <translation type="vanished">控制面板桌面通知</translation>
++    </message>
++    <message>
++        <source>WiredConnect</source>
++        <translation type="vanished">有线网络</translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="72"/>
++        <source>Settings</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="75"/>
++        <source>Settings desktop message</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="92"/>
++        <location filename="../netconnect.cpp" line="227"/>
++        <location filename="../netconnect.cpp" line="230"/>
++        <source>LAN</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="346"/>
++        <source>No ethernet device avaliable</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="635"/>
++        <location filename="../netconnect.cpp" line="1137"/>
++        <source>connected</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="637"/>
++        <location filename="../netconnect.cpp" line="952"/>
++        <location filename="../netconnect.cpp" line="1147"/>
++        <source>not connected</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="714"/>
++        <source>card</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++</TS>
+diff --git a/plugins/vpn/translations/lo.ts b/plugins/vpn/translations/lo.ts
+index 43758dc..900a35b 100644
+--- a/plugins/vpn/translations/lo.ts
++++ b/plugins/vpn/translations/lo.ts
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../itemframe.cpp" line="40"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເພີ່ມ VPN</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,26 +39,26 @@
+         <location filename="../vpn.cpp" line="159"/>
+         <location filename="../vpn.cpp" line="291"/>
+         <source>Show on Taskbar</source>
+-        <translation type="unfinished"></translation>
++        <translation>ສະແດງໄອຄອນໃນແຖບວຽກ</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="293"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເພີ່ມການເຊື່ອມຕໍ່ VPN</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="490"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເຊື່ອມຕໍ່ແລ້ວ</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
+     </message>
+ </context>
+ <context>
+@@ -66,19 +66,19 @@
+     <message>
+         <location filename="../vpnitem.cpp" line="60"/>
+         <source>Delete</source>
+-        <translation type="unfinished"></translation>
++        <translation>ລຶບ</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="117"/>
+         <location filename="../vpnitem.cpp" line="130"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ຕັດການເຊື່ອມຕໍ່</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ເຊື່ອມຕໍ່</translation>
+     </message>
+ </context>
+ </TS>

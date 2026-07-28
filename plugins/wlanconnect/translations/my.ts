@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>အခြား ကွန်ရက် တစ်ခု ထည့်သွင်းရန်</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးကွန်ရက် ထည့်ရန်</translation>
     </message>
     <message>
         <source>Add WiredNetwork</source>
@@ -23,7 +23,7 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ ဒေသဆိုင်ရာ ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
@@ -31,19 +31,19 @@
         <location filename="../wlanconnect.cpp" line="283"/>
         <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ ဒေသဆိုင်ရာ ကွန်ရက်</translation>
         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>ဖွင့်ရန်</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>အဆင့်မြင့် ဆက်တင်များ</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -57,36 +57,36 @@
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ဆက်တင်များ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ဆက်တင်များ 卓面 အသိပေးချက်များ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="278"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>အခြား ကွန်ရက် တစ်ခု ထည့်သွင်းရန်</translation>
         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="301"/>
         <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ ကဒ် မတွေ့ပါ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="433"/>
         <location filename="../wlanconnect.cpp" line="1137"/>
         <location filename="../wlanconnect.cpp" line="1206"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပြီး</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>ကဒ်</translation>
     </message>
 </context>
 </TS>

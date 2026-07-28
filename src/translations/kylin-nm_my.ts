@@ -37,22 +37,22 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
         <source>Network profile type</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်စီစဉးမှုဖိုင် အမျိုးအစား</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>အများသုံး (အကြံပြု) ကွန်ရက်တွင်ရှိသော စက်များသည် ဤကွန်ပျူတာကို ရှာတွေ့မရပါ။ ဤအခြေအနေများသည် လေဆိပ်၊ ကော်ဖီဆိုင် စသည့် အများသုံးနေရာများတွင် အသုံးပြုသော ကွန်ရက်များအတွက် သင့်လျော်ပါသည်။</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
-        <translation type="unfinished"></translation>
+        <translation>ပုဂ္ဂလိက ကွန်ရက်တွင်ရှိသော စက်များသည် ဤကွန်ပျူတာကို တွေ့ရှိနိုင်ပါသည်။ ယေဘုယျအားဖြင့် အိမ် သို့မဟုတ် ရုံးခန်းကွန်ရက်များတွင် အသုံးပြုပါသည်၊ ကွန်ရက်ပေါ်တွင်ရှိသော ပုဂ္ဂိုလ်များနှင့် စက်များကို သင် သိပြီး ယုံကြည်ပါသည်။</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation type="unfinished"></translation>
+        <translation>မီးမြောက်စက် နှင့် လုံခြုံရေး ဆက်တင်များကို စီစဉ်ပါ</translation>
     </message>
 </context>
 <context>
@@ -60,47 +60,47 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
         <source>Network connectivity detection</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ချိတ်ဆက်မှု စစ်ဆေးခြင်း</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>အကယ်၍ အင်တာနက်သုံးခွင့် ကန့်သတ်နေပါက ကွန်ရက် IP ချိတ်ဆက်မှုစစ်ဆေးမှု နည်းလမ်းကို ပြောင်းလဲပြီး ထပ်မံကြိုးစားပါ။</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
         <source>Public network (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>အင်တာနက် (မူလ)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
         <source>Local area network (intranet)</source>
-        <translation type="unfinished"></translation>
+        <translation>LAN (အတွင်းပိုင်းကွန်ရက်)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>အတည်ပြုပါ</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
         <source>The network is connected and can access the Internet normally.</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ချိတ်ဆက်မှု အင်တာနက်ကို ဝင်ရောက် အသုံးပြုနိုင်ပါသည်။</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ချိတ်ဆက်ပြီး၊ အင်တာနက် ဝင်ရောက်ခွင့်ကန့်သတ်ထားသည်။</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
         <source>Please enter the local area network (intranet) detection address</source>
-        <translation type="unfinished"></translation>
+        <translation>LAN (အတွင်းပိုင်းကွန်ရက်) စစ်ဆေးရန်လိပ်စာကို ထည့်ပေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
         <source>Format error</source>
-        <translation type="unfinished"></translation>
+        <translation>ပုံစံမမှန်ပါ</translation>
     </message>
 </context>
 <context>
@@ -123,47 +123,47 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
         <source>Connection Name</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် အမည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
         <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 စီစဉ်ချက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 လိပ်စာ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>サブネットマスク</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>မူလပုံစံ ဂိတ်ဝေး</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
         <source>Connection name is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်အမည် ဗလာ သို့မဟုတ် မမှန်ကန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 လိပ်စာ ဗလာ သို့မဟုတ် မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 ဆပ်နက်မာစက် ဗလာ သို့မဟုတ် မမှန်ကန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 ဂိတ်ဝေး ဗလာ သို့မဟုတ် မမှန်ကန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
@@ -173,7 +173,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>လိပ်စာ ပဋိပက္ခ</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -186,28 +186,28 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>အလိုအလျောက် (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>ကိုယ်တိုင်လုပ်ဆောင်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
         <source>Invalid address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP လိပ်စာ မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
         <source>Invalid subnet mask</source>
-        <translation type="unfinished"></translation>
+        <translation>မမှန်ကန်သော ဆပ်နက်မာစက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>ဖြည့်စွက်ရန်လိုအပ်ပါသည်</translation>
     </message>
 </context>
 <context>
@@ -215,82 +215,82 @@
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <source>Auto Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>အလိုအလျောက်ချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="340"/>
         <source>SSID:</source>
-        <translation type="unfinished"></translation>
+        <translation>SSID:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="151"/>
         <source>Copied successfully!</source>
-        <translation type="unfinished"></translation>
+        <translation>ကူးယူမှုအောင်မြင်ပါသည်။</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="212"/>
         <source>Copy all</source>
-        <translation type="unfinished"></translation>
+        <translation>အားလုံးကိုကူးယူပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="232"/>
         <source>Please input SSID:</source>
-        <translation type="unfinished"></translation>
+        <translation>SSID ထည့်ပါ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
         <source>Protocol:</source>
-        <translation type="unfinished"></translation>
+        <translation>ပရိုတိုကောလ်:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
         <source>Security Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>လုံခြုံရေး အမျိုးအစား -</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="343"/>
         <source>Hz:</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ကျိန်းနှုန်း -</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="344"/>
         <source>Chan:</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ချန်နယ်:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
         <source>BandWidth:</source>
-        <translation type="unfinished"></translation>
+        <translation>ဘန်ဒ္ ဝိုင်ဒါ-</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation type="unfinished"></translation>
+        <translation>စက်တွင်းချိတ် IPv6 လိပ်စာ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
         <source>IPv4:</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 လိပ်စာ -</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
         <source>IPv4 DNS:</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 DNS ဆာဗာ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation type="unfinished"></translation>
+        <translation>ရူပိုင်လိပ်စာ -</translation>
     </message>
 </context>
 <context>
@@ -528,47 +528,47 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
         <source>DNS Server Advanced Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS ဆာဗာ အဆင့်မြင့် စီစဉးမှု</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
         <source>Tactic</source>
-        <translation type="unfinished"></translation>
+        <translation>မူဝါဒ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
         <source>Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>အချိန်လွန်သွားပါပြီ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
         <source>Retry Count</source>
-        <translation type="unfinished"></translation>
+        <translation>ပြန်လည်ကြိုးစားမှု အကြိမ်ရေ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
         <source>order</source>
-        <translation type="unfinished"></translation>
+        <translation>အစဉ်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
         <source>rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>ကျပန်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
         <source>concurrency</source>
-        <translation type="unfinished"></translation>
+        <translation>တစ်ပြိုင်နက်တည်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source> s</source>
-        <translation type="unfinished"></translation>
+        <translation> စက္ကန့်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
         <source> times</source>
-        <translation type="unfinished"></translation>
+        <translation> အကြိမ်</translation>
     </message>
     <message>
         <source>Close</source>
@@ -577,12 +577,12 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ပယ်ဖျက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>အတည်ပြုပါ</translation>
     </message>
 </context>
 <context>
@@ -598,27 +598,27 @@
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi ကွန်ရက်အတွက် အထောက်အထား လိုအပ်ပါသည်</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi ကွန်ရက်သို့ ဝင်ရောက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက် သို့မဟုတ် ကီး လိုအပ်သည်။</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ပယ်ဖျက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပါ</translation>
     </message>
 </context>
 <context>
@@ -642,22 +642,22 @@
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
         <source>Allow other devices on this network to discover this computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤကွန်ရက်ရှိ ကွန်ပျူတာများအား တစ်ခြားစက်ပစ္စည်းများမှ ရှာဖွေတွေ့ရှိနိုင်စေမလား။</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
         <source>It is not recommended to enable this feature on public networks</source>
-        <translation type="unfinished"></translation>
+        <translation>အများသုံးကွန်ရက်တွင် ဤလုပ်ဆောင်ချက်ကို ဖွင့်ထားခြင်း မအကြံပြုပါ</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
         <source>Not allowed (recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>ခွင့်မပြုပါ (အကြံပြုထားသည်)</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="100"/>
         <source>Allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>ခွင့်ပြုပါ</translation>
     </message>
 </context>
 <context>
@@ -665,22 +665,22 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
         <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 ဖွဲ့စည်းပုံ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>လိပ်စာ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
         <source>Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>ဆပ်နက်မာစက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>မူလ ဂိတ်ဝေး</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -693,48 +693,48 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>အလိုအလျောက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>ကိုယ်တိုင်လုပ်ဆောင်ခြင်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Ipv4 လိပ်စာ ဗလာ သို့မဟုတ် မမှန်ကန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 ကွန်ရက်ခွဲ  маска ဗလာ သို့မဟုတ် မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 ဂိတ်ဝေး ဗလာ သို့မဟုတ် မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
         <source>Invalid address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP လိပ်စာမမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
         <source>Invalid subnet mask</source>
-        <translation type="unfinished"></translation>
+        <translation>ဆာဗာမှ ပြန်ကြားမှု မရရှိပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>လိုအပ်သည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>လိပ်စာ ပဋိပက္ခဖြစ်နေပါသည်</translation>
     </message>
 </context>
 <context>
@@ -742,22 +742,22 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
         <source>IPv6Config</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 ဖွဲ့စည်းပုံ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>လိပ်စာ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
         <source>Subnet prefix Length</source>
-        <translation type="unfinished"></translation>
+        <translation>subnet prefix length</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>မူလ ပေါက်ကိုင်း</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -770,43 +770,43 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>အလိုအလျောက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>ကိုယ်တိုင်လုပ်ဆောင်ချက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>လိုအပ်သည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
         <source>Invalid address</source>
-        <translation type="unfinished"></translation>
+        <translation>မမှန်ကန်သော IP လိပ်စာ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
         <source>Invalid gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>ဂိတ်ဝေးလိပ်စာ မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
         <source>IPv6 address is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 လိပ်စာ ဗလ�ာ သို့မဟုတ် မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
         <source>IPv6 prefix length is empty or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 ကွန်ယက် ရှေ့ဆက်နာမည် အလွတ် သို့မဟုတ် မမှန်ကန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>လိပ်စာ ပဋိပက္ခ</translation>
     </message>
 </context>
 <context>
@@ -814,12 +814,12 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="219"/>
         <source>Please enter the network information</source>
-        <translation type="unfinished"></translation>
+        <translation>သင် ဝင်ရောက်လိုသော ကွန်ရက်အချက်အလက်များကို ထည့်သွင်းပေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="224"/>
         <source>Network name(SSID)</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်အမည် (SSID)</translation>
     </message>
     <message>
         <source>Remember the Network</source>
@@ -828,7 +828,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
         <source>Connect WIFI</source>
-        <translation type="unfinished"></translation>
+        <translation>WIFI ချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <source>Please enter the network information to connect</source>
@@ -837,37 +837,37 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
         <source>Please check network config</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ဖွဲ့စည်းပုံကိုစစ်ဆေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
         <source>Show Network List</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်စာရင်းကိုပြပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ပယ်ဖျက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>ပူးပေါင်းပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>လိုအပ်သည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
         <source>Find and Join WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ဝိုင်ယာလက်စဲ ဒေသဆိုင်ရာကွန်ရက်များကို ရှာဖွေပြီး ဝင်ရောက်ပါ</translation>
     </message>
 </context>
 <context>
@@ -875,12 +875,12 @@
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="78"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>မချိတ်ဆက်ထားပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
         <source>Wired Device not carried</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြေးနှီးသံများ မထည့်သွင်းရသေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
@@ -888,7 +888,7 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်မှုဖြတ်တောက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
@@ -896,19 +896,19 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="193"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>ဂုဏ်သတ္တိများ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤကွန်ရက်ကိုဖယ်ရှားပါ</translation>
     </message>
 </context>
 <context>
@@ -916,32 +916,32 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1311"/>
         <source>No ethernet device avaliable</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးတပ်ဆက်သွယ်မှုစက် ရှာမတွေ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="812"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးတပ်ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
         <source>conflict, unable to connect to the network normally!</source>
-        <translation type="unfinished"></translation>
+        <translation>ပဋိပက္ခဖြစ်နေပါသည်၊ ကွန်ရက်သို့ မှန်ကန်စွာ ချိတ်ဆက်၍ မရပါ။</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
         <source>No wired network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးတပ်ကွန်ရက်ကဒ် ရှာမတွေ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
         <source>Activated LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ကျွန်ုပ်၏ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
         <source>Inactivated LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>တစ်ခြားကွန်ရက်များ</translation>
     </message>
     <message>
         <source>Connected, no internet access</source>
@@ -950,17 +950,17 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
         <source>Connected, restricting access</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပြီး၊ ကွန်ရက်ကန့်သတ်ထားသည်</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
         <source>No internet access. Please click Network Check to specific reasons.</source>
-        <translation type="unfinished"></translation>
+        <translation>အင်တာနက်သို့ ဝင်ရောက်၍ မရပါ။ ကွန်ရက်စစ်ဆေးမှုကို နှိပ်ပြီး အသေးစိတ်အကြောင်းအရာကို ကြည့်ပါ။</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
         <source>Network Check</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်စစ်ဆေးခြင်း</translation>
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
@@ -969,7 +969,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
         <source>Wired Device not carried</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုး မထည့်သွင်းရသေးပါ</translation>
     </message>
     <message>
         <source>LAN Connected Successfully</source>
@@ -979,17 +979,17 @@
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1535"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပြီး- </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1522"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>မချိတ်ဆက်ထားပါ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
         <source>(Limited)</source>
-        <translation type="unfinished"></translation>
+        <translation>(ကွန်ရက် ကန့်သတ်ခံရသည်)</translation>
     </message>
 </context>
 <context>
@@ -997,12 +997,12 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="183"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ဆက်တင် ကိရိယာများ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="186"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် အကြံပြုချက် မက်ဆေ့</translation>
     </message>
 </context>
 <context>
@@ -1011,19 +1011,19 @@
         <location filename="../frontend/mainwindow.cpp" line="271"/>
         <location filename="../frontend/mainwindow.cpp" line="302"/>
         <source>kylin-nm</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ကိရိယာများ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="465"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးဆက် ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="467"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>ဝိုင်ယာလက်စဲ ဒေသဆိုင်ရာကွန်ရက်</translation>
     </message>
     <message>
         <source>Show MainWindow</source>
@@ -1033,38 +1033,38 @@
         <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်အရာများကို သတ်မှတ်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="501"/>
         <source>Network Connectivity Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ချိတ်ဆက်မှု စစ်ဆေးခြင်း</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="842"/>
         <location filename="../frontend/mainwindow.cpp" line="1204"/>
         <source>Network tool</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ကိရိယာများ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="856"/>
         <source>Network Card</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ကဒ်</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပြီး</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>မချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1187"/>
         <source>Not connected to the network</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်မချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <source>Connection Failed</source>
@@ -1080,17 +1080,17 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
         <source>DNS server(Drag to sort)</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS ဆာဗာ အဆင့်မြင့် စီစဉ်ချက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
         <source>Click &quot;+&quot; to configure DNS</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;+&quot; ကိုနှိပ်ပြီး DNS ကို စီစဉ်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>အဆင့်မြင့်သတ်မှတ်ချက်များ</translation>
     </message>
 </context>
 <context>
@@ -1098,17 +1098,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ဆက်တင် ကိရိယာများ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
         <source>kylin network desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် အကြံပြုစာ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>အသေးစိတ်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
@@ -1123,17 +1123,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>လုံခြုံရေး</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
         <source>start check IPv4 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 လိပ်စာ သဘောတူမှုကိုစတင် စစ်ဆေးခြင်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
         <source>start check IPv6 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 လိပ်စာ ပဋိပက္ခစစ်ဆေးခြင်း စတင်နေပါသည်</translation>
     </message>
     <message>
         <source>Close</source>
@@ -1142,51 +1142,51 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
         <source>Config</source>
-        <translation type="unfinished"></translation>
+        <translation>စီစဉ်ချက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>အတည်ပြုပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ပယ်ဖျက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
         <source>Forget this network</source>
-        <translation type="unfinished"></translation>
+        <translation>ဒီကွန်ရက်ကို မေ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
         <source>Delete this network</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤကွန်ရက်ကိုဖယ်ရှားပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
         <source>Add LAN Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးတပ်ဆက်သွယ်မှု ထည့်သွင်းပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
         <source>Connect Hidden WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ဝှက်ထားသည့် WLAN သို့ချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="683"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>မရှိပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>အလိုအလျောက်</translation>
     </message>
     <message>
         <source>start check ipv4 address conflict</source>
@@ -1207,22 +1207,22 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
         <source>this wifi no support enterprise type</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤ wifi သည် ကုမ္ပဏီကွန်ရက်အမျိုးအစားကို မထောက်ပံ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
         <source>this wifi no support None type</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤ wifi သည် ဗလာအမျိုးအစားကို မထောက်ပံ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
         <source>this wifi no support WPA2 type</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤ wifi သည် WPA2 အမျိုးအစားကို မထောက်ပံ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
         <source>this wifi no support WPA3 type</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤဝိုင်ဖိုင်သည် WPA3 အမျိုးအစားကို မထောက်ပံ့ပါ</translation>
     </message>
     <message>
         <source>SSID:</source>
@@ -1333,85 +1333,85 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="110"/>
         <source>Remember the Network</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤကွန်ရက်ကို မှတ်သားပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>လုံခြုံရေး</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>သော့</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
         <source>EAP type</source>
-        <translation type="unfinished"></translation>
+        <translation>EAP နည်းလမ်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
         <source>Identity</source>
-        <translation type="unfinished"></translation>
+        <translation>အမည်မသိ အထောက်အထား</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>ဒိုမိန်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
         <source>CA certficate</source>
-        <translation type="unfinished"></translation>
+        <translation>CA အသိအမှတ်ပြု လက်မှတ်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
         <source>no need for CA certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>CA အသိအမှတ်ပြုလက်မှတ် မလိုအပ်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
         <source>User certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ အသိအမှတ်ပြုလက်မှတ်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
         <source>User private key</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ သော့ဖွင့်ကီး</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="231"/>
         <source>User key password</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ သော့ချက် စကားဝှက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="232"/>
         <source>Password options</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက် ရွေးချယ်စရာများ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="233"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>လိုအပ်သည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
         <source>Ineer authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>အတွင်းပိုင်းစစ်ဆေးခြင်း</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူအမည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
         <source>Ask pwd each query</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက်အချိန်တိုင်းမေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
@@ -1428,22 +1428,22 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>မရှိပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
         <source>WPA&amp;WPA2 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA&amp;WPA2 ပုဂ္ဂလ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="246"/>
         <source>WPA&amp;WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA&amp;WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="247"/>
         <source>WPA3 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA3 ပုဂ္ဂလ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="258"/>
@@ -1451,85 +1451,85 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="284"/>
         <source>Choose from file...</source>
-        <translation type="unfinished"></translation>
+        <translation>ဖိုင်မှ ရွေးချယ်ပါ...</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store passwords only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက်ကို ဤအသုံးပြုသူအတွက်သာ သိမ်းဆည်းပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store password only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက်ကို ဤအသုံးပြုသူအတွက်သာ သိမ်းဆည်းပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store passwords for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ အားလုံးအတွက် စကားဝှက် သိမ်းဆည်းပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store password for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူအားလုံးအတွက် စကားဝှက်ကိုသိမ်းဆည်းပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask this password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက် မေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက် မေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
         <source>Wifi password length less than 8</source>
-        <translation type="unfinished"></translation>
+        <translation>ဝိုင်ဖိုင် သော့ အရှည် ရှိသေးသည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
         <source>TLS identity is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>TLS အမည်မသိ အလွတ်ဖြစ်နေသည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
         <source>CA cert filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>CA အသိအမှတ်ပြုလက်မှတ် ဖိုင်လမ်းကြောင်း မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
         <source>Client cert filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ အသိအမှတ်ပြုလက်မှတ် ဖိုင်လမ်းကြောင်း မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
         <source>Client private key filepath is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ သော့ချက်ဖိုင်လမ်းကြောင်း မမှန်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
         <source>Client private key password is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူ သော့ချက် စကားဝှက် ဗလာ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
         <source>User name or user password is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>အသုံးပြုသူအမည် သို့မဟုတ် သော့ချက် ဗလာဖြစ်နေပါသည်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
         <source>No PAC file is selected </source>
-        <translation type="unfinished"></translation>
+        <translation>PAC ဖိုင် မရွေးပါ </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
         <source>Choose a CA certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>CA အသိအမှတ်ပြုလက်မှတ်ကိုရွေးချယ်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
@@ -1543,44 +1543,44 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
         <source>PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC ဖိုင်လ်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
         <source>Allow automatic PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>အလိုအလျောက် PAC စီစဉ်မှုကို ခွင့်ပြုပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
         <source>PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC ဖိုင်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
         <source>Anonymous</source>
-        <translation type="unfinished"></translation>
+        <translation>အမည်မသိ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
         <source>Authenticated</source>
-        <translation type="unfinished"></translation>
+        <translation>စစ်ဆေးပြီး</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>နှစ်မျိုးလုံး အသုံးပြုပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>CA ဖိုင်များ ( *.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
         <source>Choose a PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC ဖိုင်ကို ရွေးချယ်ပါ</translation>
     </message>
     <message>
         <source>PAC Files (*.pac)</source>
@@ -1597,32 +1597,32 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
         <source>Current Device</source>
-        <translation type="unfinished"></translation>
+        <translation>လက်ရှိကွန်ရက်ကဒ်</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
         <source>Devices Closed!</source>
-        <translation type="unfinished"></translation>
+        <translation>စက်ပစ္စည်း ပိတ်ထားပါသည်။</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ဆက်တင်များ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ဆက်တင် ကိရိယာ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် အကြံပြုချက် မက်ဆေ့</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပြီး</translation>
     </message>
 </context>
 <context>
@@ -1637,12 +1637,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
         <source>Unable to save modifications</source>
-        <translation type="unfinished"></translation>
+        <translation>ပြင်ဆင်မှုများကို မသိမ်းနိုင်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>အတည်ပြုပါ</translation>
     </message>
 </context>
 <context>
@@ -1655,37 +1655,37 @@
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN အထောက်အထားပြုခြင်း</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
-        <translation type="unfinished"></translation>
+        <translation>ကျေးဇူးပြု၍ WLAN အချက်အလက်များ ထည့်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN ID:</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
         <source>WLAN Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN အမည်-</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
-        <translation type="unfinished"></translation>
+        <translation>စကားဝှက်:</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation type="unfinished"></translation>
+        <translation>ပယ်ဖျက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>အတည်ပြုပါ</translation>
     </message>
 </context>
 <context>
@@ -1693,7 +1693,7 @@
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="70"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>မချိတ်ဆက်ရသေးပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
@@ -1702,7 +1702,7 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ဖြုတ်ဆက်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
@@ -1711,24 +1711,24 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်မှု</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
         <source>Forget</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤကွန်ရက်ကိုမေ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>ဂုဏ်သတ္တိများ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="328"/>
         <source>Auto Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ဤကွန်ရက်သို့ အလိုအလျောက် ဝင်ရောက်ပါ</translation>
     </message>
 </context>
 <context>
@@ -1740,7 +1740,7 @@
     <message>
         <location filename="../frontend/list-items/wlanmoreitem.cpp" line="28"/>
         <source>Add Others...</source>
-        <translation type="unfinished"></translation>
+        <translation>အခြားကွန်ရက်များတွင် ပူးပေါင်းပါ...</translation>
     </message>
 </context>
 <context>
@@ -1748,23 +1748,23 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ ဒေသဆိုင်ရာ ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="596"/>
         <source>No wireless network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>ဝိုင်ယာလက်စဲ ကဒ်ကို မတွေ့ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="149"/>
         <source>Activated WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ကျွန်ုပ်၏ ကွန်ရက်များ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
         <source>Other WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>အခြား ကွန်ရက်များ</translation>
     </message>
     <message>
         <source>More...</source>
@@ -1773,37 +1773,37 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1184"/>
         <source>WLAN Connected Successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ကွန်ရက် ချိတ်ဆက်ပြီး</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ကွန်ရက် ချိတ်ဆက်မှုဖြတ်တောက်ပြီး</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
         <source>The routing end rejects the access of the device</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်မှ ငြင်းပယ်ခြင်း၊ ချိတ်ဆက်မှုမအောင်မြင်ပါ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
         <source>The network access at the routing end is full</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက်ဝင်ရောက်မှု ပြည့်နှက်ပါပြီ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
         <source>usd set offline mode failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>အွန်လိုင်း အနေအထား သတ်မှတ်ခြင်း မအောင်မြင်ပါ: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>ချိတ်ဆက်ပြီး: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1988"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>မချိတ်ဆက်ပါ</translation>
     </message>
     <message>
         <source>(Limited)</source>
@@ -1870,17 +1870,17 @@
     <message>
         <location filename="../main.cpp" line="124"/>
         <source>kylinnm</source>
-        <translation type="unfinished"></translation>
+        <translation>ကွန်ရက် ကိရိယာများ</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
         <source>show kylin-nm wifi page</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြိုးမဲ့ စာမျက်နှာ ပြပါ</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="129"/>
         <source>show kylin-nm lan page</source>
-        <translation type="unfinished"></translation>
+        <translation>ကြေးနှီးသံများ စာမျက်နှာကိုပြပါ</translation>
     </message>
 </context>
 </TS>

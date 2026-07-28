@@ -1,0 +1,204 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Tue, 28 Jul 2026 11:11:07 +0800
+Subject: Added translation using Weblate (Burmese)
+
+---
+ plugins/netconnect/translations/my.ts  | 24 ++++-----
+ plugins/wlanconnect/translations/my.ts | 92 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+), 12 deletions(-)
+ create mode 100644 plugins/wlanconnect/translations/my.ts
+
+diff --git a/plugins/netconnect/translations/my.ts b/plugins/netconnect/translations/my.ts
+index d5c75dd..71b4b1b 100644
+--- a/plugins/netconnect/translations/my.ts
++++ b/plugins/netconnect/translations/my.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>ကြိုးဆွယ် ကွန်ရက် ထည့်ရန်</translation>
+     </message>
+ </context>
+ <context>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ချိတ်ဆက်ပြီး၊ ကွန်ရက် ကန့်သတ်ချက် ရှိပါသည်။</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,20 +39,20 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation type="unfinished"></translation>
++        <translation>ကြိုးဆွယ် ကွန်ရက်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>ဖွင့်ရန်</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+         <location filename="../netconnect.cpp" line="224"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>အဆင့်မြင့် ဆက်တင်များ</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -70,42 +70,42 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>ဆက်တင်များ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>စက်မျက်နှာပြင် အသိပေးချက်များ ဆက်တင်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ကြိုးဆွယ် ကွန်ရက်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation type="unfinished"></translation>
++        <translation>ကြိုးဆွယ် စက်များ မတွေ့ပါ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ချိတ်ဆက်ပြီး</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>မချိတ်ဆက်ပါ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>ကွန်ရက် ကဒ်</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/wlanconnect/translations/my.ts b/plugins/wlanconnect/translations/my.ts
+new file mode 100644
+index 0000000..4a85f25
+--- /dev/null
++++ b/plugins/wlanconnect/translations/my.ts
+@@ -0,0 +1,92 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1" language="my">
++<context>
++    <name>AddNetBtn</name>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
++        <source>Add Others</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
++        <source>Add WiredNetork</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <source>Add WiredNetwork</source>
++        <translation type="vanished">添加有线网络</translation>
++    </message>
++</context>
++<context>
++    <name>WlanConnect</name>
++    <message>
++        <location filename="../wlanconnect.ui" line="14"/>
++        <source>WlanConnect</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.ui" line="35"/>
++        <location filename="../wlanconnect.cpp" line="154"/>
++        <location filename="../wlanconnect.cpp" line="283"/>
++        <location filename="../wlanconnect.cpp" line="285"/>
++        <source>WLAN</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../wlanconnect.ui" line="94"/>
++        <source>open</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.ui" line="147"/>
++        <location filename="../wlanconnect.cpp" line="280"/>
++        <source>Advanced settings</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
++    </message>
++    <message>
++        <source>ukui control center</source>
++        <translation type="vanished">控制面板</translation>
++    </message>
++    <message>
++        <source>ukui control center desktop message</source>
++        <translation type="vanished">控制面板桌面通知</translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.cpp" line="137"/>
++        <source>Settings</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.cpp" line="140"/>
++        <source>Settings desktop message</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.cpp" line="278"/>
++        <source>Add Others</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../wlanconnect.cpp" line="301"/>
++        <location filename="../wlanconnect.cpp" line="1299"/>
++        <source>No wireless network card detected</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.cpp" line="433"/>
++        <location filename="../wlanconnect.cpp" line="1137"/>
++        <location filename="../wlanconnect.cpp" line="1206"/>
++        <source>connected</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../wlanconnect.cpp" line="1075"/>
++        <source>card</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++</TS>

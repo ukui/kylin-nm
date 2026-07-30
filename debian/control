@@ -33,7 +33,7 @@ Vcs-Browser: https://salsa.debian.org/kylin-team/kylin-nm
 Package: kylin-nm
 Architecture: any
 Depends: network-manager (>=1.2.6),
-         network-manager-gnome,
+         nm-connection-editor,
          network-manager-l2tp,
          network-manager-l2tp-gnome,
          network-manager-openvpn,

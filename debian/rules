@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+include /usr/share/dpkg/default.mk
+
 #export PATH="/usr/lib/qt6/bin:$PATH"
 #export QT_SELECT=qt6
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
@@ -14,7 +16,10 @@ override_dh_auto_configure:
 	#qmake6 kylin-nm.pro
 	# dh_auto_configure -- \
 #	@echo $PATH
-	qmake6	"QMAKE_CXXFLAGS=$(CFLAGS)" \
+	qmake6 \
+	"QMAKE_CFLAGS+=$(CFLAGS) $(CPPFLAGS)" \
+	"QMAKE_CXXFLAGS+=$(CXXFLAGS) $(CPPFLAGS)" \
+	"QMAKE_LFLAGS+=$(LDFLAGS)" \
 	kylin-nm.pro
 
 %:

@@ -1,0 +1,108 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Fri, 14 Aug 2026 08:01:47 +0000
+Subject: Translated using Weblate (Italian)
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/it/
+---
+ plugins/netconnect/translations/it.ts | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/plugins/netconnect/translations/it.ts b/plugins/netconnect/translations/it.ts
+index ad397f9..5d35082 100644
+--- a/plugins/netconnect/translations/it.ts
++++ b/plugins/netconnect/translations/it.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>Aggiungi rete cablata</translation>
+     </message>
+ </context>
+ <context>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Connesso, rete limitata.</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,20 +39,20 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation type="unfinished"></translation>
++        <translation>Rete cablata</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>Attiva</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+         <location filename="../netconnect.cpp" line="224"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Impostazioni avanzate</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -70,42 +70,42 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Impostazioni</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>Imposta notifiche desktop</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Rete cablata</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation type="unfinished"></translation>
++        <translation>Nessun dispositivo cablato rilevato</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Connesso</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Non connesso</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>Scheda di rete</translation>
+     </message>
+ </context>
+ </TS>

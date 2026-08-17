@@ -6,7 +6,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="43"/>
         <source>Set APT Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>APT プロキシを設定</translation>
     </message>
     <message>
         <source>Server Address</source>
@@ -19,32 +19,32 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="60"/>
         <source>Http Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Http プロキシ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="80"/>
         <source>Http Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Http ポート</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="100"/>
         <source>Https Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Https プロキシ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="119"/>
         <source>Https Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Https ポート</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="140"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="144"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>確定</translation>
     </message>
 </context>
 <context>
@@ -52,67 +52,67 @@
     <message>
         <location filename="../proxy.cpp" line="72"/>
         <source>Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>プロキシ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="213"/>
         <source>Start using</source>
-        <translation type="unfinished"></translation>
+        <translation>有効化</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="227"/>
         <source>Proxy mode</source>
-        <translation type="unfinished"></translation>
+        <translation>プロキシタイプ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="232"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>自動</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="236"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>手動</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="391"/>
         <source>Application Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>プロキシを適用</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="510"/>
         <source>System Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>システムプロキシ</translation>
         <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="512"/>
         <source>Auto url</source>
-        <translation type="unfinished"></translation>
+        <translation>設定URL</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="514"/>
         <source>Http Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP プロキシ</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="516"/>
         <source>Https Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPS プロキシ</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="518"/>
         <source>Ftp Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>FTP プロキシ</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="520"/>
         <source>Socks Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>SOCKS プロキシ</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -122,36 +122,36 @@
         <location filename="../proxy.cpp" line="524"/>
         <location filename="../proxy.cpp" line="1334"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>ポート</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="525"/>
         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
-        <translation type="unfinished"></translation>
+        <translation>除外するホストリスト（英語のセミコロン「;」を使用してください）</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="529"/>
         <location filename="../proxy.cpp" line="531"/>
         <source>App Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>プロキシを適用</translation>
         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="535"/>
         <source>APT Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>APT プロキシ</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="536"/>
         <location filename="../proxy.cpp" line="1271"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>オン</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="537"/>
         <source>Http Address : </source>
-        <translation type="unfinished"></translation>
+        <translation>Http アドレス： </translation>
     </message>
     <message>
         <source>Server Address : </source>
@@ -161,81 +161,81 @@
         <location filename="../proxy.cpp" line="538"/>
         <location filename="../proxy.cpp" line="540"/>
         <source>Port : </source>
-        <translation type="unfinished"></translation>
+        <translation>ポート： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="539"/>
         <source>Https Address : </source>
-        <translation type="unfinished"></translation>
+        <translation>Https アドレス： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="541"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>編集</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="716"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
-        <translation type="unfinished"></translation>
+        <translation>APT プロキシがオフになりました。有効にするには再起動が必要です。</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="717"/>
         <location filename="../proxy.cpp" line="1048"/>
         <source>Reboot Later</source>
-        <translation type="unfinished"></translation>
+        <translation>後で再起動</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="718"/>
         <location filename="../proxy.cpp" line="1049"/>
         <source>Reboot Now</source>
-        <translation type="unfinished"></translation>
+        <translation>今すぐ再起動</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1047"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>APT プロキシの設定を有効にするにはシステムを再起動する必要があります。再起動しますか？</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1284"/>
         <source>Proxy type</source>
-        <translation type="unfinished"></translation>
+        <translation>プロキシタイプ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1301"/>
         <source>IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>IPアドレス</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1307"/>
         <location filename="../proxy.cpp" line="1337"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>必須</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1327"/>
         <source>Invalid IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>無効な IP アドレス</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1348"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1351"/>
         <location filename="../proxy.cpp" line="1365"/>
         <source>Optional</source>
-        <translation type="unfinished"></translation>
+        <translation>任意</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1361"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワード</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1384"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1385"/>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../proxy.cpp" line="1457"/>
         <source>The following applications are allowed to use this configuration:</source>
-        <translation type="unfinished"></translation>
+        <translation>以下のアプリケーションにこの設定を使用することを許可：</translation>
     </message>
 </context>
 </TS>

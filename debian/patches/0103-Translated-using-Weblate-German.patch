@@ -1,0 +1,34 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Mon, 17 Aug 2026 09:33:50 +0000
+Subject: Translated using Weblate (German)
+
+Currently translated at 84.6% (11 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/de/
+---
+ plugins/netconnect/translations/de.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/netconnect/translations/de.ts b/plugins/netconnect/translations/de.ts
+index b18049e..987dafa 100644
+--- a/plugins/netconnect/translations/de.ts
++++ b/plugins/netconnect/translations/de.ts
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Verbunden, Netzwerk eingeschränkt.</translation>
+     </message>
+ </context>
+ <context>
+@@ -88,7 +88,7 @@
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Nicht verbunden</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>

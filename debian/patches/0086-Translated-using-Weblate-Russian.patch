@@ -1,0 +1,1567 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Mon, 17 Aug 2026 03:57:30 +0000
+Subject: Translated using Weblate (Russian)
+
+Currently translated at 98.7% (235 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/ru/
+---
+ src/translations/kylin-nm_ru.ts | 460 ++++++++++++++++++++--------------------
+ 1 file changed, 230 insertions(+), 230 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ru.ts b/src/translations/kylin-nm_ru.ts
+index eda4b49..04a581a 100644
+--- a/src/translations/kylin-nm_ru.ts
++++ b/src/translations/kylin-nm_ru.ts
+@@ -37,22 +37,22 @@
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
+         <source>Network profile type</source>
+-        <translation type="unfinished"></translation>
++        <translation>Тип файла конфигурации сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
+         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Общедоступная (рекомендуется) — Компьютер не будет виден другими устройствами в сети. Обычно используется в общественных местах, таких как аэропорты или кафе.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
+         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Устройства в частной сети могут обнаружить этот компьютер. Обычно используется в домашней или рабочей сети, где вы знакомы и доверяете пользователям и устройствам в этой сети.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
+         <source>Config firewall and security settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Настройка брандмауэра и параметров безопасности</translation>
+     </message>
+ </context>
+ <context>
+@@ -60,47 +60,47 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
+         <source>Network connectivity detection</source>
+-        <translation type="unfinished"></translation>
++        <translation>Проверка подключения к сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
+         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Если доступ к Интернету ограничен, попробуйте изменить способ проверки подключения IP в сети и повторите попытку.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
+         <source>Public network (default)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Интернет (по умолчанию)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
+         <source>Local area network (intranet)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Локальная сеть (внутренняя сеть)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ОК</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
+         <source>The network is connected and can access the Internet normally.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сеть подключена, можно нормально получить доступ к Интернету.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
+         <source>The network is connected and access to the Internet is restricted.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сеть подключена, доступ в Интернет ограничен.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
+         <source>Please enter the local area network (intranet) detection address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Введите адрес проверки локальной сети (внутренней сети)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
+         <source>Format error</source>
+-        <translation type="unfinished"></translation>
++        <translation>Неправильный формат</translation>
+     </message>
+ </context>
+ <context>
+@@ -123,47 +123,47 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
+         <source>Connection Name</source>
+-        <translation type="unfinished"></translation>
++        <translation>Имя сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
+         <source>IPv4Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Настройка IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
+         <source>Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4-адрес</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
+         <source>Netmask</source>
+-        <translation type="unfinished"></translation>
++        <translation>Маска подсети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
+         <source>Default Gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>Шлюз по умолчанию</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
+         <source>Connection name is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Имя сети пустое или недействительно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
+         <source>IPv4 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Адрес Ipv4 пуст или недопустим</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Маска подсети IPv4 пустая или недействительная</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Шлюз IPv4 пуст или недействителен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
+@@ -173,7 +173,7 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
+         <source>Address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Конфликт адресов</translation>
+     </message>
+     <message>
+         <source>Prefs DNS</source>
+@@ -186,28 +186,28 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
+         <source>Auto(DHCP)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Автоматически (DHCP)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>Вручную</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
+         <source>Invalid address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Недопустимый IP-адрес</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
+         <source>Invalid subnet mask</source>
+-        <translation type="unfinished"></translation>
++        <translation>Неверная маска подсети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>Обязательное поле</translation>
+     </message>
+ </context>
+ <context>
+@@ -215,82 +215,82 @@
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
+         <source>Auto Connection</source>
+-        <translation type="unfinished"></translation>
++        <translation>Автоподключение</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="340"/>
+         <source>SSID:</source>
+-        <translation type="unfinished"></translation>
++        <translation>SSID:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="151"/>
+         <source>Copied successfully!</source>
+-        <translation type="unfinished"></translation>
++        <translation>Успешно скопировано!</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="212"/>
+         <source>Copy all</source>
+-        <translation type="unfinished"></translation>
++        <translation>Копировать все</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="232"/>
+         <source>Please input SSID:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Введите SSID:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
+         <source>Protocol:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Протокол:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
+         <source>Security Type:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Тип безопасности:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="343"/>
+         <source>Hz:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Частотная полоса сети:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="344"/>
+         <source>Chan:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевой канал:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
+         <source>BandWidth:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Пропускная способность:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
+         <source>IPv6:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Локальный адрес IPv6:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
+         <source>IPv4:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Адрес IPv4:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
+         <source>IPv4 DNS:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сервер DNS IPv4:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
+         <source>Mac:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Физический адрес:</translation>
+     </message>
+ </context>
+ <context>
+@@ -528,47 +528,47 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
+         <source>DNS Server Advanced Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Расширенная настройка DNS-сервера</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
+         <source>Tactic</source>
+-        <translation type="unfinished"></translation>
++        <translation>Политика</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
+         <source>Timeout</source>
+-        <translation type="unfinished"></translation>
++        <translation>Время ожидания</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
+         <source>Retry Count</source>
+-        <translation type="unfinished"></translation>
++        <translation>Количество попыток</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
+         <source>order</source>
+-        <translation type="unfinished"></translation>
++        <translation>Последовательно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
+         <source>rotate</source>
+-        <translation type="unfinished"></translation>
++        <translation>Случайно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
+         <source>concurrency</source>
+-        <translation type="unfinished"></translation>
++        <translation>Параллельно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
+         <source> s</source>
+-        <translation type="unfinished"></translation>
++        <translation> секунд</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
+         <source> times</source>
+-        <translation type="unfinished"></translation>
++        <translation> раз</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -577,12 +577,12 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отмена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ОК</translation>
+     </message>
+ </context>
+ <context>
+@@ -598,27 +598,27 @@
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
+         <source>Wi-Fi network requires authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сеть Wi-Fi требует аутентификации</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
+         <source>Access to Wi-Fi network &quot;</source>
+-        <translation type="unfinished"></translation>
++        <translation>Доступ к сети Wi-Fi</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
+         <source>&quot; requires a password or encryption key.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Требуется пароль или ключ шифрования.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отмена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключение</translation>
+     </message>
+ </context>
+ <context>
+@@ -642,22 +642,22 @@
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
+         <source>Allow other devices on this network to discover this computer?</source>
+-        <translation type="unfinished"></translation>
++        <translation>Разрешить другим устройствам в этой сети обнаруживать этот компьютер?</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
+         <source>It is not recommended to enable this feature on public networks</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не рекомендуется включать эту функцию в общедоступных сетях</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
+         <source>Not allowed (recommended)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не разрешено (рекомендуется)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="100"/>
+         <source>Allowed</source>
+-        <translation type="unfinished"></translation>
++        <translation>Разрешить</translation>
+     </message>
+ </context>
+ <context>
+@@ -665,22 +665,22 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
+         <source>IPv4Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Настройка IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
+         <source>Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Адрес</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
+         <source>Netmask</source>
+-        <translation type="unfinished"></translation>
++        <translation>Маска подсети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
+         <source>Default Gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>Шлюз по умолчанию</translation>
+     </message>
+     <message>
+         <source>Prefs DNS</source>
+@@ -693,48 +693,48 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
+         <source>Auto(DHCP)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Автоматически</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>Вручную</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
+         <source>IPv4 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4-адрес пустой или недопустимый</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Маска подсети IPv4 пуста или недействительна</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Шлюз IPv4 пуст или недействителен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
+         <source>Invalid address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Недопустимый IP-адрес</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
+         <source>Invalid subnet mask</source>
+-        <translation type="unfinished"></translation>
++        <translation>Недействительная маска подсети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>Обязательно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
+         <source>Address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Конфликт адресов</translation>
+     </message>
+ </context>
+ <context>
+@@ -742,22 +742,22 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
+         <source>IPv6Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Настройка IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
+         <source>Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Адрес</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
+         <source>Subnet prefix Length</source>
+-        <translation type="unfinished"></translation>
++        <translation>Длина префикса подсети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
+         <source>Default Gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>Шлюз по умолчанию</translation>
+     </message>
+     <message>
+         <source>Prefs DNS</source>
+@@ -770,43 +770,43 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
+         <source>Auto(DHCP)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Автоматически</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>Вручную</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>Обязательно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
+         <source>Invalid address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Неверный IP-адрес</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
+         <source>Invalid gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>Недопустимый адрес шлюза</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
+         <source>IPv6 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Адрес IPv6 пуст или недействителен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
+         <source>IPv6 prefix length is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Длина префикса подсети IPv6 пуста или недействительна</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
+         <source>Address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Конфликт адресов</translation>
+     </message>
+ </context>
+ <context>
+@@ -814,12 +814,12 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="219"/>
+         <source>Please enter the network information</source>
+-        <translation type="unfinished"></translation>
++        <translation>Введите информацию о сети, к которой хотите присоединиться</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="224"/>
+         <source>Network name(SSID)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Имя сети (SSID)</translation>
+     </message>
+     <message>
+         <source>Remember the Network</source>
+@@ -828,7 +828,7 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключение к Wi-Fi</translation>
+     </message>
+     <message>
+         <source>Please enter the network information to connect</source>
+@@ -837,37 +837,37 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+         <source>Please check network config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Проверьте сетевые настройки</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключение</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
+         <source>Show Network List</source>
+-        <translation type="unfinished"></translation>
++        <translation>Показать список сетей</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отмена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
+         <source>Join</source>
+-        <translation type="unfinished"></translation>
++        <translation>Присоединиться</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>Обязательно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
+         <source>Find and Join WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Поиск и подключение к беспроводной локальной сети</translation>
+     </message>
+ </context>
+ <context>
+@@ -875,12 +875,12 @@
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="78"/>
+         <source>Not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не подключено</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
+         <source>Wired Device not carried</source>
+-        <translation type="unfinished"></translation>
++        <translation>Кабель не подключен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
+@@ -888,7 +888,7 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отключить</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
+@@ -896,19 +896,19 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключение</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="193"/>
+         <source>Property</source>
+-        <translation type="unfinished"></translation>
++        <translation>Свойства</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
+         <source>Delete</source>
+-        <translation type="unfinished"></translation>
++        <translation>Удалить эту сеть</translation>
+     </message>
+ </context>
+ <context>
+@@ -916,32 +916,32 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1311"/>
+         <source>No ethernet device avaliable</source>
+-        <translation type="unfinished"></translation>
++        <translation>Проводное устройство не обнаружено</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="812"/>
+         <source>LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Проводная сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
+         <source>conflict, unable to connect to the network normally!</source>
+-        <translation type="unfinished"></translation>
++        <translation>Конфликт, невозможно нормально подключиться к сети!</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
+         <source>No wired network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевая карта не обнаружена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
+         <source>Activated LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Моя сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
+         <source>Inactivated LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Другие сети</translation>
+     </message>
+     <message>
+         <source>Connected, no internet access</source>
+@@ -950,17 +950,17 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
+         <source>Connected, restricting access</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключено, сеть ограничена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
+         <source>No internet access. Please click Network Check to specific reasons.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не удается получить доступ к Интернету. Нажмите «Проверка сети» для просмотра конкретных причин.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
+         <source>Network Check</source>
+-        <translation type="unfinished"></translation>
++        <translation>Проверка сети</translation>
+     </message>
+     <message>
+         <source>LAN Disconnected Successfully</source>
+@@ -969,7 +969,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
+         <source>Wired Device not carried</source>
+-        <translation type="unfinished"></translation>
++        <translation>Кабель не подключен</translation>
+     </message>
+     <message>
+         <source>LAN Connected Successfully</source>
+@@ -979,17 +979,17 @@
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1535"/>
+         <source>Connected: </source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключено: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1522"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не подключено</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
+         <source>(Limited)</source>
+-        <translation type="unfinished"></translation>
++        <translation>(Сеть ограничена)</translation>
+     </message>
+ </context>
+ <context>
+@@ -997,12 +997,12 @@
+     <message>
+         <location filename="../frontend/list-items/listitem.cpp" line="183"/>
+         <source>Kylin NM</source>
+-        <translation type="unfinished"></translation>
++        <translation>Инструмент настройки сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/listitem.cpp" line="186"/>
+         <source>kylin network applet desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевое уведомление</translation>
+     </message>
+ </context>
+ <context>
+@@ -1011,19 +1011,19 @@
+         <location filename="../frontend/mainwindow.cpp" line="271"/>
+         <location filename="../frontend/mainwindow.cpp" line="302"/>
+         <source>kylin-nm</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевые инструменты</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="465"/>
+         <source>LAN</source>
+         <translatorcomment>有线网络</translatorcomment>
+-        <translation type="unfinished"></translation>
++        <translation>Проводная сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="467"/>
+         <source>WLAN</source>
+         <translatorcomment>无线局域网</translatorcomment>
+-        <translation type="unfinished"></translation>
++        <translation>Беспроводная локальная сеть</translation>
+     </message>
+     <message>
+         <source>Show MainWindow</source>
+@@ -1033,38 +1033,38 @@
+         <location filename="../frontend/mainwindow.cpp" line="500"/>
+         <source>Settings</source>
+         <translatorcomment>设置网络项</translatorcomment>
+-        <translation type="unfinished"></translation>
++        <translation>Настройка параметров сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="501"/>
+         <source>Network Connectivity Detection</source>
+-        <translation type="unfinished"></translation>
++        <translation>Проверка сетевой подключения</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="842"/>
+         <location filename="../frontend/mainwindow.cpp" line="1204"/>
+         <source>Network tool</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевые инструменты</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="856"/>
+         <source>Network Card</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевая карта</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+         <source>Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключено</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не подключено</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="1187"/>
+         <source>Not connected to the network</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сеть не подключена</translation>
+     </message>
+     <message>
+         <source>Connection Failed</source>
+@@ -1080,17 +1080,17 @@
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
+         <source>DNS server(Drag to sort)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Расширенная конфигурация DNS-сервера</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
+         <source>Click &quot;+&quot; to configure DNS</source>
+-        <translation type="unfinished"></translation>
++        <translation>Нажмите «+», чтобы настроить DNS</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Расширенные настройки</translation>
+     </message>
+ </context>
+ <context>
+@@ -1098,17 +1098,17 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
+         <source>Kylin NM</source>
+-        <translation type="unfinished"></translation>
++        <translation>Инструмент настройки сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
+         <source>kylin network desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевое уведомление</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
+         <source>Detail</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подробности</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
+@@ -1123,17 +1123,17 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
+         <source>Security</source>
+-        <translation type="unfinished"></translation>
++        <translation>Безопасность</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
+         <source>start check IPv4 address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Начать проверку конфликтов IPv4-адресов</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
+         <source>start check IPv6 address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Начать проверку конфликта адресов IPv6</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -1142,51 +1142,51 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
+         <source>Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Настройка</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ОК</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отмена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
+         <source>Forget this network</source>
+-        <translation type="unfinished"></translation>
++        <translation>Забыть эту сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
+         <source>Delete this network</source>
+-        <translation type="unfinished"></translation>
++        <translation>Удалить эту сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
+         <source>Add LAN Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Добавить проводную сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
+         <source>Connect Hidden WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключиться к скрытой WLAN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="683"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
+         <source>None</source>
+-        <translation type="unfinished"></translation>
++        <translation>Нет</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
+         <source>Auto</source>
+-        <translation type="unfinished"></translation>
++        <translation>Автоматически</translation>
+     </message>
+     <message>
+         <source>start check ipv4 address conflict</source>
+@@ -1207,22 +1207,22 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
+         <source>this wifi no support enterprise type</source>
+-        <translation type="unfinished"></translation>
++        <translation>Эта сеть Wi-Fi не поддерживает корпоративный тип</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
+         <source>this wifi no support None type</source>
+-        <translation type="unfinished"></translation>
++        <translation>Этот Wi-Fi не поддерживает пустой тип</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
+         <source>this wifi no support WPA2 type</source>
+-        <translation type="unfinished"></translation>
++        <translation>Эта сеть Wi-Fi не поддерживает тип WPA2</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
+         <source>this wifi no support WPA3 type</source>
+-        <translation type="unfinished"></translation>
++        <translation>Этот Wi-Fi не поддерживает тип WPA3</translation>
+     </message>
+     <message>
+         <source>SSID:</source>
+@@ -1333,85 +1333,85 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="110"/>
+         <source>Remember the Network</source>
+-        <translation type="unfinished"></translation>
++        <translation>Запомнить эту сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
+         <source>Security</source>
+-        <translation type="unfinished"></translation>
++        <translation>Безопасность</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
+         <source>Password</source>
+-        <translation type="unfinished"></translation>
++        <translation>Ключ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
+         <source>EAP type</source>
+-        <translation type="unfinished"></translation>
++        <translation>Метод EAP</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
+         <source>Identity</source>
+-        <translation type="unfinished"></translation>
++        <translation>Анонимная личность</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
+         <source>Domain</source>
+-        <translation type="unfinished"></translation>
++        <translation>Домен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
+         <source>CA certficate</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сертификат ЦС</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
+         <source>no need for CA certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сертификат ЦС не требуется</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
+         <source>User certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>Пользовательский сертификат</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
+         <source>User private key</source>
+-        <translation type="unfinished"></translation>
++        <translation>Пользовательский приватный ключ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="231"/>
+         <source>User key password</source>
+-        <translation type="unfinished"></translation>
++        <translation>Пароль закрытого ключа пользователя</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="232"/>
+         <source>Password options</source>
+-        <translation type="unfinished"></translation>
++        <translation>Параметры пароля</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="233"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
+         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>Обязательно</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
+         <source>Ineer authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>Внутренняя аутентификация</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
+         <source>Username</source>
+-        <translation type="unfinished"></translation>
++        <translation>Имя пользователя</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
+         <source>Ask pwd each query</source>
+-        <translation type="unfinished"></translation>
++        <translation>Запрашивать пароль каждый раз</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
+@@ -1428,22 +1428,22 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
+         <source>None</source>
+-        <translation type="unfinished"></translation>
++        <translation>Нет</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
+         <source>WPA&amp;WPA2 Personal</source>
+-        <translation type="unfinished"></translation>
++        <translation>WPA&amp;WPA2 Personal</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="246"/>
+         <source>WPA&amp;WPA2 Enterprise</source>
+-        <translation type="unfinished"></translation>
++        <translation>WPA&amp;WPA2 Enterprise</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="247"/>
+         <source>WPA3 Personal</source>
+-        <translation type="unfinished"></translation>
++        <translation>WPA3 Personal</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="258"/>
+@@ -1451,85 +1451,85 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="284"/>
+         <source>Choose from file...</source>
+-        <translation type="unfinished"></translation>
++        <translation>Выбрать из файла...</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
+         <source>Store passwords only for this user</source>
+-        <translation type="unfinished"></translation>
++        <translation>Хранить пароль только для этого пользователя</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
+         <source>Store password only for this user</source>
+-        <translation type="unfinished"></translation>
++        <translation>Хранить пароль только для этого пользователя</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
+         <source>Store passwords for all users</source>
+-        <translation type="unfinished"></translation>
++        <translation>Хранить пароль для всех пользователей</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
+         <source>Store password for all users</source>
+-        <translation type="unfinished"></translation>
++        <translation>Хранить пароли для всех пользователей</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
+         <source>Ask this password every time</source>
+-        <translation type="unfinished"></translation>
++        <translation>Всегда запрашивать этот пароль</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
+         <source>Ask password every time</source>
+-        <translation type="unfinished"></translation>
++        <translation>Всегда запрашивать этот пароль</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
+         <source>Wifi password length less than 8</source>
+-        <translation type="unfinished"></translation>
++        <translation>Длина wifi-ключа менее восьми символов</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
+         <source>TLS identity is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>Анонимный идентификатор TLS пуст</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
+         <source>CA cert filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Путь к файлу сертификата ЦС недопустим</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
+         <source>Client cert filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Путь к файлу сертификата пользователя недействителен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
+         <source>Client private key filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>Путь к файлу закрытого ключа пользователя недействителен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
+         <source>Client private key password is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>Пароль закрытого ключа пользователя пуст</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
+         <source>User name or user password is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>Имя пользователя или ключ пусты</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
+         <source>No PAC file is selected </source>
+-        <translation type="unfinished"></translation>
++        <translation>Файл PAC не выбран </translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
+         <source>Choose a CA certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>Выберите сертификат ЦС</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+@@ -1543,44 +1543,44 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
+         <source>PAC provisioning</source>
+-        <translation type="unfinished"></translation>
++        <translation>Конфигурация PAC</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
+         <source>Allow automatic PAC provisioning</source>
+-        <translation type="unfinished"></translation>
++        <translation>Разрешить автоматическую настройку PAC</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
+         <source>PAC file</source>
+-        <translation type="unfinished"></translation>
++        <translation>Файл PAC</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
+         <source>Anonymous</source>
+-        <translation type="unfinished"></translation>
++        <translation>Аноним</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
+         <source>Authenticated</source>
+-        <translation type="unfinished"></translation>
++        <translation>Аутентифицировано</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
+         <source>Both</source>
+-        <translation type="unfinished"></translation>
++        <translation>Использовать оба</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
+         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Файлы CA ( *.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
+         <source>Choose a PAC file</source>
+-        <translation type="unfinished"></translation>
++        <translation>Выберите файл PAC</translation>
+     </message>
+     <message>
+         <source>PAC Files (*.pac)</source>
+@@ -1597,32 +1597,32 @@
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
+         <source>Current Device</source>
+-        <translation type="unfinished"></translation>
++        <translation>Текущая сетевая карта</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
+         <source>Devices Closed!</source>
+-        <translation type="unfinished"></translation>
++        <translation>Устройство отключено!</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Настройки сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
+         <source>Kylin NM</source>
+-        <translation type="unfinished"></translation>
++        <translation>Инструмент настройки сети</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
+         <source>kylin network applet desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевое уведомление</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключено</translation>
+     </message>
+ </context>
+ <context>
+@@ -1637,12 +1637,12 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
+         <source>Unable to save modifications</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не удалось сохранить изменения</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ОК</translation>
+     </message>
+ </context>
+ <context>
+@@ -1655,37 +1655,37 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+         <source>WLAN Authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>Аутентификация WLAN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
+         <source>Input WLAN Information Please</source>
+-        <translation type="unfinished"></translation>
++        <translation>Введите информацию о WLAN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
+         <source>WLAN ID：</source>
+-        <translation type="unfinished"></translation>
++        <translation>ID WLAN:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
+         <source>WLAN Name:</source>
+-        <translation type="unfinished"></translation>
++        <translation>Имя WLAN:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
+         <source>Password：</source>
+-        <translation type="unfinished"></translation>
++        <translation>Пароль:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
+         <source>Cancl</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отмена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
+         <source>Ok</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подтвердить</translation>
+     </message>
+ </context>
+ <context>
+@@ -1693,7 +1693,7 @@
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="70"/>
+         <source>Not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не подключено</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
+@@ -1702,7 +1702,7 @@
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отключить</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
+@@ -1711,24 +1711,24 @@
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключение</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
+         <source>Forget</source>
+-        <translation type="unfinished"></translation>
++        <translation>Забыть эту сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
+         <source>Property</source>
+-        <translation type="unfinished"></translation>
++        <translation>Свойства</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="328"/>
+         <source>Auto Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Автоматически присоединяться к этой сети</translation>
+     </message>
+ </context>
+ <context>
+@@ -1740,7 +1740,7 @@
+     <message>
+         <location filename="../frontend/list-items/wlanmoreitem.cpp" line="28"/>
+         <source>Add Others...</source>
+-        <translation type="unfinished"></translation>
++        <translation>Присоединиться к другой сети...</translation>
+     </message>
+ </context>
+ <context>
+@@ -1748,23 +1748,23 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
+         <source>WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Беспроводная локальная сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="596"/>
+         <source>No wireless network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Беспроводная сетевая карта не обнаружена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="149"/>
+         <source>Activated WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Моя сеть</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
+         <source>Other WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Другие сети</translation>
+     </message>
+     <message>
+         <source>More...</source>
+@@ -1773,37 +1773,37 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1184"/>
+         <source>WLAN Connected Successfully</source>
+-        <translation type="unfinished"></translation>
++        <translation>Беспроводная сеть подключена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
+         <source>WLAN Disconnected Successfully</source>
+-        <translation type="unfinished"></translation>
++        <translation>Беспроводная сеть отключена</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
+         <source>The routing end rejects the access of the device</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сеть отклонила подключение, ошибка подключения</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
+         <source>The network access at the routing end is full</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевой доступ переполнен</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
+         <source>usd set offline mode failed: </source>
+-        <translation type="unfinished"></translation>
++        <translation>Не удалось установить автономный режим: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>
+         <source>Connected: </source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключено: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1988"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не подключено</translation>
+     </message>
+     <message>
+         <source>(Limited)</source>
+@@ -1870,17 +1870,17 @@
+     <message>
+         <location filename="../main.cpp" line="124"/>
+         <source>kylinnm</source>
+-        <translation type="unfinished"></translation>
++        <translation>Сетевые инструменты</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="128"/>
+         <source>show kylin-nm wifi page</source>
+-        <translation type="unfinished"></translation>
++        <translation>Показать страницу беспроводной сети</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="129"/>
+         <source>show kylin-nm lan page</source>
+-        <translation type="unfinished"></translation>
++        <translation>Показать проводную страницу</translation>
+     </message>
+ </context>
+ </TS>

@@ -19,22 +19,22 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="64"/>
         <source>Http Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Http-Proxy</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="84"/>
         <source>Http Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Http-Port</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="104"/>
         <source>Https Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Https-Proxy</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="123"/>
         <source>Https Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Https-Port</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="144"/>
@@ -151,7 +151,7 @@
     <message>
         <location filename="../proxy.cpp" line="538"/>
         <source>Http Address : </source>
-        <translation type="unfinished"></translation>
+        <translation>Http-Adresse: </translation>
     </message>
     <message>
         <source>Server Address : </source>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../proxy.cpp" line="540"/>
         <source>Https Address : </source>
-        <translation type="unfinished"></translation>
+        <translation>Https-Adresse: </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="542"/>

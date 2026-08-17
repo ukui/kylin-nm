@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключиться к другой сети</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить проводную сеть</translation>
     </message>
     <message>
         <source>Add WiredNetwork</source>
@@ -23,7 +23,7 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Беспроводная локальная сеть</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
@@ -31,19 +31,19 @@
         <location filename="../wlanconnect.cpp" line="283"/>
         <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Беспроводная локальная сеть</translation>
         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Расширенные настройки</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -57,36 +57,36 @@
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки уведомлений на рабочем столе</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="278"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключиться к другой сети</translation>
         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="301"/>
         <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Беспроводная карта не обнаружена</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="433"/>
         <location filename="../wlanconnect.cpp" line="1137"/>
         <location filename="../wlanconnect.cpp" line="1206"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключено</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>Сетевая карта</translation>
     </message>
 </context>
 </TS>

@@ -1,0 +1,341 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Tue, 18 Aug 2026 07:36:28 +0000
+Subject: Translated using Weblate (Spanish)
+
+Currently translated at 99.5% (237 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/es/
+---
+ src/translations/kylin-nm_es.ts | 92 ++++++++++++++++++++---------------------
+ 1 file changed, 46 insertions(+), 46 deletions(-)
+
+diff --git a/src/translations/kylin-nm_es.ts b/src/translations/kylin-nm_es.ts
+index 2dd5091..ec843a2 100644
+--- a/src/translations/kylin-nm_es.ts
++++ b/src/translations/kylin-nm_es.ts
+@@ -60,47 +60,47 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
+         <source>Network connectivity detection</source>
+-        <translation type="unfinished"></translation>
++        <translation>Detección de conectividad de red</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
+         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Si el acceso a Internet está limitado, cambie el método de detección de conectividad IP de la red e inténtelo de nuevo.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
+         <source>Public network (default)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Internet (por defecto)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
+         <source>Local area network (intranet)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Red de área local (intranet)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
+         <source>Confirm</source>
+-        <translation type="unfinished">Confirmar</translation>
++        <translation>Aceptar</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
+         <source>The network is connected and can access the Internet normally.</source>
+-        <translation type="unfinished"></translation>
++        <translation>La red está conectada y se puede acceder normalmente a Internet.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
+         <source>The network is connected and access to the Internet is restricted.</source>
+-        <translation type="unfinished"></translation>
++        <translation>La red está conectada, pero el acceso a Internet está limitado.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
+         <source>Please enter the local area network (intranet) detection address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Por favor, introduzca la dirección de detección de la red de área local (intranet)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
+         <source>Format error</source>
+-        <translation type="unfinished"></translation>
++        <translation>Formato incorrecto</translation>
+     </message>
+ </context>
+ <context>
+@@ -148,22 +148,22 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
+         <source>Connection name is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>El nombre de red está vacío o no es válido</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
+         <source>IPv4 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La dirección IPv4 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La máscara de subred IPv4 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La puerta de enlace IPv4 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
+@@ -703,17 +703,17 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
+         <source>IPv4 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La dirección IPv4 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La máscara de subred IPv4 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La puerta de enlace IPv4 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
+@@ -796,12 +796,12 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
+         <source>IPv6 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La dirección IPv6 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
+         <source>IPv6 prefix length is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La longitud del prefijo de subred IPv6 está vacía o no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
+@@ -828,17 +828,17 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation type="unfinished"></translation>
++        <translation>Conectar a WIFI</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+         <source>Please check network config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Por favor, compruebe la configuración de red</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Conectar</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
+@@ -927,7 +927,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
+         <source>No wired network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>No se detectó ninguna tarjeta de red cableada</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
+@@ -942,17 +942,17 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
+         <source>Connected, restricting access</source>
+-        <translation type="unfinished"></translation>
++        <translation>Conectado, red limitada</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
+         <source>No internet access. Please click Network Check to specific reasons.</source>
+-        <translation type="unfinished"></translation>
++        <translation>No se puede acceder a Internet. Haga clic en Detección de red para ver las razones específicas.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
+         <source>Network Check</source>
+-        <translation type="unfinished"></translation>
++        <translation>Detección de red</translation>
+     </message>
+     <message>
+         <source>LAN Disconnected Successfully</source>
+@@ -1030,7 +1030,7 @@
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="501"/>
+         <source>Network Connectivity Detection</source>
+-        <translation type="unfinished"></translation>
++        <translation>Detección de conectividad de red</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="842"/>
+@@ -1046,12 +1046,12 @@
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished">No conectado</translation>
++        <translation>No conectado</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+         <source>Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Conectado</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="1187"/>
+@@ -1112,12 +1112,12 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
+         <source>start check IPv4 address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Iniciar detección de conflictos de direcciones IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
+         <source>start check IPv6 address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>Iniciar detección de conflictos de direcciones IPv6</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -1470,43 +1470,43 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
+         <source>Wifi password length less than 8</source>
+-        <translation type="unfinished"></translation>
++        <translation>La longitud de la clave wifi es inferior a ocho caracteres</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
+         <source>TLS identity is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>La identidad anónima TLS está vacía</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
+         <source>CA cert filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La ruta del archivo de certificado CA no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
+         <source>Client cert filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La ruta del archivo de certificado del usuario no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
+         <source>Client private key filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>La ruta del archivo de clave privada del usuario no es válida</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
+         <source>Client private key password is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>La contraseña de la clave del usuario está vacía</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
+         <source>User name or user password is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>El nombre de usuario o la clave están vacíos</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
+         <source>No PAC file is selected </source>
+-        <translation type="unfinished"></translation>
++        <translation>No se ha seleccionado ningún archivo PAC </translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
+@@ -1518,7 +1518,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Archivos PAC (*.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1559,7 +1559,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
+         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+-        <translation type="unfinished"></translation>
++        <translation>Archivos CA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
+@@ -1606,7 +1606,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Conectado</translation>
+     </message>
+ </context>
+ <context>
+@@ -1621,12 +1621,12 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
+         <source>Unable to save modifications</source>
+-        <translation type="unfinished"></translation>
++        <translation>No se pueden guardar los cambios</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
+         <source>Confirm</source>
+-        <translation type="unfinished">Confirmar</translation>
++        <translation>Aceptar</translation>
+     </message>
+ </context>
+ <context>
+@@ -1767,17 +1767,17 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
+         <source>The routing end rejects the access of the device</source>
+-        <translation type="unfinished"></translation>
++        <translation>La red rechaza la conexión, fallo en la conexión</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
+         <source>The network access at the routing end is full</source>
+-        <translation type="unfinished"></translation>
++        <translation>El acceso a la red está lleno</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
+         <source>usd set offline mode failed: </source>
+-        <translation type="unfinished"></translation>
++        <translation>Error al establecer el modo sin conexión: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>

@@ -1,0 +1,34 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Tue, 18 Aug 2026 08:10:48 +0000
+Subject: Translated using Weblate (Spanish)
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/es/
+---
+ plugins/netconnect/translations/es.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/netconnect/translations/es.ts b/plugins/netconnect/translations/es.ts
+index 0fb8eb0..638e1b7 100644
+--- a/plugins/netconnect/translations/es.ts
++++ b/plugins/netconnect/translations/es.ts
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Conectado, red limitada.</translation>
+     </message>
+ </context>
+ <context>
+@@ -88,7 +88,7 @@
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>No conectado</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>

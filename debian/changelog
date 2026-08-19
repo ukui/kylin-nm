@@ -1,3 +1,21 @@
+kylin-nm (4.24.0.0-ok0.7) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: 同步v11-2603的代码，解决编译问题
+  * 其他改动影响域: 无
+
+ -- yangling <yangling@kylinos.cn>  Wed, 19 Aug 2026 17:45:01 +0800
+
+kylin-nm (4.24.0.0-ok0.6) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: 同步v11-2603的代码
+  * 其他改动影响域: 无
+
+ -- yangling <yangling@kylinos.cn>  Wed, 19 Aug 2026 15:39:27 +0800
+
 kylin-nm (4.24.0.0-ok0.5) huanghe; urgency=medium
 
   * BUG: 无

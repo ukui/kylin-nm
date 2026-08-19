@@ -125,6 +125,10 @@ void ProxyServiceManager::getProxyInfoList()
                 m_proxyExecList.append(map.value(APPINFOMAP_KEY_COMMENT));
             } else {
                 QStringList execlist = map.value(APPINFOMAP_KEY_EXEC).split(" ");
+                if (execlist.isEmpty()) {
+                    qWarning() << Q_FUNC_INFO << __LINE__ << "execlist is empty";
+                    continue;
+                }
                 m_proxyExecList.append(execlist.at(0));
             }
             m_proxyNameList.append(map.value(APPINFOMAP_KEY_ICON));
@@ -198,6 +202,10 @@ void ProcInfoDeal::onProcAdd(QMap<QString, QString> map)
             addProcDbus(map.value(PROCINFOKEY_PID).toInt());
         } else {
             QStringList list = map.value(PROCINFOKEY_DESKTOP).split("/");
+            if (list.isEmpty()) {
+                qWarning() << Q_FUNC_INFO << __LINE__ << "list is empty";
+                return;
+            }
             QString desktop = list.at(list.size() - 1);
             for (QString name : m_proxyDesktopList) {
                 if (name.contains(desktop)) {
@@ -216,6 +224,10 @@ void ProcInfoDeal::onProcAdd(QMap<QString, QString> map)
             return;
         }
         QStringList execlist = cmdline.split(" ");
+        if (execlist.isEmpty()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "execlist is empty";
+            return;
+        }
         if (m_proxyExecList.contains(execlist.at(0), Qt::CaseInsensitive)) {
             addProcDbus(map.value(PROCINFOKEY_PID).toInt());
         }
@@ -1219,6 +1231,10 @@ void ProxyServiceManager::recursiveSearchFile(const QString &_filePath)
 
     //递归算法的核心部分
     do {
+        if (i >= list.size()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "index out of range, i:" << i << "list.size():" << list.size();
+            break;
+        }
         QFileInfo fileInfo = list.at(i);
         //如果是文件夹，递归
         bool isDir = fileInfo.isDir();
@@ -1330,6 +1346,10 @@ void ProxyServiceManager::getAndroidApp()
     GKeyFile *keyfile = g_key_file_new();
 
     do {
+        if (i >= list.size()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "index out of range, i:" << i << "list.size():" << list.size();
+            break;
+        }
         QFileInfo fileInfo = list.at(i);
 
         if (!fileInfo.isFile()) {

@@ -315,7 +315,7 @@ TEST_F(TestReadExtraDns, ReadExtraDnsOptionsNonExistent)
     g_key_file_free(key_file);
 }
 
-// Test read_extra_dns_domian with valid key file
+// Test read_extra_dns_domain with valid key file
 TEST_F(TestReadExtraDns, ReadExtraDnsDomainValid)
 {
     if (testConfigFile.isEmpty()) {
@@ -328,7 +328,7 @@ TEST_F(TestReadExtraDns, ReadExtraDnsDomainValid)
     ASSERT_TRUE(g_key_file_load_from_file(key_file, testConfigFile.toUtf8().data(), 
                                           G_KEY_FILE_KEEP_COMMENTS, &error));
     
-    char *result = read_extra_dns_domian(key_file, const_cast<char*>("domain"));
+    char *result = read_extra_dns_domain(key_file, const_cast<char*>("domain"));
     if (result != NULL) {
         free(result);
     }

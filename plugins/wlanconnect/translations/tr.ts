@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<TS version="2.1">
 <context>
     <name>AddNetBtn</name>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation>Diğer Ağa Katıl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>Kablolu Ağ Ekle</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -19,7 +19,7 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation>Kablosuz Yerel Ağ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
@@ -27,54 +27,54 @@
         <location filename="../wlanconnect.cpp" line="283"/>
         <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
-        <translation>Kablosuz Yerel Ağ</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <source>open</source>
-        <translation>Aç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
-        <translation>Gelişmiş Ayarlar</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
-        <translation>Masaüstü Bildirimlerini Ayarla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="278"/>
         <source>Add Others</source>
-        <translation>Diğer Ağa Katıl</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="301"/>
         <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
-        <translation>Kablosuz ağ kartı algılanmadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="433"/>
         <location filename="../wlanconnect.cpp" line="1137"/>
         <location filename="../wlanconnect.cpp" line="1206"/>
         <source>connected</source>
-        <translation>Bağlandı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
-        <translation>Ağ Kartı</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

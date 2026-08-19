@@ -256,7 +256,7 @@ ListView {
                     text: "0KB/s"
                     Connections {
                         target: KInterface
-                        onUpdateUpLoadWiredStr : {
+                        function onUpdateUpLoadWiredStr() {
                             upLoadWiredText.text = KInterface.upwareRate
                         }
                     }
@@ -279,7 +279,7 @@ ListView {
                     text: "0KB/s"
                     Connections {
                         target: KInterface
-                        onUpdateDownLoadWiredStr : {
+                        function onUpdateDownLoadWiredStr() {
                             downLoadWiredText.text = KInterface.downwareRate
                         }
                     }

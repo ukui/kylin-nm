@@ -184,6 +184,7 @@ private:
     void initDbusConnnect();
     void registerTrayIcon();
     void initTrayIcon();
+    void setupTrayIconBindings();
     void resetTrayIconTool();
     void initWindowTheme();
     void resetWindowTheme();
@@ -235,6 +236,7 @@ private:
     //托盘图标，托盘图标右键菜单
     QSystemTrayIcon * m_trayIcon = nullptr;
     QMenu * m_trayIconMenu = nullptr;
+    bool m_trayIconBindingsDone = false;
     QAction * m_showMainwindowAction = nullptr;
     QAction * m_showSettingsAction = nullptr;
     QAction * m_showConnectivityPageAction = nullptr;

@@ -418,7 +418,15 @@ void Vpn::onVpnRemove(QString path)
 //名称变化
 void Vpn::onVpnUpdate(QStringList info)
 {
+    if (info.size() < 2) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "info size is less than 2, size:" << info.size();
+        return;
+    }
     if (m_listFrame->m_itemMap.contains(info.at(1))) {
+        if (m_listFrame->m_itemMap[info.at(1)] == nullptr) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "itemMap[info.at(1)] is nullptr";
+            return;
+        }
         qDebug() << "[Vpn]" << m_listFrame->m_itemMap[info.at(1)]->m_titileLabel->text() << "change to" << info.at(0);
         if (m_listFrame->m_itemMap[info.at(1)]->m_titileLabel->text() != info.at(0)) {
             m_listFrame->m_itemMap[info.at(1)]->m_titileLabel->setText(info.at(0));

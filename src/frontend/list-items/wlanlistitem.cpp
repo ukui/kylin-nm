@@ -545,7 +545,7 @@ void WlanListItem::onNetButtonClicked()
             value.insert("Signal",m_wirelessNetItem.m_signalStrength);
             value.insert("Security",m_wirelessNetItem.m_secuType);
             value.insert("Uuid",m_wirelessNetItem.m_connectUuid);
-            //value.insert("isApConn",(m_connectResource->isApConnection(wirelessNetItem.m_connectUuid) ? IsApConnection : NotApConnection));
+            //value.insert("isApConn",(m_connectResource->isApConnection(m_wirelessNetItem.m_connectUuid) ? "1" : "0"));
             //value.insert("category");
             value.insert("frequency",m_wirelessNetItem.m_frequency);
             value.insert("State",4);//请求重新输入时应该停止连接状态

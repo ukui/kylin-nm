@@ -30,7 +30,7 @@
 
 #include "../vpnsecrets/kylinvpnrequest.h"
 #include "../vpnsecrets/kylinvpnagent.h"
-#include "../../../sys-dbus-netctrl/kylin/common/kylin_async_task.h"
+
 
 
 #define LOG_FLAG "[KylinSecretAgent]"
@@ -1994,7 +1994,7 @@ NMVariantMapMap nmConnectionToQtMap(GVariant *connectionVariant)
         if (g_strcmp0(settingName, VPN_NAME) == 0) {
             if (settingMap.contains(VPN_DATA)) {
                 QVariant dataVar = settingMap.value(VPN_DATA);
-                if (dataVar.type() != QMetaType::QString) {
+                if (dataVar.type() == QVariant::Map) {
                     QVariantMap dataMap = dataVar.toMap();
                     QMap<QString, QString> nmStringMap;
                     for (auto it = dataMap.begin(); it != dataMap.end(); ++it) {
@@ -2005,7 +2005,7 @@ NMVariantMapMap nmConnectionToQtMap(GVariant *connectionVariant)
             }
             if (settingMap.contains(VPN_SECRET)) {
                 QVariant secretsVar = settingMap.value(VPN_SECRET);
-                if (secretsVar.type() != QMetaType::QString) {
+                if (secretsVar.type() == QVariant::Map) {
                     QVariantMap secretsMap = secretsVar.toMap();
                     QMap<QString, QString> nmStringMap;
                     for (auto it = secretsMap.begin(); it != secretsMap.end(); ++it) {

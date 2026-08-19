@@ -249,6 +249,7 @@ private:
     bool m_showWifi6Plus = true;
     QDBusInterface *m_usdInterface = nullptr;
 
+    void judgeSendRefreshIcon();
 private:
     QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;
     QMap<QString, QListWidgetItem*> m_activateConnectionItemMap;
@@ -277,6 +278,8 @@ private:
 
     QMap<QString, QMap<QString, NetDetail*>> m_wlanPagePtrMap;
     QMap<QString, JoinHiddenWiFiPage*> m_joinHiddenWiFiPagePtrMap;
+
+    int m_lastSingleRange=WIFI_NONE_SIGNAL;
 };
 
 #endif // WLANPAGE_H

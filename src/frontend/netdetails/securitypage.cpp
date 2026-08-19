@@ -419,11 +419,11 @@ void SecurityPage::setTtlsInfo(KyEapMethodTtlsInfo &info)
     onEapTypeComboxIndexChanged();
 
     if (info.authType == AUTH_EAP) {
-        if (info.authEapMethod = KyAuthEapMethodMschapv2) {
+        if (info.authEapMethod == KyAuthEapMethodMschapv2) {
             eapMethodCombox->setCurrentIndex(MSCHAPV2_EAP);
-        } else if (info.authEapMethod = KyAuthEapMethodMd5) {
+        } else if (info.authEapMethod == KyAuthEapMethodMd5) {
             eapMethodCombox->setCurrentIndex(MD5_EAP);
-        } else if (info.authEapMethod = KyAuthEapMethodMd5) {
+        } else if (info.authEapMethod == KyAuthEapMethodMd5) {
             eapMethodCombox->setCurrentIndex(MD5_EAP);
         } else {
             qDebug() << "not support yet. AUTH_EAP method" << info.authEapMethod;

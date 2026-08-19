@@ -41,7 +41,7 @@
 QString getConnectTypeByDbus(QString &connectPath)
 {
     QString connectType = "";
-
+    
     if (connectPath.isEmpty()) {
         qWarning()<< LOG_FLAG << "connect path is empty, so can not get connect type";
         return connectType;
@@ -51,25 +51,38 @@ QString getConnectTypeByDbus(QString &connectPath)
                               connectPath,
                               "org.freedesktop.NetworkManager.Settings.Connection",
                               QDBusConnection::systemBus());
-
     QDBusMessage result = dbusInterface.call("GetSettings");
-    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+
+    // 修复CWE-125：第一步校验DBus返回是否为正常应答
+    if (result.type() != QDBusMessage::ReplyMessage) {
+        qWarning() << LOG_FLAG << "get connection settings failed via dbus, type:" << result.type();
+        return connectType;
+    }
+    // 修复CWE-125：第二步强制校验参数列表非空，避免at(0)越界
+    const QList<QVariant>& args = result.arguments();
+    if (args.isEmpty()) {
+        qWarning() << LOG_FLAG << "dbus reply arguments list is empty";
+        return connectType;
+    }
+
+    const QVariant &firstArg = args.at(0);
+    if (!firstArg.canConvert<QDBusArgument>()) {
+        qWarning() << LOG_FLAG << "unexpected GetSettings reply argument type:" << firstArg.typeName();
+        return connectType;
+    }
+    QDBusArgument dbusArg1st = firstArg.value<QDBusArgument>();
     QMap<QString, QMap<QString, QVariant>> map;
     dbusArg1st >> map;
-
     if (map.isEmpty()) {
         qWarning() << LOG_FLAG <<"get connection settings failed.";
         return connectType;
     }
-
     QMap<QString,QVariant> connectMap = map.value(KEY_CONNECTION);
     if (connectMap.isEmpty()) {
-        qWarning() << LOG_FLAG <<"threre is not connection settings";
+        qWarning() << LOG_FLAG <<"there is not connection settings";
         return connectType;
     }
-
     connectType = connectMap.value(KEY_CONNECT_TYPE).toString();
-
     return connectType;
 }
 

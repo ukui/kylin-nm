@@ -56,8 +56,7 @@ int main()
     DBusConnection *conn;
     DBusError err;
     int rv;
-    void * in_data;
-
+    void * in_data = NULL;
 
     syslog(LOG_INFO,"服务管理进程启动,开始拉起默认服务");
    // raise_all_enable_service(SERVICE_CONFIG_FILE);

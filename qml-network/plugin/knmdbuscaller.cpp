@@ -831,6 +831,11 @@ void KnmDBusCaller::setDefaultWirelessDevice(QString devName)
 QString KnmDBusCaller::getDefaultWiredDevice()
 {
     qWarning() << Q_FUNC_INFO << __LINE__;
+    // 测试模式下跳过D-Bus调用
+    if (g_testMode || !m_pInterface) {
+        qWarning() << "Test mode or null interface, skipping getDefaultWiredDevice";
+        return QString();
+    }
     QDBusMessage msg = m_pInterface->call("getDefaultWiredDevice");
     if (msg.type() == QDBusMessage::ReplyMessage) {
         return msg.arguments().at(0).toString();
@@ -841,6 +846,11 @@ QString KnmDBusCaller::getDefaultWiredDevice()
 QString KnmDBusCaller::getDefaultWirelessDevice()
 {
     qWarning() << Q_FUNC_INFO << __LINE__;
+    // 测试模式下跳过D-Bus调用
+    if (g_testMode || !m_pInterface) {
+        qWarning() << "Test mode or null interface, skipping getDefaultWirelessDevice";
+        return QString();
+    }
     QDBusMessage msg = m_pInterface->call("getDefaultWirelessDevice");
     if (msg.type() == QDBusMessage::ReplyMessage) {
         return msg.arguments().at(0).toString();

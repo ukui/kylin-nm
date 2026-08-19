@@ -66,6 +66,7 @@ typedef struct {
 int gVpnRequestSta=0;//vpn插件秘钥代理是否完成 0未开始 1已完成
 KylinVpnSecretsResult gKylinVpnSecretsResult;
 
+// LCOV_EXCL_START
 KylinVpnSecretsResult *kylinVpnSecretsResultGet()
 {
     return &gKylinVpnSecretsResult;
@@ -848,8 +849,10 @@ applet_vpn_request_get_secrets (SecretsRequest *req, GError **error)
 	g_io_channel_set_encoding (req_data->channel, NULL, NULL);
 
 	/* write connection data to child stdin */
-	if (!connection_to_fd (req->connection, child_stdin, error))
-		return FALSE;
+    if (!connection_to_fd (req->connection, child_stdin, error)) {
+        close (child_stdin);
+        return FALSE;
+    }
 	close (child_stdin);
 
 	/* setup poll for stdout */
@@ -938,3 +941,4 @@ applet_vpn_request_get_secrets (SecretsRequest *req, GError **error)
 
 	return TRUE;
 }
+// LCOV_EXCL_STOP

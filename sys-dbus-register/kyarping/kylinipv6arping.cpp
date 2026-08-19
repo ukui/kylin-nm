@@ -23,6 +23,7 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include "kylinarping.h"
+#include <netinet/in.h>
 
 KyIpv6Arping::KyIpv6Arping(QString ifaceName, QString ipAddress, int retryCount, int timeout, QObject *parent) : QObject(parent)
 {
@@ -185,7 +186,7 @@ int KyIpv6Arping::parseIpv6Packet(const uint8_t *buf, size_t len, const struct s
     if ((len < sizeof (struct nd_neighbor_advert))
         || (na->nd_na_type != ND_NEIGHBOR_ADVERT)
         || (na->nd_na_code != 0)
-        || memcmp (&na->nd_na_target, &tgt->sin6_addr, 16)) {
+        || (!IN6_ARE_ADDR_EQUAL(&na->nd_na_target, &tgt->sin6_addr))) {
         return -1;
     }
     len -= sizeof (struct nd_neighbor_advert);

@@ -53,6 +53,9 @@ private slots:
     void test_getCableStateByDevice();
     void test_setNetworkConnectionAutoConnectState();
     void test_setDefaultWiredDevice();
+    void test_setDefaultWirelessDevice();
+    void test_getDefaultWiredDevice();
+    void test_getDefaultWirelessDevice();
     
     // 新增测试用例
     void test_registerInputPasswdAgent();
@@ -139,6 +142,9 @@ private slots:
     void test_getCableStateByDevice_coverage();
     void test_setNetworkConnectionAutoConnectState_coverage();
     void test_setDefaultWiredDevice_coverage();
+    void test_setDefaultWirelessDevice_coverage();
+    void test_getDefaultWiredDevice_coverage();
+    void test_getDefaultWirelessDevice_coverage();
     void test_registerInputPasswdAgent_coverage();
     void test_wiredDeviceList_edgeCases();
     void test_wirelessDeviceList_edgeCases();

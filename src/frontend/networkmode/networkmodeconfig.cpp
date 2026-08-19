@@ -124,6 +124,7 @@ int NetworkModeConfig::getNetworkModeConfig(QString uuid)
 
 void NetworkModeConfig::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
 {
+    qWarning() << "setNetworkModeConfig" <<  uuid<<cardName<<ssid<<mode;
     if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
         qWarning () << "com.ksc.defender dbus is invalid";
         return;
@@ -131,12 +132,11 @@ void NetworkModeConfig::setNetworkModeConfig(QString uuid, QString cardName, QSt
     // 异步调用
     QDBusPendingCall pendingCall = m_dbusInterface->asyncCall("set_networkModeConfig", uuid, cardName, ssid, mode);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall,this);
-    QObject::connect(watcher, &QDBusPendingCallWatcher::finished,
-                    [&](QDBusPendingCallWatcher *w) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [=](QDBusPendingCallWatcher *w) {
        // 解析调用结果
-       QDBusPendingReply<QString> reply = *w;
+       QDBusPendingReply<int> reply = *w;
        if (reply.isValid()) {
-           qDebug() << "set_networkModeConfig" << ssid << uuid << cardName << mode << ",result" << reply.value();
+           qDebug() << "set_networkModeConfig" << ",result" << reply.value();
        } else {
            QDBusError error = reply.error();
            qWarning() << "异步调用失败：" << error.name() << " - " << error.message()<<error.type();
@@ -164,12 +164,11 @@ void NetworkModeConfig::breakNetworkConnect(QString uuid, QString cardName, QStr
 
     QDBusPendingCall pendingCall = m_dbusInterface->asyncCall("break_networkConnect", uuid, cardName, ssid);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall,this);
-    QObject::connect(watcher, &QDBusPendingCallWatcher::finished,
-                    [&](QDBusPendingCallWatcher *w) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [=](QDBusPendingCallWatcher *w) {
        // 解析调用结果
-       QDBusPendingReply<QString> reply = *w;
+       QDBusPendingReply<int> reply = *w;
        if (reply.isValid()) {
-           qDebug() << "break_networkConnect" << ssid << uuid << cardName << ",result" << reply.value();
+           qDebug() << "break_networkConnect"  << ",result" << reply.value();
        } else {
            QDBusError error = reply.error();
            qWarning() << "call break_networkConnect failed" << error.name() << " - " << error.message()<<error.type();

@@ -180,6 +180,7 @@ bool updatewirelessItemConnectInfo(KyWirelessNetItem& item)
 {
     KyNetworkResourceManager *networkResourceInstance = KyNetworkResourceManager::getInstance();
 
+    bool findCurrentActConn=true;
     bool findHotspot = false;
     bool findInfrastructure = false;
 
@@ -214,6 +215,10 @@ bool updatewirelessItemConnectInfo(KyWirelessNetItem& item)
                 item.m_connDbusPath = conn->path();
                 item.m_isConfigured = true;
                 return (wifi_sett->mode() == NetworkManager::WirelessSetting::NetworkMode::Infrastructure);
+            } else {
+                findCurrentActConn = false;//如果是热点那么应该是当前连接
+                qWarning()<< Q_FUNC_INFO << __LINE__ <<"DtTest kyItem is nullptr!:";//mqtest
+
             }
 
             if (wifi_sett->mode() != NetworkManager::WirelessSetting::NetworkMode::Infrastructure) {
@@ -221,7 +226,8 @@ bool updatewirelessItemConnectInfo(KyWirelessNetItem& item)
                 hotspotItem.m_connName    = conn->name();
                 hotspotItem.m_connDbusPath = conn->path();
                 hotspotItem.m_isConfigured = true;
-                findHotspot = true;
+                if (findCurrentActConn)
+                    findHotspot = true;
             } else {
                 connectItem.m_connectUuid = settings->uuid();
                 connectItem.m_connName    = conn->name();
@@ -256,6 +262,7 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
 {
     KyNetworkResourceManager *networkResourceInstance = KyNetworkResourceManager::getInstance();
 
+    bool findCurrentActConn=true;
     bool findHotspot = false;
     bool findInfrastructure = false;
 
@@ -273,6 +280,13 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
         QString devName = networkResourceInstance->findDeviceUni(item->getDevice())->interfaceName();
         QByteArray rawSsid = wifi_sett->ssid();
         QString wifiSsid = getSsidFromByteArray(rawSsid);
+        qDebug()<< Q_FUNC_INFO << __LINE__ << "Dttest"
+                                           << "devName:" << devName << " "
+                                           << "wifiSsid:" << wifiSsid << " "
+                                           << "item->m_NetSsid:" << item->m_NetSsid << " "
+                                           << "settings->interfaceName:" << settings->interfaceName();
+
+
         if (wifiSsid == item->m_NetSsid
             && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
             /*
@@ -289,6 +303,10 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
                 item->m_autoconnect = settings->autoconnect();
                 //qWarning()<< Q_FUNC_INFO << __LINE__ <<"DtTest autoconnect:"<< item->m_autoconnect;//mqtest
                 return;
+            } else {
+                findCurrentActConn = false;//如果是热点那么应该是当前连接
+                qWarning()<< Q_FUNC_INFO << __LINE__ <<"DtTest kyItem is nullptr!:";//mqtest
+
             }
 
             if (wifi_sett->mode() != NetworkManager::WirelessSetting::NetworkMode::Infrastructure) {
@@ -297,8 +315,9 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
                 hotspotItem.m_connDbusPath = conn->path();
                 hotspotItem.m_isConfigured = true;
                 hotspotItem.m_autoconnect = false;
-
-                findHotspot = true;
+                if (findCurrentActConn) {
+                    findHotspot = true;
+                }
             } else {
                 connectItem.m_connectUuid = settings->uuid();
                 connectItem.m_connName    = conn->name();

@@ -74,16 +74,9 @@ UkuiItems.DtThemeBackground {
                                 hoverEnabled: true
                                 onClicked: {
                                     lanVisibleButton.visibleState = !lanVisibleButton.visibleState;
-                                    if (lanVisibleButton.visibleState) {
-                                        lanVisibleButton.source = "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/ukui-up-symbolic.svg"
-                                    } else {
-                                        lanVisibleButton.source = "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/arrow-down.svg"
-                                    }
-                                    if (!lanswitchBtn.checked)
-                                        return
-                                    lanContentArea.visible = lanVisibleButton.visibleState
-                                    lanDeviceComboBox.visible = lanVisibleButton.visibleState && !lanDeviceComboBox.ishide && (lanDeviceComboBox.count >= 2)
-                                    //lanNoWiredItem.visible = lanVisibleButton.visibleState && (lanDeviceComboBox.count === 0)
+                                    lanVisibleButton.source = lanVisibleButton.visibleState
+                                        ? "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/ukui-up-symbolic.svg"
+                                        : "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/arrow-down.svg"
                                 }
                             }
                             Layout.preferredWidth: 16
@@ -96,24 +89,22 @@ UkuiItems.DtThemeBackground {
                         SwitchDelegate {
                             id: lanswitchBtn
                             checked: KInterface.wiredMainSwitch
-                            enabled: true//(lanDeviceComboBox.count !== 0)
+                            enabled: true
                             visible: KInterface.uiCtlData.netMainSwitch
                             onClicked: {
                                 KInterface.wiredMainSwitch = lanswitchBtn.checked
-
-                                if (lanVisibleButton.visibleState) {
-                                    lanContentArea.visible = lanswitchBtn.checked
-                                    lanDeviceComboBox.visible = lanswitchBtn.checked && !lanDeviceComboBox.ishide && (lanDeviceComboBox.count >= 2)
-                                } else {
-                                    lanContentArea.visible = false
-                                    lanDeviceComboBox.visible = false
-                                }
                             }
                             Layout.alignment: Qt.AlignRight
                             Layout.rightMargin: 24
                             spacing:0
                             rightPadding: 0
                             Layout.preferredWidth: 44
+                            Connections {
+                                target: KInterface
+                                function onUpdateWiredMainSwitch() {
+                                    lanswitchBtn.checked = KInterface.wiredMainSwitch
+                                }
+                            }
                         }
                     }
 
@@ -147,8 +138,10 @@ UkuiItems.DtThemeBackground {
                         width: parent.width
                         spacing: 0
                         model: KInterface.wiredDevList
-                        visible: lanswitchBtn.checked && lanVisibleButton.visibleState && !lanNoWiredItem.visible && (lanDeviceComboBox.count>=2)
-                        property bool ishide : false
+                        // 统一可见性逻辑：开关开启、展开状态、有多个设备时显示
+                        visible: lanswitchBtn.checked && lanVisibleButton.visibleState && (lanDeviceComboBox.count >= 2)
+                        enabled: lanDeviceComboBox.count > 0
+                        property bool ishide : (lanDeviceComboBox.count <= 1)
                         currentConnect: lanContentArea.connectMac
                         onCurrentTextChanged: {
                             console.log("Wired device changed to:", lanDeviceComboBox.currentText);
@@ -156,25 +149,8 @@ UkuiItems.DtThemeBackground {
                         }
                         Connections {
                             target: KInterface
-                            onUpdateWiredDeviceList: {
-                                if (lanDeviceComboBox.count <= 0) {
-                                    lanDeviceComboBox.ishide = true
-                                    lanContentArea.visible = false
-                                    //lanNoWiredItem.visible = true
-                                    lanDeviceComboBox.enabled = false;
-                                } else {
-                                    //lanNoWiredItem.visible = false
-                                    lanDeviceComboBox.enabled = true;
-                                }
-                                if (lanDeviceComboBox.count <= 1) {
-                                    lanDeviceComboBox.ishide = true
-                                    lanDeviceComboBox.visible = false
-                                    lanContentArea.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
-                                } else {
-                                    lanDeviceComboBox.ishide = false
-                                    lanContentArea.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
-                                    lanDeviceComboBox.visible = true && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
-                                }
+                            function onUpdateWiredDeviceList() {
+                                // 设备列表更新后，ishide属性会自动重新计算
                                 KInterface.getWiredDevConnList(lanDeviceComboBox.currentText);
                             }
                         }
@@ -188,7 +164,8 @@ UkuiItems.DtThemeBackground {
                         width: 396 - 10
                         Layout.leftMargin: 5
                         Layout.rightMargin: 5
-                        visible: lanDeviceComboBox.count && lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
+                        // 统一可见性逻辑：开关开启、展开状态、有设备时显示
+                        visible: lanswitchBtn.checked && lanVisibleButton.visibleState && (lanDeviceComboBox.count >= 1)
                     }
 
                     MenuSeparator {
@@ -258,34 +235,40 @@ UkuiItems.DtThemeBackground {
                             checked: KInterface.wirelessSwitch
                             enabled: (wlanDeviceComboBox.count >= 1)
                             visible: wlanDeviceComboBox.count >= 1
-                       MouseArea {
-                           anchors.fill: parent
-                           // 阻止事件传递到SwitchDelegate内部
-                           propagateComposedEvents: false
-                           onClicked: {
-                               if (!wlanswitchBtn.enabled) {
-                                   KInterface.wirelessSwitch = false
-                                   return
-                               }
-                               // 直接修改数据源，而不是通过checked属性
-                               KInterface.wirelessSwitch = !KInterface.wirelessSwitch
+                        MouseArea {
+                            anchors.fill: parent
+                            // 阻止事件传递到SwitchDelegate内部
+                            propagateComposedEvents: false
+                            onClicked: {
+                                if (!wlanswitchBtn.enabled) {
+                                    KInterface.wirelessSwitch = false
+                                    return
+                                }
+                                // 直接修改数据源，而不是通过checked属性
+                                KInterface.wirelessSwitch = !KInterface.wirelessSwitch
 
 
-                               //console.log("Switch clicked, new state:", KInterface.wirelessSwitch)
-                           }
-                       }
-                       // 状态变化时更新UI
-                       onCheckedChanged: {
-                           wlanDeviceComboBox.visible = !wlanDeviceComboBox.ishide && checked && (wlanDeviceComboBox.count >= 2)
-                           wlanContentArea.visible = checked
-                           //console.log("State changed to:", checked)
-                       }
-                            Layout.alignment: Qt.AlignRight
-                            Layout.rightMargin: 24
-                            spacing:0
-                            rightPadding: 0
-                            Layout.preferredWidth: 44
+                                //console.log("Switch clicked, new state:", KInterface.wirelessSwitch)
+                            }
                         }
+                        // 状态变化时更新UI
+                        onCheckedChanged: {
+                            wlanDeviceComboBox.visible = !wlanDeviceComboBox.ishide && checked && (wlanDeviceComboBox.count >= 2)
+                            wlanContentArea.visible = checked
+                            //console.log("State changed to:", checked)
+                        }
+                             Layout.alignment: Qt.AlignRight
+                             Layout.rightMargin: 24
+                             spacing:0
+                             rightPadding: 0
+                             Layout.preferredWidth: 44
+                            Connections {
+                                target: KInterface
+                                function onUpdateWirelessSwitch() {
+                                    wlanswitchBtn.checked = KInterface.wirelessSwitch
+                                }
+                            }
+                         }
                     }
 
                     Item { Layout.fillWidth: true }
@@ -305,7 +288,7 @@ UkuiItems.DtThemeBackground {
                         }
                         Connections {
                             target: KInterface
-                            onUpdateWirelessDeviceList: {
+                            function onUpdateWirelessDeviceList() {
                                 if (wlanDeviceComboBox.count <= 1) {
                                     wlanDeviceComboBox.ishide = true
                                     wlanDeviceComboBox.visible = false

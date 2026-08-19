@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<TS version="2.1">
 <context>
     <name>AptProxyDialog</name>
     <message>
         <location filename="../aptproxydialog.cpp" line="47"/>
         <source>Set APT Proxy</source>
-        <translation>APT Proxy Ayarla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="64"/>
         <source>Http Address</source>
-        <translation>Http Proxy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="84"/>
         <source>Http Port</source>
-        <translation>Http Bağlantı Noktası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="104"/>
         <source>Https Address</source>
-        <translation>Https Proxy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="123"/>
         <source>Https Port</source>
-        <translation>Https Bağlantı Noktası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="144"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="148"/>
         <source>Confirm</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -44,67 +44,67 @@
     <message>
         <location filename="../proxy.cpp" line="73"/>
         <source>Proxy</source>
-        <translation>Proxy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="214"/>
         <source>Start using</source>
-        <translation>Etkinleştir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="228"/>
         <source>Proxy mode</source>
-        <translation>Proxy Türü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="233"/>
         <source>Auto</source>
-        <translation>Otomatik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="237"/>
         <source>Manual</source>
-        <translation>Elle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="392"/>
         <source>Application Proxy</source>
-        <translation>Proxy Uygula</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="511"/>
         <source>System Proxy</source>
-        <translation>Sistem Proxy</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="513"/>
         <source>Auto url</source>
-        <translation>Yapılandırma URL&apos;si</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="515"/>
         <source>Http Proxy</source>
-        <translation>HTTP Proxy</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="517"/>
         <source>Https Proxy</source>
-        <translation>HTTPS Proxy</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="519"/>
         <source>Ftp Proxy</source>
-        <translation>FTP Proxy</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="521"/>
         <source>Socks Proxy</source>
-        <translation>SOCKS Proxy</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -114,126 +114,126 @@
         <location filename="../proxy.cpp" line="525"/>
         <location filename="../proxy.cpp" line="1335"/>
         <source>Port</source>
-        <translation>Bağlantı Noktası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="526"/>
         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
-        <translation>Yok sayılan ana bilgisayar listesi, lütfen İngilizce noktalı virgül (;) kullanın</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="530"/>
         <location filename="../proxy.cpp" line="532"/>
         <source>App Proxy</source>
-        <translation>Proxy Uygula</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="536"/>
         <source>APT Proxy</source>
-        <translation>APT Proxy</translation>
+        <translation type="unfinished"></translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="537"/>
         <location filename="../proxy.cpp" line="1272"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="538"/>
         <source>Http Address : </source>
-        <translation>Http Adresi: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="539"/>
         <location filename="../proxy.cpp" line="541"/>
         <source>Port : </source>
-        <translation>Bağlantı Noktası: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="540"/>
         <source>Https Address : </source>
-        <translation>Https Adresi: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="542"/>
         <source>Edit</source>
-        <translation>Düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="717"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
-        <translation>APT proxy kapalı, etkili olması için yeniden başlatma gerekiyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="718"/>
         <location filename="../proxy.cpp" line="1049"/>
         <source>Reboot Later</source>
-        <translation>Daha Sonra Yeniden Başlat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="719"/>
         <location filename="../proxy.cpp" line="1050"/>
         <source>Reboot Now</source>
-        <translation>Hemen Yeniden Başlat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1048"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
-        <translation>APT proxy&apos;sini ayarlamak sistemin yeniden başlatılmasını gerektirir, sistemi yeniden başlatmak istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1285"/>
         <source>Proxy type</source>
-        <translation>Proxy Türü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1302"/>
         <source>IP address</source>
-        <translation>IP Adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1308"/>
         <location filename="../proxy.cpp" line="1338"/>
         <source>Required</source>
-        <translation>Zorunlu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1328"/>
         <source>Invalid IP Address</source>
-        <translation>Geçersiz IP Adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1349"/>
         <source>Username</source>
-        <translation>Kullanıcı Adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1352"/>
         <location filename="../proxy.cpp" line="1366"/>
         <source>Optional</source>
-        <translation>İsteğe Bağlı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1362"/>
         <source>Password</source>
-        <translation>Parola</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1385"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1386"/>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1458"/>
         <source>The following applications are allowed to use this configuration:</source>
-        <translation>Aşağıdaki uygulamaların bu yapılandırmayı kullanmasına izin ver:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -9,39 +9,31 @@
  * - Tray show settings
  * - USB hidden device pairs management
  */
-
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstdint>
-
 // Avoid glib/Qt macro conflict: undef signals before including glib headers
 #ifdef signals
 #undef signals
 #endif
-
 // Include the appsettings header
 #include "appsettings.h"
-
 // Fuzz test for AppSettings functions
 extern "C" int LLVMFuzzerTestOneInput_AppSettings(const uint8_t *data, size_t size)
 {
     if (size == 0) {
         return 0;
     }
-
     // Data format:
     // First byte: operation type (0-9)
     // Second byte: length modifier
     // Remaining bytes: data
-
     uint8_t opType = data[0] % 10;
     uint8_t lenMod = size > 1 ? data[1] % 128 : 0;
-
     // Get singleton instance
     AppSettings &settings = AppSettings::instance();
-
     switch (opType) {
         case 0: {
             // Test with device name data for wired
@@ -65,21 +57,21 @@ extern "C" int LLVMFuzzerTestOneInput_AppSettings(const uint8_t *data, size_t si
         }
         case 2: {
             // Test auto firewall permitted setting
-            bool value = (data[1] % 2 == 0);
+            bool value = size > 1 && (data[1] % 2 == 0);
             settings.setAutoFirewallPermitted(value);
             bool result = settings.autoFirewallPermitted();
             break;
         }
         case 3: {
             // Test firewall permission show setting
-            bool value = (data[1] % 2 == 0);
+            bool value = size > 1 && (data[1] % 2 == 0);
             settings.setFirewallPermissionShow(value);
             bool result = settings.firewallPermissionShow();
             break;
         }
         case 4: {
             // Test tray show setting
-            bool value = (data[1] % 2 == 0);
+            bool value = size > 1 && (data[1] % 2 == 0);
             settings.setTrayShow(value);
             bool result = settings.trayShow();
             break;
@@ -137,12 +129,10 @@ extern "C" int LLVMFuzzerTestOneInput_AppSettings(const uint8_t *data, size_t si
             break;
         }
     }
-
     // Test with empty and boundary cases
     QByteArray emptyData;
     QByteArray singleByte(reinterpret_cast<const char*>(data), 1);
     QByteArray largeData(reinterpret_cast<const char*>(data),
                          static_cast<int>(std::min(size, static_cast<size_t>(4096))));
-
     return 0;
 }

@@ -692,7 +692,15 @@ void VpnPage::deactivateVpn(const QString& connUuid)
 void VpnPage::showDetailPage(QString uuid)
 {
     QListWidgetItem * vpnlistItem = m_vpnItemMap.value(uuid);
+    if (!vpnlistItem) {
+        qWarning() << "[VpnPage] showDetailPage: vpn list item not found for uuid" << uuid;
+        return;
+    }
     VpnListItem *vpnItem = (VpnListItem *)m_listWidget->itemWidget(vpnlistItem);
+    if (!vpnItem) {
+        qWarning() << "[VpnPage] showDetailPage: vpn item widget not found for uuid" << uuid;
+        return;
+    }
     vpnItem->onInfoButtonClicked();
 }
 

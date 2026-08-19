@@ -417,7 +417,12 @@ void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
 //lanUpdate
 void NetConnect::updateLanInfo(QString deviceName, QStringList lanInfo)
 {
-    //she bei gui shu bian hua && you xian ming cheng bian hua
+    // she bei gui shu bian hua && you xian ming cheng bian hua
+    if (lanInfo.size() < 3) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "lanInfo size is less than 3, size:" << lanInfo.size();
+        return;
+    }
+    
     QMap<QString, ItemFrame *>::iterator iter;
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         if (deviceName.isEmpty()) {
@@ -583,11 +588,19 @@ void NetConnect::initNetListFromDevice(QString deviceName)
     for (iter = variantList.begin(); iter != variantList.end(); iter++) {
         if (deviceName == iter.key()) {
             QList<QStringList> wlanListInfo = iter.value();
+            if (wlanListInfo.isEmpty()) {
+                qWarning() << Q_FUNC_INFO << __LINE__ << "wlanListInfo is empty";
+                continue;
+            }
             //处理列表 已连接
             qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " acitved lan " << wlanListInfo.at(0);
             addLanItem(deviceFrameMap[deviceName], deviceName,  wlanListInfo.at(0), true);
             //处理列表 未连接
             for (int i = 1; i < wlanListInfo.length(); i++) {
+                if (i >= wlanListInfo.size()) {
+                    qWarning() << Q_FUNC_INFO << __LINE__ << "index out of range, i:" << i << "wlanListInfo.size():" << wlanListInfo.size();
+                    break;
+                }
                 qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " deacitved lan " << wlanListInfo.at(i);
                 addLanItem(deviceFrameMap[deviceName], deviceName, wlanListInfo.at(i), false);
             }
@@ -602,7 +615,8 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     if (frame == nullptr) {
         return;
     }
-    if (infoList.size() == 1) {
+    if (infoList.size() < 3) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "infoList size is less than 3, size:" << infoList.size();
         return;
     }
 
@@ -940,6 +954,11 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
         return;
     }
 
+    if (infoList.size() < 3) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "infoList size is less than 3, size:" << infoList.size();
+        return;
+    }
+
     if (frame->itemMap.contains(infoList.at(1))) {
             qDebug() << "[NetConnect]Already exist a lan " << infoList.at(1) << " in " << deviceName;
             return;
@@ -1181,7 +1200,15 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
             qDebug() << "[NetConnect] getInsertPos but " << deviceName << "not exist";
             return 0;
         }
+        if (variantList[deviceName].isEmpty()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "variantList[" << deviceName << "] is empty";
+            return 0;
+        }
         for (int i = 0; i < variantList[deviceName].size(); ++i ) {
+            if (i >= variantList[deviceName].size()) {
+                qWarning() << Q_FUNC_INFO << __LINE__ << "index out of range, i:" << i << "variantList[" << deviceName << "].size():" << variantList[deviceName].size();
+                break;
+            }
             if (variantList[deviceName].at(i).at(0) == connName) {
                 qDebug() << "pos in kylin-nm is " << i;
                 index = i;

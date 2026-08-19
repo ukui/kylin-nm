@@ -56,7 +56,7 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
         m_hiddenVidPid.append(qMakePair(vendor, product));
     }
 
-    qWarning() << Q_FUNC_INFO << __LINE__ <<  "ProjectInfo m_hiddenVidPid :" << m_hiddenVidPid;
+    //qWarning() << Q_FUNC_INFO << __LINE__ <<  "ProjectInfo m_hiddenVidPid :" << m_hiddenVidPid;
     
 
     m_deviceMap.clear();

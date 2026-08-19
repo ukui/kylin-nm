@@ -664,6 +664,8 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
         if (m_activateConnectionItemMap.contains(item.m_NetSsid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(item.m_NetSsid);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
+            qDebug() << "emit wlanConnectChanged Activated";
+            Q_EMIT wlanConnectChanged(Activated);//直接修改路由器加密方式会造成没有连接过程但是ap会重新出现 如果ap是已经连接的ap，应该主动发信号告诉任务栏刷新一下图标不然可能连接还在但是图标没更新
             return;
         }
     }
@@ -718,6 +720,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
         m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
+        Q_EMIT wlanConnectChanged(Deactivated);//当前连接的wifi如果ap被关闭后，应该主动发信号告诉任务栏刷新一下图标不然可能连接不在了但是图标还是连接状态
     }
 
     return;
@@ -737,7 +740,7 @@ void WlanPage::updateWlanListItem(QString ssid, bool isConnnectRmove)
             p_wlanItem->updateWirelessNetItem(wirelessNetItem);
             if (isConnnectRmove) {
                 p_wlanItem->updateConnectState(Deactivated);
-                Q_EMIT this->wlanConnectChanged(Deactivated);
+                Q_EMIT wlanConnectChanged(Deactivated);
             }
         }
     }
@@ -853,8 +856,10 @@ void WlanPage::onSignalStrengthChange(QString interface, QString ssid, int signa
     QListWidgetItem *p_listWidgetItem = nullptr;
     WlanListItem *p_wlanItem = nullptr;
 
-    qWarning()<< LOG_FLAG << "signalStrength is chenged";
+    qWarning()<< LOG_FLAG << "signalStrength is changed";
 
+    judgeSendRefreshIcon();
+    /*信号强度的属性更新只关心当前无线显示设备*/
     if (m_wirelessNetItemMap.contains(ssid)) {
         p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
         p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
@@ -1413,6 +1418,16 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Activating);
         }
     }
+
+    QVariantMap value;
+    value.insert(QStringLiteral("Name"), ssid);
+    value.insert(QStringLiteral("DeviceName"), devName);
+    value.insert(QStringLiteral("Uuid"), uuid);
+    value.insert(QStringLiteral("isApConn"), isApConnection?"1":"0");
+
+    qDebug() << LOG_FLAG << "emit sigNetworkPropChanged (isApConn)" << value;
+    Q_EMIT sigNetworkPropChanged(value);
+
     return;
 }
 
@@ -2131,5 +2146,30 @@ int WlanPage::getActivateWifiCategory(QString devName)
         return 0;
     } else {
         return reply.value().toInt();
+    }
+}
+
+/*更新任务栏图标策略为 先看当前显示设备是否有连接，否则读其他任意无线设备 当前连接wifi 强度变化差等级才更新 避免频繁调用*/
+void WlanPage::judgeSendRefreshIcon()
+{
+
+    int signalStrength =getActivateWifiSignal(getCurrentDisplayDevice());// 任务栏图标的更新是任意无线设备已经激活的连接信号强度档次变化
+    if (signalStrength == -1) {
+        signalStrength =getActivateWifiSignal();
+    }
+
+    int currentSingleRange=WIFI_NONE_SIGNAL;
+    if (signalStrength > WIFI_EXCELLENT_SIGNAL){
+        currentSingleRange=WIFI_EXCELLENT_SIGNAL;
+    } else if (signalStrength > WIFI_GOOD_SIGNAL) {
+        currentSingleRange=WIFI_GOOD_SIGNAL;
+    } else if (signalStrength > WIFI_OK_SIGNAL) {
+        currentSingleRange=WIFI_OK_SIGNAL;
+    } else if (signalStrength > WIFI_LOW_SIGNAL) {
+        currentSingleRange=WIFI_LOW_SIGNAL;
+    }
+    if(m_lastSingleRange!=currentSingleRange){
+        m_lastSingleRange=currentSingleRange;
+        Q_EMIT wlanConnectChanged(Activated);//当前连接的wifi信号更新时需要给任务栏发信号更新图标
     }
 }

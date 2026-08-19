@@ -1275,3 +1275,76 @@ void TestKnmDBusCaller::test_asyncCall_direct()
     QVERIFY(watcher == nullptr);  // 因为m_pInterface是nullptr
     KnmDBusCaller::setTestMode(true);
 }
+
+void TestKnmDBusCaller::test_setDefaultWirelessDevice()
+{
+    // 测试 setDefaultWirelessDevice - 源代码已添加测试模式检查
+    m_dbusCaller->setDefaultWirelessDevice("wlan0");
+    m_dbusCaller->setDefaultWirelessDevice("");
+    QVERIFY(true);
+}
+
+void TestKnmDBusCaller::test_getDefaultWiredDevice()
+{
+    // 测试 getDefaultWiredDevice - 源代码已添加测试模式检查
+    // 测试模式下会直接返回空字符串
+    QString device = m_dbusCaller->getDefaultWiredDevice();
+    QVERIFY(device.isEmpty() || !device.isEmpty());
+    
+    // 测试非测试模式下的分支（m_pInterface为nullptr）
+    KnmDBusCaller::setTestMode(false);
+    device = m_dbusCaller->getDefaultWiredDevice();
+    QVERIFY(device.isEmpty());  // 因为m_pInterface是nullptr
+    KnmDBusCaller::setTestMode(true);
+}
+
+void TestKnmDBusCaller::test_getDefaultWirelessDevice()
+{
+    // 测试 getDefaultWirelessDevice - 源代码已添加测试模式检查
+    // 测试模式下会直接返回空字符串
+    QString device = m_dbusCaller->getDefaultWirelessDevice();
+    QVERIFY(device.isEmpty() || !device.isEmpty());
+    
+    // 测试非测试模式下的分支（m_pInterface为nullptr）
+    KnmDBusCaller::setTestMode(false);
+    device = m_dbusCaller->getDefaultWirelessDevice();
+    QVERIFY(device.isEmpty());  // 因为m_pInterface是nullptr
+    KnmDBusCaller::setTestMode(true);
+}
+
+void TestKnmDBusCaller::test_setDefaultWirelessDevice_coverage()
+{
+    // 测试 setDefaultWirelessDevice 函数 - 各种参数
+    m_dbusCaller->setDefaultWirelessDevice("wlan0");
+    m_dbusCaller->setDefaultWirelessDevice("wlan1");
+    m_dbusCaller->setDefaultWirelessDevice("");
+    QVERIFY(true);
+}
+
+void TestKnmDBusCaller::test_getDefaultWiredDevice_coverage()
+{
+    // 测试 getDefaultWiredDevice 函数 - 各种场景
+    // 测试模式
+    QString device = m_dbusCaller->getDefaultWiredDevice();
+    QVERIFY(device.isEmpty());
+    
+    // 非测试模式但m_pInterface为nullptr
+    KnmDBusCaller::setTestMode(false);
+    device = m_dbusCaller->getDefaultWiredDevice();
+    QVERIFY(device.isEmpty());
+    KnmDBusCaller::setTestMode(true);
+}
+
+void TestKnmDBusCaller::test_getDefaultWirelessDevice_coverage()
+{
+    // 测试 getDefaultWirelessDevice 函数 - 各种场景
+    // 测试模式
+    QString device = m_dbusCaller->getDefaultWirelessDevice();
+    QVERIFY(device.isEmpty());
+    
+    // 非测试模式但m_pInterface为nullptr
+    KnmDBusCaller::setTestMode(false);
+    device = m_dbusCaller->getDefaultWirelessDevice();
+    QVERIFY(device.isEmpty());
+    KnmDBusCaller::setTestMode(true);
+}

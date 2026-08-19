@@ -384,14 +384,29 @@ void WlanConnect::updateList()
 void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
 {
     if(nullptr == frame || frame->lanItemLayout->count() <= 0 || list.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "frame is null or layout is empty or list is empty";
         return;
     }
     qDebug() << "begin resort" << frame->deviceFrame->deviceLabel->text();
+
+    // 检查 list.at(0) 的 size
+    if (list.size() < 1) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "list size is less than 1, size:" << list.size();
+        return;
+    }
+    if (list.at(0).size() < 6) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "list.at(0) size is less than 6, size:" << list.at(0).size();
+        return;
+    }
 
     int frameIndex = 0;
     int listIndex = 1;
     if (list.at(0).size() > 1) {
         if (frame->itemMap.contains(list.at(0).at(0))) {
+            if (frame->itemMap[list.at(0).at(0)] == nullptr) {
+                qWarning() << Q_FUNC_INFO << __LINE__ << "itemMap[0] is nullptr";
+                return;
+            }
             frame->lanItemLayout->removeWidget(frame->itemMap[list.at(0).at(0)]);
             frame->lanItemLayout->insertWidget(0, frame->itemMap[list.at(0).at(0)]);
             qDebug() << "active resort insert position 0" << list.at(0).at(0);
@@ -409,6 +424,10 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
         if (!frame->uuid.isEmpty()) {
             QMap<QString, WlanItem*>::iterator itemIter;
             for (itemIter = frame->itemMap.begin(); itemIter != frame->itemMap.end(); itemIter++) {
+                if (itemIter.value() == nullptr) {
+                    qWarning() << Q_FUNC_INFO << __LINE__ << "itemIter.value() is nullptr";
+                    continue;
+                }
                 if (itemIter.value()->uuid == frame->uuid ) {
                     WlanItem * item= nullptr;
                     item = itemIter.value();
@@ -424,9 +443,18 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
 
     for ( ; listIndex < list.size(); listIndex++) {
         if (frameIndex > frame->lanItemLayout->count() - 1) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "frameIndex out of range";
             return;
         }
+        if (listIndex >= list.size()) {
+            qWarning() << Q_FUNC_INFO << __LINE__ << "listIndex out of range, listIndex:" << listIndex << "list.size():" << list.size();
+            break;
+        }
         if (frame->itemMap.contains(list.at(listIndex).at(0))) {
+            if (frame->itemMap[list.at(listIndex).at(0)] == nullptr) {
+                qWarning() << Q_FUNC_INFO << __LINE__ << "itemMap[listIndex] is nullptr";
+                continue;
+            }
             frame->lanItemLayout->removeWidget(frame->itemMap[list.at(listIndex).at(0)]);
             frame->lanItemLayout->insertWidget(frameIndex, frame->itemMap[list.at(listIndex).at(0)]);
             qDebug() << "custom resort " << list.at(listIndex).at(0) <<" insert position" << frameIndex;
@@ -660,6 +688,11 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
 {
     qDebug()<<"[WlanConnect]onNetworkAdd "<< deviceName << " " << wlanInfo;
     if(!getSwitchBtnState() || deviceName.isEmpty()) {
+        return;
+    }
+
+    if (wlanInfo.size() < 4) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "wlanInfo size is less than 4, size:" << wlanInfo.size();
         return;
     }
 
@@ -1028,7 +1061,8 @@ void WlanConnect::addActiveItem(ItemFrame *frame, QString devName, QStringList i
     if (frame == nullptr) {
         return;
     }
-    if (infoList.size() == 1) {
+    if (infoList.size() < 6) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "infoList size is less than 6, size:" << infoList.size();
         return;
     }
 
@@ -1047,6 +1081,11 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     if (frame == nullptr) {
         return;
     }
+    if (infoList.size() < 6) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << "infoList size is less than 6, size:" << infoList.size();
+        return;
+    }
+
     bool isLock = true;
     if (infoList.at(2) == "") {
         isLock = false;
@@ -1155,14 +1194,11 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     });
     //记录到deviceFrame的itemMap中
     deviceFrameMap[deviceName]->itemMap.insert(name, wlanItem);
-    int index;
-    if (status) {
-        index = 0;
-    } else {
-        index = sortWlanNet(deviceName, name, signal);
-    }
-    qDebug()<<"insert " << name << " to " << deviceName << " list, postion " << index;
-    frame->lanItemLayout->insertWidget(index, wlanItem);
+    // 初始化时直接添加到末尾，避免在添加过程中多次触发排序，引起的控制面板界面点开无线网络界面卡顿现象严重
+    // 排序将在 updateList() 或 resortWifiList() 中统一处理
+    // 出现的现象是ap会先插入在最后，5s触发updateList重新排序后会更新到对的位置；因为默认列表是已经排序做的返回，所以这里先不进行初始化排查，后续继续完善控制面板的排查逻辑
+    frame->lanItemLayout->addWidget(wlanItem);
+    qDebug()<<"add " << name << " to " << deviceName << " list at end";
     frame->filletStyleChange();
 
     if (activeStatus == ACTIVATING || activeStatus == DEACTIVATING) {

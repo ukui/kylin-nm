@@ -23,19 +23,21 @@ char *read_extra_dns_conf(GKeyFile *key_file, char *flags)
 {
     GError *error = NULL;
     char *val = g_key_file_get_value(key_file, flags, "secondary", &error);
-    
-    if (val == NULL &&
-        !g_error_matches(error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    if (val == NULL)
     {
-        g_warning("Error finding key in key file: %s", error->message);
+        if (!g_error_matches(error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+        {
+            g_warning("Error finding key in key file: %s", error->message);
+        }
+        g_clear_error(&error);
         return NULL;
     }
-    
-    if (!strnlen(val,MAXLINE))
+    if (!strnlen(val, MAXLINE))
     {
+        g_free(val);
         val = NULL;
     }
-    
+    g_clear_error(&error);
     return val;
 }
 char *read_extra_dns_options(GKeyFile *key_file, char *flags)
@@ -56,51 +58,59 @@ char *read_extra_dns_options(GKeyFile *key_file, char *flags)
     snprintf(options_val,200,"%s",val);
     return options_val;
 }
-char *read_extra_dns_domian(GKeyFile *key_file, char *flags)
+char *read_extra_dns_domain(GKeyFile *key_file, char *flags)
 {
     GError *error = NULL;
     char *val = g_key_file_get_value(key_file, flags, "domian", &error);
-    if (val == NULL &&
-        !g_error_matches(error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    if (val == NULL)
     {
-        g_warning("Error finding key in key file: %s", error->message);
+        if (!g_error_matches(error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+        {
+            g_warning("Error finding key in key file: %s", error->message);
+        }
+        g_clear_error(&error);
         return NULL;
     }
-    if (!val || !strnlen(val,MAXLINE))
+    if (!strnlen(val, MAXLINE))
     {
+        g_free(val); 
         val = NULL;
     }
+    g_clear_error(&error);
     return val;
 }
 char *read_extra_dns_search(GKeyFile *key_file, char *flags)
 {
     GError *error = NULL;
-    char *val = NULL;
-    val = g_key_file_get_value(key_file, flags, "search", &error);
-    if (val == NULL &&
-        !g_error_matches(error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    char *val = g_key_file_get_value(key_file, flags, "search", &error);
+    if (val == NULL)
     {
-        g_warning("Error finding key in key file: %s", error->message);
+        if (!g_error_matches(error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+        {
+            g_warning("Error finding key in key file: %s", error->message);
+        }
+        g_clear_error(&error);
         return NULL;
     }
-    if (!val || !strnlen(val,MAXLINE))
+    if (!strnlen(val, MAXLINE))
     {
+        g_free(val);
         val = NULL;
     }
+    g_clear_error(&error);
     return val;
 }
 char *get_file_path(char *con_name)
 {
     char file_path[300] = {0};
-
     if (con_name == NULL)
         return NULL;
 
     // 安全检测：防止目录跳转攻击
 
     // 检测是否包含 "/" (路径分隔符)
-    if (strstr(con_name, "/") != NULL) {
-        syslog(LOG_ERR, "Security alert: con_name contains path separator '/'");
+    if (strstr (con_name, "/") != NULL) {
+        syslog (LOG_ERR, "Security alert: con_name contains path separator '/'");
         return NULL;
     }
 
@@ -112,7 +122,6 @@ char *get_file_path(char *con_name)
 bool extara_dns_conf_is_exist(char *config)
 {
     if(!config) return false;
-
     if ((access(config, F_OK)) != -1)
     {
         syslog(LOG_INFO, "dns_extra_conf exist");
@@ -123,167 +132,207 @@ bool extara_dns_conf_is_exist(char *config)
 
 int set_extra_dns(char *con_name, char *extradns)
 {
+    int ret = FAIL;
     char *file = get_file_path(con_name);
-    
-    //syslog(LOG_INFO, "file=%s", file);
-    if (extara_dns_conf_is_exist(file))
-    {
-        GError *error = NULL;
-        GKeyFile *key_file = g_key_file_new();
-        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
-        {
-            if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-                g_warning("Error loading key file: %s", error->message);
-            return FAIL;
-        }
-        if (g_key_file_has_group(key_file, NAMESERVER))
-        {
-            g_key_file_set_string(key_file, NAMESERVER, "secondary", extradns);
-            // Save as a file.
-            if (!g_key_file_save_to_file(key_file, file, &error))
-            {
-                g_warning("Error saving key file: %s", error->message);
-                return FAIL;
-            }
-        }
-        g_key_file_free(key_file);
-        
-        free(file);
-        return PASS;
+
+    if (file == NULL) {
+        return FAIL;
     }
-    return FAIL;
+
+    GError *error = NULL;
+    GKeyFile *key_file = NULL;
+
+    if (extara_dns_conf_is_exist(file)) {
+        key_file = g_key_file_new();
+        if (g_key_file_load_from_file(key_file, file,
+                G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
+        {
+            if (g_key_file_has_group(key_file, NAMESERVER)) {
+                g_key_file_set_string(key_file, NAMESERVER, "secondary", extradns);
+                if (g_key_file_save_to_file(key_file, file, &error)) {
+                    ret = PASS;
+                } else {
+                    g_warning("Error saving key file: %s", error->message);
+                }
+            }
+            g_key_file_free(key_file);
+            key_file = NULL;
+        } else {
+            if (error && !g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT)) {
+                g_warning("Error loading key file: %s", error->message);
+            }
+            g_key_file_free(key_file);
+            key_file = NULL;
+        }
+    }
+
+    if (error) {
+        g_error_free(error);
+    }
+    free(file);
+    return ret;
 }
-int set_extra_dns_domian(char *con_name, char *domian)
+int set_extra_dns_domian(char *con_name, char *domain)
 {
+    int ret = FAIL;
     char *file = get_file_path(con_name);
-    if (extara_dns_conf_is_exist(file))
-    {
-        GError *error = NULL;
-        GKeyFile *key_file = g_key_file_new();
-        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
-        {
-            if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-                g_warning("Error loading key file: %s", error->message);
-            return FAIL;
-        }
-        if (g_key_file_has_group(key_file, DOMAIN))
-        {
-            g_key_file_set_string(key_file, DOMAIN, "domain", domian);
-            // Save as a file.
-            if (!g_key_file_save_to_file(key_file, file, &error))
-            {
-                g_warning("Error saving key file: %s", error->message);
-                return FAIL;
-            }
-        }
-        g_key_file_free(key_file);
-        free(file);
-        return PASS;
+    if (file == NULL) {
+        return FAIL;
     }
-    return FAIL;
+
+    GError *error = NULL;
+    GKeyFile *key_file = NULL;
+
+    if (extara_dns_conf_is_exist(file)) {
+        key_file = g_key_file_new();
+        if (g_key_file_load_from_file(key_file, file,
+                G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
+        {
+            if (g_key_file_has_group(key_file, DOMAIN)) {
+                g_key_file_set_string(key_file, DOMAIN, "domain", domain);
+                if (g_key_file_save_to_file(key_file, file, &error)) {
+                    ret = PASS;
+                } else {
+                    g_warning("Error saving key file: %s", error->message);
+                }
+            }
+            g_key_file_free(key_file);
+            key_file = NULL;
+        } else {
+            if (error && !g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT)) {
+                g_warning("Error loading key file: %s", error->message);
+            }
+            g_key_file_free(key_file);
+            key_file = NULL;
+        }
+    }
+
+    if (error) {
+        g_error_free(error);
+    }
+    free(file);
+    return ret;
 }
 int set_extra_dns_search(char *con_name, char *search)
 {
-    char *file =NULL; 
-    file = get_file_path(con_name);
-    if (extara_dns_conf_is_exist(file))
-    {
-        GError *error = NULL;
-        GKeyFile *key_file = g_key_file_new();
-        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
-        {
-            if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-                g_warning("Error loading key file: %s", error->message);
-            return FAIL;
-        }
-        if (g_key_file_has_group(key_file, SEARCH))
-        {
-            g_key_file_set_string(key_file, SEARCH, "search", search);
-            // Save as a file.
-            if (!g_key_file_save_to_file(key_file, file, &error))
-            {
-                g_warning("Error saving key file: %s", error->message);
-                return FAIL;
-            }
-        }
-        g_key_file_free(key_file);
-
-        free(file);
-        return PASS;
+    int ret = FAIL;
+    char *file = get_file_path(con_name);
+    if (file == NULL) {
+        return FAIL;
     }
-    return FAIL;
+
+    GError *error = NULL;
+    GKeyFile *key_file = NULL;
+
+    if (extara_dns_conf_is_exist(file)) {
+        key_file = g_key_file_new();
+        if (g_key_file_load_from_file(key_file, file,
+                G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
+        {
+            if (g_key_file_has_group(key_file, SEARCH)) {
+                g_key_file_set_string(key_file, SEARCH, "search", search);
+                if (g_key_file_save_to_file(key_file, file, &error)) {
+                    ret = PASS;
+                } else {
+                    g_warning("Error saving key file: %s", error->message);
+                }
+            }
+            g_key_file_free(key_file);
+            key_file = NULL;
+        } else {
+            if (error && !g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT)) {
+                g_warning("Error loading key file: %s", error->message);
+            }
+            g_key_file_free(key_file);
+            key_file = NULL;
+        }
+    }
+
+    if (error) {
+        g_error_free(error);
+    }
+    free(file);
+    return ret;
 }
 
 int set_extra_dns_options(char *con_name, char *timeout, char *attempts, char *type)
 {
+    int ret = FAIL;
     char *file = get_file_path(con_name);
-    //syslog(LOG_INFO,"FILE=%s",file);
-    if (file != NULL)
+    if (file == NULL)
+        return FAIL;
+
+    GError *error = NULL;
+    GKeyFile *key_file = g_key_file_new();
+    bool save_needed = false;
+
+    if (extara_dns_conf_is_exist(file))
     {
-        GError *error = NULL;
-        GKeyFile *key_file = g_key_file_new();
-        if (extara_dns_conf_is_exist(file))
+        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
         {
-            if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
-            {
-                if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-                    g_warning("Error loading key file: %s", error->message);
-                return FAIL;
-            }
-            if (g_key_file_has_group(key_file, OPTIONS))
-            {
-                g_key_file_set_string(key_file, OPTIONS, "timeout", timeout);
-                g_key_file_set_string(key_file, OPTIONS, "attempts", attempts);
-                g_key_file_set_string(key_file, OPTIONS, "type", type);
-                // Save as a file.
-                if (!g_key_file_save_to_file(key_file, file, &error))
-                {
-                    g_warning("Error saving key file: %s", error->message);
-                    g_key_file_free(key_file);
-                    return FAIL;
-                }
-            }
+            if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+                g_warning("Error loading key file: %s", error->message);
+            goto out;
         }
-        else
+        if (g_key_file_has_group(key_file, OPTIONS))
         {
             g_key_file_set_string(key_file, OPTIONS, "timeout", timeout);
             g_key_file_set_string(key_file, OPTIONS, "attempts", attempts);
             g_key_file_set_string(key_file, OPTIONS, "type", type);
-            // Save as a file.
-            if (!g_key_file_save_to_file(key_file, file, &error))
-            {
-                g_warning("Error saving key file: %s", error->message);
-                g_key_file_free(key_file);
-                return FAIL;
-            }
+            save_needed = true;
         }
-        g_key_file_free(key_file);
-        return PASS;
     }
-    return FAIL;
+    else
+    {
+        g_key_file_set_string(key_file, OPTIONS, "timeout", timeout);
+        g_key_file_set_string(key_file, OPTIONS, "attempts", attempts);
+        g_key_file_set_string(key_file, OPTIONS, "type", type);
+        save_needed = true;
+    }
+
+    if (save_needed && !g_key_file_save_to_file(key_file, file, &error))
+    {
+        g_warning("Error saving key file: %s", error->message);
+        goto out;
+    }
+    ret = PASS;
+
+out:
+    if (error)
+        g_error_free(error);
+    g_key_file_free(key_file);
+    free(file);
+    return ret;
 }
 void update_options_to_resolv(char *file)
 {
     char *type=NULL,*options=NULL,*timeout=NULL,*attempts=NULL;
     GError *error = NULL;
     char val[200]={0};
-    char *options_val = calloc(200, sizeof(char *));
+    char options_val[200]={0};
     if(file == NULL)
+    {
         return;
+    }
     if (extara_dns_conf_is_exist(file))
     {
-        syslog(LOG_INFO,"EXTARA DNS CONF");
-        GError *error = NULL;
+        syslog(LOG_INFO,"EXTRA DNS CONF");
+        GError *local_error = NULL;
         GKeyFile *key_file = g_key_file_new();
-        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
+        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &local_error))
         {
-            if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-                g_warning("Error loading key file: %s", error->message);
+            if (!g_error_matches(local_error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+                g_warning("Error loading key file: %s", local_error->message);
+            g_key_file_free(key_file);
+            g_clear_error(&local_error);
             return;
         }
-        type = g_key_file_get_string(key_file,OPTIONS, "type", &error);
-        if(!strnlen(type,MAXLINE))
-            type="order";
+        type = g_key_file_get_string(key_file,OPTIONS, "type", &local_error);
+        if (type == NULL || *type == '\0')
+        {
+            g_free(type);
+            type = g_strdup("order");
+        }
         if (strncmp(type, "rotate",7)==0)
         {
             options = read_extra_dns_options(key_file,OPTIONS);
@@ -292,12 +341,18 @@ void update_options_to_resolv(char *file)
         }
         else
         {
-            timeout = g_key_file_get_string(key_file, OPTIONS, "timeout", &error);
-            if(!strnlen(timeout,200))
-                timeout="5";
-            attempts = g_key_file_get_string(key_file, OPTIONS, "attempts", &error);
-            if(!strnlen(attempts,200))
-                attempts="2";
+            timeout = g_key_file_get_string(key_file, OPTIONS, "timeout", &local_error);
+            if (timeout == NULL || *timeout == '\0')
+            {
+                g_free(timeout);
+                timeout = g_strdup("5");
+            }
+            attempts = g_key_file_get_string(key_file, OPTIONS, "attempts", &local_error);
+            if (attempts == NULL || *attempts == '\0')
+            {
+                g_free(attempts);
+                attempts = g_strdup("2");
+            }
             snprintf(val,200, "%s:%s %s:%s", "timeout", timeout, "attempts", attempts);
             snprintf(options_val,200,"%s",val);
             write_options_to_resolv(options_val);
@@ -306,11 +361,16 @@ void update_options_to_resolv(char *file)
                 write_server_to_resolv();
         }
         g_key_file_free(key_file);
-        free(options_val);
-    }else{
-        syslog(LOG_INFO,"DON NOT EXTARA DNS CONF");
+        g_clear_error(&local_error);
+        g_free(type);
+        g_free(timeout);
+        g_free(attempts);
+        g_free(options);
+    }
+    else
+    {
+        syslog(LOG_INFO,"DO NOT EXTRA DNS CONF");
         write_nameserver_to_resolv();
-        
     }
 }
 //从buf中取出一个事件
@@ -330,7 +390,11 @@ static void _inotify_event_handler(struct inotify_event *event)
             uuid = get_active_connection_uuid(active_con);
             char *file = NULL;
             file = get_file_path(uuid);
-            update_options_to_resolv(file);
+            if (file != NULL)
+            {
+                update_options_to_resolv(file); 
+            }
+            free(file); 
         }
     }
 }

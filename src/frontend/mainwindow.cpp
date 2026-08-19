@@ -294,6 +294,7 @@ void MainWindow::registerTrayIcon()
         }
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
         m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+        setupTrayIconBindings();
 
     } else {
         if (m_registerCount <= 10) {
@@ -498,11 +499,6 @@ void MainWindow::initTrayIcon()
     m_showConnectivityPageAction->setIcon(QIcon::fromTheme("gnome-netstatus-txrx"));
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
-    m_trayIcon->setContextMenu(m_trayIconMenu);
-    iconStatus = IconActiveType::LAN_CONNECTED;
-    onRefreshTrayIcon();
-
-    connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
 //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
     connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
@@ -520,7 +516,22 @@ void MainWindow::initTrayIcon()
         m_connectivityPage->show();
     });
 
+    setupTrayIconBindings();
+}
+
+void MainWindow::setupTrayIconBindings()
+{
+    if (!m_trayIcon || !m_trayIconMenu || m_trayIconBindingsDone) {
+        return;
+    }
+
+    m_trayIcon->setContextMenu(m_trayIconMenu);
+    iconStatus = IconActiveType::LAN_CONNECTED;
+    onRefreshTrayIcon();
+
+    connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
     m_trayIcon->show();
+    m_trayIconBindingsDone = true;
 }
 
 void MainWindow::initDbusConnnect()
@@ -554,7 +565,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
 
-    connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::onTimeUpdateTrayIcon);
+    //connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::onTimeUpdateTrayIcon);//不需要定时刷新已改为触发刷新
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
     connect(m_wlanWidget, &WlanPage::connectivityCheckSpareUriChanged, this, &MainWindow::onConnectivityCheckSpareUriChanged);
@@ -923,6 +934,10 @@ void MainWindow::onThemeChanged(const QString &key)
 
 void MainWindow::onRefreshTrayIcon()
 {
+    if (!m_trayIcon) {
+        return;
+    }
+
     //更新托盘图标显示
     int signalStrength = 0;
     int currentCategory = 0;
@@ -1074,6 +1089,10 @@ void MainWindow::onRefreshTrayIcon()
 
 void MainWindow::onSetTrayIconLoading()
 {
+    if (!m_trayIcon) {
+        return;
+    }
+
     if (currentIconIndex > 7) {
         currentIconIndex = 0;
     }
@@ -1335,6 +1354,7 @@ bool MainWindow::getWirelessSwitchBtnState()
     if (nullptr != m_wlanWidget) {
         return m_wlanWidget->getWirelessSwitchBtnState();
     }
+    return false;
 }
 
 bool MainWindow::getWiredEnabledState()
@@ -1342,6 +1362,7 @@ bool MainWindow::getWiredEnabledState()
     if (nullptr != m_lanWidget) {
         return m_lanWidget->getWiredEnabledState();
     }
+    return false;
 }
 
 bool MainWindow::getCableStateByDevice(const QString &deviceName)
@@ -1349,6 +1370,7 @@ bool MainWindow::getCableStateByDevice(const QString &deviceName)
     if (nullptr != m_lanWidget) {
         return m_lanWidget->getCableStateByDevice(deviceName);
     }
+    return false;
 }
 
 int MainWindow::getDeviceConnectivity(const QString deviceName)
@@ -1356,6 +1378,7 @@ int MainWindow::getDeviceConnectivity(const QString deviceName)
     if (nullptr != m_lanWidget) {
         return m_lanWidget->getDeviceConnectivity(deviceName);
     }
+    return -1;
 }
 
 /**

@@ -859,7 +859,8 @@ ListView {
     /*不能使用visble在listview中footer要占位会有一行空白*/
     footer: Loader {
            width: parent.width
-           sourceComponent: (KInterface.uiCtlData.wlanAddButton && wlanDeviceComboBox.count >= 1) ?
+           // 无线关闭时不显示「加入其他网络」；
+           sourceComponent: (KInterface.wirelessSwitch && KInterface.uiCtlData.wlanAddButton && wlanDeviceComboBox.count >= 1) ?
                            footerComponent : null
 
            //!KInterface.uiCtlData.wlanAddButton &&

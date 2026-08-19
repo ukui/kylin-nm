@@ -31,7 +31,7 @@ const char *whiteList[] = {"/usr/bin/kylin-nm",NULL};
 
 DBusHandlerResult server_message_handler(DBusConnection *conn, DBusMessage *message, void *data)
 {
-    DBusHandlerResult result;
+    DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
     DBusMessage *reply = NULL;
 
     DBusError err;
@@ -43,63 +43,41 @@ DBusHandlerResult server_message_handler(DBusConnection *conn, DBusMessage *mess
             dbus_message_get_destination(message),
             dbus_message_get_sender(message));
 
-    if (!(reply = dbus_message_new_method_return(message))) //申请内存适配则事先退出
+    if (!(reply = dbus_message_new_method_return(message)))
     {
         result = DBUS_HANDLER_RESULT_NEED_MEMORY;
         return result;
     }
 
-    //漫长的调用接口判断，归类调用的功能
     if (dbus_message_is_method_call(message, DBUS_INTERFACE_INTROSPECTABLE, METHOD_LST_INTROSPECT))
     {
         dbus_message_append_args(reply,
                                  DBUS_TYPE_STRING, &server_introspection_xml,
-                                 DBUS_TYPE_INVALID);   
+                                 DBUS_TYPE_INVALID);
+        result = DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_method_call(message, NETWORK_ENHANCEMENT_OPTIMIZATION_INTERFACE, METHOD_QUIT))
     {
-        g_main_loop_quit(mainloop); //用于退出主循环
-     }
-    // else if (dbus_message_is_method_call(message, NETWORK_ENHANCEMENT_OPTIMIZATION_INTERFACE, METHOD_LIST_ENANCEMENT_SETTING))
-    // {
-    //     // if(!dbus_security_check(conn,message,&err)){
-    //     //     goto fail;
-    //     // }
-    //     syslog(LOG_INFO,"Getsetting");
-    // }
-    //消息回复、分发
+        g_main_loop_quit(mainloop);
+        result = DBUS_HANDLER_RESULT_HANDLED;
+    }
+    else
+    {
+        result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    }
+
     if (!dbus_connection_send(conn, reply, NULL))
         result = DBUS_HANDLER_RESULT_NEED_MEMORY;
 
-clean:   
+clean:
     dbus_message_unref(reply);
     return result;
-// fail:
-//    if (dbus_error_is_set(&err)) {
-// 		if (reply)
-// 			dbus_message_unref(reply);
-// 		reply = dbus_message_new_error(message, err.name, err.message);
-// 		dbus_error_free(&err);
-// 	}
-
-// 	if (!reply)
-// 		return DBUS_HANDLER_RESULT_NEED_MEMORY;
-
-// 	result = DBUS_HANDLER_RESULT_HANDLED;
-
-// 	if (!dbus_connection_send(conn, reply, NULL))
-// 		result = DBUS_HANDLER_RESULT_NEED_MEMORY;
-
-// 	dbus_message_unref(reply);
-
-// 	return result;
-    
 }
 DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *message, void *data)
 {
     DBusError err;
-    DBusHandlerResult result;
-    DBusMessage *reply = NULL; //创建消息对象指针
+    DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    DBusMessage *reply = NULL;
 
     dbus_error_init(&err);
     syslog(LOG_INFO, "Got D-Bus request: %s.%s on %s,destination is:%s,sender is:%s\n",
@@ -108,17 +86,17 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
             dbus_message_get_path(message),
             dbus_message_get_destination(message),
             dbus_message_get_sender(message));
-    if (!(reply = dbus_message_new_method_return(message))) //申请内存适配则事先退出(创建返回消息)
+    if (!(reply = dbus_message_new_method_return(message)))
     {
         result = DBUS_HANDLER_RESULT_NEED_MEMORY;
         return result;
     }
-    //漫长的调用接口判断，归类调用的功能
+
     if (dbus_message_is_method_call(message, DBUS_INTERFACE_INTROSPECTABLE, METHOD_LST_INTROSPECT))
     {
         dbus_message_append_args(reply,
                                  DBUS_TYPE_STRING, &dns_xml,
-                                 DBUS_TYPE_INVALID); //将dns_xml定义为消息
+                                 DBUS_TYPE_INVALID);
     }
     else if (dbus_message_is_method_call(message, DNS_OPTIMIZATION_INTERFACE_PATH, METHOD_LIST_GET_ALL_EXTRA_DNS))
     {
@@ -135,7 +113,7 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
         {
             goto fail;
         }
-        dbus_message_iter_init_append(reply, &iter); //在消息中加入参数
+        dbus_message_iter_init_append(reply, &iter);
         char *file=get_file_path(con_name);
         if (!extara_dns_conf_is_exist(file))
         {
@@ -143,6 +121,7 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
             dbus_message_iter_append_basic(&iter,
                                            DBUS_TYPE_STRING,
                                            &result_value);
+            result = DBUS_HANDLER_RESULT_HANDLED;  // 新增赋值
             goto send;
         }
         char value_secondary[200] = {0};
@@ -164,7 +143,7 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
         }
         extra_secondary = read_extra_dns_conf(key_file, NAMESERVER);
         options = read_extra_dns_options(key_file,OPTIONS);
-        domian = read_extra_dns_domian(key_file,DOMAIN);
+        domian = read_extra_dns_domain(key_file,DOMAIN);
         search = read_extra_dns_search(key_file,SEARCH);
         
         snprintf(value_secondary,200,"%s:%s",NAMESERVER,extra_secondary);
@@ -190,6 +169,7 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
         g_key_file_free(key_file);
         free(file);
         free(options);
+        result = DBUS_HANDLER_RESULT_HANDLED;  // 新增赋值
         goto send;
     }else if (dbus_message_is_method_call(message, DNS_OPTIMIZATION_INTERFACE_PATH, METHOD_LIST_GET_EXTRA_DNS))
     {
@@ -205,13 +185,14 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
         {
             goto fail;
         }
-        dbus_message_iter_init_append(reply, &iter); //在消息中加入参数
+        dbus_message_iter_init_append(reply, &iter);
         dbus_message_iter_open_container(&iter,DBUS_TYPE_ARRAY,"{sv}", &v);
         
         char *file=get_file_path(con_name);
         if (!extara_dns_conf_is_exist(file))
         {
             dbus_message_iter_close_container(&iter,&v);
+            result = DBUS_HANDLER_RESULT_HANDLED;  // 新增赋值
             goto send;
         }
         GKeyFile *key_file = g_key_file_new();
@@ -264,6 +245,7 @@ DBusHandlerResult server_message_handler_dns(DBusConnection *conn, DBusMessage *
         dbus_message_iter_close_container(&iter,&v);                        
         g_key_file_free(key_file);
         free(file);
+        result = DBUS_HANDLER_RESULT_HANDLED;  // 新增赋值
         goto send;
     }
     else if (dbus_message_is_method_call(message, DNS_OPTIMIZATION_INTERFACE_PATH, METHOD_LIST_SET_EXTRA_DNS))
@@ -437,10 +419,9 @@ fail:
 
 	return result;
 send:
-    //消息回复、分发
-    if (!dbus_connection_send(conn, reply, NULL)) // 发送该消息
+    if (!dbus_connection_send(conn, reply, NULL))
         result = DBUS_HANDLER_RESULT_NEED_MEMORY;
-    dbus_message_unref(reply); // 释放消息对象
+    dbus_message_unref(reply);
     return result;
 }
 char *get_active_connection_uuid(char *path)
@@ -526,7 +507,6 @@ void delete_options_form_conf(FILE *temp_fp,char*path)
     {
         perror("Failed to open file for writing"); // 打开文件失败
         fclose(temp_fp);
-        fclose(fp);
         return;
     }
     rewind(temp_fp); // 重置临时文件的读取位置
@@ -667,6 +647,7 @@ int write_nameserver_to_resolv(){
     if (fp == NULL)
     {
         syslog(LOG_INFO, "DON NOT OPEN FILE");
+        fclose(resolv_fp);
         return 0;
     }
   
@@ -694,41 +675,47 @@ int write_nameserver_to_resolv(){
 
 void write_options_to_resolv(char *options)
 {
-    FILE *fp,*temp_fp;
+    FILE *fp = NULL;
+    FILE *temp_fp = NULL;
     char line_str[MAXLINE];
-    int found;
+    int found = 0;
     fp = fopen(DNS_CONFIG_FILE, "a+");
-    if (fp == NULL)
-    {
+    if (fp == NULL) {
         syslog(LOG_INFO, "DON NOT OPEN FILE");
         return;
     }
-    temp_fp = tmpfile(); // 创建临时文件
-    if (temp_fp == NULL)
-    {
-        perror("Failed to create temporary file"); // 创建临时文件失败
+    temp_fp = tmpfile();
+    if (temp_fp == NULL) {
+        perror("Failed to create temporary file");
         fclose(fp);
         return;
     }
-    while (fgets(line_str, MAXLINE, fp) != NULL)
-    {
-        if (strstr(line_str, "options") == NULL)
-        {
-            fputs(line_str, temp_fp); 
-        }else{
-            found =1;
+    while (fgets(line_str, MAXLINE, fp) != NULL) {
+        if (strstr(line_str, "options") == NULL) {
+            fputs(line_str, temp_fp);
+        } else {
+            found = 1;
         }
     }
-    if(found)
-    {
-        fclose(fp);
-        delete_options_form_conf(temp_fp,DNS_CONFIG_FILE);
-        fp = fopen(DNS_CONFIG_FILE, "a+");
-        if (fp == NULL)
-        {
+    fclose(fp);
+    fp = NULL;
+
+    if (found) {
+        rewind(temp_fp);
+        // delete_options_form_conf 内部已关闭 temp_fp，此处不能再 fclose
+        delete_options_form_conf(temp_fp, DNS_CONFIG_FILE);
+        temp_fp = NULL;
+    }
+
+    if (temp_fp != NULL) {
+        fclose(temp_fp);
+        temp_fp = NULL;
+    }
+
+    fp = fopen(DNS_CONFIG_FILE, "a+");
+    if (fp == NULL) {
         syslog(LOG_INFO, "DON NOT OPEN FILE");
         return;
-        }
     }
     fseek(fp, 0, SEEK_END);
     fprintf(fp, "%s %s\n", "options", options);
@@ -793,6 +780,7 @@ void write_options_to_dnsmasq(char *options)
         if (strncmp(options, "all-servers",12) == 0 && strstr(line_str, "all-servers") != NULL)
         {
             fclose(fp);
+            fclose(temp_fp);
             return;
         }
         else if (strncmp(options, "all-servers",12) != 0 && strstr(line_str, "all-servers") == NULL)
@@ -826,67 +814,103 @@ void write_options_to_dnsmasq(char *options)
 
 void update_extra_conf_to_resolv(char *path)
 {
-    char *type=NULL,*options=NULL,*timeout=NULL,*attempts=NULL;
-    GError *error = NULL;
-    char val[200]={0};
-    char *options_val = calloc(200, sizeof(char *));
-    char *uuid =get_active_connection_uuid(path);
-    char *file =get_file_path(uuid);
-    if(path == NULL)
+    if (path == NULL) {
         return;
-    if (extara_dns_conf_is_exist(file))
-    {
+    }
+
+    char *uuid = get_active_connection_uuid(path);
+    if (uuid == NULL) {
+        return;
+    }
+
+    char *file = get_file_path(uuid);
+    if (file == NULL) {
+        free(uuid);
+        return;
+    }
+
+    char *options_val = calloc(200, sizeof(char *));
+    if (options_val == NULL) {
+        free(file);
+        free(uuid);
+        return;
+    }
+
+    GError *error = NULL;
+    GKeyFile *key_file = NULL;
+    char *type = NULL;
+    char *options = NULL;
+    char *timeout = NULL;
+    char *attempts = NULL;
+
+    if (extara_dns_conf_is_exist(file)) {
         syslog(LOG_INFO,"EXTARA DNS CONF");
-        MONITOR_FLAG=0;
-        GKeyFile *key_file = g_key_file_new();
-        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error))
-        {
+        MONITOR_FLAG = 0;
+        key_file = g_key_file_new();
+        if (!g_key_file_load_from_file(key_file, file, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &error)) {
             if (!g_error_matches(error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
                 g_warning("Error loading key file: %s", error->message);
+            g_key_file_free(key_file);
+            if (error) g_error_free(error);
+            free(options_val);
+            free(file);
+            free(uuid);
             return;
         }
-        type = g_key_file_get_string(key_file,OPTIONS, "type", &error);
-        if(!strnlen(type,MAX_FILE_LENGTH))
-            type="order";
-        if (strncmp(type, "rotate",7)==0)
-        {
-            options = read_extra_dns_options(key_file,OPTIONS);
+
+        type = g_key_file_get_string(key_file, OPTIONS, "type", &error);
+        if (!type || !strnlen(type, MAX_FILE_LENGTH)) {
+            if (type) g_free(type);
+            type = g_strdup("order");
+        }
+
+        if (strncmp(type, "rotate", 7) == 0) {
+            options = read_extra_dns_options(key_file, OPTIONS);
             write_options_to_resolv(options);
             write_nameserver_to_resolv();
             delete_server_to_resolv();
             write_options_to_dnsmasq("rotate");
-        }
-        else
-        {
+            g_free(options);
+        } else {
             timeout = g_key_file_get_string(key_file, OPTIONS, "timeout", &error);
-            if(!strnlen(timeout,MAX_FILE_LENGTH))
-                timeout="5";
+            if (!timeout || !strnlen(timeout, MAX_FILE_LENGTH)) {
+                if (timeout) g_free(timeout);
+                timeout = g_strdup("5");
+            }
             attempts = g_key_file_get_string(key_file, OPTIONS, "attempts", &error);
-            if(!strnlen(attempts,MAX_FILE_LENGTH))
-                attempts="2";
-            snprintf(val, 200,"%s:%s %s:%s", "timeout", timeout, "attempts", attempts);
-            snprintf(options_val,200,"%s",val);
+            if (!attempts || !strnlen(attempts, MAX_FILE_LENGTH)) {
+                if (attempts) g_free(attempts);
+                attempts = g_strdup("2");
+            }
+            char val[200] = {0};
+            snprintf(val, 200, "%s:%s %s:%s", "timeout", timeout, "attempts", attempts);
+            snprintf(options_val, 200, "%s", val);
             write_options_to_resolv(options_val);
             write_nameserver_to_resolv();
-            if (strncmp(type, "order", 6) != 0)
-            {
+            if (strncmp(type, "order", 6) != 0) {
                 write_server_to_resolv();
                 write_options_to_dnsmasq("all-servers");
-            }
-            else
-            {
+            } else {
                 delete_server_to_resolv();
                 write_options_to_dnsmasq("strict-order");
             }
+            g_free(timeout);
+            g_free(attempts);
         }
+        g_free(type);
         g_key_file_free(key_file);
-        free(options_val);
-    }else{
+    } else {
         syslog(LOG_INFO,"DON NOT EXTARA DNS CONF");
-        
     }
-    return;
+
+    if (error) {
+        g_error_free(error);
+    }
+    free(options_val);
+    free(file);
+    free(uuid);
 }
+
 static DBusHandlerResult filter_func(DBusConnection *BUS, DBusMessage *message, void *user_data)
 {
     dbus_bool_t handled = FALSE;
@@ -1055,16 +1079,13 @@ int checkEnviron(DBusConnection *conn,int pid) {
 }
 static int dbus_security_get_client_by_proc_exe(const char *exe_path, char buf[])
 {
-  int result = readlink(exe_path, buf, MAX_FILE_LENGTH - 1);
-
-  if (result < 0 || (result > MAX_FILE_LENGTH - 1))
-  {
-    return -1;
-  }
-
-  buf[result] = '\0';
-
-  return 0;
+    ssize_t result = readlink(exe_path, buf, MAX_FILE_LENGTH - 1);
+    if (result < 0 || (size_t)result >= MAX_FILE_LENGTH - 1)
+    {
+        return -1;
+    }
+    buf[result] = '\0';
+    return 0;
 }
 static inline int strstartswith(const char *str, const char *prefix)
 {
@@ -1152,7 +1173,7 @@ gboolean isAllowedCaller(DBusConnection *conn, pid_t pid)
         
         goto exit;
     }
-    for (int i = 0; whiteList[i]; i++)
+    for (int i = 0; whiteList[i] != NULL; i++)
     {
         if ((spos && !strcmp(spos, whiteList[i])) || !strcmp(buf, whiteList[i]))
         {

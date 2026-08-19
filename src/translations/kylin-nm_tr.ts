@@ -104,22 +104,22 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
         <source>Network profile type</source>
-        <translation>Ağ Yapılandırma Dosyası Türü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
-        <translation>Genel (önerilen) ağdaki cihazlar bu bilgisayarı keşfedemez. Genellikle havaalanı ya da kafe gibi kamuya açık yerlerdeki ağlar için uygundur.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
-        <translation>Özel ağdaki cihazlar bu bilgisayarı keşfedebilir. Genellikle ev veya iş ağı için uygundur. Ağdaki kişileri ve cihazları tanır ve onlara güvenirim.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation>Güvenlik duvarını ve güvenlik ayarlarını yapılandır</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,47 +127,47 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
         <source>Network connectivity detection</source>
-        <translation>Ağ bağlantısı algılama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
-        <translation>İnternet erişimi kısıtlıysa, ağ IP bağlantısı algılama yöntemini değiştirip tekrar deneyin.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
         <source>Public network (default)</source>
-        <translation>İnternet (varsayılan)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
         <source>Local area network (intranet)</source>
-        <translation>Yerel alan ağı (LAN)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
         <source>Confirm</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
         <source>The network is connected and can access the Internet normally.</source>
-        <translation>Ağ bağlı, İnternet&apos;e normal şekilde erişilebilir.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation>Ağa bağlandı, ancak İnternet erişimi kısıtlı.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
         <source>Please enter the local area network (intranet) detection address</source>
-        <translation>Lütfen yerel ağ (iç ağ) algılama adresini girin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
         <source>Format error</source>
-        <translation>Biçim yanlış</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -175,63 +175,63 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
         <source>Connection Name</source>
-        <translation>Ağ adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
         <source>IPv4Config</source>
-        <translation>IPv4 yapılandırması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
         <source>Address</source>
-        <translation>IPv4 adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>Netmask</source>
-        <translation>Alt ağ maskesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
         <source>Default Gateway</source>
-        <translation>Varsayılan Ağ Geçidi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
         <source>Connection name is empty or invalid</source>
-        <translation>Ağ adı boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation>IPv4 adresi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation>IPv4 alt ağ maskesi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation>IPv4 ağ geçidi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
         <source>Invalid address</source>
-        <translation>Geçersiz IP adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
         <source>Invalid subnet mask</source>
-        <translation>Geçersiz alt ağ maskesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
         <source>Required</source>
-        <translation>Zorunlu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
@@ -241,17 +241,17 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
         <source>Address conflict</source>
-        <translation>Adres çakışması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
         <source>Auto(DHCP)</source>
-        <translation>Otomatik (DHCP)</translation>
+        <translation type="unfinished">Oto(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
         <source>Manual</source>
-        <translation>El ile</translation>
+        <translation type="unfinished">Elle</translation>
     </message>
 </context>
 <context>
@@ -259,82 +259,82 @@
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <source>Auto Connection</source>
-        <translation>Otomatik Bağlan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="340"/>
         <source>SSID:</source>
-        <translation>SSID:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="151"/>
         <source>Copied successfully!</source>
-        <translation>Kopyalama başarılı!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="212"/>
         <source>Copy all</source>
-        <translation>Tümünü Kopyala</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="232"/>
         <source>Please input SSID:</source>
-        <translation>Lütfen SSID girin:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
         <source>Protocol:</source>
-        <translation>Protokol:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
         <source>Security Type:</source>
-        <translation>Güvenlik türü:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="343"/>
         <source>Hz:</source>
-        <translation>Ağ Bandı:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="344"/>
         <source>Chan:</source>
-        <translation>Ağ kanalı:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
         <source>BandWidth:</source>
-        <translation>Bant genişliği:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
         <source>IPv4:</source>
-        <translation>IPv4 Adresi:</translation>
+        <translation type="unfinished">IPv6 adresi: {4:?}</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
         <source>IPv4 DNS:</source>
-        <translation>IPv4 DNS sunucusu:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>Yerel bağlantı IPv6 adresi:</translation>
+        <translation type="unfinished">IPv6 adresi: {6:?}</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation>Fiziksel Adres:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1263,57 +1263,57 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
         <source>DNS Server Advanced Settings</source>
-        <translation>DNS Sunucusu Gelişmiş Yapılandırması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
         <source>Tactic</source>
-        <translation>Politika</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
         <source>Timeout</source>
-        <translation>Zaman aşımı süresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
         <source>Retry Count</source>
-        <translation>Yeniden deneme sayısı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
         <source>order</source>
-        <translation>Sıra</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
         <source>rotate</source>
-        <translation>Rastgele</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
         <source>concurrency</source>
-        <translation>Eşzamanlı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source> s</source>
-        <translation> saniye</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
         <source> times</source>
-        <translation> kez</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
         <source>Confirm</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1321,27 +1321,27 @@
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation>Wi-Fi ağı kimlik doğrulaması gerektiriyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation>Wi-Fi ağına eriş</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation>Parola veya şifreleme anahtarı gereklidir.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1349,22 +1349,22 @@
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
         <source>Allow other devices on this network to discover this computer?</source>
-        <translation>Bu ağdaki diğer cihazların bu bilgisayarı keşfetmesine izin verilsin mi?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
         <source>It is not recommended to enable this feature on public networks</source>
-        <translation>Bu özelliğin genel ağda etkinleştirilmesi önerilmez</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
         <source>Not allowed (recommended)</source>
-        <translation>İzin verme (önerilir)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="100"/>
         <source>Allowed</source>
-        <translation>İzin Ver</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1372,68 +1372,68 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
         <source>Address</source>
-        <translation>Adres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
         <source>Netmask</source>
-        <translation>Alt Ağ Maskesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation>Varsayılan ağ geçidi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
         <source>IPv4Config</source>
-        <translation>IPv4 Yapılandırması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
         <source>Auto(DHCP)</source>
-        <translation>Otomatik</translation>
+        <translation type="unfinished">Oto(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
         <source>Manual</source>
-        <translation>Elle</translation>
+        <translation type="unfinished">Elle</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation>Ipv4 adresi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
         <source>IPv4 netMask is empty or invalid</source>
-        <translation>IPv4 alt ağ maskesi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
         <source>IPv4 gateway is empty or invalid</source>
-        <translation>IPv4 ağ geçidi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
         <source>Invalid address</source>
-        <translation>Geçersiz IP Adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
         <source>Invalid subnet mask</source>
-        <translation>Geçersiz alt ağ maskesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
         <source>Required</source>
-        <translation>Zorunlu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
         <source>Address conflict</source>
-        <translation>Adres çakışması</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1441,63 +1441,63 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
         <source>Address</source>
-        <translation>Adres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
         <source>Subnet prefix Length</source>
-        <translation>Alt ağ önek uzunluğu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation>Varsayılan Ağ Geçidi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
         <source>IPv6Config</source>
-        <translation>IPv6 Yapılandırması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
         <source>Auto(DHCP)</source>
-        <translation>Otomatik</translation>
+        <translation type="unfinished">Oto(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
         <source>Manual</source>
-        <translation>El ile</translation>
+        <translation type="unfinished">Elle</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
         <source>Required</source>
-        <translation>Gerekli</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
         <source>Invalid address</source>
-        <translation>Geçersiz IP adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
         <source>Invalid gateway</source>
-        <translation>Geçersiz ağ geçidi adresi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
         <source>IPv6 address is empty or invalid</source>
-        <translation>IPv6 adresi boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
         <source>IPv6 prefix length is empty or invalid</source>
-        <translation>IPv6 alt ağ önek uzunluğu boş veya geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
         <source>Address conflict</source>
-        <translation>Adres çakışması</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1505,52 +1505,52 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
         <source>Connect WIFI</source>
-        <translation>WIFI&apos;ye Bağlan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
         <source>Please check network config</source>
-        <translation>Lütfen ağ yapılandırmasını kontrol edin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="219"/>
         <source>Please enter the network information</source>
-        <translation>Lütfen katılmak istediğiniz ağ bilgilerini girin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="224"/>
         <source>Network name(SSID)</source>
-        <translation>Ağ Adı (SSID)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
         <source>Show Network List</source>
-        <translation>Ağ listesini göster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
         <source>Join</source>
-        <translation>Katıl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
         <source>Required</source>
-        <translation>Gerekli</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
         <source>Find and Join WLAN</source>
-        <translation>Kablosuz yerel ağları bul ve katıl</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1565,12 +1565,12 @@
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="78"/>
         <source>Not connected</source>
-        <translation>Bağlı değil</translation>
+        <translation type="unfinished">Bağlanamadı</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
         <source>Wired Device not carried</source>
-        <translation>Ethernet kablosu takılı değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
@@ -1578,7 +1578,7 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
         <source>Disconnect</source>
-        <translation>Bağlantıyı Kes</translation>
+        <translation type="unfinished">Bağlantıyı Kes</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
@@ -1586,19 +1586,19 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="193"/>
         <source>Property</source>
-        <translation>Özellikler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
         <source>Delete</source>
-        <translation>Bu Ağı Sil</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1606,68 +1606,68 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="812"/>
         <source>LAN</source>
-        <translation>Kablolu ağ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
         <source>conflict, unable to connect to the network normally!</source>
-        <translation>Çakışma, ağa düzgün bağlanılamıyor!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
         <source>No wired network card detected</source>
-        <translation>Kablolu ağ kartı algılanmadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
         <source>Activated LAN</source>
-        <translation>Ağım</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
         <source>Inactivated LAN</source>
-        <translation>Diğer Ağlar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1311"/>
         <source>No ethernet device avaliable</source>
-        <translation>Kablolu cihaz algılanmadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
         <source>Wired Device not carried</source>
-        <translation>Ağ kablosu takılı değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1535"/>
         <source>Connected: </source>
-        <translation>Bağlandı: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
         <source>(Limited)</source>
-        <translation>(Ağ sınırlı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
         <source>Connected, restricting access</source>
-        <translation>Bağlandı, ağ sınırlı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
         <source>No internet access. Please click Network Check to specific reasons.</source>
-        <translation>İnternete erişilemiyor. Lütfen ağ algılamasına tıklayarak ayrıntılı nedeni görün.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
         <source>Network Check</source>
-        <translation>Ağ Algılama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1522"/>
         <source>Not Connected</source>
-        <translation>Bağlı Değil</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1675,12 +1675,12 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="183"/>
         <source>Kylin NM</source>
-        <translation>Ağ ayarları aracı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="186"/>
         <source>kylin network applet desktop message</source>
-        <translation>Ağ Bildirim Mesajı</translation>
+        <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
     </message>
 </context>
 <context>
@@ -1710,7 +1710,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="465"/>
         <source>LAN</source>
-        <translation>Kablolu Ağ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="467"/>
@@ -1720,38 +1720,38 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
-        <translation>Ağ Öğesini Ayarla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="501"/>
         <source>Network Connectivity Detection</source>
-        <translation>Ağ bağlantısı algılama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="842"/>
         <location filename="../frontend/mainwindow.cpp" line="1204"/>
         <source>Network tool</source>
-        <translation>Ağ Araçları</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="856"/>
         <source>Network Card</source>
-        <translation>Ağ Arayüzü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Not Connected</source>
-        <translation>Bağlı değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Connected</source>
-        <translation>Bağlandı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="1187"/>
         <source>Not connected to the network</source>
-        <translation>Ağa Bağlanılmadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1863,17 +1863,17 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
         <source>DNS server(Drag to sort)</source>
-        <translation>DNS sunucusu gelişmiş yapılandırması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
         <source>Click &quot;+&quot; to configure DNS</source>
-        <translation>DNS yapılandırmak için “+”ya tıklayın</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
         <source>Settings</source>
-        <translation>Gelişmiş Ayarlar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1881,52 +1881,52 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
         <source>Kylin NM</source>
-        <translation>Ağ ayarları aracı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
         <source>kylin network desktop message</source>
-        <translation>Ağ ipucu mesajı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
-        <translation>Detaylar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
         <source>Security</source>
-        <translation>Güvenlik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
         <source>Config</source>
-        <translation>Yapılandırma</translation>
+        <translation type="unfinished">Ayar</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
         <source>Confirm</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
         <source>Forget this network</source>
-        <translation>Bu ağı unut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
         <source>start check IPv4 address conflict</source>
-        <translation>IPv4 Adres Çakışması Tespiti Başlatılıyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
         <source>start check IPv6 address conflict</source>
-        <translation>IPv6 Adres Çakışması Tespiti Başlatılıyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
@@ -1941,51 +1941,51 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
         <source>Add LAN Connect</source>
-        <translation>Kablolu ağ ekle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
         <source>Connect Hidden WLAN</source>
-        <translation>Gizli WLAN&apos;a Bağlan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
         <source>Delete this network</source>
-        <translation>Bu Ağı Sil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="683"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
         <source>None</source>
-        <translation>Yok</translation>
+        <translation type="unfinished">Yok</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
         <source>Auto</source>
-        <translation>Otomatik</translation>
+        <translation type="unfinished">Oto</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
         <source>this wifi no support enterprise type</source>
-        <translation>Bu wifi kurumsal ağ türünü desteklemiyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
         <source>this wifi no support None type</source>
-        <translation>Bu wifi boş türü desteklemiyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
         <source>this wifi no support WPA2 type</source>
-        <translation>Bu Wi-Fi, WPA2 türünü desteklemiyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
         <source>this wifi no support WPA3 type</source>
-        <translation>Bu wifi WPA3 türünü desteklemiyor</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2207,85 +2207,85 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="110"/>
         <source>Remember the Network</source>
-        <translation>Bu ağı hatırla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
         <source>Security</source>
-        <translation>Güvenlik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
         <source>Password</source>
-        <translation>Anahtar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
         <source>EAP type</source>
-        <translation>EAP Yöntemi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
         <source>Identity</source>
-        <translation>Anonim kimlik</translation>
+        <translation type="unfinished">Kimlik:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
         <source>Domain</source>
-        <translation>Etki Alanı</translation>
+        <translation type="unfinished">Domain:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
         <source>CA certficate</source>
-        <translation>CA Sertifikası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
         <source>no need for CA certificate</source>
-        <translation>CA sertifikası gerekli değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
         <source>User certificate</source>
-        <translation>Kullanıcı Sertifikası</translation>
+        <translation type="unfinished">Kullanıcı sertifikası:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
         <source>User private key</source>
-        <translation>Kullanıcı özel anahtarı</translation>
+        <translation type="unfinished">Kullanıcı özel anahtarı:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="231"/>
         <source>User key password</source>
-        <translation>Kullanıcı Anahtar Parolası</translation>
+        <translation type="unfinished">Kullanıcı anahtarı şifresi:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="232"/>
         <source>Password options</source>
-        <translation>Parola seçenekleri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="233"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
         <source>Required</source>
-        <translation>Zorunlu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
         <source>Ineer authentication</source>
-        <translation>Dahili Kimlik Doğrulama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
         <source>Username</source>
-        <translation>Kullanıcı Adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
         <source>Ask pwd each query</source>
-        <translation>Her Seferinde Parola Sor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
@@ -2302,22 +2302,22 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
         <source>None</source>
-        <translation>Yok</translation>
+        <translation type="unfinished">Yok</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
         <source>WPA&amp;WPA2 Personal</source>
-        <translation>WPA&amp;WPA2 Kişisel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="246"/>
         <source>WPA&amp;WPA2 Enterprise</source>
-        <translation>WPA&amp;WPA2 Enterprise</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="247"/>
         <source>WPA3 Personal</source>
-        <translation>WPA3 Kişisel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="258"/>
@@ -2325,132 +2325,132 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="284"/>
         <source>Choose from file...</source>
-        <translation>Dosyadan seç...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store passwords only for this user</source>
-        <translation>Parolayı yalnızca bu kullanıcı için sakla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
         <source>Store password only for this user</source>
-        <translation>Parolayı yalnızca bu kullanıcı için sakla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store passwords for all users</source>
-        <translation>Tüm kullanıcılar için parolayı sakla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
         <source>Store password for all users</source>
-        <translation>Tüm kullanıcılar için parolayı sakla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask this password every time</source>
-        <translation>Bu parolayı her zaman sor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
         <source>Ask password every time</source>
-        <translation>Bu parolayı her zaman sor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
         <source>PAC provisioning</source>
-        <translation>PAC Yapılandırması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
         <source>Allow automatic PAC provisioning</source>
-        <translation>Otomatik PAC yapılandırmasına izin ver</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
         <source>PAC file</source>
-        <translation>PAC dosyası</translation>
+        <translation type="unfinished">PAC dosyası</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
         <source>Anonymous</source>
-        <translation>Anonim</translation>
+        <translation type="unfinished">Anonim</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
         <source>Authenticated</source>
-        <translation>Kimliği Doğrulanmış</translation>
+        <translation type="unfinished">Doğrulanmış</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
         <source>Both</source>
-        <translation>Her ikisini birden kullan</translation>
+        <translation type="unfinished">Her ikisi de</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
         <source>Wifi password length less than 8</source>
-        <translation>Wifi anahtar uzunluğu sekiz karakterden az</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
         <source>TLS identity is empty</source>
-        <translation>TLS anonim kimliği boş</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
         <source>CA cert filepath is invalid</source>
-        <translation>CA sertifikası dosya yolu geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
         <source>Client cert filepath is invalid</source>
-        <translation>Kullanıcı sertifika dosya yolu geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
         <source>Client private key filepath is invalid</source>
-        <translation>Kullanıcı özel anahtar dosya yolu geçersiz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
         <source>Client private key password is empty</source>
-        <translation>Kullanıcı anahtar parolası boş</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
         <source>User name or user password is empty</source>
-        <translation>Kullanıcı adı veya anahtar boş</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
         <source>No PAC file is selected </source>
-        <translation>PAC dosyası seçilmedi </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
         <source>Choose a CA certificate</source>
-        <translation>Bir CA Sertifikası Seçin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation>CA Dosyaları (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
         <source>PAC Files ( *.pac)</source>
-        <translation>PAC Dosyaları (*.pac)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
         <source>Choose a PAC file</source>
-        <translation>Bir PAC Dosyası Seçin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
@@ -2463,32 +2463,32 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
         <source>Current Device</source>
-        <translation>Mevcut Ağ Arayüzü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
         <source>Devices Closed!</source>
-        <translation>Cihaz kapalı!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
         <source>Settings</source>
-        <translation>Ağ ayarları</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
         <source>Kylin NM</source>
-        <translation>Ağ ayarları aracı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
         <source>kylin network applet desktop message</source>
-        <translation>Ağ Bildirim Mesajı</translation>
+        <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
         <source>connected</source>
-        <translation>Bağlandı</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2503,12 +2503,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
         <source>Unable to save modifications</source>
-        <translation>Değişiklikler kaydedilemedi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
         <source>Confirm</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2516,42 +2516,42 @@
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
-        <translation>WLAN Kimlik Doğrulaması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
-        <translation>Lütfen WLAN bilgilerini girin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
-        <translation>WLAN Kimliği:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
         <source>WLAN Name:</source>
-        <translation>WLAN Adı:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation>İptal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation>Onayla</translation>
+        <translation type="unfinished">Tamam</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>İletişim kutusu</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2559,7 +2559,7 @@
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="70"/>
         <source>Not connected</source>
-        <translation>Bağlı değil</translation>
+        <translation type="unfinished">Bağlanamadı</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
@@ -2568,7 +2568,7 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
         <source>Disconnect</source>
-        <translation>Bağlantıyı Kes</translation>
+        <translation type="unfinished">Bağlantıyı Kes</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
@@ -2577,24 +2577,24 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
         <source>Connect</source>
-        <translation>Bağlantı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
         <source>Property</source>
-        <translation>Özellikler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
         <source>Forget</source>
-        <translation>Bu Ağı Unut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="328"/>
         <source>Auto Connect</source>
-        <translation>Bu Ağa Otomatik Katıl</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2602,7 +2602,7 @@
     <message>
         <location filename="../frontend/list-items/wlanmoreitem.cpp" line="28"/>
         <source>Add Others...</source>
-        <translation>Diğer ağa katıl...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2610,58 +2610,58 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
         <source>WLAN</source>
-        <translation>Kablosuz yerel ağ</translation>
+        <translation type="unfinished">WLAN</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="149"/>
         <source>Activated WLAN</source>
-        <translation>Ağlarım</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
         <source>Other WLAN</source>
-        <translation>Diğer ağlar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
         <source>The routing end rejects the access of the device</source>
-        <translation>Ağ katılmayı reddetti, bağlantı başarısız oldu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
         <source>The network access at the routing end is full</source>
-        <translation>Ağ bağlantısı dolu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
         <source>usd set offline mode failed: </source>
-        <translation>Çevrimdışı mod ayarlanamadı: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>
         <source>Connected: </source>
-        <translation>Bağlandı: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1988"/>
         <source>Not Connected</source>
-        <translation>Bağlı değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="596"/>
         <source>No wireless network card detected</source>
-        <translation>Kablosuz ağ arayüzü bulunamadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1184"/>
         <source>WLAN Connected Successfully</source>
-        <translation>Kablosuz ağ bağlandı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation>Kablosuz ağ bağlantısı kesildi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2684,17 +2684,17 @@
     <message>
         <location filename="../main.cpp" line="124"/>
         <source>kylinnm</source>
-        <translation>Ağ araçları</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
         <source>show kylin-nm wifi page</source>
-        <translation>Kablosuz sayfasını göster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="129"/>
         <source>show kylin-nm lan page</source>
-        <translation>Kablolu sayfayı göster</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

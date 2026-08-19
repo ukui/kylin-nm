@@ -86,6 +86,7 @@ src/backend/proxyservicemanager/proxyservicemanager-test.pro \
 #src/backend/vpndbusadaptor/vpndbusadaptor-test.pro \
 #src/backend/kylinipv6arping/kylinipv6arping-test.pro \
 #src/backend/utils/utils-test.pro \
+src/backend/vpnsecrets/test_vpnsecrets.pro \
 #src/main/test_main.pro \
 src/frontend/customstyle/customstyle-test.pro \
 src/frontend/netdetails/multiplednswidget/multiplednswidget-test.pro \

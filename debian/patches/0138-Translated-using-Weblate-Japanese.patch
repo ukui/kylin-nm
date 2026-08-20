@@ -1,0 +1,25 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Thu, 20 Aug 2026 12:39:58 +0000
+Subject: Translated using Weblate (Japanese)
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ja/
+---
+ src-vpn/translations/kylin-vpn_ja.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ja.ts b/src-vpn/translations/kylin-vpn_ja.ts
+index e885757..77a1f3f 100644
+--- a/src-vpn/translations/kylin-vpn_ja.ts
++++ b/src-vpn/translations/kylin-vpn_ja.ts
+@@ -99,7 +99,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="847"/>
+         <source>All Available</source>
+-        <translation type="unfinished"></translation>
++        <translation>任意</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="848"/>

@@ -1,0 +1,79 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Thu, 20 Aug 2026 07:44:21 +0000
+Subject: Translated using Weblate (Urdu)
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/vpn/ur/
+---
+ plugins/vpn/translations/ur.ts | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/plugins/vpn/translations/ur.ts b/plugins/vpn/translations/ur.ts
+index caa9346..9e6f7ad 100644
+--- a/plugins/vpn/translations/ur.ts
++++ b/plugins/vpn/translations/ur.ts
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../itemframe.cpp" line="40"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>VPN شامل کریں</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,26 +39,26 @@
+         <location filename="../vpn.cpp" line="159"/>
+         <location filename="../vpn.cpp" line="291"/>
+         <source>Show on Taskbar</source>
+-        <translation type="unfinished"></translation>
++        <translation>ٹاسک بار میں آئیکن دکھائیں</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="293"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>VPN کنکشن شامل کریں</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="490"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>منسلک ہے</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>غیر منسلک ہے</translation>
+     </message>
+ </context>
+ <context>
+@@ -66,19 +66,19 @@
+     <message>
+         <location filename="../vpnitem.cpp" line="60"/>
+         <source>Delete</source>
+-        <translation type="unfinished"></translation>
++        <translation>حذف کریں</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="117"/>
+         <location filename="../vpnitem.cpp" line="130"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>غیر منسلک کریں</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>منسلک کریں</translation>
+     </message>
+ </context>
+ </TS>

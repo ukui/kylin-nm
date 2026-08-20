@@ -1,0 +1,296 @@
+From: Qingqing <wangyiqing@kylinos.cn>
+Date: Thu, 20 Aug 2026 07:28:14 +0000
+Subject: Translated using Weblate (Urdu)
+
+Currently translated at 100.0% (42 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/ur/
+---
+ plugins/proxy/translations/ur.ts | 84 ++++++++++++++++++++--------------------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
+
+diff --git a/plugins/proxy/translations/ur.ts b/plugins/proxy/translations/ur.ts
+index a18dfd7..965da2e 100644
+--- a/plugins/proxy/translations/ur.ts
++++ b/plugins/proxy/translations/ur.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../aptproxydialog.cpp" line="43"/>
+         <source>Set APT Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>APT پراکسی کو ترتیب دیں</translation>
+     </message>
+     <message>
+         <source>Server Address</source>
+@@ -19,32 +19,32 @@
+     <message>
+         <location filename="../aptproxydialog.cpp" line="60"/>
+         <source>Http Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Http پراکسی</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="80"/>
+         <source>Http Port</source>
+-        <translation type="unfinished"></translation>
++        <translation>Http پورٹ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="100"/>
+         <source>Https Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Https پراکسی</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="119"/>
+         <source>Https Port</source>
+-        <translation type="unfinished"></translation>
++        <translation>Https پورٹ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="140"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>منسوخ کریں</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="144"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ٹھیک ہے</translation>
+     </message>
+ </context>
+ <context>
+@@ -52,67 +52,67 @@
+     <message>
+         <location filename="../proxy.cpp" line="72"/>
+         <source>Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>پراکسی</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="213"/>
+         <source>Start using</source>
+-        <translation type="unfinished"></translation>
++        <translation>فعال کریں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="227"/>
+         <source>Proxy mode</source>
+-        <translation type="unfinished"></translation>
++        <translation>پراکسی کی قسم</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="232"/>
+         <source>Auto</source>
+-        <translation type="unfinished"></translation>
++        <translation>خودکار</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="236"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>دستی</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="391"/>
+         <source>Application Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>درخواست پراکسی</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="510"/>
+         <source>System Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>نظام کی پراکسی</translation>
+         <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="512"/>
+         <source>Auto url</source>
+-        <translation type="unfinished"></translation>
++        <translation>ترتیبات URL</translation>
+         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="514"/>
+         <source>Http Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>HTTP پراکسی</translation>
+         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="516"/>
+         <source>Https Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>HTTPS پراکسی</translation>
+         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="518"/>
+         <source>Ftp Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>FTP پراکسی</translation>
+         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="520"/>
+         <source>Socks Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>SOCKS پراکسی</translation>
+         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
+     </message>
+     <message>
+@@ -122,36 +122,36 @@
+         <location filename="../proxy.cpp" line="524"/>
+         <location filename="../proxy.cpp" line="1334"/>
+         <source>Port</source>
+-        <translation type="unfinished"></translation>
++        <translation>پورٹ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="525"/>
+         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
+-        <translation type="unfinished"></translation>
++        <translation>نظر انداز کردہ میزبان کی فہرست، براہ کرم انگریزی سیمی کولن (;) استعمال کریں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="529"/>
+         <location filename="../proxy.cpp" line="531"/>
+         <source>App Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>درخواست پراکسی</translation>
+         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="535"/>
+         <source>APT Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>APT پراکسی</translation>
+         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="536"/>
+         <location filename="../proxy.cpp" line="1271"/>
+         <source>Open</source>
+-        <translation type="unfinished"></translation>
++        <translation>کھولیں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="537"/>
+         <source>Http Address : </source>
+-        <translation type="unfinished"></translation>
++        <translation>Http پتہ: </translation>
+     </message>
+     <message>
+         <source>Server Address : </source>
+@@ -161,91 +161,91 @@
+         <location filename="../proxy.cpp" line="538"/>
+         <location filename="../proxy.cpp" line="540"/>
+         <source>Port : </source>
+-        <translation type="unfinished"></translation>
++        <translation>پورٹ: </translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="539"/>
+         <source>Https Address : </source>
+-        <translation type="unfinished"></translation>
++        <translation>Https پتہ: </translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="541"/>
+         <source>Edit</source>
+-        <translation type="unfinished"></translation>
++        <translation>ترمیم کریں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="716"/>
+         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
+-        <translation type="unfinished"></translation>
++        <translation>APT پراکسی بند ہے، اثر انداز کرنے کے لئے دوبارہ چلانا ہوگا</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="717"/>
+         <location filename="../proxy.cpp" line="1048"/>
+         <source>Reboot Later</source>
+-        <translation type="unfinished"></translation>
++        <translation>بعد میں دوبارہ چلائیں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="718"/>
+         <location filename="../proxy.cpp" line="1049"/>
+         <source>Reboot Now</source>
+-        <translation type="unfinished"></translation>
++        <translation>فوری طور پر دوبارہ چلائیں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1047"/>
+         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
+-        <translation type="unfinished"></translation>
++        <translation>APT پراکسی کو ترتیب دینے کے بعد نظام کو دوبارہ چلانا ہوگا، کیا آپ نظام کو دوبارہ چلانا چاہتے ہیں؟</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1284"/>
+         <source>Proxy type</source>
+-        <translation type="unfinished"></translation>
++        <translation>پراکسی کی قسم</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1301"/>
+         <source>IP address</source>
+-        <translation type="unfinished"></translation>
++        <translation>IP ایڈریس</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1307"/>
+         <location filename="../proxy.cpp" line="1337"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>مطلوب</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1327"/>
+         <source>Invalid IP Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>غلط IP ایڈریس</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1348"/>
+         <source>Username</source>
+-        <translation type="unfinished"></translation>
++        <translation>صارف نام</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1351"/>
+         <location filename="../proxy.cpp" line="1365"/>
+         <source>Optional</source>
+-        <translation type="unfinished"></translation>
++        <translation>اختیاری</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1361"/>
+         <source>Password</source>
+-        <translation type="unfinished"></translation>
++        <translation>پاس ورڈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1384"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>منسوخ کریں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1385"/>
+         <source>Save</source>
+-        <translation type="unfinished"></translation>
++        <translation>محفوظ کریں</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1457"/>
+         <source>The following applications are allowed to use this configuration:</source>
+-        <translation type="unfinished"></translation>
++        <translation>درج ذیل ایپلیکیشنز کو اس ترتیب کو استعمال کرنے کی اجازت دیں:</translation>
+     </message>
+ </context>
+ </TS>

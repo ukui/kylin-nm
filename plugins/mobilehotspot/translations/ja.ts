@@ -144,7 +144,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1103"/>
         <source>use </source>
-        <translation type="unfinished"></translation>
+        <translation>使用 </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1104"/>

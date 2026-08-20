@@ -6,7 +6,7 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../blacklistpage.cpp" line="48"/>
         <source>Blacklist</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista negra de dispositivos</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar à lista negra</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../connectdevpage.cpp" line="49"/>
         <source>Connect device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivos ligados</translation>
     </message>
 </context>
 <context>
@@ -38,54 +38,54 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>Hotspot móvel</translation>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="110"/>
         <source>mobilehotspot open</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir hotspot</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="112"/>
         <source>Mobile Hotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>Hotspot móvel</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="114"/>
         <source>Open mobile hotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>Ativar hotspot móvel</translation>
         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="116"/>
         <source>Wi-Fi Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome Wi-Fi</translation>
         <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="118"/>
         <source>Network Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Palavra-passe da rede</translation>
         <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="120"/>
         <source>Network Frequency band</source>
-        <translation type="unfinished"></translation>
+        <translation>Banda de rede</translation>
         <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="122"/>
         <source>Shared NIC port</source>
-        <translation type="unfinished"></translation>
+        <translation>Partilhar porta do cartão de rede</translation>
         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>Hotspot móvel</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
 </context>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="165"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation type="unfinished"></translation>
+        <translation>O interruptor sem fios está desligado ou não existe um cartão de rede sem fios com função de hotspot</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="190"/>
         <source>hotpots name or device is invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do hotspot ou erro do dispositivo</translation>
     </message>
     <message>
         <source>can not  create hotspot with password length less than eight!</source>
@@ -124,32 +124,32 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="644"/>
         <source>Contains at least 8 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Deve conter pelo menos 8 carateres</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>Hotspot móvel</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Definições</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Definir notificações no ambiente de trabalho</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1103"/>
         <source>use </source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizar </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1104"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation type="unfinished"></translation>
+        <translation> ao partilhar o hotspot, irá interromper a ligação de rede sem fios do dispositivo local</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="381"/>
@@ -158,27 +158,27 @@
         <location filename="../mobilehotspotwidget.cpp" line="526"/>
         <location filename="../mobilehotspotwidget.cpp" line="791"/>
         <source>hotspot already close</source>
-        <translation type="unfinished"></translation>
+        <translation>Hotspot desativado</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="550"/>
         <source>Open mobile hotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>Ativar hotspot móvel</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="633"/>
         <source>Network Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Palavra-passe da rede</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="672"/>
         <source>Network Frequency band</source>
-        <translation type="unfinished"></translation>
+        <translation>Banda de rede</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="697"/>
         <source>Shared NIC port</source>
-        <translation type="unfinished"></translation>
+        <translation>Partilhar porta do cartão de rede</translation>
     </message>
     <message>
         <source>Open</source>
@@ -187,7 +187,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="611"/>
         <source>Wi-Fi Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome Wi-Fi</translation>
     </message>
     <message>
         <source>Password</source>
@@ -201,7 +201,7 @@
         <location filename="../mobilehotspotwidget.cpp" line="823"/>
         <location filename="../mobilehotspotwidget.cpp" line="835"/>
         <source>hotspot already open</source>
-        <translation type="unfinished"></translation>
+        <translation>Hotspot ativado</translation>
     </message>
 </context>
 </TS>

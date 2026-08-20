@@ -1,0 +1,25 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Thu, 20 Aug 2026 12:41:57 +0000
+Subject: Translated using Weblate (Japanese)
+
+Currently translated at 100.0% (28 of 28 strings)
+
+Translation: openkylin-huanghe/mobilehotspot
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/mobilehotspot/ja/
+---
+ plugins/mobilehotspot/translations/ja.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/mobilehotspot/translations/ja.ts b/plugins/mobilehotspot/translations/ja.ts
+index 85b9076..04d292f 100644
+--- a/plugins/mobilehotspot/translations/ja.ts
++++ b/plugins/mobilehotspot/translations/ja.ts
+@@ -144,7 +144,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="1103"/>
+         <source>use </source>
+-        <translation type="unfinished"></translation>
++        <translation>使用 </translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="1104"/>

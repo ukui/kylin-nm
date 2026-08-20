@@ -19,7 +19,7 @@
     <message>
         <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectado, red limitada.</translation>
     </message>
 </context>
 <context>
@@ -88,7 +88,7 @@
         <location filename="../netconnect.cpp" line="952"/>
         <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>No conectado</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="714"/>

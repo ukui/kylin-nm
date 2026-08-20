@@ -1,0 +1,114 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Thu, 20 Aug 2026 01:59:21 +0000
+Subject: Translated using Weblate (Portuguese)
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/pt/
+---
+ plugins/netconnect/translations/pt.ts | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/plugins/netconnect/translations/pt.ts b/plugins/netconnect/translations/pt.ts
+index 5435abd..5142f34 100644
+--- a/plugins/netconnect/translations/pt.ts
++++ b/plugins/netconnect/translations/pt.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>Adicionar outros</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>Adicionar rede por cabo</translation>
+     </message>
+ </context>
+ <context>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation type="unfinished"></translation>
++        <translation>Ligado, acesso à rede limitado.</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,20 +39,20 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation type="unfinished"></translation>
++        <translation>Rede por cabo</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>Ativar</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+         <location filename="../netconnect.cpp" line="224"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Definições avançadas</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -70,42 +70,42 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>Definições</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>Configurar notificações no ambiente de trabalho</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Rede por cabo</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation type="unfinished"></translation>
++        <translation>Nenhum dispositivo com fios detetado</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Ligado</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Desligado</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>Placa de rede</translation>
+     </message>
+ </context>
+ </TS>

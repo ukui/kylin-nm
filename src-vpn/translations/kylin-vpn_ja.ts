@@ -99,7 +99,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="847"/>
         <source>All Available</source>
-        <translation type="unfinished"></translation>
+        <translation>任意</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="848"/>

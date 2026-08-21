@@ -1,0 +1,61 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Fri, 21 Aug 2026 06:12:24 +0000
+Subject: Translated using Weblate (French)
+
+Currently translated at 100.0% (42 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/fr/
+---
+ plugins/proxy/translations/fr.ts | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/plugins/proxy/translations/fr.ts b/plugins/proxy/translations/fr.ts
+index 00916c0..96d4668 100644
+--- a/plugins/proxy/translations/fr.ts
++++ b/plugins/proxy/translations/fr.ts
+@@ -19,22 +19,22 @@
+     <message>
+         <location filename="../aptproxydialog.cpp" line="64"/>
+         <source>Http Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Proxy HTTP</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="84"/>
+         <source>Http Port</source>
+-        <translation type="unfinished"></translation>
++        <translation>Port HTTP</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="104"/>
+         <source>Https Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>Proxy HTTPS</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="123"/>
+         <source>Https Port</source>
+-        <translation type="unfinished"></translation>
++        <translation>Port HTTPS</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="144"/>
+@@ -151,7 +151,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="538"/>
+         <source>Http Address : </source>
+-        <translation type="unfinished"></translation>
++        <translation>Adresse HTTP : </translation>
+     </message>
+     <message>
+         <source>Server Address : </source>
+@@ -166,7 +166,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="540"/>
+         <source>Https Address : </source>
+-        <translation type="unfinished"></translation>
++        <translation>Adresse HTTPS : </translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="542"/>

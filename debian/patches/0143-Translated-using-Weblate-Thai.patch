@@ -1,0 +1,25 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Fri, 21 Aug 2026 07:36:48 +0000
+Subject: Translated using Weblate (Thai)
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/th/
+---
+ src-vpn/translations/kylin-vpn_th.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_th.ts b/src-vpn/translations/kylin-vpn_th.ts
+index 5d2244b..30e52ea 100644
+--- a/src-vpn/translations/kylin-vpn_th.ts
++++ b/src-vpn/translations/kylin-vpn_th.ts
+@@ -780,7 +780,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+         <source>No VPN configuration available</source>
+-        <translation type="unfinished"></translation>
++        <translation>ไม่มีการกำหนดค่า VPN ที่พร้อมใช้งาน</translation>
+     </message>
+ </context>
+ <context>

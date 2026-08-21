@@ -1,0 +1,37 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Fri, 21 Aug 2026 07:38:52 +0000
+Subject: Translated using Weblate (Thai)
+
+Currently translated at 100.0% (238 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/th/
+---
+ src/translations/kylin-nm_th.ts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/translations/kylin-nm_th.ts b/src/translations/kylin-nm_th.ts
+index e4fff89..5ea94f3 100644
+--- a/src/translations/kylin-nm_th.ts
++++ b/src/translations/kylin-nm_th.ts
+@@ -828,17 +828,17 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation type="unfinished"></translation>
++        <translation>เชื่อมต่อ WIFI</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+         <source>Please check network config</source>
+-        <translation type="unfinished"></translation>
++        <translation>กรุณาตรวจสอบการตั้งค่าเครือข่าย</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>เชื่อมต่อ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>

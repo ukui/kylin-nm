@@ -828,17 +828,17 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
         <source>Connect WIFI</source>
-        <translation type="unfinished"></translation>
+        <translation>เชื่อมต่อ WIFI</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
         <source>Please check network config</source>
-        <translation type="unfinished"></translation>
+        <translation>กรุณาตรวจสอบการตั้งค่าเครือข่าย</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>เชื่อมต่อ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>

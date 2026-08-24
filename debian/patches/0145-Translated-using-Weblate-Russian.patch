@@ -1,0 +1,79 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Mon, 24 Aug 2026 03:19:56 +0000
+Subject: Translated using Weblate (Russian)
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/vpn/ru/
+---
+ plugins/vpn/translations/ru.ts | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/plugins/vpn/translations/ru.ts b/plugins/vpn/translations/ru.ts
+index ef3859a..ff650ae 100644
+--- a/plugins/vpn/translations/ru.ts
++++ b/plugins/vpn/translations/ru.ts
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../itemframe.cpp" line="40"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Добавить VPN</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,26 +39,26 @@
+         <location filename="../vpn.cpp" line="159"/>
+         <location filename="../vpn.cpp" line="291"/>
+         <source>Show on Taskbar</source>
+-        <translation type="unfinished"></translation>
++        <translation>Показывать значок на панели задач</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="293"/>
+         <source>Add VPN</source>
+-        <translation type="unfinished"></translation>
++        <translation>Добавить VPN-подключение</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="490"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключено</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>Не подключено</translation>
+     </message>
+ </context>
+ <context>
+@@ -66,19 +66,19 @@
+     <message>
+         <location filename="../vpnitem.cpp" line="60"/>
+         <source>Delete</source>
+-        <translation type="unfinished"></translation>
++        <translation>Удалить</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="117"/>
+         <location filename="../vpnitem.cpp" line="130"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Отключить</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Подключить</translation>
+     </message>
+ </context>
+ </TS>

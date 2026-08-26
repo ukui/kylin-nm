@@ -1,0 +1,107 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Wed, 26 Aug 2026 06:48:16 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (238 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/ko_KP/
+---
+ src/translations/kylin-nm_ko_KP.ts | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ko_KP.ts b/src/translations/kylin-nm_ko_KP.ts
+index c6ac831..0e47617 100644
+--- a/src/translations/kylin-nm_ko_KP.ts
++++ b/src/translations/kylin-nm_ko_KP.ts
+@@ -207,7 +207,7 @@
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
+         <source>Required</source>
+-        <translation>반드시 입력하기</translation>
++        <translation>필수</translation>
+     </message>
+ </context>
+ <context>
+@@ -729,7 +729,7 @@
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
+         <source>Required</source>
+-        <translation>반드시 입력하기</translation>
++        <translation>필수</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
+@@ -781,7 +781,7 @@
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
+         <source>Required</source>
+-        <translation>반드시 입력하기</translation>
++        <translation>필수</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
+@@ -828,7 +828,7 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation type="unfinished"></translation>
++        <translation>WIFI에 연결하십시오</translation>
+     </message>
+     <message>
+         <source>Please enter the network information to connect</source>
+@@ -837,7 +837,7 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+         <source>Please check network config</source>
+-        <translation type="unfinished"></translation>
++        <translation>네트워크 구성을 확인하십시오</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+@@ -862,7 +862,7 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
+         <source>Required</source>
+-        <translation>반드시 입력하기</translation>
++        <translation>필수</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
+@@ -1396,7 +1396,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
+         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
+         <source>Required</source>
+-        <translation>반드시 입력하기</translation>
++        <translation>필수</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
+@@ -1575,7 +1575,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1175"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1197"/>
+         <source>CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+-        <translation type="unfinished"></translation>
++        <translation>CA 파일 ( *.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation>대화상자</translation>
++        <translation>변경 시간</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+@@ -1793,7 +1793,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
+         <source>usd set offline mode failed: </source>
+-        <translation type="unfinished"></translation>
++        <translation>usd 오프라인 모드 설정 실패: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>

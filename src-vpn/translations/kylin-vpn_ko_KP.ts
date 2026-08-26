@@ -264,7 +264,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1086"/>
         <source>Mode</source>
-        <translation>모드</translation>
+        <translation>표시 방법</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
@@ -549,7 +549,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="386"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
@@ -804,7 +804,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="147"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="142"/>

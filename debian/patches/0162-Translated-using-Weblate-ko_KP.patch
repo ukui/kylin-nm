@@ -1,0 +1,101 @@
+From: Anonymous <noreply@weblate.org>
+Date: Wed, 26 Aug 2026 06:09:02 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 91.6% (11 of 12 strings)
+
+Translation: openkylin-huanghe/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/wlanconnect/ko_KP/
+---
+ plugins/wlanconnect/translations/ko_KP.ts | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/plugins/wlanconnect/translations/ko_KP.ts b/plugins/wlanconnect/translations/ko_KP.ts
+index 9b6d48d..b91a4da 100644
+--- a/plugins/wlanconnect/translations/ko_KP.ts
++++ b/plugins/wlanconnect/translations/ko_KP.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>기타 네트워크에 가입</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -23,7 +23,7 @@
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+         <source>WlanConnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>무선랜</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+@@ -31,19 +31,19 @@
+         <location filename="../wlanconnect.cpp" line="283"/>
+         <location filename="../wlanconnect.cpp" line="285"/>
+         <source>WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>무선랜</translation>
+         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>열기</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+         <location filename="../wlanconnect.cpp" line="280"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>고급설정</translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -57,36 +57,36 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="137"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>설정 항목</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="140"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>데스크톱 알림 설정</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="278"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>기타 네트워크에 가입</translation>
+         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="301"/>
+         <location filename="../wlanconnect.cpp" line="1299"/>
+         <source>No wireless network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>무선카드가 검색되지 않음</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="433"/>
+         <location filename="../wlanconnect.cpp" line="1137"/>
+         <location filename="../wlanconnect.cpp" line="1206"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>련결됨</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="1075"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>음향 카드</translation>
+     </message>
+ </context>
+ </TS>

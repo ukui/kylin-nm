@@ -1,0 +1,53 @@
+From: Anonymous <noreply@weblate.org>
+Date: Wed, 26 Aug 2026 03:48:15 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 97.6% (41 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/ko_KP/
+---
+ plugins/proxy/translations/ko_KP.ts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/plugins/proxy/translations/ko_KP.ts b/plugins/proxy/translations/ko_KP.ts
+index 214a341..86a4303 100644
+--- a/plugins/proxy/translations/ko_KP.ts
++++ b/plugins/proxy/translations/ko_KP.ts
+@@ -146,7 +146,7 @@
+         <location filename="../proxy.cpp" line="536"/>
+         <location filename="../proxy.cpp" line="1271"/>
+         <source>Open</source>
+-        <translation>열다</translation>
++        <translation>선택</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="537"/>
+@@ -188,7 +188,7 @@
+         <location filename="../proxy.cpp" line="718"/>
+         <location filename="../proxy.cpp" line="1049"/>
+         <source>Reboot Now</source>
+-        <translation>즉시 재시작</translation>
++        <translation>지금 재시작</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1047"/>
+@@ -209,7 +209,7 @@
+         <location filename="../proxy.cpp" line="1307"/>
+         <location filename="../proxy.cpp" line="1337"/>
+         <source>Required</source>
+-        <translation>반드시 입력하기</translation>
++        <translation>필수</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1327"/>
+@@ -240,7 +240,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="1385"/>
+         <source>Save</source>
+-        <translation>로 스캔</translation>
++        <translation>확정</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1457"/>

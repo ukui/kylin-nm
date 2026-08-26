@@ -43,7 +43,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="110"/>
         <source>mobilehotspot open</source>
-        <translation type="unfinished"></translation>
+        <translation>열점 열기</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
     </message>
     <message>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
-        <translation type="unfinished"></translation>
+        <translation>이동열점</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
 </context>

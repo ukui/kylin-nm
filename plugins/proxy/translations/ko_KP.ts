@@ -146,7 +146,7 @@
         <location filename="../proxy.cpp" line="536"/>
         <location filename="../proxy.cpp" line="1271"/>
         <source>Open</source>
-        <translation>열다</translation>
+        <translation>선택</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="537"/>
@@ -188,7 +188,7 @@
         <location filename="../proxy.cpp" line="718"/>
         <location filename="../proxy.cpp" line="1049"/>
         <source>Reboot Now</source>
-        <translation>즉시 재시작</translation>
+        <translation>지금 재시작</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1047"/>
@@ -209,7 +209,7 @@
         <location filename="../proxy.cpp" line="1307"/>
         <location filename="../proxy.cpp" line="1337"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1327"/>
@@ -240,7 +240,7 @@
     <message>
         <location filename="../proxy.cpp" line="1385"/>
         <source>Save</source>
-        <translation>로 스캔</translation>
+        <translation>확정</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1457"/>

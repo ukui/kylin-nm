@@ -780,7 +780,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
         <source>No VPN configuration available</source>
-        <translation>사용가능한 VPN 구성이 없습니다</translation>
+        <translation>사용 가능한 VPN 구성이 없습니다</translation>
     </message>
 </context>
 <context>

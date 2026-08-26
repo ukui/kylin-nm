@@ -1,0 +1,26 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Wed, 26 Aug 2026 07:37:46 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (42 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/ko_KP/
+---
+ plugins/proxy/translations/ko_KP.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/proxy/translations/ko_KP.ts b/plugins/proxy/translations/ko_KP.ts
+index 86a4303..a3eddd3 100644
+--- a/plugins/proxy/translations/ko_KP.ts
++++ b/plugins/proxy/translations/ko_KP.ts
+@@ -133,7 +133,7 @@
+         <location filename="../proxy.cpp" line="529"/>
+         <location filename="../proxy.cpp" line="531"/>
+         <source>App Proxy</source>
+-        <translation type="unfinished"></translation>
++        <translation>응용프록시</translation>
+         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
+     </message>
+     <message>

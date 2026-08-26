@@ -11,7 +11,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>유선네트워크 추가</translation>
     </message>
     <message>
         <source>Add WiredNetwork</source>

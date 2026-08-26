@@ -207,7 +207,7 @@
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
 </context>
 <context>
@@ -729,7 +729,7 @@
         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
@@ -781,7 +781,7 @@
         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
@@ -862,7 +862,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
@@ -1396,7 +1396,7 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
         <source>Required</source>
-        <translation>반드시 입력하기</translation>
+        <translation>필수</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>대화상자</translation>
+        <translation>변경 시간</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>

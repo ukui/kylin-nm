@@ -133,7 +133,7 @@
         <location filename="../proxy.cpp" line="529"/>
         <location filename="../proxy.cpp" line="531"/>
         <source>App Proxy</source>
-        <translation>응용프록시</translation>
+        <translation>응용 프록시</translation>
         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
     </message>
     <message>

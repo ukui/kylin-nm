@@ -1,0 +1,54 @@
+From: 13832136087 <ningxiyuyi@126.com>
+Date: Wed, 26 Aug 2026 15:46:59 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/wlanconnect/ko_KP/
+---
+ plugins/wlanconnect/translations/ko_KP.ts | 2 +-
+ src-vpn/translations/kylin-vpn_ko.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_ko_KP.ts   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/wlanconnect/translations/ko_KP.ts b/plugins/wlanconnect/translations/ko_KP.ts
+index a89edbf..0fb9044 100644
+--- a/plugins/wlanconnect/translations/ko_KP.ts
++++ b/plugins/wlanconnect/translations/ko_KP.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation>유선네트워크 추가</translation>
++        <translation>유선 네트워크 추가</translation>
+     </message>
+     <message>
+         <source>Add WiredNetwork</source>
+diff --git a/src-vpn/translations/kylin-vpn_ko.ts b/src-vpn/translations/kylin-vpn_ko.ts
+index 39e635c..5d77615 100644
+--- a/src-vpn/translations/kylin-vpn_ko.ts
++++ b/src-vpn/translations/kylin-vpn_ko.ts
+@@ -16,7 +16,7 @@
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
+         <source>kylin vpn applet desktop message</source>
+-        <translation>VPN 구성 데스크톱 알림</translation>
++        <translation>VPN 구성 바탕 화면 알림</translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src-vpn/translations/kylin-vpn_ko_KP.ts b/src-vpn/translations/kylin-vpn_ko_KP.ts
+index dca34c3..dda74ce 100644
+--- a/src-vpn/translations/kylin-vpn_ko_KP.ts
++++ b/src-vpn/translations/kylin-vpn_ko_KP.ts
+@@ -16,7 +16,7 @@
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
+         <source>kylin vpn applet desktop message</source>
+-        <translation>VPN 구성 데스크톱 알림</translation>
++        <translation>VPN 구성 바탕 화면 알림</translation>
+     </message>
+ </context>
+ <context>

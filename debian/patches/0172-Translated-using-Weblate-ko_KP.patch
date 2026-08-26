@@ -1,0 +1,35 @@
+From: 13832136087 <ningxiyuyi@126.com>
+Date: Wed, 26 Aug 2026 15:45:51 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (28 of 28 strings)
+
+Translation: openkylin-huanghe/mobilehotspot
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/mobilehotspot/ko_KP/
+---
+ plugins/mobilehotspot/translations/ko_KP.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/mobilehotspot/translations/ko_KP.ts b/plugins/mobilehotspot/translations/ko_KP.ts
+index 32d24e3..e30f12f 100644
+--- a/plugins/mobilehotspot/translations/ko_KP.ts
++++ b/plugins/mobilehotspot/translations/ko_KP.ts
+@@ -43,7 +43,7 @@
+     <message>
+         <location filename="../mobilehotspot.cpp" line="110"/>
+         <source>mobilehotspot open</source>
+-        <translation>열점 열기</translation>
++        <translation>핫스팟 켜기</translation>
+         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
+     </message>
+     <message>
+@@ -85,7 +85,7 @@
+     <message>
+         <location filename="../mobilehotspot.cpp" line="108"/>
+         <source>mobilehotspot</source>
+-        <translation>이동열점</translation>
++        <translation>모바일 핫스팟</translation>
+         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
+     </message>
+ </context>

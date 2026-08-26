@@ -1,0 +1,26 @@
+From: 13832136087 <ningxiyuyi@126.com>
+Date: Wed, 26 Aug 2026 15:46:59 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/vpn/ko_KP/
+---
+ plugins/vpn/translations/ko_KP.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/vpn/translations/ko_KP.ts b/plugins/vpn/translations/ko_KP.ts
+index 218216d..6192393 100644
+--- a/plugins/vpn/translations/ko_KP.ts
++++ b/plugins/vpn/translations/ko_KP.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation></translation>
++        <translation>유선 네트워크 추가</translation>
+     </message>
+ </context>
+ <context>

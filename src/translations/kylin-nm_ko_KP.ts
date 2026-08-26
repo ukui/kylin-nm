@@ -828,7 +828,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
         <source>Connect WIFI</source>
-        <translation>WIFI에 연결하십시오</translation>
+        <translation>WIFI에 련결</translation>
     </message>
     <message>
         <source>Please enter the network information to connect</source>
@@ -1793,7 +1793,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
         <source>usd set offline mode failed: </source>
-        <translation>usd 오프라인 모드 설정 실패: </translation>
+        <translation>오프라인 모드 설정 실패: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>

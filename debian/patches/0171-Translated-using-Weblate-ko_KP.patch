@@ -1,0 +1,26 @@
+From: 13832136087 <ningxiyuyi@126.com>
+Date: Wed, 26 Aug 2026 14:30:15 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ko_KP/
+---
+ src-vpn/translations/kylin-vpn_ko_KP.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ko_KP.ts b/src-vpn/translations/kylin-vpn_ko_KP.ts
+index 5b49f6a..dca34c3 100644
+--- a/src-vpn/translations/kylin-vpn_ko_KP.ts
++++ b/src-vpn/translations/kylin-vpn_ko_KP.ts
+@@ -780,7 +780,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+         <source>No VPN configuration available</source>
+-        <translation>사용가능한 VPN 구성이 없습니다</translation>
++        <translation>사용 가능한 VPN 구성이 없습니다</translation>
+     </message>
+ </context>
+ <context>

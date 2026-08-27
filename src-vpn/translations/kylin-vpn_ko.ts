@@ -16,7 +16,7 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
         <source>kylin vpn applet desktop message</source>
-        <translation>VPN 구성 데스크톱 알림</translation>
+        <translation>VPN 구성 바탕 화면 알림</translation>
     </message>
 </context>
 <context>

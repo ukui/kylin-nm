@@ -139,7 +139,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation>설정 바탕화면 알림</translation>
+        <translation>설정 바탕 화면 알림</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1103"/>

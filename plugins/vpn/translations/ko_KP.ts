@@ -78,7 +78,7 @@
         <location filename="../vpnitem.cpp" line="119"/>
         <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
-        <translation>스캐너 련결</translation>
+        <translation>련결</translation>
     </message>
 </context>
 </TS>

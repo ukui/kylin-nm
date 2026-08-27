@@ -70,7 +70,7 @@
     <message>
         <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation>설정 항목</translation>
+        <translation>네트워크 설정</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="75"/>

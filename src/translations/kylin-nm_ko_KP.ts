@@ -272,7 +272,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>본지 련결 IPV6 주소:</translation>
+        <translation>IPV6 주소:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
@@ -665,12 +665,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
         <source>IPv4Config</source>
-        <translation>IPV4 설정</translation>
+        <translation>IPV4 구성</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
         <source>Address</source>
-        <translation>서버 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
@@ -742,12 +742,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
         <source>IPv6Config</source>
-        <translation>Ipv6 설정</translation>
+        <translation>Ipv6 구성</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
         <source>Address</source>
-        <translation>서버 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
@@ -1152,7 +1152,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
         <source>Cancel</source>
-        <translation>실행 취소</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>

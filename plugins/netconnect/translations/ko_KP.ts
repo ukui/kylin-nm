@@ -75,7 +75,7 @@
     <message>
         <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation>데스크톱 알림 설정</translation>
+        <translation>바탕 화면 알림 설정</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="92"/>

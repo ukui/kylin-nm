@@ -1,0 +1,40 @@
+From: hyoyeong <164199371@qq.com>
+Date: Thu, 27 Aug 2026 02:31:22 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/ko_KP/
+---
+ plugins/netconnect/translations/ko.ts    | 2 +-
+ plugins/netconnect/translations/ko_KP.ts | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/netconnect/translations/ko.ts b/plugins/netconnect/translations/ko.ts
+index 6ecb690..7ff221d 100644
+--- a/plugins/netconnect/translations/ko.ts
++++ b/plugins/netconnect/translations/ko.ts
+@@ -75,7 +75,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation>데스크톱 알림 설정</translation>
++        <translation>바탕 화면 알림 설정</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+diff --git a/plugins/netconnect/translations/ko_KP.ts b/plugins/netconnect/translations/ko_KP.ts
+index 9a471a7..df99861 100644
+--- a/plugins/netconnect/translations/ko_KP.ts
++++ b/plugins/netconnect/translations/ko_KP.ts
+@@ -75,7 +75,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation>데스크톱 알림 설정</translation>
++        <translation>바탕 화면 알림 설정</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>

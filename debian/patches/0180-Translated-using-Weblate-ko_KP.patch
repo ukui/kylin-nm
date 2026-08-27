@@ -1,0 +1,26 @@
+From: hyoyeong <164199371@qq.com>
+Date: Thu, 27 Aug 2026 15:39:49 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/vpn/ko_KP/
+---
+ plugins/vpn/translations/ko_KP.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/vpn/translations/ko_KP.ts b/plugins/vpn/translations/ko_KP.ts
+index 6192393..c008497 100644
+--- a/plugins/vpn/translations/ko_KP.ts
++++ b/plugins/vpn/translations/ko_KP.ts
+@@ -78,7 +78,7 @@
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation>스캐너 련결</translation>
++        <translation>련결</translation>
+     </message>
+ </context>
+ </TS>

@@ -1,0 +1,40 @@
+From: hyoyeong <164199371@qq.com>
+Date: Thu, 27 Aug 2026 02:31:22 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (28 of 28 strings)
+
+Translation: openkylin-huanghe/mobilehotspot
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/mobilehotspot/ko_KP/
+---
+ plugins/mobilehotspot/translations/ko.ts    | 2 +-
+ plugins/mobilehotspot/translations/ko_KP.ts | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/mobilehotspot/translations/ko.ts b/plugins/mobilehotspot/translations/ko.ts
+index 8619c1b..3f17b7b 100644
+--- a/plugins/mobilehotspot/translations/ko.ts
++++ b/plugins/mobilehotspot/translations/ko.ts
+@@ -139,7 +139,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="67"/>
+         <source>Settings desktop message</source>
+-        <translation>설정 바탕화면 알림</translation>
++        <translation>설정 바탕 화면 알림</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="1103"/>
+diff --git a/plugins/mobilehotspot/translations/ko_KP.ts b/plugins/mobilehotspot/translations/ko_KP.ts
+index e30f12f..f90bd59 100644
+--- a/plugins/mobilehotspot/translations/ko_KP.ts
++++ b/plugins/mobilehotspot/translations/ko_KP.ts
+@@ -139,7 +139,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="67"/>
+         <source>Settings desktop message</source>
+-        <translation>데스크톱 알림 설정</translation>
++        <translation>바탕 화면 알림 설정</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="1103"/>

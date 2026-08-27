@@ -43,7 +43,7 @@
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="280"/>
         <source>Advanced settings</source>
-        <translation>고급설정</translation>
+        <translation>고급 설정</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -57,12 +57,12 @@
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation>설정 항목</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
-        <translation>데스크톱 알림 설정</translation>
+        <translation>바탕 화면 알림 설정</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="278"/>
@@ -74,7 +74,7 @@
         <location filename="../wlanconnect.cpp" line="301"/>
         <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
-        <translation>무선카드가 검색되지 않음</translation>
+        <translation>무선 카드가 검색되지 않음</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="433"/>

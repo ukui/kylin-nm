@@ -620,7 +620,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
         <source>VPN</source>
-        <translation></translation>
+        <translation>VPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
-        <translation></translation>
+        <translation>VPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>

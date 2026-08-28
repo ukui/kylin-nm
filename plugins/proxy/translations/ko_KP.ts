@@ -230,7 +230,7 @@
     <message>
         <location filename="../proxy.cpp" line="1361"/>
         <source>Password</source>
-        <translation>키</translation>
+        <translation>비밀번호</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1384"/>
@@ -240,7 +240,7 @@
     <message>
         <location filename="../proxy.cpp" line="1385"/>
         <source>Save</source>
-        <translation>확정</translation>
+        <translation>저장</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1457"/>

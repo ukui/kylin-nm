@@ -1033,7 +1033,7 @@
         <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation>설정 항목</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="501"/>

@@ -1,0 +1,35 @@
+From: =?utf-8?b?6YeR5oWn54+g?= <2429894928@qq.com>
+Date: Fri, 28 Aug 2026 04:01:56 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ko_KP/
+---
+ src-vpn/translations/kylin-vpn_ko_KP.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ko_KP.ts b/src-vpn/translations/kylin-vpn_ko_KP.ts
+index dda74ce..2d21eeb 100644
+--- a/src-vpn/translations/kylin-vpn_ko_KP.ts
++++ b/src-vpn/translations/kylin-vpn_ko_KP.ts
+@@ -620,7 +620,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>

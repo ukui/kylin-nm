@@ -1511,7 +1511,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
         <source>Client private key password is empty</source>
-        <translation>사용자 키 암호가 비었음</translation>
+        <translation>사용자 키 비밀번호가 비었음</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
@@ -1534,7 +1534,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
         <source>PAC Files ( *.pac)</source>
-        <translation></translation>
+        <translation>PAC Files ( *.pac)</translation>
     </message>
     <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
@@ -1589,7 +1589,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
         <source> </source>
-        <translation></translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -1680,12 +1680,12 @@
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
-        <translation>캔커</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
-        <translation>괜찮습니다</translation>
+        <translation>확인</translation>
     </message>
 </context>
 <context>

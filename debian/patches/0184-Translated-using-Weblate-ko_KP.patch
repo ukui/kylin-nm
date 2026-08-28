@@ -1,0 +1,35 @@
+From: =?utf-8?b?6YeR5oWn54+g?= <2429894928@qq.com>
+Date: Fri, 28 Aug 2026 04:42:19 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (42 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/ko_KP/
+---
+ plugins/proxy/translations/ko_KP.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/proxy/translations/ko_KP.ts b/plugins/proxy/translations/ko_KP.ts
+index 5e04a6f..e5ef029 100644
+--- a/plugins/proxy/translations/ko_KP.ts
++++ b/plugins/proxy/translations/ko_KP.ts
+@@ -230,7 +230,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="1361"/>
+         <source>Password</source>
+-        <translation>키</translation>
++        <translation>비밀번호</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1384"/>
+@@ -240,7 +240,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="1385"/>
+         <source>Save</source>
+-        <translation>확정</translation>
++        <translation>저장</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1457"/>

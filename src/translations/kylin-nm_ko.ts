@@ -215,7 +215,7 @@
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <source>Auto Connection</source>
-        <translation>자동 연결</translation>
+        <translation>자동 련결</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
@@ -1207,12 +1207,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
         <source>this wifi no support enterprise type</source>
-        <translation>이 wifi는 기업용 네트워크 유형을 지원하지 않습니다</translation>
+        <translation>이 wifi는 기업용 네트워크 류형을 지원하지 않습니다</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
         <source>this wifi no support None type</source>
-        <translation>이 wifi는 공백형식을 지원하지 않습니다</translation>
+        <translation>이 wifi는 공백 형식을 지원하지 않습니다</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>

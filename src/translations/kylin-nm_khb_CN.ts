@@ -1281,7 +1281,7 @@
     <message>
         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>ᦎᧂᧉᦔᦲᦓ</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>ᦎᧂᧉᦔᦲᦓ</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation>ᦶᦔᧂᦵᦔᦲᧂᦺᦖᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>

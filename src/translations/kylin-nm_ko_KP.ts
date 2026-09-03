@@ -801,7 +801,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
         <source>IPv6 prefix length is empty or invalid</source>
-        <translation>IPv6 접두어 길이가 비어 있거나 유효하지 않음</translation>
+        <translation>IPv6 접두사 길이가 비어 있거나 유효하지 않음</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>

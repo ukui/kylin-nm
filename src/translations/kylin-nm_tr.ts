@@ -1689,7 +1689,7 @@
         <location filename="../frontend/mainwindow.cpp" line="271"/>
         <location filename="../frontend/mainwindow.cpp" line="302"/>
         <source>kylin-nm</source>
-        <translation></translation>
+        <translation>kylin-nm</translation>
     </message>
     <message>
         <source>Network</source>

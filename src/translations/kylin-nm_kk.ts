@@ -1577,7 +1577,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
         <source> </source>
-        <translation></translation>
+        <translation> </translation>
     </message>
 </context>
 <context>

@@ -1281,7 +1281,7 @@
     <message>
         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1534,7 +1534,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
         <source>PAC Files ( *.pac)</source>
-        <translation></translation>
+        <translation>PAC Files ( *.pac)</translation>
     </message>
     <message>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
@@ -1589,7 +1589,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
         <source> </source>
-        <translation></translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -1650,7 +1650,7 @@
     <message>
         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation>Dialog</translation>
     </message>
     <message>
         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>

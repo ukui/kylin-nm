@@ -6,7 +6,7 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
-        <translation>설정 항목</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="827"/>
         <source>MPPE encryption algorithm:</source>
-        <translation>MPPE 암호화 알고리즘:</translation>
+        <translation>MPPE 암호화 산법:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
         <source>Allow BSD data compression</source>
-        <translation>BSD 데이터 압축 허용</translation>
+        <translation>BSD 압축 허용</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
         <source>Use custom gateway port</source>
-        <translation>사용자 정의 게이트웨이 포트 사용</translation>
+        <translation>사용자 지정 게이트웨이 포트 사용</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
@@ -129,7 +129,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
         <source>Set virtual device type</source>
-        <translation>가상 장치 유형 설정</translation>
+        <translation>가상 장치 류형 설정</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
         <source>Randomize remote hosts</source>
-        <translation>원격 호스트 임의화</translation>
+        <translation>원격 주기 임의화</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
         <source>Use custom key size</source>
-        <translation>사용자 정의 키 크기 사용</translation>
+        <translation>사용자 지정 키 크기 사용</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1059"/>
@@ -184,22 +184,22 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1062"/>
         <source>Use custom renegotiation interval</source>
-        <translation>사용자 정의 재협상 간격 사용</translation>
+        <translation>사용자 지정 재협상 간격 사용</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
         <source>Use custom tunnel Maximum Transmission Umit(MTU)</source>
-        <translation>사용자 정의 터널 최대 전송 단위(MTU) 사용</translation>
+        <translation>사용자 지정 터널 최대 전송 단위(MTU) 사용</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
         <source>Use custom UDP fragment size</source>
-        <translation>사용자 정의 UDP 조각 크기 사용</translation>
+        <translation>사용자 지정 UDP 조각 크기 사용</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
         <source>Accept authenticated packets from any address (Float)</source>
-        <translation>모든 주소(Float)로 부터 인증된 패킷 수락</translation>
+        <translation>모든 주소(Float)로 부터 신분 인증된 패킷 수락</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
@@ -224,7 +224,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
         <source>Port</source>
-        <translation>구단</translation>
+        <translation>포트</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1076"/>
@@ -234,12 +234,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
         <source>Proxy Password</source>
-        <translation>프록시 비밀 번호</translation>
+        <translation>프록시 비밀번호</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1079"/>
         <source>General</source>
-        <translation>기본 기능</translation>
+        <translation>기본</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1086"/>
         <source>Mode</source>
-        <translation>표시 방법</translation>
+        <translation>모드</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
@@ -274,12 +274,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
         <source>Proxy Type</source>
-        <translation>프록시 유형</translation>
+        <translation>프록시 류형</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
         <source>Security</source>
-        <translation>안전하고 신뢰성이 있습니다</translation>
+        <translation>안전</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1090"/>
@@ -294,7 +294,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
         <source>No</source>
-        <translation>취소</translation>
+        <translation>아니요</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1106"/>
@@ -309,7 +309,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
         <source>Exit</source>
-        <translation>응용 프로그람 종료</translation>
+        <translation>종료</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1113"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1115"/>
         <source>Don&apos;t verify certificate identification</source>
-        <translation>인증서 식별 검증 안 함</translation>
+        <translation>인증서 식별자 검증하지 않음</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1116"/>
@@ -353,7 +353,7 @@
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1130"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1139"/>
         <source>None</source>
-        <translation>아직 없음</translation>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
@@ -373,7 +373,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1138"/>
         <source>Default</source>
-        <translation>기본으로 설정</translation>
+        <translation>기본값</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1216"/>
@@ -398,7 +398,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1222"/>
         <source>Enable custom password suggestions</source>
-        <translation>사용자 정의 비밀번호 제안 활성화</translation>
+        <translation>사용자 지정 비밀번호 제안 활성화</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1382"/>
@@ -416,12 +416,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="331"/>
         <source>Type</source>
-        <translation>네트워크 카드 유형</translation>
+        <translation>류형</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
         <source>Name</source>
-        <translation>블루투스 장치 이름</translation>
+        <translation>명칭</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
@@ -436,7 +436,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
         <source>Remote IP</source>
-        <translation>원격 주소</translation>
+        <translation>원격 IP 주소</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="336"/>
@@ -448,7 +448,7 @@
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="849"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="856"/>
         <source>Password</source>
-        <translation>키</translation>
+        <translation>비밀번호</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
@@ -499,14 +499,14 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
         <source>Username</source>
-        <translation>사용자의 이름</translation>
+        <translation>사용자 이름</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
         <source>Notice:
 If key direction is used, it must be opposite to the VPN side used. If &apos;1&apos; is used, the connection must use &apos;0&apos;. If you are not sure which value to use, please contact your system administrator.</source>
         <translation>주의:
-키 방향을 사용하는 경우 VPN 단말과 반대 방향이어야 합니다. &quot;1&quot;을 사용하면 련결은 반드시 &quot;0&quot;을 사용해야 합니다. 값이 잘 모를 경우 체계 관리자에게 문의하십시오.</translation>
+키 방향을 사용하는 경우 VPN 단말과 반대 방향이어야 합니다. “1”을 사용하면 련결은 반드시 “0”을 사용해야 합니다. 어떤 값을 사용해야 할지 확실하지 않으면 체계 관리자에게 문의하십시오.</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="359"/>
@@ -519,13 +519,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
         <source>None</source>
-        <translation>아직 없음</translation>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="379"/>
         <source>Save password only for this user</source>
-        <translation>현재 사용자만 비밀번호 저장</translation>
+        <translation>현재 사용자에게만 비밀번호 저장</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="374"/>
@@ -537,7 +537,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="381"/>
         <source>Ask password every time</source>
-        <translation>항상 묻기</translation>
+        <translation>매번 묻기</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
@@ -549,7 +549,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="386"/>
         <source>Required</source>
-        <translation>필수</translation>
+        <translation>필수 입력</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
@@ -595,7 +595,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="936"/>
         <source>Choose a CA certificate</source>
-        <translation>CA 증명서 하나 선택하기</translation>
+        <translation>CA 증명서 선택하기</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="938"/>
@@ -636,7 +636,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
         <source>Advanced</source>
-        <translation>고급 옵션</translation>
+        <translation>고급</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
@@ -646,12 +646,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="178"/>
         <source>Cancel</source>
-        <translation>실행 취소</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
         <source>Confirm</source>
-        <translation>승인</translation>
+        <translation>확인</translation>
     </message>
 </context>
 <context>
@@ -664,7 +664,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="171"/>
         <source>Address</source>
-        <translation>서버 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="172"/>
@@ -684,7 +684,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="175"/>
         <source>Search Domain</source>
-        <translation>검색 도메인</translation>
+        <translation>도메인 검색</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="176"/>
@@ -699,7 +699,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
         <source>Manual</source>
-        <translation>사용자 매뉴얼</translation>
+        <translation>수동</translation>
     </message>
 </context>
 <context>
@@ -712,7 +712,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
         <source>Address</source>
-        <translation>서버 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="161"/>
@@ -732,7 +732,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="164"/>
         <source>Search Domain</source>
-        <translation>검색 도메인</translation>
+        <translation>도메인 검색</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
@@ -742,7 +742,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
         <source>Manual</source>
-        <translation>사용자 매뉴얼</translation>
+        <translation>수동</translation>
     </message>
 </context>
 <context>
@@ -756,13 +756,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
-        <translation>련결 끊기</translation>
+        <translation>끊기</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
-        <translation>스캐너 련결</translation>
+        <translation>련결</translation>
     </message>
 </context>
 <context>
@@ -775,7 +775,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
         <source>VPN Settings</source>
-        <translation>VPN 설정</translation>
+        <translation>더 많은 VPN 설정</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
@@ -793,7 +793,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
         <source>VPN Type</source>
-        <translation>VPN 유형</translation>
+        <translation>VPN 류형</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
@@ -804,7 +804,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="147"/>
         <source>Required</source>
-        <translation>필수</translation>
+        <translation>필수 입력</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="142"/>
@@ -819,12 +819,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
         <source>Confirm</source>
-        <translation>승인</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>
         <source>Cancel</source>
-        <translation>실행 취소</translation>
+        <translation>취소</translation>
     </message>
 </context>
 <context>

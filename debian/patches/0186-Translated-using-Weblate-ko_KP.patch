@@ -1,0 +1,1559 @@
+From: hyoyeong <164199371@qq.com>
+Date: Thu, 3 Sep 2026 08:49:46 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (238 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/ko_KP/
+---
+ src/translations/kylin-nm_ar.ts      |  10 +-
+ src/translations/kylin-nm_bo_CN.ts   |   2 +-
+ src/translations/kylin-nm_de.ts      |   6 +-
+ src/translations/kylin-nm_es.ts      |   2 +-
+ src/translations/kylin-nm_fr.ts      |   6 +-
+ src/translations/kylin-nm_id.ts      |  10 +-
+ src/translations/kylin-nm_it.ts      |  10 +-
+ src/translations/kylin-nm_ja.ts      |  10 +-
+ src/translations/kylin-nm_khb_CN.ts  |  10 +-
+ src/translations/kylin-nm_kk.ts      |   2 +-
+ src/translations/kylin-nm_ko.ts      |  10 +-
+ src/translations/kylin-nm_ko_KP.ts   | 184 +++++++++++++++++------------------
+ src/translations/kylin-nm_ky.ts      |   2 +-
+ src/translations/kylin-nm_lo.ts      |  10 +-
+ src/translations/kylin-nm_mn.ts      |   2 +-
+ src/translations/kylin-nm_my.ts      |  10 +-
+ src/translations/kylin-nm_pt.ts      |   2 +-
+ src/translations/kylin-nm_ru.ts      |  10 +-
+ src/translations/kylin-nm_tr.ts      |   2 +-
+ src/translations/kylin-nm_ug.ts      |   2 +-
+ src/translations/kylin-nm_ur.ts      |  10 +-
+ src/translations/kylin-nm_zh_CN.ts   |  10 +-
+ src/translations/kylin-nm_zh_HK.ts   |   6 +-
+ src/translations/kylin-nm_zh_Hant.ts |   6 +-
+ 24 files changed, 167 insertions(+), 167 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ar.ts b/src/translations/kylin-nm_ar.ts
+index ce2df09..a33da85 100644
+--- a/src/translations/kylin-nm_ar.ts
++++ b/src/translations/kylin-nm_ar.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_bo_CN.ts b/src/translations/kylin-nm_bo_CN.ts
+index b06e283..a59f296 100644
+--- a/src/translations/kylin-nm_bo_CN.ts
++++ b/src/translations/kylin-nm_bo_CN.ts
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_de.ts b/src/translations/kylin-nm_de.ts
+index 0710754..feae4c3 100644
+--- a/src/translations/kylin-nm_de.ts
++++ b/src/translations/kylin-nm_de.ts
+@@ -1265,7 +1265,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1293,7 +1293,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_es.ts b/src/translations/kylin-nm_es.ts
+index c6c330e..f4b691f 100644
+--- a/src/translations/kylin-nm_es.ts
++++ b/src/translations/kylin-nm_es.ts
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_fr.ts b/src/translations/kylin-nm_fr.ts
+index 23dbf07..e730eaa 100644
+--- a/src/translations/kylin-nm_fr.ts
++++ b/src/translations/kylin-nm_fr.ts
+@@ -1265,7 +1265,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1293,7 +1293,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_id.ts b/src/translations/kylin-nm_id.ts
+index 6b45393..1da7664 100644
+--- a/src/translations/kylin-nm_id.ts
++++ b/src/translations/kylin-nm_id.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_it.ts b/src/translations/kylin-nm_it.ts
+index ee03231..9aecc45 100644
+--- a/src/translations/kylin-nm_it.ts
++++ b/src/translations/kylin-nm_it.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_ja.ts b/src/translations/kylin-nm_ja.ts
+index 24da72f..7efc9b8 100644
+--- a/src/translations/kylin-nm_ja.ts
++++ b/src/translations/kylin-nm_ja.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_khb_CN.ts b/src/translations/kylin-nm_khb_CN.ts
+index 94c9634..b90bff3 100644
+--- a/src/translations/kylin-nm_khb_CN.ts
++++ b/src/translations/kylin-nm_khb_CN.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_kk.ts b/src/translations/kylin-nm_kk.ts
+index 141dd15..bc43c7e 100644
+--- a/src/translations/kylin-nm_kk.ts
++++ b/src/translations/kylin-nm_kk.ts
+@@ -1577,7 +1577,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_ko.ts b/src/translations/kylin-nm_ko.ts
+index b0945f1..1d84540 100644
+--- a/src/translations/kylin-nm_ko.ts
++++ b/src/translations/kylin-nm_ko.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_ko_KP.ts b/src/translations/kylin-nm_ko_KP.ts
+index f2aaec9..67b81f0 100644
+--- a/src/translations/kylin-nm_ko_KP.ts
++++ b/src/translations/kylin-nm_ko_KP.ts
+@@ -37,7 +37,7 @@
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
+         <source>Network profile type</source>
+-        <translation>네트워크 구성 파일 유형</translation>
++        <translation>네트워크 구성 파일 류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
+@@ -65,7 +65,7 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
+         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
+-        <translation>인터넷 접근이 제한될 경우 네트워크 IP 련결 상태 확인 방식을 변경 후 다시 시도하십시오.</translation>
++        <translation>인터넷 접근이 제한된 경우 네트워크 IP 련결 상태 검사 방식을 변경 후 다시 시도하십시오.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
+@@ -75,12 +75,12 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
+         <source>Local area network (intranet)</source>
+-        <translation>본지 영역 네트워크(내부망)</translation>
++        <translation>근거리 통신망(내부망)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
+         <source>Confirm</source>
+-        <translation>승인</translation>
++        <translation>확인</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
+@@ -95,12 +95,12 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
+         <source>Please enter the local area network (intranet) detection address</source>
+-        <translation>LAN(내부망) 검사 주소를 입력해 주십시오</translation>
++        <translation>근거리 통신망(내부망) 검사 주소를 입력해 주십시오</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
+         <source>Format error</source>
+-        <translation>형식이 틀렸다</translation>
++        <translation>형식 오류</translation>
+     </message>
+ </context>
+ <context>
+@@ -123,17 +123,17 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
+         <source>Connection Name</source>
+-        <translation>네트워크 명</translation>
++        <translation>네트워크 이름</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
+         <source>IPv4Config</source>
+-        <translation>IPV4 설정</translation>
++        <translation>IPV4 구성</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
+         <source>Address</source>
+-        <translation>서버 주소</translation>
++        <translation>IPv4 주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
+@@ -158,12 +158,12 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation>IPv4 망 마스크가 비었거나 잘못됨</translation>
++        <translation>IPv4 서브넷 마스크가 비어 있거나 잘못되었습니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation>IPv4 관문은 비였거나 무효이다</translation>
++        <translation>IPv4 게이트웨이는 비어 있거나 무효입니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
+@@ -191,7 +191,7 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
+         <source>Manual</source>
+-        <translation>사용자 매뉴얼</translation>
++        <translation>수동</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
+@@ -201,13 +201,13 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
+         <source>Invalid subnet mask</source>
+-        <translation>잘못된 망 마스크</translation>
++        <translation>잘못된 서브넷 마스크</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+ </context>
+ <context>
+@@ -242,7 +242,7 @@
+         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
+         <source>Protocol:</source>
+-        <translation>규약:</translation>
++        <translation>프로토콜:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
+@@ -272,7 +272,7 @@
+         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
+         <source>IPv6:</source>
+-        <translation>IPV6 주소:</translation>
++        <translation>로컬 링크 IPV6 주소:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
+@@ -533,7 +533,7 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
+         <source>Tactic</source>
+-        <translation>정책</translation>
++        <translation>전략</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
+@@ -558,7 +558,7 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
+         <source>concurrency</source>
+-        <translation>병행</translation>
++        <translation>동시 처리</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
+@@ -568,7 +568,7 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
+         <source> times</source>
+-        <translation> 회수</translation>
++        <translation> 회</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -577,12 +577,12 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
+         <source>Cancel</source>
+-        <translation>실행 취소</translation>
++        <translation>취소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
+         <source>Confirm</source>
+-        <translation>승인</translation>
++        <translation>확인</translation>
+     </message>
+ </context>
+ <context>
+@@ -613,12 +613,12 @@
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
+         <source>Cancel</source>
+-        <translation>실행 취소</translation>
++        <translation>취소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
+         <source>Connect</source>
+-        <translation>스캐너 련결</translation>
++        <translation>련결</translation>
+     </message>
+ </context>
+ <context>
+@@ -647,7 +647,7 @@
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
+         <source>It is not recommended to enable this feature on public networks</source>
+-        <translation>공용 네트워크에서 이 기능을 활성화하는 것은 추천하지 않는다</translation>
++        <translation>공용 네트워크에서 이 기능을 활성화하는 것은 권장하지 않습니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
+@@ -698,7 +698,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
+         <source>Manual</source>
+-        <translation>사용자 매뉴얼</translation>
++        <translation>수동</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
+@@ -708,12 +708,12 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation>IPv4 망 마스크가 비었거나 잘못됨</translation>
++        <translation>IPv4 서브넷 마스크가 비어 있거나 잘못됨</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation>IPv4 관문은 비였거나 무효이다</translation>
++        <translation>IPv4 게이트웨이는 비어 있거나 무효입니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
+@@ -723,13 +723,13 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
+         <source>Invalid subnet mask</source>
+-        <translation>잘못된 망 마스크</translation>
++        <translation>잘못된 서브넷 마스크</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
+@@ -752,7 +752,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
+         <source>Subnet prefix Length</source>
+-        <translation>망 접두사 길이</translation>
++        <translation>서브넷 접두어 길이</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
+@@ -775,13 +775,13 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
+         <source>Manual</source>
+-        <translation>사용자 매뉴얼</translation>
++        <translation>수동</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
+@@ -791,7 +791,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
+         <source>Invalid gateway</source>
+-        <translation>잘못된 관문 주소</translation>
++        <translation>잘못된 게이트웨이 주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
+@@ -801,7 +801,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
+         <source>IPv6 prefix length is empty or invalid</source>
+-        <translation>IPv6 접두사 길이가 비어 있거나 유효하지 않음</translation>
++        <translation>IPv6 접두어 길이가 비어 있거나 유효하지 않음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
+@@ -828,7 +828,7 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation>WIFI에 련결</translation>
++        <translation>WIFI 련결</translation>
+     </message>
+     <message>
+         <source>Please enter the network information to connect</source>
+@@ -842,32 +842,32 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation>스캐너 련결</translation>
++        <translation>련결</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
+         <source>Show Network List</source>
+-        <translation>네트워크 목록 보기</translation>
++        <translation>네트워크 리스트 표시</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
+         <source>Cancel</source>
+-        <translation>실행 취소</translation>
++        <translation>취소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
+         <source>Join</source>
+-        <translation>련결</translation>
++        <translation>가입</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
+         <source>Find and Join WLAN</source>
+-        <translation>무선랜 검색 후 련결하기</translation>
++        <translation>무선 근거리 통신망을 찾아 가입</translation>
+     </message>
+ </context>
+ <context>
+@@ -880,7 +880,7 @@
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
+         <source>Wired Device not carried</source>
+-        <translation>망선이 꽂혀있지 않음</translation>
++        <translation>망선이 꽂혀 있지 않음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
+@@ -888,7 +888,7 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
+         <source>Disconnect</source>
+-        <translation>련결 끊기</translation>
++        <translation>끊기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
+@@ -896,7 +896,7 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
+         <source>Connect</source>
+-        <translation>스캐너 련결</translation>
++        <translation>련결</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
+@@ -908,7 +908,7 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
+         <source>Delete</source>
+-        <translation>삭제 표시</translation>
++        <translation>이 네트워크 삭제</translation>
+     </message>
+ </context>
+ <context>
+@@ -941,7 +941,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
+         <source>Inactivated LAN</source>
+-        <translation>다른 네트워크</translation>
++        <translation>기타 네트워크</translation>
+     </message>
+     <message>
+         <source>Connected, no internet access</source>
+@@ -950,7 +950,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
+         <source>Connected, restricting access</source>
+-        <translation>련결되었으나 네트워크가 제한되였습니다</translation>
++        <translation>련결됨. 네트워크 제한</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
+@@ -969,7 +969,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
+         <source>Wired Device not carried</source>
+-        <translation>망선이 꽂혀있지 않음</translation>
++        <translation>망선이 꽂혀 있지 않음</translation>
+     </message>
+     <message>
+         <source>LAN Connected Successfully</source>
+@@ -997,7 +997,7 @@
+     <message>
+         <location filename="../frontend/list-items/listitem.cpp" line="183"/>
+         <source>Kylin NM</source>
+-        <translation>키린 네트워크 설정 도구</translation>
++        <translation>네트워크 설정 도구</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/listitem.cpp" line="186"/>
+@@ -1023,7 +1023,7 @@
+         <location filename="../frontend/mainwindow.cpp" line="467"/>
+         <source>WLAN</source>
+         <translatorcomment>无线局域网</translatorcomment>
+-        <translation>무선랜</translation>
++        <translation>무선 근거리 통신망</translation>
+     </message>
+     <message>
+         <source>Show MainWindow</source>
+@@ -1033,7 +1033,7 @@
+         <location filename="../frontend/mainwindow.cpp" line="500"/>
+         <source>Settings</source>
+         <translatorcomment>设置网络项</translatorcomment>
+-        <translation>설정</translation>
++        <translation>네트웨크 항목 설정</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="501"/>
+@@ -1049,7 +1049,7 @@
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="856"/>
+         <source>Network Card</source>
+-        <translation>망 카드</translation>
++        <translation>네트워크 카드</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+@@ -1085,12 +1085,12 @@
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
+         <source>Click &quot;+&quot; to configure DNS</source>
+-        <translation>“+”를 클릭하여 DNS 설정</translation>
++        <translation>“+”를 클릭하여 DNS 구성</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
+         <source>Settings</source>
+-        <translation>설정 항목</translation>
++        <translation>고급 설정</translation>
+     </message>
+ </context>
+ <context>
+@@ -1098,7 +1098,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
+         <source>Kylin NM</source>
+-        <translation>키린 네트워크 설정 도구</translation>
++        <translation>네트워크 설정 도구</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
+@@ -1108,7 +1108,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
+         <source>Detail</source>
+-        <translation>상세 정보</translation>
++        <translation>세부 정보</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
+@@ -1123,7 +1123,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
+         <source>Security</source>
+-        <translation>안전하고 신뢰성이 있습니다</translation>
++        <translation>안전</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
+@@ -1142,12 +1142,12 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
+         <source>Config</source>
+-        <translation>설정</translation>
++        <translation>구성</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
+         <source>Confirm</source>
+-        <translation>승인</translation>
++        <translation>확인</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
+@@ -1179,14 +1179,14 @@
+         <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
+         <source>None</source>
+-        <translation>아직 없음</translation>
++        <translation>없음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
+         <source>Auto</source>
+-        <translation>자동 검색</translation>
++        <translation>자동</translation>
+     </message>
+     <message>
+         <source>start check ipv4 address conflict</source>
+@@ -1207,22 +1207,22 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
+         <source>this wifi no support enterprise type</source>
+-        <translation>이 wifi는 기업형 인증 방식을 지원하지 않음</translation>
++        <translation>이 wifi는 기업 네트워크 류형을 지원하지 않습니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
+         <source>this wifi no support None type</source>
+-        <translation>이 wifi는 공백 형식을 지원하지 않음</translation>
++        <translation>이 Wi‑Fi는 빈 류형을 지원하지 않습니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
+         <source>this wifi no support WPA2 type</source>
+-        <translation>이 wifi는 WPA2 형식을 지원하지 않음</translation>
++        <translation>이 wifi는 WPA2 류형을 지원하지 않습니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
+         <source>this wifi no support WPA3 type</source>
+-        <translation>이 wifi는 WPA3 형식을 지원하지 않음</translation>
++        <translation>이 wifi는 WPA3 류형을 지원하지 않습니다</translation>
+     </message>
+     <message>
+         <source>SSID:</source>
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation>형성</translation>
++        <translation>폼</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation>형성</translation>
++        <translation>폼</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1338,7 +1338,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
+         <source>Security</source>
+-        <translation>안전하고 신뢰성이 있습니다</translation>
++        <translation>안전성</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
+@@ -1349,17 +1349,17 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
+         <source>EAP type</source>
+-        <translation>EAP 인증</translation>
++        <translation>EAP 벙법</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
+         <source>Identity</source>
+-        <translation>신분</translation>
++        <translation>익명 신분</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
+         <source>Domain</source>
+-        <translation>등록</translation>
++        <translation>도메인</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
+@@ -1396,7 +1396,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
+         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
+@@ -1406,7 +1406,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
+         <source>Username</source>
+-        <translation>사용자의 이름</translation>
++        <translation>사용자 이름</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
+@@ -1428,7 +1428,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
+         <source>None</source>
+-        <translation>아직 없음</translation>
++        <translation>없음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
+@@ -1461,7 +1461,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
+         <source>Store password only for this user</source>
+-        <translation>이 사용자만 비밀번호 저장</translation>
++        <translation>해당 사용자에게만 비밀번호를 저장합니다</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
+@@ -1481,7 +1481,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
+         <source>Ask password every time</source>
+-        <translation>항상 묻기</translation>
++        <translation>이 비밀번호 매번 묻기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
+@@ -1511,7 +1511,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
+         <source>Client private key password is empty</source>
+-        <translation>사용자 키 비밀번호가 비었음</translation>
++        <translation>사용자 키 비밀번호가 비어 있음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
+@@ -1529,7 +1529,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
+         <source>Choose a CA certificate</source>
+-        <translation>CA 증명서 하나 선택하기</translation>
++        <translation>CA 증명서 선택하기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+@@ -1558,7 +1558,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
+         <source>Anonymous</source>
+-        <translation>익명 로그인</translation>
++        <translation>익명</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
+@@ -1580,7 +1580,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
+         <source>Choose a PAC file</source>
+-        <translation>PAC 파일 하나 선택하기</translation>
++        <translation>PAC 파일 선택하기</translation>
+     </message>
+     <message>
+         <source>PAC Files (*.pac)</source>
+@@ -1597,7 +1597,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
+         <source>Current Device</source>
+-        <translation>현재 장치</translation>
++        <translation>현재 네트워크 카드</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
+@@ -1607,12 +1607,12 @@
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
+         <source>Settings</source>
+-        <translation>설정 항목</translation>
++        <translation>네트워크 설정</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
+         <source>Kylin NM</source>
+-        <translation>키린 네트워크 설정 도구</translation>
++        <translation>네트워크 설정 도구</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
+@@ -1642,7 +1642,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
+         <source>Confirm</source>
+-        <translation>승인</translation>
++        <translation>확인</translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,12 +1650,12 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation>변경 시간</translation>
++        <translation>대화 상자</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+         <source>WLAN Authentication</source>
+-        <translation>WLAN 인증</translation>
++        <translation>WLAN 신분 인증</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
+@@ -1665,12 +1665,12 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
+         <source>WLAN ID：</source>
+-        <translation>무선랜 ID:</translation>
++        <translation>WLAN ID:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
+         <source>WLAN Name:</source>
+-        <translation>WLAN명:</translation>
++        <translation>WLAN 이름:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
+@@ -1702,7 +1702,7 @@
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
+         <source>Disconnect</source>
+-        <translation>련결 끊기</translation>
++        <translation>끊기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
+@@ -1711,7 +1711,7 @@
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
+         <source>Connect</source>
+-        <translation>스캐너 련결</translation>
++        <translation>련결</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
+@@ -1748,7 +1748,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
+         <source>WLAN</source>
+-        <translation>무선랜</translation>
++        <translation>무선 근거리 통신망</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
+@@ -1764,7 +1764,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
+         <source>Other WLAN</source>
+-        <translation>다른 네트워크</translation>
++        <translation>기타 네트워크</translation>
+     </message>
+     <message>
+         <source>More...</source>
+diff --git a/src/translations/kylin-nm_ky.ts b/src/translations/kylin-nm_ky.ts
+index c9c274e..59f1b74 100644
+--- a/src/translations/kylin-nm_ky.ts
++++ b/src/translations/kylin-nm_ky.ts
+@@ -1577,7 +1577,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_lo.ts b/src/translations/kylin-nm_lo.ts
+index aeebbcc..0850c58 100644
+--- a/src/translations/kylin-nm_lo.ts
++++ b/src/translations/kylin-nm_lo.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_mn.ts b/src/translations/kylin-nm_mn.ts
+index efbb823..0b877ec 100644
+--- a/src/translations/kylin-nm_mn.ts
++++ b/src/translations/kylin-nm_mn.ts
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_my.ts b/src/translations/kylin-nm_my.ts
+index 98267e2..47f3198 100644
+--- a/src/translations/kylin-nm_my.ts
++++ b/src/translations/kylin-nm_my.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_pt.ts b/src/translations/kylin-nm_pt.ts
+index 5328215..ad596bc 100644
+--- a/src/translations/kylin-nm_pt.ts
++++ b/src/translations/kylin-nm_pt.ts
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_ru.ts b/src/translations/kylin-nm_ru.ts
+index 04a581a..be26a53 100644
+--- a/src/translations/kylin-nm_ru.ts
++++ b/src/translations/kylin-nm_ru.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_tr.ts b/src/translations/kylin-nm_tr.ts
+index 9568c59..9740332 100644
+--- a/src/translations/kylin-nm_tr.ts
++++ b/src/translations/kylin-nm_tr.ts
+@@ -1689,7 +1689,7 @@
+         <location filename="../frontend/mainwindow.cpp" line="271"/>
+         <location filename="../frontend/mainwindow.cpp" line="302"/>
+         <source>kylin-nm</source>
+-        <translation></translation>
++        <translation>kylin-nm</translation>
+     </message>
+     <message>
+         <source>Network</source>
+diff --git a/src/translations/kylin-nm_ug.ts b/src/translations/kylin-nm_ug.ts
+index 80a3a79..2b05970 100644
+--- a/src/translations/kylin-nm_ug.ts
++++ b/src/translations/kylin-nm_ug.ts
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_ur.ts b/src/translations/kylin-nm_ur.ts
+index 8332956..fe080d6 100644
+--- a/src/translations/kylin-nm_ur.ts
++++ b/src/translations/kylin-nm_ur.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_zh_CN.ts b/src/translations/kylin-nm_zh_CN.ts
+index a569a2c..dfeb00b 100644
+--- a/src/translations/kylin-nm_zh_CN.ts
++++ b/src/translations/kylin-nm_zh_CN.ts
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1534,7 +1534,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+         <source>PAC Files ( *.pac)</source>
+-        <translation></translation>
++        <translation>PAC Files ( *.pac)</translation>
+     </message>
+     <message>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+@@ -1589,7 +1589,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,7 +1650,7 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation></translation>
++        <translation>Dialog</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+diff --git a/src/translations/kylin-nm_zh_HK.ts b/src/translations/kylin-nm_zh_HK.ts
+index 339d012..4bcc4b5 100644
+--- a/src/translations/kylin-nm_zh_HK.ts
++++ b/src/translations/kylin-nm_zh_HK.ts
+@@ -1265,7 +1265,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1293,7 +1293,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_zh_Hant.ts b/src/translations/kylin-nm_zh_Hant.ts
+index fe2eac7..ea0b646 100644
+--- a/src/translations/kylin-nm_zh_Hant.ts
++++ b/src/translations/kylin-nm_zh_Hant.ts
+@@ -1265,7 +1265,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1293,7 +1293,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1573,7 +1573,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
+         <source> </source>
+-        <translation></translation>
++        <translation> </translation>
+     </message>
+ </context>
+ <context>

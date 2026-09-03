@@ -1,0 +1,47 @@
+From: hyoyeong <164199371@qq.com>
+Date: Thu, 3 Sep 2026 10:26:09 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (238 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/ko_KP/
+---
+ src/translations/kylin-nm_ko_KP.ts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ko_KP.ts b/src/translations/kylin-nm_ko_KP.ts
+index 67b81f0..4116ff5 100644
+--- a/src/translations/kylin-nm_ko_KP.ts
++++ b/src/translations/kylin-nm_ko_KP.ts
+@@ -1778,7 +1778,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
+         <source>WLAN Disconnected Successfully</source>
+-        <translation>무선 네트워크가 끊어짐</translation>
++        <translation>무선 네트워크 련결이 끊어짐</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
+@@ -1870,17 +1870,17 @@
+     <message>
+         <location filename="../main.cpp" line="124"/>
+         <source>kylinnm</source>
+-        <translation>키린</translation>
++        <translation>네트워크 도구</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="128"/>
+         <source>show kylin-nm wifi page</source>
+-        <translation>키린-NM WiFi 페지 표시</translation>
++        <translation>무선 페지 표시</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="129"/>
+         <source>show kylin-nm lan page</source>
+-        <translation>kylin-nm LAN 페지 표시</translation>
++        <translation>유선 페지 표시</translation>
+     </message>
+ </context>
+ </TS>

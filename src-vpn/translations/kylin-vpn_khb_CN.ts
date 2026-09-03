@@ -6,7 +6,7 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
-        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+        <translation>配置项</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
@@ -304,17 +304,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1107"/>
         <source>Automatic</source>
-        <translation>ᦎᦱᧄᦙᧃᦐᦹᧂ</translation>
+        <translation>自动</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
         <source>Exit</source>
-        <translation>ᦀᦸᧅᧈᦵᦵᦩᧃᧈ</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1113"/>
         <source>Restart</source>
-        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
+        <translation>重新开始</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1115"/>
@@ -353,7 +353,7 @@
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1130"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1139"/>
         <source>None</source>
-        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+        <translation>无</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1134"/>
         <source>Not Required</source>
-        <translation>ᦢᧁᧈᦀᧁ</translation>
+        <translation>不要求</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1138"/>
@@ -421,7 +421,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
         <source>Name</source>
-        <translation>ᦢᦴᦟᦴᦏᦳ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦹᧈ</translation>
+        <translation>文件名</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
@@ -448,7 +448,7 @@
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="849"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="856"/>
         <source>Password</source>
-        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
+        <translation>ᦟᦴᧅᦶᦉᧆᦋᦹᧈ：</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="340"/>
         <source>Server Address</source>
-        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+        <translation>服务器地址</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="341"/>
@@ -601,7 +601,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="938"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="951"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation>ᦐᧂᦉᦹCA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+        <translation>CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="949"/>
@@ -620,7 +620,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
         <source>VPN</source>
-        <translation>VPN</translation>
+        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉVPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
@@ -646,7 +646,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="178"/>
         <source>Cancel</source>
-        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
@@ -694,7 +694,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="178"/>
         <source>Auto(DHCP)</source>
-        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+        <translation>自动(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
@@ -737,12 +737,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
         <source>Auto(DHCP)</source>
-        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+        <translation>自动(DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
         <source>Manual</source>
-        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+        <translation>手动</translation>
     </message>
 </context>
 <context>
@@ -762,7 +762,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
-        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+        <translation>ᦆᦱᧆᦔᦲᧃᦖᦱᧃᧈ</translation>
     </message>
 </context>
 <context>
@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
-        <translation>VPN</translation>
+        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉVPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>

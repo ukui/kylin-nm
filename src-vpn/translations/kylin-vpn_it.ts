@@ -620,18 +620,18 @@ Se viene utilizzata una direzione della chiave, questa deve essere opposta a que
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
         <source>VPN</source>
-        <translation></translation>
+        <translation>VPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
         <source>IPv4</source>
-        <translation></translation>
+        <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
         <source>IPv6</source>
-        <translation></translation>
+        <translation>IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
@@ -770,7 +770,7 @@ Se viene utilizzata una direzione della chiave, questa deve essere opposta a que
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
         <source>VPN</source>
-        <translation></translation>
+        <translation>VPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>

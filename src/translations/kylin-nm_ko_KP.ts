@@ -248,7 +248,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
         <source>Security Type:</source>
-        <translation>안전 유형:</translation>
+        <translation>안전 류형:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>

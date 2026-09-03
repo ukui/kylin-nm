@@ -1265,7 +1265,7 @@
     <message>
         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1293,7 +1293,7 @@
     <message>
         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1573,7 +1573,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="129"/>
         <source> </source>
-        <translation></translation>
+        <translation> </translation>
     </message>
 </context>
 <context>

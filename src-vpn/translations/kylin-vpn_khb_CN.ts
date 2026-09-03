@@ -6,12 +6,12 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
         <source>Settings</source>
-        <translation>ການຕັ້ງຄ່າ</translation>
+        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
         <source>Kylin VPN</source>
-        <translation>ເຄື່ອງມື VPN</translation>
+        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉVPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="829"/>
         <source>Send PPP echo packets</source>
-        <translation>ສົ່ງແພັກເກັດ PPP echo</translation>
+        <translation>ᦶᦕᧈᦺᦔ PPPᦂᧇᦠᦼᦵᦉᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="830"/>
@@ -44,12 +44,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="831"/>
         <source>PAP authentication</source>
-        <translation>ການຢືນຢັນ PAP</translation>
+        <translation>PAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="832"/>
         <source>CHAP authentication</source>
-        <translation>ການຢືນຢັນ CHAP</translation>
+        <translation>CHAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="833"/>
@@ -59,7 +59,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="834"/>
         <source>MSCHAP2 authentication</source>
-        <translation>ການຢືນຢັນ MSCHAP2</translation>
+        <translation>MSCHAP2ᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="835"/>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="836"/>
         <source>Compression Mode:</source>
-        <translation>ວິທີການຫຸ້ມ:</translation>
+        <translation>ᦵᦔᦲᧂᦕᦸᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
@@ -79,17 +79,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
         <source>Allow Default data compression</source>
-        <translation>ອະນຸຍາດໃຫ້ຫຸ້ມ Default</translation>
+        <translation>ᦷᦓᦍᦱᧆ Defaultᦕᦸᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="839"/>
         <source>Allow TCP header compression</source>
-        <translation>ອະນຸຍາດໃຫ້ຫຼຸດຂະໜາດສ່ວນຫົວ TCP</translation>
+        <translation>ᦷᦓᦍᦱᧆ TCPᦷᦠᦕᦸᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="840"/>
         <source>Use protocol field compression negotiation</source>
-        <translation>ໃຊ້ການປຶກສາການຫຼຸດຂະໜາດໂປຣໂຕຄອນ</translation>
+        <translation>ᦕᦸᧃᧈᦓᦾᧉᦀᦳᧇᧈᦂᦱᧃᦺᦋᧈᦏᦹᦑᦲᧈᦀᦳᧇᧈᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="841"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
         <source>Use custom gateway port</source>
-        <translation>ໃຊ້ພອດເຄື່ອງອອກທາງກຳນົດເອງ</translation>
+        <translation>ᦺᦋᧉᦏᦹᦑᦲᧈᦃᧁᧉᦐᦹᧂᦞᦱᧂᦷᦠᧉᦔᦳᧆᦃᦱᦤᦎᦱᧄᦺᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
@@ -124,12 +124,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1048"/>
         <source>Use a TCP connection</source>
-        <translation>ໃຊ້ການເຊື່ອມຕໍ່ TCP</translation>
+        <translation>ᦺᦋᧉᦏᦹ TCPᦎᦸᦰᦈᧇ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
         <source>Set virtual device type</source>
-        <translation>ການຕັ້ງຄ່າປະເພດອຸປະກອນເວີດຕົວລະ</translation>
+        <translation>ᦎᧂᧉ ᦶᦔᧂᦵᦖᦲᧃ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦸᧂᧈᦉᦱᧂᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
@@ -139,7 +139,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1051"/>
         <source>Limit TCP Maximum Segment Size(MSS)</source>
-        <translation>ຈຳກັດຂະໜາດເຊັກເກັດ TCP (MSS)</translation>
+        <translation>ᦗᦰᦍᦰᦐᦱᧉᦑᧇ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
@@ -149,22 +149,22 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
         <source>IPv6 tun link</source>
-        <translation>ການເຊື່ອມຕໍ່ IPv6 tun</translation>
+        <translation>ᦎᦸᦰᦈᧇIPv6 tun</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1054"/>
         <source>Specify ping interval</source>
-        <translation>ການກຳນົດໄລຍະ Ping</translation>
+        <translation>ᦢᧅᦅᦱᧈᦷᦞᧂᧈᦌᦲᧈ Ping</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1055"/>
         <source>Specify exit or restart ping</source>
-        <translation>ການກຳນົດໄລຍະ Ping ສຳລັບການອອກຈາກລະບົບ ຫຼື ເລີ່ມຄືນໃໝ່</translation>
+        <translation>Pingᦢᧅᦅᦱᧈᦏᦼᧈᦀᦸᧅᧈᦢᧁᧈᦅᦸᧉᦺᦃᦺᦖᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1056"/>
         <source>Specify max routes</source>
-        <translation>路由上限ᦒᦜᦺᦸᦞᦔᦷᦟᦰ</translation>
+        <translation>ᦢᧅᦅᦱᧈᦘᦲᧄᦀᦸᧅᧈᦂᦱᧃᧉᦂᦸᦺᦊᧈᦑᦹᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1057"/>
@@ -174,12 +174,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
         <source>Use custom key size</source>
-        <translation>ໃຊ້ຂະໜາດກຸນແຈກຳນົດເອງ</translation>
+        <translation>ᦺᦋᧈᦏᦹᦓᦾᧉᦺᦊᧈᦃᦸᦶᦈᦎᦱᧃᦺᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1059"/>
         <source>Choose</source>
-        <translation>ເລືອກ</translation>
+        <translation>ᦵᦟᦲᧅᦀᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1062"/>
@@ -189,7 +189,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
         <source>Use custom tunnel Maximum Transmission Umit(MTU)</source>
-        <translation>ໃຊ້ການສົ່ງຂໍ້ມູນ MTU ທີ່ກຳນົດເອງ</translation>
+        <translation>ᦺᦋᧈᦏᦹᦑᦱᧂᦣᦴᧉᦣᦸᧂᧉᦺᦊᧈᦑᦹᧅᦌᦸᧃᧉᦉᦳ（MTU）ᦎᦱᧄᦺᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
         <source>Subject Match</source>
-        <translation>ການຈັບຄູ່ຫົວຂໍ້</translation>
+        <translation>ᦃᦸᧉᦅᧁᧉᦈᧇᦂᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1071"/>
@@ -214,7 +214,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1072"/>
         <source>Key Direction</source>
-        <translation>ທິດທາງຄີ</translation>
+        <translation>ᦠᦳᧃᦗᦻᦃᦸᦶᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1074"/>
@@ -224,12 +224,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
         <source>Port</source>
-        <translation>ພອດ</translation>
+        <translation>ᦚᦻᧈᦵᦆᦲᧂᧈᦔᦟᦲᦰᦂᦱᧃ ᦎᦱᦉᦻ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1076"/>
         <source>Proxy USername</source>
-        <translation>ຊື່ຜູ້ໃຊ້ Proxy</translation>
+        <translation>ᦶᦑᧃᦎᦱᧂᦋᦹᧈᦕᦴᧉᦺᦋᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
@@ -244,42 +244,42 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
         <source>TLS settings</source>
-        <translation>ການຕັ້ງຄ່າ TLS</translation>
+        <translation>ᦎᧂᧉTLS</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1081"/>
         <source>Server Certificate Check</source>
-        <translation>ການກວດສອບໃບຢັ້ງຢືນເຄື່ອງບໍລິການ</translation>
+        <translation>ᦌᦱᧉᦶᦋᧆᦐᧂᦉᦹᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1083"/>
         <source>Use the previous authentication end (server) certificate</source>
-        <translation>ໃຊ້ໃບຢັ້ງຢືນເຄື່ອງບໍລິການກ່ອນໜ້ານີ້</translation>
+        <translation>ᦵᦙᦲᧈᦺᦋᧈᦏᦹᦌᦱᧉᦶᦋᧆᦐᧂᦉᦹᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃᦀᦸᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1085"/>
         <source>Verify peer (server) certificate nsCertType specification</source>
-        <translation>ກວດສອບໃບຢັ້ງຢືນຂອງເພີ່ນ (ເຊີບເວີ) ທີ່ກຳນົດໃນ nsCertType</translation>
+        <translation>nsCertTypeᦢᧅᦅᦱᧈ ᦌᦱᧉᦶᦋᧆᦐᧂᦉᦹᦑᦲᧈᦈᧇᦂᧃ（ᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ）</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1086"/>
         <source>Mode</source>
-        <translation>ຮູບແບບ</translation>
+        <translation>ᦗᦰᦍᦰᦔᦳᧃᦓᦾᧉᦠᦸᧂᧉᦗᦻᦗᦱᧂᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
         <source>Proxies</source>
-        <translation>ໂປຣຊີ</translation>
+        <translation>ᦶᦑᧃᦎᦱᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
         <source>Proxy Type</source>
-        <translation>ປະເພດໂປຣຊີ</translation>
+        <translation>ᦙᦊᦷᦍᦵᦔᦲᧂᦶᦑᧃᦎᦱᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
         <source>Security</source>
-        <translation>ຄວາມປອດໄພ</translation>
+        <translation>ᦗᦹᧂᧈᦺᦡᧉᦔᦸᧆᦺᦘ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1090"/>
@@ -289,7 +289,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1100"/>
         <source>Input content</source>
-        <translation>ເນື້ອໃນທີ່ປ້ອນ</translation>
+        <translation>ᦵᦎᧅᦀᦏᦺᦓᦺᦉᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
@@ -304,32 +304,32 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1107"/>
         <source>Automatic</source>
-        <translation>ອັດຕະໂນມັດ</translation>
+        <translation>ᦎᦱᧄᦙᧃᦐᦹᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
         <source>Exit</source>
-        <translation>ອອກ</translation>
+        <translation>ᦀᦸᧅᧈᦵᦵᦩᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1113"/>
         <source>Restart</source>
-        <translation>ເລີ່ມຄືນໃໝ່</translation>
+        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1115"/>
         <source>Don&apos;t verify certificate identification</source>
-        <translation>ບໍ່ກວດສອບຕົວຕົນໃບຢັ້ງຢືນ</translation>
+        <translation>ᦢᧁᧈᦌᦱᧈᦶᦋᧆᦈᧄᦜᦻᦐᧂᦉᦹᦣᧇᦣᦸᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1116"/>
         <source>Verify the entire subject exactly</source>
-        <translation>ກວດສອບຫົວຂໍ້ທັງໝົດຢ່າງຖືກຕ້ອງ</translation>
+        <translation>ᦌᦱᧈᦶᦋᧆᦐᧂᦉᦹᦡᦲᦡᦲ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1117"/>
         <source>Verify name exactly</source>
-        <translation>ກວດສອບຊື່ຜູ້ໃຊ້ງານຢ່າງຖືກຕ້ອງ</translation>
+        <translation>ᦌᦱᧈᦶᦋᧆᦋᦹᧈᦵᦉᧂᦶᦈᧂᧉᦏᦲᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1118"/>
@@ -346,19 +346,19 @@
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1121"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1124"/>
         <source>Client</source>
-        <translation>ຄລາຍແອັບ</translation>
+        <translation>ᦑᦲᧈᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1126"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1130"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1139"/>
         <source>None</source>
-        <translation>ບໍ່ມີ</translation>
+        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
         <source>TLS-Certification</source>
-        <translation>ການຢືນຢັນ TLS</translation>
+        <translation>TLS-ᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1128"/>
@@ -368,17 +368,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1134"/>
         <source>Not Required</source>
-        <translation>ບໍ່ຈຳເປັນ</translation>
+        <translation>ᦢᧁᧈᦀᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1138"/>
         <source>Default</source>
-        <translation>ຄ່າເລີ່ມຕົ້ນ</translation>
+        <translation>ᦎᧂᧉ ᦠᦹᧉ ᦵᦟᦹᧄᧈᦎᦳᧄᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1216"/>
         <source>Options:</source>
-        <translation>ຕົວເລືອກ:</translation>
+        <translation>ᦵᦟᦲᧅᦺᦋᧉ:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1219"/>
@@ -388,27 +388,27 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1220"/>
         <source>Enforce UDP encapsulation</source>
-        <translation>ບັງຄັບການຫຸ້ມ UDP</translation>
+        <translation>ᦵᦎᧅᦊᦱᧉᦺᦋᧈᦏᦹUDPᦶᦕᧈᦺᦔ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1221"/>
         <source>Use IP compression</source>
-        <translation>ໃຊ້ການຫຼຸດຂະໜາດ IP</translation>
+        <translation>ᦺᦋᧈᦏᦹ Ipᦕᦱᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1222"/>
         <source>Enable custom password suggestions</source>
-        <translation>ເປີດໃຊ້ຄຳແນະນຳລະຫັດຜ່ານທີ່ກຳນົດເອງ</translation>
+        <translation>ᦃᦸᦺᦋᧈᦟᦲᧅᦵᦉᦲᧂᦵᦀᧄᦎᦱᧄᦷᦎ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1382"/>
         <source>Choose a private key</source>
-        <translation>ເລືອກກຸນແຈສ່ວນຕົວ</translation>
+        <translation>ᦵᦟᦲᧅᦀᧁᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1384"/>
         <source>Key Files (*.key *.pem *.der *.p12 *.pfx)</source>
-        <translation>ໄຟລ໌ກຸນແຈສ່ວນຕົວ (*.key *.pem *.der *.p12 *.pfx)</translation>
+        <translation>ᦐᧂᦉᦹᦃᦸᦷᦎᦵᦡᧁ (*.key *.pem *.der *.p12 *.pfx)</translation>
     </message>
 </context>
 <context>
@@ -421,7 +421,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
         <source>Name</source>
-        <translation>ຊື່</translation>
+        <translation>ᦢᦴᦟᦴᦏᦳ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦹᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
@@ -431,24 +431,24 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
         <source>Local IP</source>
-        <translation>ທີ່ຢູ່ IP ພາຍໃນ</translation>
+        <translation>Ipᦑᦲᧈᦺᦓᦷᦠᦈᧅ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
         <source>Remote IP</source>
-        <translation>IP ᦓັງໄລຍະไกล</translation>
+        <translation>Ipᦑᦲᧈᦺᦂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="336"/>
         <source>PIN Code</source>
-        <translation>ລະຫັດ PIN</translation>
+        <translation>ᦓᦱᧄᦗᦱᧆPIN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="337"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="849"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="856"/>
         <source>Password</source>
-        <translation>ລະຫັດຜ່ານ</translation>
+        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
@@ -458,27 +458,27 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="340"/>
         <source>Server Address</source>
-        <translation>ທີ່ຢູ່ເຊີບເວີ</translation>
+        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="341"/>
         <source>Authentication Mode</source>
-        <translation>ວິທີການຢືນຢັນ</translation>
+        <translation>ᦵᦔᦲᧂᦆᦱᧆᦔᦲᧃᦖᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="342"/>
         <source>CA Certificate</source>
-        <translation>ໃບຢັ້ງຢືນ CA</translation>
+        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂCA</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="343"/>
         <source>User Certificate</source>
-        <translation>ໃບຢັ້ງຢືນຜູ້ໃຊ້ງານ</translation>
+        <translation>ᦂᦱᧃᧉᦉᧅᦃᦲᦰᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="344"/>
         <source>Key Direction</source>
-        <translation>ທິດທາງຄີ</translation>
+        <translation>ᦠᦳᧃᦗᦻᦃᦸᦶᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="345"/>
@@ -488,13 +488,13 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="346"/>
         <source>Private Key Password</source>
-        <translation>ລະຫັດຜ່ານຂອງຄີສ່ວນຕົວ</translation>
+        <translation>ᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="347"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="349"/>
         <source>Password Options</source>
-        <translation>ຕົວເລືອກລະຫັດຜ່ານ</translation>
+        <translation>ᦃᦸᧉᦂᦱᧃᦵᦟᦲᧅᦟᦲᧅᦉᦄᧆ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
@@ -513,7 +513,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="361"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="362"/>
         <source>Choose</source>
-        <translation>ເລືອກ</translation>
+        <translation>ᦵᦟᦲᧅᦀᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
@@ -524,13 +524,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="379"/>
         <source>Save password only for this user</source>
-        <translation>ບັນທຶກລະຫັດຜ່ານສຳລັບຜູ້ໃຊ້ງານປັດຈຸບັນເທົ່ານັ້ນ</translation>
+        <translation>ᦎᦱᧄᦅᦱᧈ ᦎᦸᧂᦑᦲᧈ ᦅᦳᧃᦺᦋᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ ᦢᧃᦑᦹᧅ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="374"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="380"/>
         <source>Save password for all users</source>
-        <translation>ບັນທຶກລະຫັດຜ່ານສຳລັບຜູ້ໃຊ້ງານທຸກຄົນ</translation>
+        <translation>ᦵᦎᦲᧃᦕᦴᧉᦺᦋᧈᦵᦚᧆᧈᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄᦺᦞᧉᦑᧂᦷᦙᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
@@ -542,28 +542,28 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="382"/>
         <source>Don&apos;t require a password</source>
-        <translation>密码不必要</translation>
+        <translation>ᦢᧁᧈᦀᧁᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="386"/>
         <source>Required</source>
-        <translation>ຕ້ອງການ</translation>
+        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
         <source>Certificate(TLS)</source>
-        <translation>ໃບຢັ້ງຢືນ (TLS)</translation>
+        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂ（TLS）</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="855"/>
         <source>Static key</source>
-        <translation>ຄີຄົງທີ່</translation>
+        <translation>ᦃᦸᦃᦶᦈᦢᧁᧈᦋᦱᧂᧈᦵᦔᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="857"/>
         <source>Password and certificate(TLS)</source>
-        <translation>ລະຫັດຜ່ານ ແລະ ໃບຢັ້ງຢືນ (TLS)</translation>
+        <translation>ᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄ᧞ᦐᧂᦉᦹᦣᧇᦣᦸᧂ（TLS）</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="866"/>
@@ -573,12 +573,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="867"/>
         <source>Certificate/ssh-agent</source>
-        <translation>ໃບຢັ້ງຢືນ/ssh-agent</translation>
+        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂ/ ssh-agent</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="868"/>
         <source>Smart card</source>
-        <translation>ບັດສະມາດ</translation>
+        <translation>ᦋᦹᦐᦵᦓᦲᧃᦃᦱ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="923"/>
@@ -589,18 +589,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="925"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="964"/>
         <source>Key Files (*.key *.pem *.der *.p12 *.pfx)</source>
-        <translation>ໄຟລ໌ຄີສ່ວນຕົວ (*.key *.pem *.der *.p12 *.pfx)</translation>
+        <translation>ᦐᧂᦉᦹᦃᦸᦷᦎᦵᦡᧁ (*.key *.pem *.der *.p12 *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="936"/>
         <source>Choose a CA certificate</source>
-        <translation>ເລືອກໃບຢັ້ງຢືນ CA</translation>
+        <translation>ᦵᦟᦲᧅᦀᧁᦐᧂᦉᦹᦣᧇᦣᦸᧂCA</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="938"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="951"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation>ໄຟລ໌ CA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+        <translation>ᦐᧂᦉᦹCA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="949"/>
@@ -610,7 +610,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="962"/>
         <source>Choose a Static key</source>
-        <translation>ເລືອກຄີຄົງທີ່</translation>
+        <translation>ᦵᦟᦲᧅᦀᧁᦃᦸᦃᦶᦈᦢᧁᧈᦋᦱᧂᧈᦵᦔᧃᧈ</translation>
     </message>
 </context>
 <context>
@@ -640,17 +640,17 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
         <source>Auto Connection</source>
-        <translation>ເຊື່ອມຕໍ່ອັດຕະໂນມັດ</translation>
+        <translation>ᦎᦱᧄᦷᦎᦎᦸᦰᦈᧇ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="178"/>
         <source>Cancel</source>
-        <translation>ຍົກເລີກ</translation>
+        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
         <source>Confirm</source>
-        <translation>ຢືນຢັນ</translation>
+        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
     </message>
 </context>
 <context>
@@ -658,32 +658,32 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="170"/>
         <source>IPv4 Config</source>
-        <translation>ການຕັ້ງຄ່າ IPv4</translation>
+        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv4</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="171"/>
         <source>Address</source>
-        <translation>ທີ່ຢູ່</translation>
+        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="172"/>
         <source>Netmask</source>
-        <translation>маска подсети</translation>
+        <translation>ᦓᦱᧄᦗᦱᧆᦞᦱᧂᦷᦟᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="173"/>
         <source>Default Gateway</source>
-        <translation>ເຄືອຂ່າຍຄ່າເລີ່ມຕົ້ນ</translation>
+        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="174"/>
         <source>DNS Server</source>
-        <translation>ເຊີບເວີ DNS</translation>
+        <translation>DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="175"/>
         <source>Search Domain</source>
-        <translation>ໂດເມນທີ່ຄົ້ນຫາ</translation>
+        <translation>ᦑᦲᧈᦌᦸᦰᦠᦱ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="176"/>
@@ -693,7 +693,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="178"/>
         <source>Auto(DHCP)</source>
-        <translation>ອັດຕະໂນມັດ (DHCP)</translation>
+        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
@@ -711,17 +711,17 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
         <source>Address</source>
-        <translation>ທີ່ຢູ່</translation>
+        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="161"/>
         <source>Netmask</source>
-        <translation>ຊຶ່ເຄືອຂ່າຍ</translation>
+        <translation>ᦓᦱᧄᦗᦱᧆᦞᦱᧂᦷᦟᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="162"/>
         <source>Default Gateway</source>
-        <translation>ເຄື່ອງອອກທາງເລີ່ມຕົ້ນ</translation>
+        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="163"/>
@@ -731,17 +731,17 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="164"/>
         <source>Search Domain</source>
-        <translation>ໂດເມນທີ່ຄົ້ນຫາ</translation>
+        <translation>ᦑᦲᧈᦌᦸᦰᦠᦱ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
         <source>Auto(DHCP)</source>
-        <translation>ອັດຕະໂນມັດ (DHCP)</translation>
+        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
         <source>Manual</source>
-        <translation>ດ້ວຍມື</translation>
+        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
     </message>
 </context>
 <context>
@@ -761,7 +761,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
         <source>Connect</source>
-        <translation>ເຊື່ອມຕໍ່</translation>
+        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
     </message>
 </context>
 <context>
@@ -774,7 +774,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
         <source>VPN Settings</source>
-        <translation>ການຕັ້ງຄ່າ VPN ເພີ່ມເຕີມ</translation>
+        <translation>ᦶᦔᧂᦵᦆᦲᧂᧈVPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
@@ -787,7 +787,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="58"/>
         <source>create VPN</source>
-        <translation>VPN ᦙཱའ</translation>
+        <translation>ᦶᦔᧂVPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
@@ -797,18 +797,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
         <source>VPN Name</source>
-        <translation>VPN ᨣᩴ</translation>
+        <translation>ᦋᦹᧈᦵᦉᧂVPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="147"/>
         <source>Required</source>
-        <translation>ຕ້ອງການ</translation>
+        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="142"/>
         <source>VPN Server</source>
-        <translation>ທີ່ຢູ່ເຄື່ອງບໍລິການ</translation>
+        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="168"/>
@@ -818,7 +818,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
         <source>Confirm</source>
-        <translation>ຢືນຢັນ</translation>
+        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>

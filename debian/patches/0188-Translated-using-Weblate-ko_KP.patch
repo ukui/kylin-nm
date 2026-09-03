@@ -1,0 +1,1266 @@
+From: hyoyeong <164199371@qq.com>
+Date: Thu, 3 Sep 2026 13:22:37 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ko_KP/
+---
+ src-vpn/translations/kylin-vpn_ar.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_bo.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_bo_CN.ts   |   8 +--
+ src-vpn/translations/kylin-vpn_de.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_es.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_fr.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_id.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_it.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_ja.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_khb_CN.ts  |   8 +--
+ src-vpn/translations/kylin-vpn_kk.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_ko.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_ko_KP.ts   | 100 +++++++++++++++---------------
+ src-vpn/translations/kylin-vpn_ky.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_lo.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_my.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_pt.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_ru.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_tr.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_ug.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_ur.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_vi.ts      |   8 +--
+ src-vpn/translations/kylin-vpn_zh_CN.ts   |   8 +--
+ src-vpn/translations/kylin-vpn_zh_Hant.ts |   8 +--
+ 24 files changed, 142 insertions(+), 142 deletions(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ar.ts b/src-vpn/translations/kylin-vpn_ar.ts
+index eee8d3d..191f104 100644
+--- a/src-vpn/translations/kylin-vpn_ar.ts
++++ b/src-vpn/translations/kylin-vpn_ar.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_bo.ts b/src-vpn/translations/kylin-vpn_bo.ts
+index b2b2b2b..0eae465 100644
+--- a/src-vpn/translations/kylin-vpn_bo.ts
++++ b/src-vpn/translations/kylin-vpn_bo.ts
+@@ -619,18 +619,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -769,7 +769,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_bo_CN.ts b/src-vpn/translations/kylin-vpn_bo_CN.ts
+index 16e2dad..a3dc5f8 100644
+--- a/src-vpn/translations/kylin-vpn_bo_CN.ts
++++ b/src-vpn/translations/kylin-vpn_bo_CN.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_de.ts b/src-vpn/translations/kylin-vpn_de.ts
+index 3409902..aeb84a7 100644
+--- a/src-vpn/translations/kylin-vpn_de.ts
++++ b/src-vpn/translations/kylin-vpn_de.ts
+@@ -620,18 +620,18 @@ Wenn die Schlüsselrichtung verwendet wird, muss sie der verwendeten VPN-Seite e
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Wenn die Schlüsselrichtung verwendet wird, muss sie der verwendeten VPN-Seite e
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_es.ts b/src-vpn/translations/kylin-vpn_es.ts
+index d3e35f1..7ce99db 100644
+--- a/src-vpn/translations/kylin-vpn_es.ts
++++ b/src-vpn/translations/kylin-vpn_es.ts
+@@ -620,18 +620,18 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_fr.ts b/src-vpn/translations/kylin-vpn_fr.ts
+index ff42a7b..42792d0 100644
+--- a/src-vpn/translations/kylin-vpn_fr.ts
++++ b/src-vpn/translations/kylin-vpn_fr.ts
+@@ -620,18 +620,18 @@ Si la direction de la clé est utilisée, elle doit être opposée au côté VPN
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Si la direction de la clé est utilisée, elle doit être opposée au côté VPN
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_id.ts b/src-vpn/translations/kylin-vpn_id.ts
+index d7d4d7e..dbbb850 100644
+--- a/src-vpn/translations/kylin-vpn_id.ts
++++ b/src-vpn/translations/kylin-vpn_id.ts
+@@ -620,18 +620,18 @@ Jika menggunakan arah kunci, nilainya harus berlawanan dengan ujung VPN yang dig
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Jika menggunakan arah kunci, nilainya harus berlawanan dengan ujung VPN yang dig
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_it.ts b/src-vpn/translations/kylin-vpn_it.ts
+index 35022b9..62b3ab6 100644
+--- a/src-vpn/translations/kylin-vpn_it.ts
++++ b/src-vpn/translations/kylin-vpn_it.ts
+@@ -620,18 +620,18 @@ Se viene utilizzata una direzione della chiave, questa deve essere opposta a que
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Se viene utilizzata una direzione della chiave, questa deve essere opposta a que
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_ja.ts b/src-vpn/translations/kylin-vpn_ja.ts
+index 77a1f3f..743e8cc 100644
+--- a/src-vpn/translations/kylin-vpn_ja.ts
++++ b/src-vpn/translations/kylin-vpn_ja.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_khb_CN.ts b/src-vpn/translations/kylin-vpn_khb_CN.ts
+index 73a8acc..6c3e82c 100644
+--- a/src-vpn/translations/kylin-vpn_khb_CN.ts
++++ b/src-vpn/translations/kylin-vpn_khb_CN.ts
+@@ -619,18 +619,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -769,7 +769,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_kk.ts b/src-vpn/translations/kylin-vpn_kk.ts
+index 0b746d4..887adaf 100644
+--- a/src-vpn/translations/kylin-vpn_kk.ts
++++ b/src-vpn/translations/kylin-vpn_kk.ts
+@@ -619,18 +619,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -769,7 +769,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_ko.ts b/src-vpn/translations/kylin-vpn_ko.ts
+index 5d77615..ffd1544 100644
+--- a/src-vpn/translations/kylin-vpn_ko.ts
++++ b/src-vpn/translations/kylin-vpn_ko.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_ko_KP.ts b/src-vpn/translations/kylin-vpn_ko_KP.ts
+index 2d21eeb..95188ab 100644
+--- a/src-vpn/translations/kylin-vpn_ko_KP.ts
++++ b/src-vpn/translations/kylin-vpn_ko_KP.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
+         <source>Settings</source>
+-        <translation>설정 항목</translation>
++        <translation>설정</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
+@@ -24,7 +24,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="827"/>
+         <source>MPPE encryption algorithm:</source>
+-        <translation>MPPE 암호화 알고리즘:</translation>
++        <translation>MPPE 암호화 산법:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
+@@ -74,7 +74,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
+         <source>Allow BSD data compression</source>
+-        <translation>BSD 데이터 압축 허용</translation>
++        <translation>BSD 압축 허용</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
+@@ -114,7 +114,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
+         <source>Use custom gateway port</source>
+-        <translation>사용자 정의 게이트웨이 포트 사용</translation>
++        <translation>사용자 지정 게이트웨이 포트 사용</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
+@@ -129,7 +129,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
+         <source>Set virtual device type</source>
+-        <translation>가상 장치 유형 설정</translation>
++        <translation>가상 장치 류형 설정</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
+@@ -144,7 +144,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
+         <source>Randomize remote hosts</source>
+-        <translation>원격 호스트 임의화</translation>
++        <translation>원격 주기 임의화</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
+@@ -174,7 +174,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
+         <source>Use custom key size</source>
+-        <translation>사용자 정의 키 크기 사용</translation>
++        <translation>사용자 지정 키 크기 사용</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1059"/>
+@@ -184,22 +184,22 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1062"/>
+         <source>Use custom renegotiation interval</source>
+-        <translation>사용자 정의 재협상 간격 사용</translation>
++        <translation>사용자 지정 재협상 간격 사용</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
+         <source>Use custom tunnel Maximum Transmission Umit(MTU)</source>
+-        <translation>사용자 정의 터널 최대 전송 단위(MTU) 사용</translation>
++        <translation>사용자 지정 터널 최대 전송 단위(MTU) 사용</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
+         <source>Use custom UDP fragment size</source>
+-        <translation>사용자 정의 UDP 조각 크기 사용</translation>
++        <translation>사용자 지정 UDP 조각 크기 사용</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
+         <source>Accept authenticated packets from any address (Float)</source>
+-        <translation>모든 주소(Float)로 부터 인증된 패킷 수락</translation>
++        <translation>모든 주소(Float)로 부터 신분 인증된 패킷 수락</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
+@@ -224,7 +224,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
+         <source>Port</source>
+-        <translation>구단</translation>
++        <translation>포트</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1076"/>
+@@ -234,12 +234,12 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
+         <source>Proxy Password</source>
+-        <translation>프록시 비밀 번호</translation>
++        <translation>프록시 비밀번호</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1079"/>
+         <source>General</source>
+-        <translation>기본 기능</translation>
++        <translation>기본</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
+@@ -264,7 +264,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1086"/>
+         <source>Mode</source>
+-        <translation>표시 방법</translation>
++        <translation>모드</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
+@@ -274,12 +274,12 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
+         <source>Proxy Type</source>
+-        <translation>프록시 유형</translation>
++        <translation>프록시 류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
+         <source>Security</source>
+-        <translation>안전하고 신뢰성이 있습니다</translation>
++        <translation>안전</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1090"/>
+@@ -294,7 +294,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
+         <source>No</source>
+-        <translation>취소</translation>
++        <translation>아니요</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1106"/>
+@@ -309,7 +309,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
+         <source>Exit</source>
+-        <translation>응용 프로그람 종료</translation>
++        <translation>종료</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1113"/>
+@@ -319,7 +319,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1115"/>
+         <source>Don&apos;t verify certificate identification</source>
+-        <translation>인증서 식별 검증 안 함</translation>
++        <translation>인증서 식별자 검증하지 않음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1116"/>
+@@ -353,7 +353,7 @@
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1130"/>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1139"/>
+         <source>None</source>
+-        <translation>아직 없음</translation>
++        <translation>없음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
+@@ -373,7 +373,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1138"/>
+         <source>Default</source>
+-        <translation>기본으로 설정</translation>
++        <translation>기본값</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1216"/>
+@@ -398,7 +398,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1222"/>
+         <source>Enable custom password suggestions</source>
+-        <translation>사용자 정의 비밀번호 제안 활성화</translation>
++        <translation>사용자 지정 비밀번호 제안 활성화</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1382"/>
+@@ -416,12 +416,12 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="331"/>
+         <source>Type</source>
+-        <translation>네트워크 카드 유형</translation>
++        <translation>류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
+         <source>Name</source>
+-        <translation>블루투스 장치 이름</translation>
++        <translation>명칭</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
+@@ -436,7 +436,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
+         <source>Remote IP</source>
+-        <translation>원격 주소</translation>
++        <translation>원격 IP 주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="336"/>
+@@ -448,7 +448,7 @@
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="849"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="856"/>
+         <source>Password</source>
+-        <translation>키</translation>
++        <translation>비밀번호</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
+@@ -499,14 +499,14 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
+         <source>Username</source>
+-        <translation>사용자의 이름</translation>
++        <translation>사용자 이름</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
+         <source>Notice:
+ If key direction is used, it must be opposite to the VPN side used. If &apos;1&apos; is used, the connection must use &apos;0&apos;. If you are not sure which value to use, please contact your system administrator.</source>
+         <translation>주의:
+-키 방향을 사용하는 경우 VPN 단말과 반대 방향이어야 합니다. &quot;1&quot;을 사용하면 련결은 반드시 &quot;0&quot;을 사용해야 합니다. 값이 잘 모를 경우 체계 관리자에게 문의하십시오.</translation>
++키 방향을 사용하는 경우 VPN 단말과 반대 방향이어야 합니다. “1”을 사용하면 련결은 반드시 “0”을 사용해야 합니다. 어떤 값을 사용해야 할지 확실하지 않으면 체계 관리자에게 문의하십시오.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="359"/>
+@@ -519,13 +519,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
+         <source>None</source>
+-        <translation>아직 없음</translation>
++        <translation>없음</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="379"/>
+         <source>Save password only for this user</source>
+-        <translation>현재 사용자만 비밀번호 저장</translation>
++        <translation>현재 사용자에게만 비밀번호 저장</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="374"/>
+@@ -537,7 +537,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="381"/>
+         <source>Ask password every time</source>
+-        <translation>항상 묻기</translation>
++        <translation>매번 묻기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
+@@ -549,7 +549,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="386"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
+@@ -595,7 +595,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="936"/>
+         <source>Choose a CA certificate</source>
+-        <translation>CA 증명서 하나 선택하기</translation>
++        <translation>CA 증명서 선택하기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="938"/>
+@@ -636,7 +636,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+         <source>Advanced</source>
+-        <translation>고급 옵션</translation>
++        <translation>고급</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
+@@ -646,12 +646,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="178"/>
+         <source>Cancel</source>
+-        <translation>실행 취소</translation>
++        <translation>취소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
+         <source>Confirm</source>
+-        <translation>승인</translation>
++        <translation>확인</translation>
+     </message>
+ </context>
+ <context>
+@@ -664,7 +664,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="171"/>
+         <source>Address</source>
+-        <translation>서버 주소</translation>
++        <translation>주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="172"/>
+@@ -684,7 +684,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="175"/>
+         <source>Search Domain</source>
+-        <translation>검색 도메인</translation>
++        <translation>도메인 검색</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="176"/>
+@@ -699,7 +699,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
+         <source>Manual</source>
+-        <translation>사용자 매뉴얼</translation>
++        <translation>수동</translation>
+     </message>
+ </context>
+ <context>
+@@ -712,7 +712,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
+         <source>Address</source>
+-        <translation>서버 주소</translation>
++        <translation>주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="161"/>
+@@ -732,7 +732,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="164"/>
+         <source>Search Domain</source>
+-        <translation>검색 도메인</translation>
++        <translation>도메인 검색</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
+@@ -742,7 +742,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
+         <source>Manual</source>
+-        <translation>사용자 매뉴얼</translation>
++        <translation>수동</translation>
+     </message>
+ </context>
+ <context>
+@@ -756,13 +756,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
+         <source>Disconnect</source>
+-        <translation>련결 끊기</translation>
++        <translation>끊기</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
+         <source>Connect</source>
+-        <translation>스캐너 련결</translation>
++        <translation>련결</translation>
+     </message>
+ </context>
+ <context>
+@@ -775,7 +775,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+         <source>VPN Settings</source>
+-        <translation>VPN 설정</translation>
++        <translation>더 많은 VPN 설정</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+@@ -793,7 +793,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
+         <source>VPN Type</source>
+-        <translation>VPN 유형</translation>
++        <translation>VPN 류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
+@@ -804,7 +804,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="147"/>
+         <source>Required</source>
+-        <translation>필수</translation>
++        <translation>필수 입력</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="142"/>
+@@ -819,12 +819,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
+         <source>Confirm</source>
+-        <translation>승인</translation>
++        <translation>확인</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>
+         <source>Cancel</source>
+-        <translation>실행 취소</translation>
++        <translation>취소</translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src-vpn/translations/kylin-vpn_ky.ts b/src-vpn/translations/kylin-vpn_ky.ts
+index 19c6e0a..71e1458 100644
+--- a/src-vpn/translations/kylin-vpn_ky.ts
++++ b/src-vpn/translations/kylin-vpn_ky.ts
+@@ -619,18 +619,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -769,7 +769,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_lo.ts b/src-vpn/translations/kylin-vpn_lo.ts
+index 45d1b35..7d27bd2 100644
+--- a/src-vpn/translations/kylin-vpn_lo.ts
++++ b/src-vpn/translations/kylin-vpn_lo.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_my.ts b/src-vpn/translations/kylin-vpn_my.ts
+index ee8c63e..ea66650 100644
+--- a/src-vpn/translations/kylin-vpn_my.ts
++++ b/src-vpn/translations/kylin-vpn_my.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_pt.ts b/src-vpn/translations/kylin-vpn_pt.ts
+index 29847d7..8e70d62 100644
+--- a/src-vpn/translations/kylin-vpn_pt.ts
++++ b/src-vpn/translations/kylin-vpn_pt.ts
+@@ -620,18 +620,18 @@ Se for utilizada uma direção de chave, esta deve ser oposta à do ponto VPN ut
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Se for utilizada uma direção de chave, esta deve ser oposta à do ponto VPN ut
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_ru.ts b/src-vpn/translations/kylin-vpn_ru.ts
+index 8d1fabe..49bec1a 100644
+--- a/src-vpn/translations/kylin-vpn_ru.ts
++++ b/src-vpn/translations/kylin-vpn_ru.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_tr.ts b/src-vpn/translations/kylin-vpn_tr.ts
+index 1af5d91..70dc1d7 100644
+--- a/src-vpn/translations/kylin-vpn_tr.ts
++++ b/src-vpn/translations/kylin-vpn_tr.ts
+@@ -620,18 +620,18 @@ Anahtar yönü kullanılıyorsa, kullanılan VPN ucunun tersi olmalıdır. &quot
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Anahtar yönü kullanılıyorsa, kullanılan VPN ucunun tersi olmalıdır. &quot
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_ug.ts b/src-vpn/translations/kylin-vpn_ug.ts
+index 11b1040..5300394 100644
+--- a/src-vpn/translations/kylin-vpn_ug.ts
++++ b/src-vpn/translations/kylin-vpn_ug.ts
+@@ -619,18 +619,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -769,7 +769,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_ur.ts b/src-vpn/translations/kylin-vpn_ur.ts
+index 8da7473..60aa9cf 100644
+--- a/src-vpn/translations/kylin-vpn_ur.ts
++++ b/src-vpn/translations/kylin-vpn_ur.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_vi.ts b/src-vpn/translations/kylin-vpn_vi.ts
+index 7c0ae50..7ce52b6 100644
+--- a/src-vpn/translations/kylin-vpn_vi.ts
++++ b/src-vpn/translations/kylin-vpn_vi.ts
+@@ -620,18 +620,18 @@ Nếu sử dụng hướng của khóa, nó phải ngược với phía VPN sử
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ Nếu sử dụng hướng của khóa, nó phải ngược với phía VPN sử
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_zh_CN.ts b/src-vpn/translations/kylin-vpn_zh_CN.ts
+index 998b698..d374e0c 100644
+--- a/src-vpn/translations/kylin-vpn_zh_CN.ts
++++ b/src-vpn/translations/kylin-vpn_zh_CN.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+diff --git a/src-vpn/translations/kylin-vpn_zh_Hant.ts b/src-vpn/translations/kylin-vpn_zh_Hant.ts
+index 912b71d..899bf84 100644
+--- a/src-vpn/translations/kylin-vpn_zh_Hant.ts
++++ b/src-vpn/translations/kylin-vpn_zh_Hant.ts
+@@ -620,18 +620,18 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="80"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="164"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="165"/>
+         <source>IPv4</source>
+-        <translation></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="167"/>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="244"/>
+         <source>IPv6</source>
+-        <translation></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+@@ -770,7 +770,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="273"/>
+         <source>VPN</source>
+-        <translation></translation>
++        <translation>VPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>

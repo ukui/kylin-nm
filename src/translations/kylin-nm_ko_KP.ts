@@ -1778,7 +1778,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation>무선 네트워크가 끊어짐</translation>
+        <translation>무선 네트워크 련결이 끊어짐</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
@@ -1870,17 +1870,17 @@
     <message>
         <location filename="../main.cpp" line="124"/>
         <source>kylinnm</source>
-        <translation>키린</translation>
+        <translation>네트워크 도구</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>
         <source>show kylin-nm wifi page</source>
-        <translation>키린-NM WiFi 페지 표시</translation>
+        <translation>무선 페지 표시</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="129"/>
         <source>show kylin-nm lan page</source>
-        <translation>kylin-nm LAN 페지 표시</translation>
+        <translation>유선 페지 표시</translation>
     </message>
 </context>
 </TS>

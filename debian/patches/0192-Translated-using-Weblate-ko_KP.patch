@@ -1,0 +1,53 @@
+From: hyoyeong <164199371@qq.com>
+Date: Fri, 4 Sep 2026 01:25:57 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/ko_KP/
+---
+ plugins/netconnect/translations/ko_KP.ts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/plugins/netconnect/translations/ko_KP.ts b/plugins/netconnect/translations/ko_KP.ts
+index 2c18bbc..913bad5 100644
+--- a/plugins/netconnect/translations/ko_KP.ts
++++ b/plugins/netconnect/translations/ko_KP.ts
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation>련결됨, 인터넷 련결 제한됨.</translation>
++        <translation>련결되었습니다. 인터넷 련결 제한되었습니다.</translation>
+     </message>
+ </context>
+ <context>
+@@ -52,7 +52,7 @@
+         <location filename="../netconnect.ui" line="198"/>
+         <location filename="../netconnect.cpp" line="224"/>
+         <source>Advanced settings</source>
+-        <translation>고급설정</translation>
++        <translation>고급 설정</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -70,7 +70,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation>네트워크 설정</translation>
++        <translation>설정</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+@@ -105,7 +105,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation>음향 카드</translation>
++        <translation>네트워크 카드</translation>
+     </message>
+ </context>
+ </TS>

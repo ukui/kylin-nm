@@ -1,0 +1,138 @@
+From: hyoyeong <164199371@qq.com>
+Date: Fri, 4 Sep 2026 12:50:26 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjlgqPku4LmlocgKGtoYl9D?=
+ =?utf-8?b?Tikp?=
+
+Currently translated at 100.0% (42 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/khb_CN/
+---
+ plugins/proxy/translations/khb_CN.ts | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/plugins/proxy/translations/khb_CN.ts b/plugins/proxy/translations/khb_CN.ts
+index b202f14..cfad0f6 100644
+--- a/plugins/proxy/translations/khb_CN.ts
++++ b/plugins/proxy/translations/khb_CN.ts
+@@ -39,7 +39,7 @@
+     <message>
+         <location filename="../aptproxydialog.cpp" line="140"/>
+         <source>Cancel</source>
+-        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
++        <translation>取消</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="144"/>
+@@ -52,7 +52,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="72"/>
+         <source>Proxy</source>
+-        <translation></translation>
++        <translation>ᦶᦑᧃᦎᦱᧂ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="213"/>
+@@ -67,17 +67,17 @@
+     <message>
+         <location filename="../proxy.cpp" line="232"/>
+         <source>Auto</source>
+-        <translation>ᦎᦱᧄᦺᦈ ᦣᦳᧇᦶᦂᧇ</translation>
++        <translation>自动</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="236"/>
+         <source>Manual</source>
+-        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
++        <translation>手动</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="391"/>
+         <source>Application Proxy</source>
+-        <translation>ᦓᧄᦺᦋᧉ ᦎᦴᦶᦑᧃ</translation>
++        <translation>ᦶᦑᧃᦎᦱᧂᦺᦋᧉᦊᦳᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="510"/>
+@@ -133,7 +133,7 @@
+         <location filename="../proxy.cpp" line="529"/>
+         <location filename="../proxy.cpp" line="531"/>
+         <source>App Proxy</source>
+-        <translation></translation>
++        <translation>ᦶᦑᧃᦎᦱᧂᦺᦋᧉᦊᦳᧂᧈ</translation>
+         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
+     </message>
+     <message>
+@@ -146,7 +146,7 @@
+         <location filename="../proxy.cpp" line="536"/>
+         <location filename="../proxy.cpp" line="1271"/>
+         <source>Open</source>
+-        <translation>ᦺᦃ ᦂᦱᧃᦅᦳᧄᦷᦆᧇ ᦟᦲᧄᧉ</translation>
++        <translation>打开</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="537"/>
+@@ -161,7 +161,7 @@
+         <location filename="../proxy.cpp" line="538"/>
+         <location filename="../proxy.cpp" line="540"/>
+         <source>Port : </source>
+-        <translation>ᦎᦱᦉᦻ： </translation>
++        <translation>ᦑᦸᧃᧈᦵᦆᦲᧁ： </translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="539"/>
+@@ -171,7 +171,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="541"/>
+         <source>Edit</source>
+-        <translation>ᦷᦂᧆᦘᦻᧈ</translation>
++        <translation>编辑</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="716"/>
+@@ -182,13 +182,13 @@
+         <location filename="../proxy.cpp" line="717"/>
+         <location filename="../proxy.cpp" line="1048"/>
+         <source>Reboot Later</source>
+-        <translation>ᦜᦲᧂᦓᦲᦰᦺᦌᧈᦎᦳ ᦎᧂᧉᦺᦖᧈ</translation>
++        <translation>ᦏᦱᧉᦺᦃᦺᦖᧈᦵᦵᦏᧃᧉ。</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="718"/>
+         <location filename="../proxy.cpp" line="1049"/>
+         <source>Reboot Now</source>
+-        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
++        <translation>ᦗᦸᧅᦺᦃᦷᦠᦈᧅᦺᦞ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1047"/>
+@@ -219,7 +219,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="1348"/>
+         <source>Username</source>
+-        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
++        <translation>ᦋᦹᧉᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1351"/>
+@@ -230,17 +230,17 @@
+     <message>
+         <location filename="../proxy.cpp" line="1361"/>
+         <source>Password</source>
+-        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
++        <translation>ᦵᦔᧃᧈᦟᦲᧅᦉᦄᧆ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1384"/>
+         <source>Cancel</source>
+-        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
++        <translation>取消</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1385"/>
+         <source>Save</source>
+-        <translation>ᦉᦻᦷᦆᧇᦉᦴ ᦏᦹᧂ</translation>
++        <translation>确定</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1457"/>

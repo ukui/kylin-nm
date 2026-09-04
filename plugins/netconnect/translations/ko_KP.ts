@@ -70,7 +70,7 @@
     <message>
         <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation>설정</translation>
+        <translation>네트워크 설정</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="75"/>
@@ -87,7 +87,7 @@
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>유선 장치가 감지되지 않았습니다</translation>
+        <translation>유선 네트워크 카드가 감지되지 않았습니다</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="43"/>
         <source>Set APT Proxy</source>
-        <translation>Set APT Proxy</translation>
+        <translation>ᦎᧂᧉ APT ᦎᦴᦶᦑᧃ</translation>
     </message>
     <message>
         <source>Server Address</source>
@@ -19,32 +19,32 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="60"/>
         <source>Http Address</source>
-        <translation>Http Proxy</translation>
+        <translation>Http ᦎᦴᦶᦑᧃ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="80"/>
         <source>Http Port</source>
-        <translation>Http ပေႜrt</translation>
+        <translation>Http ᦎᦱᦉᦻ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="100"/>
         <source>Https Address</source>
-        <translation>Https Proxy</translation>
+        <translation>Https ᦎᦴᦶᦑᧃ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="119"/>
         <source>Https Port</source>
-        <translation>Https Port</translation>
+        <translation>Https ᦎᦱᦉᦻ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="140"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="144"/>
         <source>Confirm</source>
-        <translation>OK</translation>
+        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
     </message>
 </context>
 <context>
@@ -57,62 +57,62 @@
     <message>
         <location filename="../proxy.cpp" line="213"/>
         <source>Start using</source>
-        <translation>Enable</translation>
+        <translation>ᦺᦃᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="227"/>
         <source>Proxy mode</source>
-        <translation>Proxy Type</translation>
+        <translation>ᦙᦊᦷᦍᦵᦔᦲᧂᦶᦑᧃᦎᦱᧂ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="232"/>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>ᦎᦱᧄᦺᦈ ᦣᦳᧇᦶᦂᧇ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="236"/>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="391"/>
         <source>Application Proxy</source>
-        <translation>Apply Proxy</translation>
+        <translation>ᦓᧄᦺᦋᧉ ᦎᦴᦶᦑᧃ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="510"/>
         <source>System Proxy</source>
-        <translation>System Proxy</translation>
+        <translation>ᦟᦰᦢᦸᧇ ᦎᦴᦶᦑᧃ</translation>
         <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="512"/>
         <source>Auto url</source>
-        <translation>Configure URL</translation>
+        <translation>ᦂᦱᧃᦎᧂᧉ URL</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="514"/>
         <source>Http Proxy</source>
-        <translation>HTTP Proxy</translation>
+        <translation>HTTP ᦎᦴᦶᦑᧃ</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="516"/>
         <source>Https Proxy</source>
-        <translation>HTTPS Proxy</translation>
+        <translation>HTTPS ᦎᦴᦶᦑᧃ</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="518"/>
         <source>Ftp Proxy</source>
-        <translation>FTP Proxy</translation>
+        <translation>FTP ᦎᦴᦶᦑᧃ</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="520"/>
         <source>Socks Proxy</source>
-        <translation>SOCKS Proxy</translation>
+        <translation>SOCKS ᦎᦴᦶᦑᧃ</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -122,12 +122,12 @@
         <location filename="../proxy.cpp" line="524"/>
         <location filename="../proxy.cpp" line="1334"/>
         <source>Port</source>
-        <translation>Port</translation>
+        <translation>ᦚᦻᧈᦵᦆᦲᧂᧈᦔᦟᦲᦰᦂᦱᧃ ᦎᦱᦉᦻ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="525"/>
         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
-        <translation>List of ignored hosts, please use semicolon (;)</translation>
+        <translation>ᦑᦲᧈᦊᦴᧈᦃᦸᧉᦙᦳᧃ ᦉᦱᧄᦵᦝᦋᦹᧈ ᦃᦸᧂ ᦢᧁᧈᦵᦉᧂᦡᦲ，ᦃᦸᧉ ᦺᦋᧉ ᦟᦲᧅᦁᧂᦂᦲᧆ ᦺᦙᧉᦊᦹᧆ（;）</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="529"/>
@@ -139,19 +139,19 @@
     <message>
         <location filename="../proxy.cpp" line="535"/>
         <source>APT Proxy</source>
-        <translation>APT Proxy</translation>
+        <translation>APT ᦎᦴᦶᦑᧃ</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="536"/>
         <location filename="../proxy.cpp" line="1271"/>
         <source>Open</source>
-        <translation>On</translation>
+        <translation>ᦺᦃ ᦂᦱᧃᦅᦳᧄᦷᦆᧇ ᦟᦲᧄᧉ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="537"/>
         <source>Http Address : </source>
-        <translation>Http Address: </translation>
+        <translation>Http ᦑᦲᧈᦊᦴᧈ： </translation>
     </message>
     <message>
         <source>Server Address : </source>
@@ -161,91 +161,91 @@
         <location filename="../proxy.cpp" line="538"/>
         <location filename="../proxy.cpp" line="540"/>
         <source>Port : </source>
-        <translation>ပေႜrt: </translation>
+        <translation>ᦎᦱᦉᦻ： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="539"/>
         <source>Https Address : </source>
-        <translation>Https Address: </translation>
+        <translation>Https ᦑᦲᧈᦊᦴᧈ： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="541"/>
         <source>Edit</source>
-        <translation>Edit</translation>
+        <translation>ᦷᦂᧆᦘᦻᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="716"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
-        <translation>APT proxy is disabled, restart required to take effect</translation>
+        <translation>APT ᦎᦴᦶᦑᧃ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦠᧇ，ᦎᦸᧂᧉ ᦎᧂᧉᦺᦖᧈ ᦈᦲᧂᧈᦋᦱᧂᧈ ᦍᧇ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="717"/>
         <location filename="../proxy.cpp" line="1048"/>
         <source>Reboot Later</source>
-        <translation>Restart Later</translation>
+        <translation>ᦜᦲᧂᦓᦲᦰᦺᦌᧈᦎᦳ ᦎᧂᧉᦺᦖᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="718"/>
         <location filename="../proxy.cpp" line="1049"/>
         <source>Reboot Now</source>
-        <translation>Restart Now</translation>
+        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1047"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
-        <translation>Setting APT proxy requires restarting the system to take effect. Restart now?</translation>
+        <translation>ᦎᧂᧉ APT ᦎᦴᦶᦑᧃ ᦎᦸᧂᧉ ᦎᧂᧉᦺᦖᧈ ᦟᦰᦢᦸᧇ ᦗᦻᦜᧂ ᦍᧇ，ᦶᦙᧃᧈᦢᧁᧈᦶᦙᧃᧈ ᦎᧂᧉᦺᦖᧈ ᦟᦰᦢᦸᧇ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1284"/>
         <source>Proxy type</source>
-        <translation>Proxy Type</translation>
+        <translation>ᦙᦊᦷᦍᦵᦔᦲᧂᦶᦑᧃᦎᦱᧂ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1301"/>
         <source>IP address</source>
-        <translation>IP Address</translation>
+        <translation>IP ᦑᦲᧈᦊᦴᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1307"/>
         <location filename="../proxy.cpp" line="1337"/>
         <source>Required</source>
-        <translation>Required</translation>
+        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1327"/>
         <source>Invalid IP Address</source>
-        <translation>Invalid IP address</translation>
+        <translation>ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ ᦃᦸᧂ IP ᦑᦲᧈᦊᦴᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1348"/>
         <source>Username</source>
-        <translation>Username</translation>
+        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1351"/>
         <location filename="../proxy.cpp" line="1365"/>
         <source>Optional</source>
-        <translation>Optional</translation>
+        <translation>ᦵᦟᦲᧅᦵᦵᦎᧄᧉ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1361"/>
         <source>Password</source>
-        <translation>Password</translation>
+        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1384"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1385"/>
         <source>Save</source>
-        <translation>Save</translation>
+        <translation>ᦉᦻᦷᦆᧇᦉᦴ ᦏᦹᧂ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1457"/>
         <source>The following applications are allowed to use this configuration:</source>
-        <translation>Allow the following applications to use this configuration:</translation>
+        <translation>ᦀᦸᧉᦎᦳᧄᧉᦓᧄᦺᦋᧉᦎᦲᧅᦵᦎᦡᦲᧉᦓᦲᦰᦺᦋᧉ ᦂᦱᧃᦎᧂᧉᦓᦲᦰ ：</translation>
     </message>
 </context>
 </TS>

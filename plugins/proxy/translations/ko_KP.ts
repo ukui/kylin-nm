@@ -6,7 +6,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="43"/>
         <source>Set APT Proxy</source>
-        <translation>APT 대리 설정</translation>
+        <translation>APT 프록시 설정</translation>
     </message>
     <message>
         <source>Server Address</source>
@@ -19,7 +19,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="60"/>
         <source>Http Address</source>
-        <translation>Http 대리</translation>
+        <translation>Http 프록시</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="80"/>
@@ -29,7 +29,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="100"/>
         <source>Https Address</source>
-        <translation>Https 대리</translation>
+        <translation>Https 프록시</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="119"/>
@@ -39,12 +39,12 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="140"/>
         <source>Cancel</source>
-        <translation>실행 취소</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="144"/>
         <source>Confirm</source>
-        <translation>승인</translation>
+        <translation>확인</translation>
     </message>
 </context>
 <context>
@@ -62,57 +62,57 @@
     <message>
         <location filename="../proxy.cpp" line="227"/>
         <source>Proxy mode</source>
-        <translation>대리 유형</translation>
+        <translation>프록시 류형</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="232"/>
         <source>Auto</source>
-        <translation>자동 검색</translation>
+        <translation>자동</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="236"/>
         <source>Manual</source>
-        <translation>사용자 매뉴얼</translation>
+        <translation>수동</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="391"/>
         <source>Application Proxy</source>
-        <translation>대리 응용</translation>
+        <translation>응용 프록시</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="510"/>
         <source>System Proxy</source>
-        <translation>체계 대리</translation>
+        <translation>체계 프록시</translation>
         <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="512"/>
         <source>Auto url</source>
-        <translation>URL 설정</translation>
+        <translation>URL 구성</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="514"/>
         <source>Http Proxy</source>
-        <translation>HTTP 대리</translation>
+        <translation>HTTP 프록시</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="516"/>
         <source>Https Proxy</source>
-        <translation>HTTPS 대리</translation>
+        <translation>HTTPS 프록시</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="518"/>
         <source>Ftp Proxy</source>
-        <translation>FTP 대리</translation>
+        <translation>FTP 프록시</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="520"/>
         <source>Socks Proxy</source>
-        <translation>SOCKS 대리</translation>
+        <translation>SOCKS 프록시</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -122,12 +122,12 @@
         <location filename="../proxy.cpp" line="524"/>
         <location filename="../proxy.cpp" line="1334"/>
         <source>Port</source>
-        <translation>구단</translation>
+        <translation>포트</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="525"/>
         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
-        <translation>무시할 호스트 목록, 영문 세미콜론(;)을 사용하십시오</translation>
+        <translation>무시할 주기 리스트, 영문 반두점(;)을 사용하십시오</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="529"/>
@@ -139,14 +139,14 @@
     <message>
         <location filename="../proxy.cpp" line="535"/>
         <source>APT Proxy</source>
-        <translation>APT 대리</translation>
+        <translation>APT 프록시</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="536"/>
         <location filename="../proxy.cpp" line="1271"/>
         <source>Open</source>
-        <translation>선택</translation>
+        <translation>활성화</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="537"/>
@@ -176,7 +176,7 @@
     <message>
         <location filename="../proxy.cpp" line="716"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
-        <translation>APT 대리가 꺼졌으며, 적용을 위해 재시작이 필요합니다</translation>
+        <translation>APT 프록시가 꺼졌습니다. 적용을 위해 재시작이 필요합니다</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="717"/>
@@ -193,12 +193,12 @@
     <message>
         <location filename="../proxy.cpp" line="1047"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
-        <translation>APT 대리 설정 후 체계 재시작이 필요합니다. 체계를 재시작하시겠습니까</translation>
+        <translation>APT 프록시 설정 후 체계 재시작이 필요합니다. 체계를 재시작하시겠습니까</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1284"/>
         <source>Proxy type</source>
-        <translation>대리 유형</translation>
+        <translation>프록시 류형</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1301"/>
@@ -209,7 +209,7 @@
         <location filename="../proxy.cpp" line="1307"/>
         <location filename="../proxy.cpp" line="1337"/>
         <source>Required</source>
-        <translation>필수</translation>
+        <translation>필수 입력</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1327"/>
@@ -219,7 +219,7 @@
     <message>
         <location filename="../proxy.cpp" line="1348"/>
         <source>Username</source>
-        <translation>사용자의 이름</translation>
+        <translation>사용자 이름</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1351"/>
@@ -235,7 +235,7 @@
     <message>
         <location filename="../proxy.cpp" line="1384"/>
         <source>Cancel</source>
-        <translation>실행 취소</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1385"/>

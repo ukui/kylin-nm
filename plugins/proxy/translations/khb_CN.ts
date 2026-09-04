@@ -230,7 +230,7 @@
     <message>
         <location filename="../proxy.cpp" line="1361"/>
         <source>Password</source>
-        <translation>ᦟᦴᧅᦶᦉᧆᦋᦹᧈ：</translation>
+        <translation>ᦵᦔᧃᧈᦟᦲᧅᦉᦄᧆ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1384"/>

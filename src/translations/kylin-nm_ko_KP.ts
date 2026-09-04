@@ -272,7 +272,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>로컬 링크 IPV6 주소:</translation>
+        <translation>IPV6 주소:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
@@ -693,7 +693,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
         <source>Auto(DHCP)</source>
-        <translation>자동 (DHCP)</translation>
+        <translation>자동</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
         <source>Subnet prefix Length</source>
-        <translation>서브넷 접두어 길이</translation>
+        <translation>서브넷 접두사 길이</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
@@ -770,7 +770,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
         <source>Auto(DHCP)</source>
-        <translation>자동 (DHCP)</translation>
+        <translation>자동</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
@@ -1108,7 +1108,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
-        <translation>세부 정보</translation>
+        <translation>세부 사항</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>

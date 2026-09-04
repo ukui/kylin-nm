@@ -6,7 +6,7 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>ᱵᱟᱦᱟᱨ ᱠᱟᱹᱣᱰᱟ</translation>
+        <translation>ᦉᦹᧇᦎᦸᧅᧈ ᦀᧇᦵᦡᧆ</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../blacklistpage.cpp" line="48"/>
         <source>Blacklist</source>
-        <translation>ᱰᱤᱵᱟᱺᱥ ᱵᱷᱟᱨᱞᱤᱥᱴ</translation>
+        <translation>ᦶᦆᦲᧂᧈᦺᦋᧉ ᦶᦏᧁᦋᦹᧈᦂᧅᦠᦱᧄᧉ</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation>᧓ᱫᱚ ᱵᱷᱟᱨᱞᱤᱥᱴ ᱨᱮ</translation>
+        <translation>ᦗᦹᧄ ᦃᧁᧉ ᦶᦏᧁᦋᦹᧈᦂᧅᦠᦱᧄᧉ</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../connectdevpage.cpp" line="49"/>
         <source>Connect device</source>
-        <translation>ᱠᱟᱹᱱᱮᱠᱥᱚᱱ ᱰᱤᱵᱟᱺᱥ</translation>
+        <translation>ᦈᦸᧆᧈ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
+        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="110"/>
@@ -49,37 +49,37 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="112"/>
         <source>Mobile Hotspot</source>
-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
+        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="114"/>
         <source>Open mobile hotspot</source>
-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ ᱪᱟᱞᱟᱣ</translation>
+        <translation>ᦺᦃ ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="116"/>
         <source>Wi-Fi Name</source>
-        <translation>Wi-Fi ᱱᱟᱢ</translation>
+        <translation>Wi-Fi ᦋᦹᧈ</translation>
         <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="118"/>
         <source>Network Password</source>
-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱟᱥᱣᱟᱨᱰ</translation>
+        <translation>ᦃᦻᧈ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
         <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="120"/>
         <source>Network Frequency band</source>
-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱷᱩᱱᱩᱨᱜᱟᱹᱞ</translation>
+        <translation>ᦃᦻᧈ ᦔᦳᧃᦏᦲᧈᦠᦱᧂᧈ</translation>
         <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="122"/>
         <source>Shared NIC port</source>
-        <translation>ᱥᱷᱮᱨ ᱱᱮᱴᱣᱳᱨᱠ ᱠᱟᱹᱨᱰ ᱯᱚᱨᱴ</translation>
+        <translation>ᦺᦋᧉᦂᦱᧃᦅᦸᧉ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ ᦎᦱᦉᦻ</translation>
         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
     </message>
     <message>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="165"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation>ᱣᱟᱭᱨᱞᱮᱥ ᱥᱣᱤᱪᱷ ᱵᱮᱱᱰ ᱟᱹᱰᱤ ᱠᱟᱹᱣᱬᱟᱭ ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ ᱯᱷᱩᱱᱩᱨᱜᱟᱹᱞ ᱠᱟᱹᱱᱮᱠᱥᱚᱱ ᱠᱟᱹᱣᱬᱟᱭ</translation>
+        <translation>ᦃᦻᧈᦢᧁᧈᦙᦲᦉᦻ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ ᦃᦸᧂ ᦑᦲᧈᦠᧇᦺᦃ ᦃᦻᧈᦢᧁᧈᦙᦲᦉᦻ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦠᧇ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈ ᦙᦲᦊᦴᧈ ᦙᦲ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦂᦱᧃᦺᦋᧉᦡᦲ</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="190"/>
         <source>hotpots name or device is invalid</source>
-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱱᱟᱢ ᱟᱹᱨᱵᱟ ᱰᱤᱵᱟᱺᱥ ᱜᱷᱟᱹᱞᱤ</translation>
+        <translation>ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦋᦹᧈ ᦷᦠᦵᦙᦲᧂ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦕᦲᧆ</translation>
     </message>
     <message>
         <source>can not  create hotspot with password length less than eight!</source>
@@ -124,32 +124,32 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="644"/>
         <source>Contains at least 8 characters</source>
-        <translation>ᱟᱹᱰᱤ ᱪᱟᱸᱫᱚ 8 ᱪᱟᱨᱟᱠᱴᱮᱨ ᱠᱟᱹᱣᱬᱟᱭ</translation>
+        <translation>ᦓᦾᧉᦑᦹᧅ / ᦷᦟᧂᦑᦲᧈᦵᦂᧈ / ᦓᦾᧉᦓᦾᧉ / ᦊᦸᧅᦔᦱᧃᦊᦸᧅ / ᦀᧃᦎᦙᦷᦉ ᦙᦲᦺᦉᧈ8ᦷᦎᦐᧂᦉᦹ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
+        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation>ᱥᱮᱴᱤᱝ</translation>
+        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation>ᱥᱮᱴᱤᱝ ᱰᱮᱥᱠᱴᱚᱯ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ</translation>
+        <translation>ᦎᧂᧉ ᦷᦎᧅᦵᦂᧉᦊᦴᧈᦵᦞᧃᧈ ᦉᦳᧃᦃᦱᧁ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1103"/>
         <source>use </source>
-        <translation>ᱵᱮᱵᱚᱦᱟᱨ </translation>
+        <translation>ᦺᦋᧉ </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1104"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation> ᱦᱚᱴᱥᱯᱚᱴ ᱥᱷᱮᱨ ᱠᱟᱹᱣᱬᱟᱭ, ᱱᱚᱶᱟ ᱡᱮᱭᱟᱜ ᱣᱟᱭᱨᱞᱮᱥ ᱱᱮᱴᱣᱳᱨᱠ ᱠᱟᱹᱱᱮᱠᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱦᱩᱭᱩᱜᱼᱟ</translation>
+        <translation> ᦺᦔᦓᦱᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦺᦋᧉᦂᦱᧃᦅᦸᧉ，ᦈᧅ ᦎᧆᦃᦱᧆ ᦣᦱᧅᦷᦠ ᦈᧅ ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ ᦈᦸᧆᧈ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="381"/>
@@ -158,27 +158,27 @@
         <location filename="../mobilehotspotwidget.cpp" line="526"/>
         <location filename="../mobilehotspotwidget.cpp" line="791"/>
         <source>hotspot already close</source>
-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱵᱮᱱᱰ ᱠᱟᱹᱣᱬᱟᱭ</translation>
+        <translation>ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦶᦟᧅᧈᦵᦟᧆᧉ ᦠᧇ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="550"/>
         <source>Open mobile hotspot</source>
-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ ᱪᱟᱞᱟᱣ</translation>
+        <translation>ᦺᦃ ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="633"/>
         <source>Network Password</source>
-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱟᱥᱣᱟᱨᱰ</translation>
+        <translation>ᦃᦻᧈ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="672"/>
         <source>Network Frequency band</source>
-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱷᱩᱱᱩᱨᱜᱟᱹᱞ</translation>
+        <translation>ᦃᦻᧈ ᦔᦳᧃᦏᦲᧈᦠᦱᧂᧈ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="697"/>
         <source>Shared NIC port</source>
-        <translation>ᱥᱷᱮᱨ ᱱᱮᱴᱣᱳᱨᱠ ᱠᱟᱹᱨᱰ ᱯᱚᱨᱴ</translation>
+        <translation>ᦺᦋᧉᦂᦱᧃᦅᦸᧉ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ ᦎᦱᦉᦻ</translation>
     </message>
     <message>
         <source>Open</source>
@@ -187,7 +187,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="611"/>
         <source>Wi-Fi Name</source>
-        <translation>Wi-Fi ᱱᱟᱢ</translation>
+        <translation>Wi-Fi ᦋᦹᧈ</translation>
     </message>
     <message>
         <source>Password</source>
@@ -201,7 +201,7 @@
         <location filename="../mobilehotspotwidget.cpp" line="823"/>
         <location filename="../mobilehotspotwidget.cpp" line="835"/>
         <source>hotspot already open</source>
-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱪᱟᱞᱟᱣ ᱞᱮᱱᱟ</translation>
+        <translation>ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦶᦟᧅᧈᦵᦟᧆᧉ ᦺᦃ</translation>
     </message>
 </context>
 </TS>

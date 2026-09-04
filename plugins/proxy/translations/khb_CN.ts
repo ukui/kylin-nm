@@ -39,7 +39,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="140"/>
         <source>Cancel</source>
-        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="144"/>
@@ -67,17 +67,17 @@
     <message>
         <location filename="../proxy.cpp" line="232"/>
         <source>Auto</source>
-        <translation>ᦎᦱᧄᦺᦈ ᦣᦳᧇᦶᦂᧇ</translation>
+        <translation>自动</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="236"/>
         <source>Manual</source>
-        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+        <translation>手动</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="391"/>
         <source>Application Proxy</source>
-        <translation>ᦓᧄᦺᦋᧉ ᦎᦴᦶᦑᧃ</translation>
+        <translation>ᦶᦑᧃᦎᦱᧂᦺᦋᧉᦊᦳᧂᧈ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="510"/>
@@ -146,7 +146,7 @@
         <location filename="../proxy.cpp" line="536"/>
         <location filename="../proxy.cpp" line="1271"/>
         <source>Open</source>
-        <translation>ᦺᦃ ᦂᦱᧃᦅᦳᧄᦷᦆᧇ ᦟᦲᧄᧉ</translation>
+        <translation>打开</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="537"/>
@@ -161,7 +161,7 @@
         <location filename="../proxy.cpp" line="538"/>
         <location filename="../proxy.cpp" line="540"/>
         <source>Port : </source>
-        <translation>ᦎᦱᦉᦻ： </translation>
+        <translation>ᦑᦸᧃᧈᦵᦆᦲᧁ： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="539"/>
@@ -171,7 +171,7 @@
     <message>
         <location filename="../proxy.cpp" line="541"/>
         <source>Edit</source>
-        <translation>ᦷᦂᧆᦘᦻᧈ</translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="716"/>
@@ -182,13 +182,13 @@
         <location filename="../proxy.cpp" line="717"/>
         <location filename="../proxy.cpp" line="1048"/>
         <source>Reboot Later</source>
-        <translation>ᦜᦲᧂᦓᦲᦰᦺᦌᧈᦎᦳ ᦎᧂᧉᦺᦖᧈ</translation>
+        <translation>ᦏᦱᧉᦺᦃᦺᦖᧈᦵᦵᦏᧃᧉ。</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="718"/>
         <location filename="../proxy.cpp" line="1049"/>
         <source>Reboot Now</source>
-        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
+        <translation>ᦗᦸᧅᦺᦃᦷᦠᦈᧅᦺᦞ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1047"/>
@@ -219,7 +219,7 @@
     <message>
         <location filename="../proxy.cpp" line="1348"/>
         <source>Username</source>
-        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
+        <translation>ᦋᦹᧉᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1351"/>
@@ -230,17 +230,17 @@
     <message>
         <location filename="../proxy.cpp" line="1361"/>
         <source>Password</source>
-        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
+        <translation>ᦟᦴᧅᦶᦉᧆᦋᦹᧈ：</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1384"/>
         <source>Cancel</source>
-        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1385"/>
         <source>Save</source>
-        <translation>ᦉᦻᦷᦆᧇᦉᦴ ᦏᦹᧂ</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1457"/>

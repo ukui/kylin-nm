@@ -6,7 +6,7 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>삭제</translation>
+        <translation>제거</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../blacklistpage.cpp" line="48"/>
         <source>Blacklist</source>
-        <translation>장치 블랙리스트</translation>
+        <translation>장치 차단 목록</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation>블랙리스트에 추가</translation>
+        <translation>차단 목록에 추가</translation>
     </message>
 </context>
 <context>
@@ -38,24 +38,24 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation>모바일 핫스팟</translation>
+        <translation>모바일 공유 지점</translation>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="110"/>
         <source>mobilehotspot open</source>
-        <translation>핫스팟 켜기</translation>
+        <translation>공유 지점 켜기</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="112"/>
         <source>Mobile Hotspot</source>
-        <translation>모바일 핫스팟</translation>
+        <translation>모바일 공유 지점</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="114"/>
         <source>Open mobile hotspot</source>
-        <translation>모바일 핫스팟 켜기</translation>
+        <translation>모바일 공유 지점 켜기</translation>
         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
     </message>
     <message>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
-        <translation>모바일 핫스팟</translation>
+        <translation>모바일 공유 지점</translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
 </context>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="165"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation>무선 스위치가 꺼져 있거나 핫스팟 기능이 있는 무선랜 카드가 없습니다</translation>
+        <translation>무선 켜기/끄기가 꺼져 있거나 공유 지점 기능이 있는 무선랜 카드가 없습니다</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
@@ -111,7 +111,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="190"/>
         <source>hotpots name or device is invalid</source>
-        <translation>핫스팟 이름 또는 장치 오류</translation>
+        <translation>공유 지점 이름 또는 장치 오류</translation>
     </message>
     <message>
         <source>can not  create hotspot with password length less than eight!</source>
@@ -124,17 +124,17 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="644"/>
         <source>Contains at least 8 characters</source>
-        <translation>최소 8자 이상 포함</translation>
+        <translation>최소 8자 이상 문자 포함</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
-        <translation>핫스팟</translation>
+        <translation>공유 지점</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation>설정 항목</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="1104"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation> 핫스팟 공유를 진행하면 본 기기의 무선 네트워크 련결이 끊어집니다</translation>
+        <translation> 공유 지점 공유를 진행하면 이 기기의 무선 네트워크 련결이 끊어집니다</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="381"/>
@@ -158,12 +158,12 @@
         <location filename="../mobilehotspotwidget.cpp" line="526"/>
         <location filename="../mobilehotspotwidget.cpp" line="791"/>
         <source>hotspot already close</source>
-        <translation>핫스팟이 꺼졌습니다</translation>
+        <translation>공유 지점이 꺼졌습니다</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="550"/>
         <source>Open mobile hotspot</source>
-        <translation>모바일 핫스팟 켜기</translation>
+        <translation>모바일 공유 지점 켜기</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="633"/>
@@ -201,7 +201,7 @@
         <location filename="../mobilehotspotwidget.cpp" line="823"/>
         <location filename="../mobilehotspotwidget.cpp" line="835"/>
         <source>hotspot already open</source>
-        <translation>핫스팟이 켜졌습니다</translation>
+        <translation>공유 지점이 켜져 있음</translation>
     </message>
 </context>
 </TS>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>ᦉᦹᧇᦎᦸᧅᧈ ᦀᧇᦵᦡᧆ</translation>
+        <translation>接受</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="112"/>
         <source>Mobile Hotspot</source>
-        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+        <translation>ᦍᦻᧉᦐᦹᧂᦙᦲᦐᧄᧉᦣᦸᧃᧉ</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
@@ -129,12 +129,12 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="245"/>
         <source>Hotspot</source>
-        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+        <translation>ᦍᦻᧉᦐᦹᧂᦙᦲᦐᧄᧉᦣᦸᧃᧉ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+        <translation>配置项</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>

@@ -57,7 +57,7 @@
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation>설정</translation>
+        <translation>네트워크 설정</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>

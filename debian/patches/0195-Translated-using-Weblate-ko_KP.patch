@@ -1,0 +1,26 @@
+From: hyoyeong <164199371@qq.com>
+Date: Sat, 5 Sep 2026 01:48:49 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/wlanconnect/ko_KP/
+---
+ plugins/wlanconnect/translations/ko_KP.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/wlanconnect/translations/ko_KP.ts b/plugins/wlanconnect/translations/ko_KP.ts
+index 552e33f..5f56e4e 100644
+--- a/plugins/wlanconnect/translations/ko_KP.ts
++++ b/plugins/wlanconnect/translations/ko_KP.ts
+@@ -57,7 +57,7 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="137"/>
+         <source>Settings</source>
+-        <translation>설정</translation>
++        <translation>네트워크 설정</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="140"/>

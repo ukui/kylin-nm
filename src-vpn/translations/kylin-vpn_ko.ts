@@ -431,7 +431,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
         <source>Local IP</source>
-        <translation>로컬 IP 주소</translation>
+        <translation>이 기기 IP 주소</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>

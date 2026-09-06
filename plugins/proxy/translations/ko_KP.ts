@@ -245,7 +245,7 @@
     <message>
         <location filename="../proxy.cpp" line="1457"/>
         <source>The following applications are allowed to use this configuration:</source>
-        <translation>다음 응용 프로그람이 이 설정을 사용하도록 허용：</translation>
+        <translation>다음 응용프로그람 이 이 설정을 사용하도록 허용：</translation>
     </message>
 </context>
 </TS>

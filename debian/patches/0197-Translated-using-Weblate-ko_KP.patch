@@ -1,0 +1,76 @@
+From: hyoyeong <164199371@qq.com>
+Date: Sun, 6 Sep 2026 23:00:56 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (42 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/ko_KP/
+---
+ plugins/proxy/translations/ko_KP.ts |  2 +-
+ src/translations/kylin-nm_ko_KP.ts  | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/plugins/proxy/translations/ko_KP.ts b/plugins/proxy/translations/ko_KP.ts
+index 8e54626..ec38372 100644
+--- a/plugins/proxy/translations/ko_KP.ts
++++ b/plugins/proxy/translations/ko_KP.ts
+@@ -245,7 +245,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="1457"/>
+         <source>The following applications are allowed to use this configuration:</source>
+-        <translation>다음 응용 프로그람이 이 설정을 사용하도록 허용：</translation>
++        <translation>다음 응용프로그람 이 이 설정을 사용하도록 허용：</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/src/translations/kylin-nm_ko_KP.ts b/src/translations/kylin-nm_ko_KP.ts
+index 4336a3d..ce7370b 100644
+--- a/src/translations/kylin-nm_ko_KP.ts
++++ b/src/translations/kylin-nm_ko_KP.ts
+@@ -272,7 +272,7 @@
+         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
+         <source>IPv6:</source>
+-        <translation>로컬 링크 IPV6 주소:</translation>
++        <translation>IPV6 주소:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
+@@ -693,7 +693,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
+         <source>Auto(DHCP)</source>
+-        <translation>자동 (DHCP)</translation>
++        <translation>자동</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
+@@ -752,7 +752,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
+         <source>Subnet prefix Length</source>
+-        <translation>서브넷 접두어 길이</translation>
++        <translation>서브넷 접두사 길이</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
+@@ -770,7 +770,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
+         <source>Auto(DHCP)</source>
+-        <translation>자동 (DHCP)</translation>
++        <translation>자동</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
+@@ -1108,7 +1108,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
+         <source>Detail</source>
+-        <translation>세부 정보</translation>
++        <translation>세부 사항</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>

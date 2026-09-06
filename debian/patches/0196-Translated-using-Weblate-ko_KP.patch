@@ -1,0 +1,40 @@
+From: hyoyeong <164199371@qq.com>
+Date: Sun, 6 Sep 2026 11:59:24 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjmnJ3pspzor60gKGtvX0tQ?=
+ =?utf-8?b?KSk=?=
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ko_KP/
+---
+ src-vpn/translations/kylin-vpn_ko.ts    | 2 +-
+ src-vpn/translations/kylin-vpn_ko_KP.ts | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ko.ts b/src-vpn/translations/kylin-vpn_ko.ts
+index ffd1544..1f5f872 100644
+--- a/src-vpn/translations/kylin-vpn_ko.ts
++++ b/src-vpn/translations/kylin-vpn_ko.ts
+@@ -431,7 +431,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
+         <source>Local IP</source>
+-        <translation>로컬 IP 주소</translation>
++        <translation>이 기기 IP 주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
+diff --git a/src-vpn/translations/kylin-vpn_ko_KP.ts b/src-vpn/translations/kylin-vpn_ko_KP.ts
+index 95188ab..3f5a02c 100644
+--- a/src-vpn/translations/kylin-vpn_ko_KP.ts
++++ b/src-vpn/translations/kylin-vpn_ko_KP.ts
+@@ -431,7 +431,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
+         <source>Local IP</source>
+-        <translation>로컬 IP 주소</translation>
++        <translation>이 기기 IP 주소</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>

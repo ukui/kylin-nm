@@ -1,0 +1,61 @@
+From: hyoyeong <164199371@qq.com>
+Date: Sun, 6 Sep 2026 23:02:38 +0000
+Subject: Translated using Weblate (Korean)
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ko/
+---
+ src-vpn/translations/kylin-vpn_ko.ts | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ko.ts b/src-vpn/translations/kylin-vpn_ko.ts
+index 1f5f872..e42f815 100644
+--- a/src-vpn/translations/kylin-vpn_ko.ts
++++ b/src-vpn/translations/kylin-vpn_ko.ts
+@@ -24,7 +24,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="827"/>
+         <source>MPPE encryption algorithm:</source>
+-        <translation>MPPE 암호화 알고리즘:</translation>
++        <translation>MPPE 암호화 산법:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
+@@ -129,7 +129,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
+         <source>Set virtual device type</source>
+-        <translation>가상 장치 유형 설정</translation>
++        <translation>가상 장치 류형 설정</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
+@@ -274,7 +274,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
+         <source>Proxy Type</source>
+-        <translation>프록시 유형</translation>
++        <translation>프록시 류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
+@@ -416,7 +416,7 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="331"/>
+         <source>Type</source>
+-        <translation>유형</translation>
++        <translation>류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
+@@ -793,7 +793,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
+         <source>VPN Type</source>
+-        <translation>VPN 유형</translation>
++        <translation>VPN 류형</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>

@@ -1,7 +1,8 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Source: https://gitee.com/openkylin/kylin-nm
 Upstream-Name: kylin-nm
-Upstream-Contact: Kylin Team <team+kylin@tracker.debian.org>
+Upstream-Contact:
+ Kylin Team <ukui@kylinos.cn>,
 
 Files: *
 Copyright: 2019, 2022, Tianjin KYLIN Information Technology Co., Ltd.

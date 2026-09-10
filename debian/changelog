@@ -1,12 +1,13 @@
-kylin-nm (4.20.0.1-1) UNRELEASED; urgency=medium
+kylin-nm (4.20.0.1-1) unstable; urgency=medium
 
+  [ zhangpan ]
   * New upstream release.
   * Replace the network-manager-gnome transitional package dependency with
     nm-connection-editor. (Closes: #1142606)
   * Fix propagation of CPPFLAGS to qmake builds, restoring FORTIFY_SOURCE
     hardening.
 
- -- zhangpan <zhangpan@kylinos.cn>  Fri, 24 Jul 2026 15:06:31 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 12 Aug 2026 17:59:38 +0800
 
 kylin-nm (4.20.0.0-1) unstable; urgency=medium
 

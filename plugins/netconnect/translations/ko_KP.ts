@@ -11,7 +11,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>유선 네트워크 추가</translation>
     </message>
 </context>
 <context>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation type="unfinished"></translation>
+        <translation>련결되었습니다. 인터넷 련결 제한되었습니다.</translation>
     </message>
 </context>
 <context>
@@ -39,20 +39,20 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation type="unfinished"></translation>
+        <translation>유선 네트워크</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="229"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>열기</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
         <location filename="../netconnect.cpp" line="224"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>고급 설정</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -70,42 +70,42 @@
     <message>
         <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>체계 설정</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>바탕 화면 알림 설정</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="92"/>
         <location filename="../netconnect.cpp" line="227"/>
         <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>유선 네트워크</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation type="unfinished"></translation>
+        <translation>유선 네트워크 카드가 감지되지 않았습니다</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>
         <location filename="../netconnect.cpp" line="1137"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>련결됨</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="637"/>
         <location filename="../netconnect.cpp" line="952"/>
         <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>련결되지 않음</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>네트워크 카드</translation>
     </message>
 </context>
 </TS>

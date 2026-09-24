@@ -780,7 +780,7 @@ Si la direction de la clé est utilisée, elle doit être opposée au côté VPN
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
         <source>No VPN configuration available</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune configuration VPN disponible</translation>
     </message>
 </context>
 <context>

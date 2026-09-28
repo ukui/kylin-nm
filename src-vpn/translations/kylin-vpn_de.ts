@@ -780,7 +780,7 @@ Wenn die Schlüsselrichtung verwendet wird, muss sie der verwendeten VPN-Seite e
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
         <source>No VPN configuration available</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine verfügbare VPN-Konfiguration</translation>
     </message>
 </context>
 <context>

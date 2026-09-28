@@ -1,0 +1,25 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Mon, 28 Sep 2026 07:31:07 +0000
+Subject: Translated using Weblate (German)
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/de/
+---
+ src-vpn/translations/kylin-vpn_de.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_de.ts b/src-vpn/translations/kylin-vpn_de.ts
+index aeb84a7..64d6722 100644
+--- a/src-vpn/translations/kylin-vpn_de.ts
++++ b/src-vpn/translations/kylin-vpn_de.ts
+@@ -780,7 +780,7 @@ Wenn die Schlüsselrichtung verwendet wird, muss sie der verwendeten VPN-Seite e
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+         <source>No VPN configuration available</source>
+-        <translation type="unfinished"></translation>
++        <translation>Keine verfügbare VPN-Konfiguration</translation>
+     </message>
+ </context>
+ <context>

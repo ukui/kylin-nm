@@ -828,12 +828,12 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
         <source>Connect WIFI</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối Wi-Fi</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
         <source>Please check network config</source>
-        <translation type="unfinished"></translation>
+        <translation>Vui lòng kiểm tra cấu hình mạng</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>

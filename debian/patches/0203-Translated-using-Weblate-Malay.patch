@@ -1,0 +1,77 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Wed, 30 Sep 2026 09:22:30 +0000
+Subject: Translated using Weblate (Malay)
+
+Currently translated at 100.0% (238 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/ms/
+---
+ src-vpn/translations/kylin-vpn_vi.ts | 2 +-
+ src/translations/kylin-nm_ms.ts      | 6 +++---
+ src/translations/kylin-nm_vi.ts      | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_vi.ts b/src-vpn/translations/kylin-vpn_vi.ts
+index 7ce52b6..7635935 100644
+--- a/src-vpn/translations/kylin-vpn_vi.ts
++++ b/src-vpn/translations/kylin-vpn_vi.ts
+@@ -780,7 +780,7 @@ Nếu sử dụng hướng của khóa, nó phải ngược với phía VPN sử
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+         <source>No VPN configuration available</source>
+-        <translation type="unfinished"></translation>
++        <translation>Không có cấu hình VPN khả dụng</translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_ms.ts b/src/translations/kylin-nm_ms.ts
+index 18e1ae8..ff2580a 100644
+--- a/src/translations/kylin-nm_ms.ts
++++ b/src/translations/kylin-nm_ms.ts
+@@ -828,17 +828,17 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation type="unfinished"></translation>
++        <translation>Sambung ke Wi-Fi</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+         <source>Please check network config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Sila semak konfigurasi rangkaian</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Sambung</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
+diff --git a/src/translations/kylin-nm_vi.ts b/src/translations/kylin-nm_vi.ts
+index 6600505..cf613bf 100644
+--- a/src/translations/kylin-nm_vi.ts
++++ b/src/translations/kylin-nm_vi.ts
+@@ -828,17 +828,17 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="132"/>
+         <source>Connect WIFI</source>
+-        <translation type="unfinished"></translation>
++        <translation>Kết nối Wi-Fi</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="133"/>
+         <source>Please check network config</source>
+-        <translation type="unfinished"></translation>
++        <translation>Vui lòng kiểm tra cấu hình mạng</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>Kết nối</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>

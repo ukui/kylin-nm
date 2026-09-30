@@ -780,7 +780,7 @@ Nếu sử dụng hướng của khóa, nó phải ngược với phía VPN sử
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
         <source>No VPN configuration available</source>
-        <translation type="unfinished"></translation>
+        <translation>Không có cấu hình VPN khả dụng</translation>
     </message>
 </context>
 <context>

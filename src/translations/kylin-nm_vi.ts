@@ -838,7 +838,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>

@@ -1,0 +1,25 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Wed, 30 Sep 2026 09:26:31 +0000
+Subject: Translated using Weblate (Malay)
+
+Currently translated at 100.0% (156 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/ms/
+---
+ src-vpn/translations/kylin-vpn_ms.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_ms.ts b/src-vpn/translations/kylin-vpn_ms.ts
+index f36091d..15a9e6d 100644
+--- a/src-vpn/translations/kylin-vpn_ms.ts
++++ b/src-vpn/translations/kylin-vpn_ms.ts
+@@ -780,7 +780,7 @@ Jika arah kunci digunakan, ia mesti bertentangan dengan bahagian VPN yang diguna
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+         <source>No VPN configuration available</source>
+-        <translation type="unfinished"></translation>
++        <translation>Tiada konfigurasi VPN yang tersedia</translation>
+     </message>
+ </context>
+ <context>

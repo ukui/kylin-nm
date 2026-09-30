@@ -780,7 +780,7 @@ Jika arah kunci digunakan, ia mesti bertentangan dengan bahagian VPN yang diguna
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
         <source>No VPN configuration available</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiada konfigurasi VPN yang tersedia</translation>
     </message>
 </context>
 <context>

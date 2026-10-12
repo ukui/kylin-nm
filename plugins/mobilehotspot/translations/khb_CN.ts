@@ -38,12 +38,12 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="35"/>
         <source>MobileHotspot</source>
-        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="110"/>
         <source>mobilehotspot open</source>
-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱪᱷᱟᱞᱟᱣ</translation>
+        <translation></translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
     </message>
     <message>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="108"/>
         <source>mobilehotspot</source>
-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
+        <translation></translation>
         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
     </message>
 </context>

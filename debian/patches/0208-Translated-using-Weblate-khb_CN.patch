@@ -1,0 +1,64 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Mon, 12 Oct 2026 13:44:11 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjlgqPku4LmlocgKGtoYl9D?=
+ =?utf-8?b?Tikp?=
+
+Currently translated at 95.2% (40 of 42 strings)
+
+Translation: openkylin-huanghe/proxy
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/proxy/khb_CN/
+---
+ plugins/mobilehotspot/translations/khb_CN.ts | 6 +++---
+ plugins/proxy/translations/khb_CN.ts         | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/plugins/mobilehotspot/translations/khb_CN.ts b/plugins/mobilehotspot/translations/khb_CN.ts
+index 744c81d..15ec7e0 100644
+--- a/plugins/mobilehotspot/translations/khb_CN.ts
++++ b/plugins/mobilehotspot/translations/khb_CN.ts
+@@ -38,12 +38,12 @@
+     <message>
+         <location filename="../mobilehotspot.cpp" line="35"/>
+         <source>MobileHotspot</source>
+-        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
++        <translation></translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="110"/>
+         <source>mobilehotspot open</source>
+-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱪᱷᱟᱞᱟᱣ</translation>
++        <translation></translation>
+         <extra-contents_path>/mobilehotspot/mobilehotspot open</extra-contents_path>
+     </message>
+     <message>
+@@ -85,7 +85,7 @@
+     <message>
+         <location filename="../mobilehotspot.cpp" line="108"/>
+         <source>mobilehotspot</source>
+-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
++        <translation></translation>
+         <extra-contents_path>/mobilehotspot/mobilehotspot</extra-contents_path>
+     </message>
+ </context>
+diff --git a/plugins/proxy/translations/khb_CN.ts b/plugins/proxy/translations/khb_CN.ts
+index d2a81bb..b202f14 100644
+--- a/plugins/proxy/translations/khb_CN.ts
++++ b/plugins/proxy/translations/khb_CN.ts
+@@ -52,7 +52,7 @@
+     <message>
+         <location filename="../proxy.cpp" line="72"/>
+         <source>Proxy</source>
+-        <translation>Proxy</translation>
++        <translation></translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="213"/>
+@@ -133,7 +133,7 @@
+         <location filename="../proxy.cpp" line="529"/>
+         <location filename="../proxy.cpp" line="531"/>
+         <source>App Proxy</source>
+-        <translation>Apply Proxy</translation>
++        <translation></translation>
+         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
+     </message>
+     <message>

@@ -1,0 +1,26 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Mon, 12 Oct 2026 13:50:32 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjlgqPku4LmlocgKGtoYl9D?=
+ =?utf-8?b?Tikp?=
+
+Currently translated at 91.6% (11 of 12 strings)
+
+Translation: openkylin-huanghe/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/wlanconnect/khb_CN/
+---
+ plugins/wlanconnect/translations/khb_CN.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/wlanconnect/translations/khb_CN.ts b/plugins/wlanconnect/translations/khb_CN.ts
+index ecc802f..90eab17 100644
+--- a/plugins/wlanconnect/translations/khb_CN.ts
++++ b/plugins/wlanconnect/translations/khb_CN.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation>ᨡᦱ ᦠᦱ ᦎᦲᧄ ᦶ ᦎᦲᧄ ᦸᦱ</translation>
++        <translation></translation>
+     </message>
+     <message>
+         <source>Add WiredNetwork</source>

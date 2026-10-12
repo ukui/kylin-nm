@@ -1,0 +1,35 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Mon, 12 Oct 2026 13:54:53 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjlgqPku4LmlocgKGtoYl9D?=
+ =?utf-8?b?Tikp?=
+
+Currently translated at 98.7% (154 of 156 strings)
+
+Translation: openkylin-huanghe/kylin-vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-vpn/khb_CN/
+---
+ src-vpn/translations/kylin-vpn_khb_CN.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src-vpn/translations/kylin-vpn_khb_CN.ts b/src-vpn/translations/kylin-vpn_khb_CN.ts
+index 030f697..a3e4773 100644
+--- a/src-vpn/translations/kylin-vpn_khb_CN.ts
++++ b/src-vpn/translations/kylin-vpn_khb_CN.ts
+@@ -780,7 +780,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+         <source>No VPN configuration available</source>
+-        <translation>ບໍ່ມີການຕັ້ງຄ່າ VPN ທີ່ໃຊ້ໄດ້</translation>
++        <translation></translation>
+     </message>
+ </context>
+ <context>
+@@ -839,7 +839,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="59"/>
+         <source>VPN Tool</source>
+-        <translation>ເຄື່ອງມື VPN</translation>
++        <translation></translation>
+     </message>
+ </context>
+ </TS>

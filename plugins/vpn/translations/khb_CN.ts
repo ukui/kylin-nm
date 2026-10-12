@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>ᦃᧁᧉᦉᦸᦙᧈ ᦑᦱᧂᦺᦖᧈ ᦃᦻᧈ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -33,7 +33,7 @@
     <message>
         <location filename="../vpn.ui" line="68"/>
         <source>import</source>
-        <translation></translation>
+        <translation>ᦓᧄᦃᧁᧉ</translation>
     </message>
     <message>
         <location filename="../vpn.cpp" line="159"/>

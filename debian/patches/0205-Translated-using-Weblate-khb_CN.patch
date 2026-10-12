@@ -1,0 +1,3092 @@
+From: Anonymous <noreply@weblate.org>
+Date: Mon, 12 Oct 2026 13:05:31 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjlgqPku4LmlocgKGtoYl9D?=
+ =?utf-8?b?Tikp?=
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/vpn/khb_CN/
+---
+ plugins/mobilehotspot/translations/khb_CN.ts |  52 +--
+ plugins/proxy/translations/khb_CN.ts         |  80 ++---
+ plugins/vpn/translations/khb_CN.ts           |  20 +-
+ src-vpn/translations/kylin-vpn_khb_CN.ts     | 301 ++++++++---------
+ src/translations/kylin-nm_khb_CN.ts          | 462 +++++++++++++--------------
+ 5 files changed, 458 insertions(+), 457 deletions(-)
+
+diff --git a/plugins/mobilehotspot/translations/khb_CN.ts b/plugins/mobilehotspot/translations/khb_CN.ts
+index b3d628a..744c81d 100644
+--- a/plugins/mobilehotspot/translations/khb_CN.ts
++++ b/plugins/mobilehotspot/translations/khb_CN.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../blacklistitem.cpp" line="50"/>
+         <source>Remove</source>
+-        <translation>ᱵᱟᱦᱟᱨ ᱠᱟᱹᱣᱰᱟ</translation>
++        <translation>ᦉᦹᧇᦎᦸᧅᧈ ᦀᧇᦵᦡᧆ</translation>
+     </message>
+ </context>
+ <context>
+@@ -14,7 +14,7 @@
+     <message>
+         <location filename="../blacklistpage.cpp" line="48"/>
+         <source>Blacklist</source>
+-        <translation>ᱰᱤᱵᱟᱺᱥ ᱵᱷᱟᱨᱞᱤᱥᱴ</translation>
++        <translation>ᦶᦆᦲᧂᧈᦺᦋᧉ ᦶᦏᧁᦋᦹᧈᦂᧅᦠᦱᧄᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -22,7 +22,7 @@
+     <message>
+         <location filename="../connectdevlistitem.cpp" line="50"/>
+         <source>drag into blacklist</source>
+-        <translation>᧓ᱫᱚ ᱵᱷᱟᱨᱞᱤᱥᱴ ᱨᱮ</translation>
++        <translation>ᦗᦹᧄ ᦃᧁᧉ ᦶᦏᧁᦋᦹᧈᦂᧅᦠᦱᧄᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -30,7 +30,7 @@
+     <message>
+         <location filename="../connectdevpage.cpp" line="49"/>
+         <source>Connect device</source>
+-        <translation>ᱠᱟᱹᱱᱮᱠᱥᱚᱱ ᱰᱤᱵᱟᱺᱥ</translation>
++        <translation>ᦈᦸᧆᧈ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -38,7 +38,7 @@
+     <message>
+         <location filename="../mobilehotspot.cpp" line="35"/>
+         <source>MobileHotspot</source>
+-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
++        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="110"/>
+@@ -49,37 +49,37 @@
+     <message>
+         <location filename="../mobilehotspot.cpp" line="112"/>
+         <source>Mobile Hotspot</source>
+-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
++        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="114"/>
+         <source>Open mobile hotspot</source>
+-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ ᱪᱟᱞᱟᱣ</translation>
++        <translation>ᦺᦃ ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="116"/>
+         <source>Wi-Fi Name</source>
+-        <translation>Wi-Fi ᱱᱟᱢ</translation>
++        <translation>Wi-Fi ᦋᦹᧈ</translation>
+         <extra-contents_path>/mobilehotspot/Wi-Fi Name</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="118"/>
+         <source>Network Password</source>
+-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱟᱥᱣᱟᱨᱰ</translation>
++        <translation>ᦃᦻᧈ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
+         <extra-contents_path>/mobilehotspot/Network Password</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="120"/>
+         <source>Network Frequency band</source>
+-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱷᱩᱱᱩᱨᱜᱟᱹᱞ</translation>
++        <translation>ᦃᦻᧈ ᦔᦳᧃᦏᦲᧈᦠᦱᧂᧈ</translation>
+         <extra-contents_path>/mobilehotspot/Network Frequency band</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../mobilehotspot.cpp" line="122"/>
+         <source>Shared NIC port</source>
+-        <translation>ᱥᱷᱮᱨ ᱱᱮᱴᱣᱳᱨᱠ ᱠᱟᱹᱨᱰ ᱯᱚᱨᱴ</translation>
++        <translation>ᦺᦋᧉᦂᦱᧃᦅᦸᧉ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ ᦎᦱᦉᦻ</translation>
+         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
+     </message>
+     <message>
+@@ -102,7 +102,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="165"/>
+         <source>wirless switch is close or no wireless device</source>
+-        <translation>ᱣᱟᱭᱨᱞᱮᱥ ᱥᱣᱤᱪᱷ ᱵᱮᱱᱰ ᱟᱹᱰᱤ ᱠᱟᱹᱣᱬᱟᱭ ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ ᱯᱷᱩᱱᱩᱨᱜᱟᱹᱞ ᱠᱟᱹᱱᱮᱠᱥᱚᱱ ᱠᱟᱹᱣᱬᱟᱭ</translation>
++        <translation>ᦃᦻᧈᦢᧁᧈᦙᦲᦉᦻ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ ᦃᦸᧂ ᦑᦲᧈᦠᧇᦺᦃ ᦃᦻᧈᦢᧁᧈᦙᦲᦉᦻ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦠᧇ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈ ᦙᦲᦊᦴᧈ ᦙᦲ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦂᦱᧃᦺᦋᧉᦡᦲ</translation>
+     </message>
+     <message>
+         <source>start to close hotspot</source>
+@@ -111,7 +111,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="190"/>
+         <source>hotpots name or device is invalid</source>
+-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱱᱟᱢ ᱟᱹᱨᱵᱟ ᱰᱤᱵᱟᱺᱥ ᱜᱷᱟᱹᱞᱤ</translation>
++        <translation>ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦋᦹᧈ ᦷᦠᦵᦙᦲᧂ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦕᦲᧆ</translation>
+     </message>
+     <message>
+         <source>can not  create hotspot with password length less than eight!</source>
+@@ -124,32 +124,32 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="644"/>
+         <source>Contains at least 8 characters</source>
+-        <translation>ᱟᱹᱰᱤ ᱪᱟᱸᱫᱚ 8 ᱪᱟᱨᱟᱠᱴᱮᱨ ᱠᱟᱹᱣᱬᱟᱭ</translation>
++        <translation>ᦓᦾᧉᦑᦹᧅ / ᦷᦟᧂᦑᦲᧈᦵᦂᧈ / ᦓᦾᧉᦓᦾᧉ / ᦊᦸᧅᦔᦱᧃᦊᦸᧅ / ᦀᧃᦎᦙᦷᦉ ᦙᦲᦺᦉᧈ8ᦷᦎᦐᧂᦉᦹ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="245"/>
+         <source>Hotspot</source>
+-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ</translation>
++        <translation>ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="64"/>
+         <source>Settings</source>
+-        <translation>ᱥᱮᱴᱤᱝ</translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="67"/>
+         <source>Settings desktop message</source>
+-        <translation>ᱥᱮᱴᱤᱝ ᱰᱮᱥᱠᱴᱚᱯ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ</translation>
++        <translation>ᦎᧂᧉ ᦷᦎᧅᦵᦂᧉᦊᦴᧈᦵᦞᧃᧈ ᦉᦳᧃᦃᦱᧁ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="1103"/>
+         <source>use </source>
+-        <translation>ᱵᱮᱵᱚᱦᱟᱨ </translation>
++        <translation>ᦺᦋᧉ </translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="1104"/>
+         <source> share network, will interrupt local wireless connection</source>
+-        <translation> ᱦᱚᱴᱥᱯᱚᱴ ᱥᱷᱮᱨ ᱠᱟᱹᱣᱬᱟᱭ, ᱱᱚᱶᱟ ᱡᱮᱭᱟᱜ ᱣᱟᱭᱨᱞᱮᱥ ᱱᱮᱴᱣᱳᱨᱠ ᱠᱟᱹᱱᱮᱠᱥᱚᱱ ᱢᱩᱪᱟᱹᱫ ᱦᱩᱭᱩᱜᱼᱟ</translation>
++        <translation> ᦺᦔᦓᦱᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦺᦋᧉᦂᦱᧃᦅᦸᧉ，ᦈᧅ ᦎᧆᦃᦱᧆ ᦣᦱᧅᦷᦠ ᦈᧅ ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="381"/>
+@@ -158,27 +158,27 @@
+         <location filename="../mobilehotspotwidget.cpp" line="526"/>
+         <location filename="../mobilehotspotwidget.cpp" line="791"/>
+         <source>hotspot already close</source>
+-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱵᱮᱱᱰ ᱠᱟᱹᱣᱬᱟᱭ</translation>
++        <translation>ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦶᦟᧅᧈᦵᦟᧆᧉ ᦠᧇ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="550"/>
+         <source>Open mobile hotspot</source>
+-        <translation>ᱢᱟᱵᱤᱞ ᱦᱚᱴᱥᱯᱚᱴ ᱪᱟᱞᱟᱣ</translation>
++        <translation>ᦺᦃ ᦐᦻᧉ ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="633"/>
+         <source>Network Password</source>
+-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱟᱥᱣᱟᱨᱰ</translation>
++        <translation>ᦃᦻᧈ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="672"/>
+         <source>Network Frequency band</source>
+-        <translation>ᱱᱮᱴᱣᱳᱨᱠ ᱯᱷᱩᱱᱩᱨᱜᱟᱹᱞ</translation>
++        <translation>ᦃᦻᧈ ᦔᦳᧃᦏᦲᧈᦠᦱᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="697"/>
+         <source>Shared NIC port</source>
+-        <translation>ᱥᱷᱮᱨ ᱱᱮᱴᱣᱳᱨᱠ ᱠᱟᱹᱨᱰ ᱯᱚᱨᱴ</translation>
++        <translation>ᦺᦋᧉᦂᦱᧃᦅᦸᧉ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ ᦎᦱᦉᦻ</translation>
+     </message>
+     <message>
+         <source>Open</source>
+@@ -187,7 +187,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="611"/>
+         <source>Wi-Fi Name</source>
+-        <translation>Wi-Fi ᱱᱟᱢ</translation>
++        <translation>Wi-Fi ᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <source>Password</source>
+@@ -201,7 +201,7 @@
+         <location filename="../mobilehotspotwidget.cpp" line="823"/>
+         <location filename="../mobilehotspotwidget.cpp" line="835"/>
+         <source>hotspot already open</source>
+-        <translation>ᱦᱚᱴᱥᱯᱚᱴ ᱪᱟᱞᱟᱣ ᱞᱮᱱᱟ</translation>
++        <translation>ᦑᦲᧈᦎᦸᦰᦈᧇ Wi-Fi ᦶᦟᧅᧈᦵᦟᧆᧉ ᦺᦃ</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/proxy/translations/khb_CN.ts b/plugins/proxy/translations/khb_CN.ts
+index 429e7f8..d2a81bb 100644
+--- a/plugins/proxy/translations/khb_CN.ts
++++ b/plugins/proxy/translations/khb_CN.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../aptproxydialog.cpp" line="43"/>
+         <source>Set APT Proxy</source>
+-        <translation>Set APT Proxy</translation>
++        <translation>ᦎᧂᧉ APT ᦎᦴᦶᦑᧃ</translation>
+     </message>
+     <message>
+         <source>Server Address</source>
+@@ -19,32 +19,32 @@
+     <message>
+         <location filename="../aptproxydialog.cpp" line="60"/>
+         <source>Http Address</source>
+-        <translation>Http Proxy</translation>
++        <translation>Http ᦎᦴᦶᦑᧃ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="80"/>
+         <source>Http Port</source>
+-        <translation>Http ပေႜrt</translation>
++        <translation>Http ᦎᦱᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="100"/>
+         <source>Https Address</source>
+-        <translation>Https Proxy</translation>
++        <translation>Https ᦎᦴᦶᦑᧃ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="119"/>
+         <source>Https Port</source>
+-        <translation>Https Port</translation>
++        <translation>Https ᦎᦱᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="140"/>
+         <source>Cancel</source>
+-        <translation>Cancel</translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../aptproxydialog.cpp" line="144"/>
+         <source>Confirm</source>
+-        <translation>OK</translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -57,62 +57,62 @@
+     <message>
+         <location filename="../proxy.cpp" line="213"/>
+         <source>Start using</source>
+-        <translation>Enable</translation>
++        <translation>ᦺᦃᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="227"/>
+         <source>Proxy mode</source>
+-        <translation>Proxy Type</translation>
++        <translation>ᦙᦊᦷᦍᦵᦔᦲᧂᦶᦑᧃᦎᦱᧂ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="232"/>
+         <source>Auto</source>
+-        <translation>Auto</translation>
++        <translation>ᦎᦱᧄᦺᦈ ᦣᦳᧇᦶᦂᧇ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="236"/>
+         <source>Manual</source>
+-        <translation>Manual</translation>
++        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="391"/>
+         <source>Application Proxy</source>
+-        <translation>Apply Proxy</translation>
++        <translation>ᦓᧄᦺᦋᧉ ᦎᦴᦶᦑᧃ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="510"/>
+         <source>System Proxy</source>
+-        <translation>System Proxy</translation>
++        <translation>ᦟᦰᦢᦸᧇ ᦎᦴᦶᦑᧃ</translation>
+         <extra-contents_path>/Proxy/System Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="512"/>
+         <source>Auto url</source>
+-        <translation>Configure URL</translation>
++        <translation>ᦂᦱᧃᦎᧂᧉ URL</translation>
+         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="514"/>
+         <source>Http Proxy</source>
+-        <translation>HTTP Proxy</translation>
++        <translation>HTTP ᦎᦴᦶᦑᧃ</translation>
+         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="516"/>
+         <source>Https Proxy</source>
+-        <translation>HTTPS Proxy</translation>
++        <translation>HTTPS ᦎᦴᦶᦑᧃ</translation>
+         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="518"/>
+         <source>Ftp Proxy</source>
+-        <translation>FTP Proxy</translation>
++        <translation>FTP ᦎᦴᦶᦑᧃ</translation>
+         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="520"/>
+         <source>Socks Proxy</source>
+-        <translation>SOCKS Proxy</translation>
++        <translation>SOCKS ᦎᦴᦶᦑᧃ</translation>
+         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
+     </message>
+     <message>
+@@ -122,12 +122,12 @@
+         <location filename="../proxy.cpp" line="524"/>
+         <location filename="../proxy.cpp" line="1334"/>
+         <source>Port</source>
+-        <translation>Port</translation>
++        <translation>ᦚᦻᧈᦵᦆᦲᧂᧈᦔᦟᦲᦰᦂᦱᧃ ᦎᦱᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="525"/>
+         <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
+-        <translation>List of ignored hosts, please use semicolon (;)</translation>
++        <translation>ᦑᦲᧈᦊᦴᧈᦃᦸᧉᦙᦳᧃ ᦉᦱᧄᦵᦝᦋᦹᧈ ᦃᦸᧂ ᦢᧁᧈᦵᦉᧂᦡᦲ，ᦃᦸᧉ ᦺᦋᧉ ᦟᦲᧅᦁᧂᦂᦲᧆ ᦺᦙᧉᦊᦹᧆ（;）</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="529"/>
+@@ -139,19 +139,19 @@
+     <message>
+         <location filename="../proxy.cpp" line="535"/>
+         <source>APT Proxy</source>
+-        <translation>APT Proxy</translation>
++        <translation>APT ᦎᦴᦶᦑᧃ</translation>
+         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="536"/>
+         <location filename="../proxy.cpp" line="1271"/>
+         <source>Open</source>
+-        <translation>On</translation>
++        <translation>ᦺᦃ ᦂᦱᧃᦅᦳᧄᦷᦆᧇ ᦟᦲᧄᧉ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="537"/>
+         <source>Http Address : </source>
+-        <translation>Http Address: </translation>
++        <translation>Http ᦑᦲᧈᦊᦴᧈ： </translation>
+     </message>
+     <message>
+         <source>Server Address : </source>
+@@ -161,91 +161,91 @@
+         <location filename="../proxy.cpp" line="538"/>
+         <location filename="../proxy.cpp" line="540"/>
+         <source>Port : </source>
+-        <translation>ပေႜrt: </translation>
++        <translation>ᦎᦱᦉᦻ： </translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="539"/>
+         <source>Https Address : </source>
+-        <translation>Https Address: </translation>
++        <translation>Https ᦑᦲᧈᦊᦴᧈ： </translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="541"/>
+         <source>Edit</source>
+-        <translation>Edit</translation>
++        <translation>ᦷᦂᧆᦘᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="716"/>
+         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
+-        <translation>APT proxy is disabled, restart required to take effect</translation>
++        <translation>APT ᦎᦴᦶᦑᧃ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦠᧇ，ᦎᦸᧂᧉ ᦎᧂᧉᦺᦖᧈ ᦈᦲᧂᧈᦋᦱᧂᧈ ᦍᧇ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="717"/>
+         <location filename="../proxy.cpp" line="1048"/>
+         <source>Reboot Later</source>
+-        <translation>Restart Later</translation>
++        <translation>ᦜᦲᧂᦓᦲᦰᦺᦌᧈᦎᦳ ᦎᧂᧉᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="718"/>
+         <location filename="../proxy.cpp" line="1049"/>
+         <source>Reboot Now</source>
+-        <translation>Restart Now</translation>
++        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1047"/>
+         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
+-        <translation>Setting APT proxy requires restarting the system to take effect. Restart now?</translation>
++        <translation>ᦎᧂᧉ APT ᦎᦴᦶᦑᧃ ᦎᦸᧂᧉ ᦎᧂᧉᦺᦖᧈ ᦟᦰᦢᦸᧇ ᦗᦻᦜᧂ ᦍᧇ，ᦶᦙᧃᧈᦢᧁᧈᦶᦙᧃᧈ ᦎᧂᧉᦺᦖᧈ ᦟᦰᦢᦸᧇ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1284"/>
+         <source>Proxy type</source>
+-        <translation>Proxy Type</translation>
++        <translation>ᦙᦊᦷᦍᦵᦔᦲᧂᦶᦑᧃᦎᦱᧂ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1301"/>
+         <source>IP address</source>
+-        <translation>IP Address</translation>
++        <translation>IP ᦑᦲᧈᦊᦴᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1307"/>
+         <location filename="../proxy.cpp" line="1337"/>
+         <source>Required</source>
+-        <translation>Required</translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1327"/>
+         <source>Invalid IP Address</source>
+-        <translation>Invalid IP address</translation>
++        <translation>ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ ᦃᦸᧂ IP ᦑᦲᧈᦊᦴᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1348"/>
+         <source>Username</source>
+-        <translation>Username</translation>
++        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1351"/>
+         <location filename="../proxy.cpp" line="1365"/>
+         <source>Optional</source>
+-        <translation>Optional</translation>
++        <translation>ᦵᦟᦲᧅᦵᦵᦎᧄᧉ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1361"/>
+         <source>Password</source>
+-        <translation>Password</translation>
++        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1384"/>
+         <source>Cancel</source>
+-        <translation>Cancel</translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1385"/>
+         <source>Save</source>
+-        <translation>Save</translation>
++        <translation>ᦉᦻᦷᦆᧇᦉᦴ ᦏᦹᧂ</translation>
+     </message>
+     <message>
+         <location filename="../proxy.cpp" line="1457"/>
+         <source>The following applications are allowed to use this configuration:</source>
+-        <translation>Allow the following applications to use this configuration:</translation>
++        <translation>ᦀᦸᧉᦎᦳᧄᧉᦓᧄᦺᦋᧉᦎᦲᧅᦵᦎᦡᦲᧉᦓᦲᦰᦺᦋᧉ ᦂᦱᧃᦎᧂᧉᦓᦲᦰ ：</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/vpn/translations/khb_CN.ts b/plugins/vpn/translations/khb_CN.ts
+index b61afe6..0dac403 100644
+--- a/plugins/vpn/translations/khb_CN.ts
++++ b/plugins/vpn/translations/khb_CN.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>ᦃᧁᧉᦉᦸᦙᧈ ᦑᦱᧂᦺᦖᧈ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../itemframe.cpp" line="40"/>
+         <source>Add VPN</source>
+-        <translation>VPN ᦥᱚᱛᱮ</translation>
++        <translation>ᦗᦹᧄ VPN</translation>
+     </message>
+ </context>
+ <context>
+@@ -33,32 +33,32 @@
+     <message>
+         <location filename="../vpn.ui" line="68"/>
+         <source>import</source>
+-        <translation></translation>
++        <translation>ᦓᧄᦃᧁᧉ</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="159"/>
+         <location filename="../vpn.cpp" line="291"/>
+         <source>Show on Taskbar</source>
+-        <translation>ᦂᱮᱱ ᦊᱮᱨ ᦟᱮ ᦡᱤᱛᱮᱱ ᦢᱮ ᦟᱮᱱ ᦕᱚᱸ</translation>
++        <translation>ᦊᦴᧈ ᦑᦲᧈᦂᦱᧃᦒᦱᧄ ᦉᦰᦶᦡᧂ ᦉᦱᧃᦑᦲᧈ</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="293"/>
+         <source>Add VPN</source>
+-        <translation>VPN ᦠᱚᱱnection ᦥᱚᱛᱮ</translation>
++        <translation>ᦗᦹᧄ VPN</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="490"/>
+         <source>connected</source>
+-        <translation>ᦂᱮᱱ ᦠᱚ connecting</translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation>ᦂᱮᱱ ᦠᱚ connected</translation>
++        <translation>ᦢᧁᧈᦺᦡᧉᦎᦸᦰᦈᧇ</translation>
+     </message>
+ </context>
+ <context>
+@@ -66,19 +66,19 @@
+     <message>
+         <location filename="../vpnitem.cpp" line="60"/>
+         <source>Delete</source>
+-        <translation>ᦓᱫᱚ</translation>
++        <translation>ᦟᦸᧇ ᦓᦲᦰ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="117"/>
+         <location filename="../vpnitem.cpp" line="130"/>
+         <source>Disconnect</source>
+-        <translation>disconnect</translation>
++        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation>connect</translation>
++        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/src-vpn/translations/kylin-vpn_khb_CN.ts b/src-vpn/translations/kylin-vpn_khb_CN.ts
+index 6c3e82c..030f697 100644
+--- a/src-vpn/translations/kylin-vpn_khb_CN.ts
++++ b/src-vpn/translations/kylin-vpn_khb_CN.ts
+@@ -6,17 +6,17 @@
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="81"/>
+         <source>Settings</source>
+-        <translation>ການຕັ້ງຄ່າ</translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="142"/>
+         <source>Kylin VPN</source>
+-        <translation>ເຄື່ອງມື VPN</translation>
++        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉVPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
+         <source>kylin vpn applet desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>VPNᦶᦔᧂᦵᦆᦲᧂᦖᦱᧉᦑᧇᦢᦸᧅᧈᦵᦎᦲᧃᦂᧇᦺᦉᧈ</translation>
+     </message>
+ </context>
+ <context>
+@@ -24,391 +24,391 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="827"/>
+         <source>MPPE encryption algorithm:</source>
+-        <translation type="unfinished"></translation>
++        <translation>MPPEᦓᧇᦉᦸᧃᧈᦶᦏᧄᦟᦲᧅᦵᦉᦲᧂᧈ:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
+         <source>Use Stateful encryption</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧉᦏᦹᦠᦳᧃᧈᦵᦟᦲᧂᧈᦶᦏᧄᦟᦲᧅᦵᦉᦲᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="829"/>
+         <source>Send PPP echo packets</source>
+-        <translation>ສົ່ງແພັກເກັດ PPP echo</translation>
++        <translation>ᦶᦕᧈᦺᦔ PPPᦂᧇᦠᦼᦵᦉᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="830"/>
+         <source>Authentication Mode:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦔᦲᧂᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="831"/>
+         <source>PAP authentication</source>
+-        <translation>ການຢືນຢັນ PAP</translation>
++        <translation>PAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="832"/>
+         <source>CHAP authentication</source>
+-        <translation>ການຢືນຢັນ CHAP</translation>
++        <translation>CHAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="833"/>
+         <source>MSCHAP authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>MSCHAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="834"/>
+         <source>MSCHAP2 authentication</source>
+-        <translation>ການຢືນຢັນ MSCHAP2</translation>
++        <translation>MSCHAP2ᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="835"/>
+         <source>EAP authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>EAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="836"/>
+         <source>Compression Mode:</source>
+-        <translation>ວິທີການຫຸ້ມ:</translation>
++        <translation>ᦵᦔᦲᧂᦕᦸᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
+         <source>Allow BSD data compression</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦷᦓᦍᦱᧆ BSDᦕᦸᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
+         <source>Allow Default data compression</source>
+-        <translation>ອະນຸຍາດໃຫ້ຫຸ້ມ Default</translation>
++        <translation>ᦷᦓᦍᦱᧆ Defaultᦕᦸᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="839"/>
+         <source>Allow TCP header compression</source>
+-        <translation>ອະນຸຍາດໃຫ້ຫຼຸດຂະໜາດສ່ວນຫົວ TCP</translation>
++        <translation>ᦷᦓᦍᦱᧆ TCPᦷᦠᦕᦸᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="840"/>
+         <source>Use protocol field compression negotiation</source>
+-        <translation>ໃຊ້ການປຶກສາການຫຼຸດຂະໜາດໂປຣໂຕຄອນ</translation>
++        <translation>ᦕᦸᧃᧈᦓᦾᧉᦀᦳᧇᧈᦂᦱᧃᦺᦋᧈᦏᦹᦑᦲᧈᦀᦳᧇᧈᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="841"/>
+         <source>Use Address/Control compression</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧈᦏᦹᦑᦲᧈᦊᦴᧈ/ᦕᧃᧉᦕᦸᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="847"/>
+         <source>All Available</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦺᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="848"/>
+         <source>128-bit</source>
+-        <translation type="unfinished"></translation>
++        <translation>128ᦷᦎ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="849"/>
+         <source>40-bit</source>
+-        <translation type="unfinished"></translation>
++        <translation>40ᦷᦎ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
+         <source>Use custom gateway port</source>
+-        <translation>ໃຊ້ພອດເຄື່ອງອອກທາງກຳນົດເອງ</translation>
++        <translation>ᦺᦋᧉᦏᦹᦑᦲᧈᦃᧁᧉᦐᦹᧂᦞᦱᧂᦷᦠᧉᦔᦳᧆᦃᦱᦤᦎᦱᧄᦺᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
+         <source>Use compression</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧉᦏᦹᦕᦸᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1048"/>
+         <source>Use a TCP connection</source>
+-        <translation>ໃຊ້ການເຊື່ອມຕໍ່ TCP</translation>
++        <translation>ᦺᦋᧉᦏᦹ TCPᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
+         <source>Set virtual device type</source>
+-        <translation>ການຕັ້ງຄ່າປະເພດອຸປະກອນເວີດຕົວລະ</translation>
++        <translation>ᦎᧂᧉ ᦶᦔᧂᦵᦖᦲᧃ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦸᧂᧈᦉᦱᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
+         <source>Set virtual device name</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᧂᧉ ᦶᦔᧂᦵᦖᦲᧃ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1051"/>
+         <source>Limit TCP Maximum Segment Size(MSS)</source>
+-        <translation>ຈຳກັດຂະໜາດເຊັກເກັດ TCP (MSS)</translation>
++        <translation>ᦗᦰᦍᦰᦐᦱᧉᦑᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
+         <source>Randomize remote hosts</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦔᧂᦠᦹᧉᦵᦔᧃᦶᦢᧇᧈᦈᦸᧂᧉᦶᦈᧂᧉ ᦑᦲᧈᦊᦴᧈᦃᦸᧉᦙᦳᧃ ᦶᦉᧃᦑᦱᧂᦂᦱᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
+         <source>IPv6 tun link</source>
+-        <translation>ການເຊື່ອມຕໍ່ IPv6 tun</translation>
++        <translation>ᦎᦸᦰᦈᧇIPv6 tun</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1054"/>
+         <source>Specify ping interval</source>
+-        <translation>ການກຳນົດໄລຍະ Ping</translation>
++        <translation>ᦢᧅᦅᦱᧈᦷᦞᧂᧈᦌᦲᧈ Ping</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1055"/>
+         <source>Specify exit or restart ping</source>
+-        <translation>ການກຳນົດໄລຍະ Ping ສຳລັບການອອກຈາກລະບົບ ຫຼື ເລີ່ມຄືນໃໝ່</translation>
++        <translation>Pingᦢᧅᦅᦱᧈᦏᦼᧈᦀᦸᧅᧈᦢᧁᧈᦅᦸᧉᦺᦃᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1056"/>
+         <source>Specify max routes</source>
+-        <translation>路由上限ᦒᦜᦺᦸᦞᦔᦷᦟᦰ</translation>
++        <translation>ᦢᧅᦅᦱᧈᦘᦲᧄᦀᦸᧅᧈᦂᦱᧃᧉᦂᦸᦺᦊᧈᦑᦹᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1057"/>
+         <source>Infinite retry on error</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦙᦲᧈᦀᦸᧅᧈᦜᦳᧂᦟᦸᦜᦻᦗᦸᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
+         <source>Use custom key size</source>
+-        <translation>ໃຊ້ຂະໜາດກຸນແຈກຳນົດເອງ</translation>
++        <translation>ᦺᦋᧈᦏᦹᦓᦾᧉᦺᦊᧈᦃᦸᦶᦈᦎᦱᧃᦺᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1059"/>
+         <source>Choose</source>
+-        <translation>ເລືອກ</translation>
++        <translation>ᦵᦟᦲᧅᦀᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1062"/>
+         <source>Use custom renegotiation interval</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧈᦏᦹᦀᦳᧇᧈᦂᦱᧃᦓᧄᧉᦺᦂᦣᦸᧂᧉᦎᦱᧄᦺᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
+         <source>Use custom tunnel Maximum Transmission Umit(MTU)</source>
+-        <translation>ໃຊ້ການສົ່ງຂໍ້ມູນ MTU ທີ່ກຳນົດເອງ</translation>
++        <translation>ᦺᦋᧈᦏᦹᦑᦱᧂᦣᦴᧉᦣᦸᧂᧉᦺᦊᧈᦑᦹᧅᦌᦸᧃᧉᦉᦳ（MTU）ᦎᦱᧄᦺᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
+         <source>Use custom UDP fragment size</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧈᦏᦹᦓᦾᧉᦺᦊᧈᦷᦣᧇᦔᦳᧂᧈUDPᦎᦱᧄᦺᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
+         <source>Accept authenticated packets from any address (Float)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦣᧇᦀᧁᦆᦱᧆᦔᦲᧃᦖᦱᧃᧈᦵᦍᦂᦱᧃᧉᦂᦸᦁᧃᦶᦑᧉᦙᦱᦑᦲᧈᦜᦻᦑᦲᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
+         <source>Subject Match</source>
+-        <translation>ການຈັບຄູ່ຫົວຂໍ້</translation>
++        <translation>ᦃᦸᧉᦅᧁᧉᦈᧇᦂᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1071"/>
+         <source>Key File</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᦶᦈᦐᧂᦉᦹ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1072"/>
+         <source>Key Direction</source>
+-        <translation>ທິດທາງຄີ</translation>
++        <translation>ᦠᦳᧃᦗᦻᦃᦸᦶᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1074"/>
+         <source>Server Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
+         <source>Port</source>
+-        <translation>ພອດ</translation>
++        <translation>ᦚᦻᧈᦵᦆᦲᧂᧈᦔᦟᦲᦰᦂᦱᧃ ᦎᦱᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1076"/>
+         <source>Proxy USername</source>
+-        <translation>ຊື່ຜູ້ໃຊ້ Proxy</translation>
++        <translation>ᦶᦑᧃᦎᦱᧂᦋᦹᧈᦕᦴᧉᦺᦋᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
+         <source>Proxy Password</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦑᧃᦎᦱᧂᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1079"/>
+         <source>General</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦱᦋᦱᧂᧈᦅᧁᧉᦗᦹᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
+         <source>TLS settings</source>
+-        <translation>ການຕັ້ງຄ່າ TLS</translation>
++        <translation>ᦎᧂᧉTLS</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1081"/>
+         <source>Server Certificate Check</source>
+-        <translation>ການກວດສອບໃບຢັ້ງຢືນເຄື່ອງບໍລິການ</translation>
++        <translation>ᦌᦱᧉᦶᦋᧆᦐᧂᦉᦹᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1083"/>
+         <source>Use the previous authentication end (server) certificate</source>
+-        <translation>ໃຊ້ໃບຢັ້ງຢືນເຄື່ອງບໍລິການກ່ອນໜ້ານີ້</translation>
++        <translation>ᦵᦙᦲᧈᦺᦋᧈᦏᦹᦌᦱᧉᦶᦋᧆᦐᧂᦉᦹᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃᦀᦸᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1085"/>
+         <source>Verify peer (server) certificate nsCertType specification</source>
+-        <translation>ກວດສອບໃບຢັ້ງຢືນຂອງເພີ່ນ (ເຊີບເວີ) ທີ່ກຳນົດໃນ nsCertType</translation>
++        <translation>nsCertTypeᦢᧅᦅᦱᧈ ᦌᦱᧉᦶᦋᧆᦐᧂᦉᦹᦑᦲᧈᦈᧇᦂᧃ（ᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ）</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1086"/>
+         <source>Mode</source>
+-        <translation>ຮູບແບບ</translation>
++        <translation>ᦗᦰᦍᦰᦔᦳᧃᦓᦾᧉᦠᦸᧂᧉᦗᦻᦗᦱᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
+         <source>Proxies</source>
+-        <translation>ໂປຣຊີ</translation>
++        <translation>ᦶᦑᧃᦎᦱᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
+         <source>Proxy Type</source>
+-        <translation>ປະເພດໂປຣຊີ</translation>
++        <translation>ᦙᦊᦷᦍᦵᦔᦲᧂᦶᦑᧃᦎᦱᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
+         <source>Security</source>
+-        <translation>ຄວາມປອດໄພ</translation>
++        <translation>ᦗᦹᧂᧈᦺᦡᧉᦔᦸᧆᦺᦘ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1090"/>
+         <source>HMAC Authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>HMACᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1100"/>
+         <source>Input content</source>
+-        <translation>ເນື້ອໃນທີ່ປ້ອນ</translation>
++        <translation>ᦵᦎᧅᦀᦏᦺᦓᦺᦉᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
+         <source>No</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦳᧇᦶᦝᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1106"/>
+         <source>Self-adaption</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦉᦳᧄᦷᦅᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1107"/>
+         <source>Automatic</source>
+-        <translation>ອັດຕະໂນມັດ</translation>
++        <translation>ᦎᦱᧄᦙᧃᦐᦹᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
+         <source>Exit</source>
+-        <translation>ອອກ</translation>
++        <translation>ᦀᦸᧅᧈᦵᦵᦩᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1113"/>
+         <source>Restart</source>
+-        <translation>ເລີ່ມຄືນໃໝ່</translation>
++        <translation>ᦺᦙᦡᦲᧉᦓᦲᦰ ᦎᧂᧉᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1115"/>
+         <source>Don&apos;t verify certificate identification</source>
+-        <translation>ບໍ່ກວດສອບຕົວຕົນໃບຢັ້ງຢືນ</translation>
++        <translation>ᦢᧁᧈᦌᦱᧈᦶᦋᧆᦈᧄᦜᦻᦐᧂᦉᦹᦣᧇᦣᦸᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1116"/>
+         <source>Verify the entire subject exactly</source>
+-        <translation>ກວດສອບຫົວຂໍ້ທັງໝົດຢ່າງຖືກຕ້ອງ</translation>
++        <translation>ᦌᦱᧈᦶᦋᧆᦐᧂᦉᦹᦡᦲᦡᦲ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1117"/>
+         <source>Verify name exactly</source>
+-        <translation>ກວດສອບຊື່ຜູ້ໃຊ້ງານຢ່າງຖືກຕ້ອງ</translation>
++        <translation>ᦌᦱᧈᦶᦋᧆᦋᦹᧈᦵᦉᧂᦶᦈᧂᧉᦏᦲᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1118"/>
+         <source>Verify name by prefix</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦗᦻᦐᦱᧉᦌᦱᧉᦶᦋᧆᦋᦹᧈᦵᦉᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1120"/>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1123"/>
+         <source>Server</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1121"/>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1124"/>
+         <source>Client</source>
+-        <translation>ຄລາຍແອັບ</translation>
++        <translation>ᦑᦲᧈᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1126"/>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1130"/>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1139"/>
+         <source>None</source>
+-        <translation>ບໍ່ມີ</translation>
++        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
+         <source>TLS-Certification</source>
+-        <translation>ການຢືນຢັນ TLS</translation>
++        <translation>TLS-ᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1128"/>
+         <source>TLS-Encryption</source>
+-        <translation type="unfinished"></translation>
++        <translation>TLS-ᦶᦏᧄᦟᦲᧅᦵᦉᦲᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1134"/>
+         <source>Not Required</source>
+-        <translation>ບໍ່ຈຳເປັນ</translation>
++        <translation>ᦢᧁᧈᦀᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1138"/>
+         <source>Default</source>
+-        <translation>ຄ່າເລີ່ມຕົ້ນ</translation>
++        <translation>ᦎᧂᧉ ᦠᦹᧉ ᦵᦟᦹᧄᧈᦎᦳᧄᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1216"/>
+         <source>Options:</source>
+-        <translation>ຕົວເລືອກ:</translation>
++        <translation>ᦵᦟᦲᧅᦺᦋᧉ:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1219"/>
+         <source>Request an inner IP address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᦑᦲᧈ IPᦗᦻᦺᦓ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1220"/>
+         <source>Enforce UDP encapsulation</source>
+-        <translation>ບັງຄັບການຫຸ້ມ UDP</translation>
++        <translation>ᦵᦎᧅᦊᦱᧉᦺᦋᧈᦏᦹUDPᦶᦕᧈᦺᦔ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1221"/>
+         <source>Use IP compression</source>
+-        <translation>ໃຊ້ການຫຼຸດຂະໜາດ IP</translation>
++        <translation>ᦺᦋᧈᦏᦹ Ipᦕᦱᧃᧈᦓᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1222"/>
+         <source>Enable custom password suggestions</source>
+-        <translation>ເປີດໃຊ້ຄຳແນະນຳລະຫັດຜ່ານທີ່ກຳນົດເອງ</translation>
++        <translation>ᦃᦸᦺᦋᧈᦟᦲᧅᦵᦉᦲᧂᦵᦀᧄᦎᦱᧄᦷᦎ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1382"/>
+         <source>Choose a private key</source>
+-        <translation>ເລືອກກຸນແຈສ່ວນຕົວ</translation>
++        <translation>ᦵᦟᦲᧅᦀᧁᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1384"/>
+         <source>Key Files (*.key *.pem *.der *.p12 *.pfx)</source>
+-        <translation>ໄຟລ໌ກຸນແຈສ່ວນຕົວ (*.key *.pem *.der *.p12 *.pfx)</translation>
++        <translation>ᦐᧂᦉᦹᦃᦸᦷᦎᦵᦡᧁ (*.key *.pem *.der *.p12 *.pfx)</translation>
+     </message>
+ </context>
+ <context>
+@@ -416,96 +416,97 @@
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="331"/>
+         <source>Type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦢᧇᧈᦵᦔᦲᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
+         <source>Name</source>
+-        <translation>ຊື່</translation>
++        <translation>ᦢᦴᦟᦴᦏᦳ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
+         <source>Static Key</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᦃᦶᦈᦢᧁᧈᦋᦱᧂᧈᦵᦔᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
+         <source>Local IP</source>
+-        <translation>ທີ່ຢູ່ IP ພາຍໃນ</translation>
++        <translation>Ipᦑᦲᧈᦺᦓᦷᦠᦈᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
+         <source>Remote IP</source>
+-        <translation>IP ᦓັງໄລຍະไกล</translation>
++        <translation>Ipᦑᦲᧈᦺᦂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="336"/>
+         <source>PIN Code</source>
+-        <translation>ລະຫັດ PIN</translation>
++        <translation>ᦓᦱᧄᦗᦱᧆPIN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="337"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="849"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="856"/>
+         <source>Password</source>
+-        <translation>ລະຫັດຜ່ານ</translation>
++        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
+         <source>NT Domain</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈNT</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="340"/>
+         <source>Server Address</source>
+-        <translation>ທີ່ຢູ່ເຊີບເວີ</translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="341"/>
+         <source>Authentication Mode</source>
+-        <translation>ວິທີການຢືນຢັນ</translation>
++        <translation>ᦵᦔᦲᧂᦆᦱᧆᦔᦲᧃᦖᦱᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="342"/>
+         <source>CA Certificate</source>
+-        <translation>ໃບຢັ້ງຢືນ CA</translation>
++        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂCA</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="343"/>
+         <source>User Certificate</source>
+-        <translation>ໃບຢັ້ງຢືນຜູ້ໃຊ້ງານ</translation>
++        <translation>ᦂᦱᧃᧉᦉᧅᦃᦲᦰᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="344"/>
+         <source>Key Direction</source>
+-        <translation>ທິດທາງຄີ</translation>
++        <translation>ᦠᦳᧃᦗᦻᦃᦸᦶᦈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="345"/>
+         <source>Private Key</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="346"/>
+         <source>Private Key Password</source>
+-        <translation>ລະຫັດຜ່ານຂອງຄີສ່ວນຕົວ</translation>
++        <translation>ᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="347"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="349"/>
+         <source>Password Options</source>
+-        <translation>ຕົວເລືອກລະຫັດຜ່ານ</translation>
++        <translation>ᦃᦸᧉᦂᦱᧃᦵᦟᦲᧅᦟᦲᧅᦉᦄᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
+         <source>Username</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
+         <source>Notice:
+ If key direction is used, it must be opposite to the VPN side used. If &apos;1&apos; is used, the connection must use &apos;0&apos;. If you are not sure which value to use, please contact your system administrator.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦉᧂᦡᦲᦺᦋᧉᦅᧄ：
++ᦉᦹᧂᦞᦱᧈ ᦺᦋᧉ ᦵᦏᧉᦵᦓ ᦅᧄᦶᦉᧆᦅᦱᧆ ᦠᦳᧃᦗᦻ，ᦙᧃ ᦎᦸᧂᧉ ᦶᦟᧉ ᦺᦋᧉ ᦃᦸᧂVPNᦷᦠᦠᦱᧂ ᦢᧁᧈᦵᦖᦲᧃᦂᧃ 。 ᦉᦹᧂᦞᦱᧈ ᦺᦋᧉ ᦵᦏᧉᦵᦓ1，ᦈᦸᧆᧈ ᦎᦸᧂᧉ ᦺᦆᧈ ᦺᦋᧉ0。 ᦉᦹᧂᦞᦱᧈ ᦢᧁᧈ ᦎᦸᧅᦟᦸᧄ ᦺᦋᧉ ᦁᦲᧈᦺᦑ ᦩᦱᧄ，ᦕᦴᧉᦷᦔᦨᦱᧃᦚᦻᧈᦂᦱᧃ 。 ᦃᦸᧂ ᦃᦸᧉ ᦎᦲᧆᦎᦸᧈ ᦋᦴ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="359"/>
+@@ -513,104 +514,104 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="361"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="362"/>
+         <source>Choose</source>
+-        <translation>ເລືອກ</translation>
++        <translation>ᦵᦟᦲᧅᦀᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
+         <source>None</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="379"/>
+         <source>Save password only for this user</source>
+-        <translation>ບັນທຶກລະຫັດຜ່ານສຳລັບຜູ້ໃຊ້ງານປັດຈຸບັນເທົ່ານັ້ນ</translation>
++        <translation>ᦎᦱᧄᦅᦱᧈ ᦎᦸᧂᦑᦲᧈ ᦅᦳᧃᦺᦋᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ ᦢᧃᦑᦹᧅ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="374"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="380"/>
+         <source>Save password for all users</source>
+-        <translation>ບັນທຶກລະຫັດຜ່ານສຳລັບຜູ້ໃຊ້ງານທຸກຄົນ</translation>
++        <translation>ᦵᦎᦲᧃᦕᦴᧉᦺᦋᧈᦵᦚᧆᧈᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄᦺᦞᧉᦑᧂᦷᦙᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="381"/>
+         <source>Ask password every time</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦴᧈᦵᦑᦲᧈᦅᦸᦺᦡᧉᦏᦱᧄ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="382"/>
+         <source>Don&apos;t require a password</source>
+-        <translation>密码不必要</translation>
++        <translation>ᦢᧁᧈᦀᧁᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="386"/>
+         <source>Required</source>
+-        <translation>ຕ້ອງການ</translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
+         <source>Certificate(TLS)</source>
+-        <translation>ໃບຢັ້ງຢືນ (TLS)</translation>
++        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂ（TLS）</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="855"/>
+         <source>Static key</source>
+-        <translation>ຄີຄົງທີ່</translation>
++        <translation>ᦃᦸᦃᦶᦈᦢᧁᧈᦋᦱᧂᧈᦵᦔᧃᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="857"/>
+         <source>Password and certificate(TLS)</source>
+-        <translation>ລະຫັດຜ່ານ ແລະ ໃບຢັ້ງຢືນ (TLS)</translation>
++        <translation>ᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄ᧞ᦐᧂᦉᦹᦣᧇᦣᦸᧂ（TLS）</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="866"/>
+         <source>Certificate/Private key</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂ/ᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="867"/>
+         <source>Certificate/ssh-agent</source>
+-        <translation>ໃບຢັ້ງຢືນ/ssh-agent</translation>
++        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂ/ ssh-agent</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="868"/>
+         <source>Smart card</source>
+-        <translation>ບັດສະມາດ</translation>
++        <translation>ᦋᦹᦐᦵᦓᦲᧃᦃᦱ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="923"/>
+         <source>Choose a private key</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦟᦲᧅᦀᧁᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="925"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="964"/>
+         <source>Key Files (*.key *.pem *.der *.p12 *.pfx)</source>
+-        <translation>ໄຟລ໌ຄີສ່ວນຕົວ (*.key *.pem *.der *.p12 *.pfx)</translation>
++        <translation>ᦐᧂᦉᦹᦃᦸᦷᦎᦵᦡᧁ (*.key *.pem *.der *.p12 *.pfx)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="936"/>
+         <source>Choose a CA certificate</source>
+-        <translation>ເລືອກໃບຢັ້ງຢືນ CA</translation>
++        <translation>ᦵᦟᦲᧅᦀᧁᦐᧂᦉᦹᦣᧇᦣᦸᧂCA</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="938"/>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="951"/>
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+-        <translation>ໄຟລ໌ CA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
++        <translation>ᦐᧂᦉᦹCA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="949"/>
+         <source>Choose a User certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦟᦲᧅᦀᧁᦐᧂᦉᦹᦣᧇᦣᦸᧂᦕᦴᧉᦺᦋᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="962"/>
+         <source>Choose a Static key</source>
+-        <translation>ເລືອກຄີຄົງທີ່</translation>
++        <translation>ᦵᦟᦲᧅᦀᧁᦃᦸᦃᦶᦈᦢᧁᧈᦋᦱᧂᧈᦵᦔᧃᧈ</translation>
+     </message>
+ </context>
+ <context>
+@@ -635,22 +636,22 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
+         <source>Advanced</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦏᦱᧃᧉᦉᦳᧂ ᦣᦳᧇᦶᦂᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
+         <source>Auto Connection</source>
+-        <translation>ເຊື່ອມຕໍ່ອັດຕະໂນມັດ</translation>
++        <translation>ᦎᦱᧄᦷᦎᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="178"/>
+         <source>Cancel</source>
+-        <translation>ຍົກເລີກ</translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
+         <source>Confirm</source>
+-        <translation>ຢືນຢັນ</translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -658,47 +659,47 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="170"/>
+         <source>IPv4 Config</source>
+-        <translation>ການຕັ້ງຄ່າ IPv4</translation>
++        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="171"/>
+         <source>Address</source>
+-        <translation>ທີ່ຢູ່</translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="172"/>
+         <source>Netmask</source>
+-        <translation>маска подсети</translation>
++        <translation>ᦓᦱᧄᦗᦱᧆᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="173"/>
+         <source>Default Gateway</source>
+-        <translation>ເຄືອຂ່າຍຄ່າເລີ່ມຕົ້ນ</translation>
++        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="174"/>
+         <source>DNS Server</source>
+-        <translation>ເຊີບເວີ DNS</translation>
++        <translation>DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="175"/>
+         <source>Search Domain</source>
+-        <translation>ໂດເມນທີ່ຄົ້ນຫາ</translation>
++        <translation>ᦑᦲᧈᦌᦸᦰᦠᦱ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="176"/>
+         <source>DHCP Client ID</source>
+-        <translation type="unfinished"></translation>
++        <translation>IdᦑᦲᧈᦕᦴᧉᦺᦋᧈDHCP</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="178"/>
+         <source>Auto(DHCP)</source>
+-        <translation>ອັດຕະໂນມັດ (DHCP)</translation>
++        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -706,42 +707,42 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="159"/>
+         <source>IPv6 Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
+         <source>Address</source>
+-        <translation>ທີ່ຢູ່</translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="161"/>
+         <source>Netmask</source>
+-        <translation>ຊຶ່ເຄືອຂ່າຍ</translation>
++        <translation>ᦓᦱᧄᦗᦱᧆᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="162"/>
+         <source>Default Gateway</source>
+-        <translation>ເຄື່ອງອອກທາງເລີ່ມຕົ້ນ</translation>
++        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="163"/>
+         <source>DNS Server</source>
+-        <translation type="unfinished"></translation>
++        <translation>DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="164"/>
+         <source>Search Domain</source>
+-        <translation>ໂດເມນທີ່ຄົ້ນຫາ</translation>
++        <translation>ᦑᦲᧈᦌᦸᦰᦠᦱ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
+         <source>Auto(DHCP)</source>
+-        <translation>ອັດຕະໂນມັດ (DHCP)</translation>
++        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
+         <source>Manual</source>
+-        <translation>ດ້ວຍມື</translation>
++        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -749,19 +750,19 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
+         <source>Not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦙᦲ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
+         <location filename="../frontend/list-items/vpnlistitem.cpp" line="163"/>
+         <source>Connect</source>
+-        <translation>ເຊື່ອມຕໍ່</translation>
++        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+     </message>
+ </context>
+ <context>
+@@ -774,7 +775,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="282"/>
+         <source>VPN Settings</source>
+-        <translation>ການຕັ້ງຄ່າ VPN ເພີ່ມເຕີມ</translation>
++        <translation>ᦶᦔᧂᦵᦆᦲᧂᧈVPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
+@@ -787,43 +788,43 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="58"/>
+         <source>create VPN</source>
+-        <translation>VPN ᦙཱའ</translation>
++        <translation>ᦶᦔᧂVPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
+         <source>VPN Type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦙᦷᦍᦵᦔᦲᧂVPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
+         <source>VPN Name</source>
+-        <translation>VPN ᨣᩴ</translation>
++        <translation>ᦋᦹᧈᦵᦉᧂVPN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="147"/>
+         <source>Required</source>
+-        <translation>ຕ້ອງການ</translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="142"/>
+         <source>VPN Server</source>
+-        <translation>ທີ່ຢູ່ເຄື່ອງບໍລິການ</translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="168"/>
+         <source>Auto Connection</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
+         <source>Confirm</source>
+-        <translation>ຢືນຢັນ</translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+ </context>
+ <context>
+diff --git a/src/translations/kylin-nm_khb_CN.ts b/src/translations/kylin-nm_khb_CN.ts
+index b90bff3..9aec1b3 100644
+--- a/src/translations/kylin-nm_khb_CN.ts
++++ b/src/translations/kylin-nm_khb_CN.ts
+@@ -37,22 +37,22 @@
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
+         <source>Network profile type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦝᦻᧉᦎᧂᧉ ᦋᦸᧂᧈᦉᦱᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
+         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦳᧄᦴᦽᦺᦋᧉᦊᦳᧂᧈ（ᦢᦸᧅᧈᦂᦱᧁᧈ） ᦶᦆᦲᧂᧈᦺᦋᧉ ᦢᧁᧈᦺᦡᧉ ᦠᦱᦺᦡᧉ ᦓᦲᦰ ᦶᦎᧃᧈᦓᧁ 。 ᦢᧁᧈᦣᦻᧉᦢᧁᧈᦡᦻ ᦂᦱᧃᦵᦉᧂᦉ ᦺᦎᧉ ᦏᦳᧅᧈᦶᦙᧃᧈ ᦵᦙᦲᧈ ᦑᦲᧈᦉᦒᦱᧃ ᦂᦱᧂ ᦃᦸᧂ ᦃᦻᧈ ᦃᦸᧂ ᦃᦻᧈ ᦂᦱᧂ，ᦅᧃᦞᦱᧈ ᦷᦃᧂᧈᦍᦳᧃᦢᦲᧃ ᦷᦠᦵᦙᦲᧂ ᦣᦱᧃᧉᦂᦱᦶᦝ ᦂᧇᦋᦸᧄ 。</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
+         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦸᧃᧈᦊᦳᧂᧈ  ᦶᦆᦲᧂᧈᦺᦋᧉ ᦺᦡᧉ ᦠᦱᦺᦡᧉ ᦓᦲᦰ ᦶᦎᧃᧈᦓᧁ 。 ᦢᧁᧈᦣᦻᧉᦢᧁᧈᦡᦻ ᦂᦱᧃᦵᦉᧂᦉ ᦺᦎᧉ ᦏᦳᧅᧈᦶᦙᧃᧈ ᦵᦙᦲᧈ ᦊᦱᧁᧉᦵᦣᦲᧃᦵᦕᦲᧃᦂᦲᧃ ᦷᦠᦵᦙᦲᧂ ᦵᦣᧆᦂᦱᧃ ᦑᦱᧃᧈᦵᦛᦿᧈ ᦃᦸᧂ ᦃᦻᧈ ᦃᦸᧂ ᦃᦻᧈ ᦂᦱᧂ，ᦷᦎᦵᦡᧁ ᦶᦟᧉ ᦶᦆᦲᧂᧈᦺᦋᧉ 。 ᦃᦸᧂ ᦋᦴ ᦣᦴᧉᦈᧅ ᦆᧇᦑᦱᧄ ᦩᦱᧄᦺᦞᧉᦺᦈ ᦃᦻᧈ ᦵᦐᦲ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
+         <source>Config firewall and security settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦂᦱᧃᦎᧂᧉ ᦚᦱᦺᦝ ᦶᦟᧉ ᦉᦱᧈᦵᦆᦲᧂᧈᦡᦲ ᦎᧂᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -60,47 +60,47 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="48"/>
+         <source>Network connectivity detection</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦂᦱᧃᦎᦸᦰᦈᧇᦺᦡᧉ ᦌᦱᧉᦶᦋᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="79"/>
+         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦅᧃᦞᦱᧈ ᦃᧁᧉᦑᦹᧂ Internet ᦏᦹᧅᦂᧄᦓᦳᧆ，ᦃᦸᧉ ᦶᦉᧃᦺᦔ ᦃᦻᧈ IP ᦂᦱᧃᦎᦸᦰᦈᧇᦺᦡᧉ ᦌᦱᧉᦶᦋᧆ ᦑᦱᧂᦺᦋᧉ ᦗᦻᦜᧂ ᦟᦸᧈᦺᦖᧈ 。</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="88"/>
+         <source>Public network (default)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦺᦋᧉᦣᦸᧄ（ᦵᦟᦹᧄᧈᦎᦳᧄᧉ）</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="90"/>
+         <source>Local area network (intranet)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦵᦃᧆᧈᦶᦦᧆᧈᦋᦲᧉ(ᦞᦱᧂᦷᦟᦺᦔᦺᦓ)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="109"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="209"/>
+         <source>The network is connected and can access the Internet normally.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ，ᦺᦡᧉ ᦑᦱᧂᦡᦲ ᦃᧁᧉᦑᦹᧂ Internet 。</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="214"/>
+         <source>The network is connected and access to the Internet is restricted.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ，ᦃᧁᧉᦑᦹᧂ Internet ᦏᦹᧅᦂᧄᦓᦳᧆ 。</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="225"/>
+         <source>Please enter the local area network (intranet) detection address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᧉ ᦋᦸᧂᧈᦃᦱᧁ ᦞᦱᧂᦷᦟᧉᦺᦓᦵᦃᧆ（ᦺᦓ ᦶᦠ）ᦌᦱᧉᦶᦋᧆ ᦑᦲᧈᦊᦴᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="244"/>
+         <source>Format error</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦣᦳᧇᦶᦂᧇ ᦕᦲᧆ</translation>
+     </message>
+ </context>
+ <context>
+@@ -123,47 +123,47 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
+         <source>Connection Name</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
+         <source>IPv4Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
+         <source>Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
+         <source>Netmask</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦱᧄᦗᦱᧆᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
+         <source>Default Gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="152"/>
+         <source>Connection name is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦋᦹᧈ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
+         <source>IPv4 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4ᦑᦲᧈᦊᦴᧈ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4ᦓᦱᧄᦗᦱᧆᦶᦢᧂᧈᦃᦻᧈᦟᦴᧅ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="171"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4ᦔᦎᦴᦞᦱᧂᦷᦟᧉ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
+@@ -173,7 +173,7 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
+         <source>Address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦊᦴᧈ ᦝᦡᦝᦸᧅ</translation>
+     </message>
+     <message>
+         <source>Prefs DNS</source>
+@@ -186,28 +186,28 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
+         <source>Auto(DHCP)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="195"/>
+         <source>Invalid address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ ᦃᦸᧂIPᦑᦲᧈᦊᦴᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="213"/>
+         <source>Invalid subnet mask</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦱᧄᦗᦱᧆᦶᦢᧂᧈᦃᦻᧈᦟᦴᧅ ᦃᦸᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="234"/>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="235"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+ </context>
+ <context>
+@@ -215,82 +215,82 @@
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
+         <source>Auto Connection</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="241"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="340"/>
+         <source>SSID:</source>
+-        <translation type="unfinished"></translation>
++        <translation>SSID：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="151"/>
+         <source>Copied successfully!</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᧄᦓᧁ ᦺᦡᧉᦡᦲ！</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="212"/>
+         <source>Copy all</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᧄᦓᧁ ᦗᦱᧂᦗᦸᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="232"/>
+         <source>Please input SSID:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᧉ ᦋᦸᧂᧈᦃᦱᧁ SSID:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
+         <source>Protocol:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᦳᧃᦉᦲᧆᦎᦱ:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="342"/>
+         <source>Security Type:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᦱᧈᦵᦆᦲᧂᧈᦡᦲ ᦋᦸᧂᧈᦉᦱᧂᧉ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="253"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="343"/>
+         <source>Hz:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦔᦳᧃᦏᦲᧈᦠᦱᧂᧈ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="257"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="344"/>
+         <source>Chan:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦉᦻᦑᦱᧂ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
+         <source>BandWidth:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦂᧇᦦᦱᧂᧉ:</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
+         <source>IPv6:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦸᧆᧈᦉᦻ ᦑᦲᧈᦊᦴᧈᦣᦲᧉᦎᦳᧄᧉ IPv6 ᦑᦲᧈᦊᦴᧈ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
+         <source>IPv4:</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4 ᦑᦲᧈᦊᦴᧈ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
+         <source>IPv4 DNS:</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4 DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
+         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
+         <source>Mac:</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦅᦸᧂᦃᦸᧂID</translation>
+     </message>
+ </context>
+ <context>
+@@ -528,47 +528,47 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="51"/>
+         <source>DNS Server Advanced Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ ᦏᦱᧃᧉᦉᦳᧂ ᦂᦱᧃᦎᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="54"/>
+         <source>Tactic</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦱᧂᦎᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="57"/>
+         <source>Timeout</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦞᦟᦱᦜᦻᦺᦔ ᦵᦞᦟᦱ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="60"/>
+         <source>Retry Count</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦸᦰᦺᦖᧈ ᦗᦸᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="63"/>
+         <source>order</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦆᧇᦎᦱᧄ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="64"/>
+         <source>rotate</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦕᦲᧆᦆᦢᦲᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="65"/>
+         <source>concurrency</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦕᧈᦂᦸᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
+         <source> s</source>
+-        <translation type="unfinished"></translation>
++        <translation> ᦶᦙᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
+         <source> times</source>
+-        <translation type="unfinished"></translation>
++        <translation> ᦗᦸᧅ</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -577,12 +577,12 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="83"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="86"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -598,27 +598,27 @@
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="103"/>
+         <source>Wi-Fi network requires authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>Wi-Fi ᦃᦻᧈ ᦃᦸ ᦌᦱᧉᦶᦋᧆᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="108"/>
+         <source>Access to Wi-Fi network &quot;</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᧁᧉᦑᦹᧂ Wi-Fi ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="110"/>
+         <source>&quot; requires a password or encryption key.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦸᧂᧉ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ ᦷᦠᦵᦙᦲᧂ ᦉᦳᧃᦶᦉᧆ ᦅᧄᦶᦉᧆᦅᦱᧆ 。</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="141"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="142"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+     </message>
+ </context>
+ <context>
+@@ -642,22 +642,22 @@
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="95"/>
+         <source>Allow other devices on this network to discover this computer?</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦆᦲᧂᧈᦺᦋᧉ ᦑᦱᧂᦺᦖᧈ ᦠᦱᦺᦡᧉ ᦷᦠᦓᦲᦰ ᦶᦎᧃᧈᦓᧁ ᦃᦸᧂ ᦶᦙᧃᧈᦢᧁᧈᦶᦙᧃᧈ ᦀᦸᧉᦎᦳᧄᧉ ᦓᦲᦰ ᦃᦻᧈ ᦵᦐᦲ？</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="97"/>
+         <source>It is not recommended to enable this feature on public networks</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦉᦳᧃᦡᦲ ᦊᦴᧈ ᦊᦸᧅᦋᦱᧉ ᦃᦻᧈ ᦵᦐᦲ ᦺᦃ ᦓᦲᦰ ᦂᦱᧃᦺᦋᧉᦡᦲ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="99"/>
+         <source>Not allowed (recommended)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦀᦸᧉᦎᦳᧄᧉ（ᦢᦸᧅᧈᦂᦱᧁᧈ）</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="100"/>
+         <source>Allowed</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦀᦸᧉᦎᦳᧄᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -665,22 +665,22 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
+         <source>IPv4Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
+         <source>Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
+         <source>Netmask</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦱᧄᦗᦱᧆᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
+         <source>Default Gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <source>Prefs DNS</source>
+@@ -693,48 +693,48 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
+         <source>Auto(DHCP)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
+         <source>IPv4 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4ᦑᦲᧈᦊᦴᧈ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="250"/>
+         <source>IPv4 netMask is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4ᦓᦱᧄᦗᦱᧆᦶᦢᧂᧈᦃᦻᧈᦟᦴᧅ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="256"/>
+         <source>IPv4 gateway is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4ᦔᦎᦴᦞᦱᧂᦷᦟᧉ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="280"/>
+         <source>Invalid address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ ᦃᦸᧂIPᦑᦲᧈᦊᦴᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="289"/>
+         <source>Invalid subnet mask</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦱᧄᦗᦱᧆᦶᦢᧂᧈᦃᦻᧈᦟᦴᧅ ᦃᦸᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="316"/>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="317"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="385"/>
+         <source>Address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦊᦴᧈ ᦝᦡᦝᦸᧅ</translation>
+     </message>
+ </context>
+ <context>
+@@ -742,22 +742,22 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
+         <source>IPv6Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
+         <source>Address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
+         <source>Subnet prefix Length</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦓᦾᧉ ᦷᦎᦶᦏᧄᦗᦻᦐᦱᧉ ᦩᦱᧄᦺᦂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
+         <source>Default Gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦸᧄᦋᦴᦑᦲᧈᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <source>Prefs DNS</source>
+@@ -770,43 +770,43 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
+         <source>Auto(DHCP)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦷᦎᦐᦹᧂ (DHCP)</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
+         <source>Manual</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="235"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="252"/>
+         <source>Invalid address</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ ᦃᦸᧂIPᦑᦲᧈᦊᦴᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="261"/>
+         <source>Invalid gateway</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦔᦎᦴᦞᦱᧂᦷᦟᧉ ᦑᦲᧈᦊᦴᧈ ᦃᦸᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="281"/>
+         <source>IPv6 address is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv6ᦑᦲᧈᦊᦴᧈ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="287"/>
+         <source>IPv6 prefix length is empty or invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv6ᦞᦱᧂᦷᦟᧉᦓᦾᧉ ᦷᦎᦶᦏᧄᦗᦻᦐᦱᧉ ᦩᦱᧄᦺᦂ ᦞᦱᧂᧈ ᦷᦠᦵᦙᦲᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="306"/>
+         <source>Address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᦲᧈᦊᦴᧈ ᦝᦡᦝᦸᧅ</translation>
+     </message>
+ </context>
+ <context>
+@@ -814,12 +814,12 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="219"/>
+         <source>Please enter the network information</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᦵᦎᧅᦌᦲᧂᧈᦃᦱᧁᧈᦞᦱᧂᦷᦜᧈᦺᦉᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="224"/>
+         <source>Network name(SSID)</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦋᦹᧈ (SSID)</translation>
+     </message>
+     <message>
+         <source>Remember the Network</source>
+@@ -842,32 +842,32 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="225"/>
+         <source>Show Network List</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᦰᦶᦡᧂ ᦃᦻᧈ ᦉᦱᧄᦵᦝᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="226"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="227"/>
+         <source>Join</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᧁᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="236"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="238"/>
+         <source>Find and Join WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦌᦸᧅᦠᦱ᧞ᦃᧁᧉᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+ </context>
+ <context>
+@@ -875,12 +875,12 @@
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="78"/>
+         <source>Not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦙᦲ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="133"/>
+         <source>Wired Device not carried</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦏᦜᦱᦞᧃᦓᦓᦱᦐᧂᦉᦹᦢᧁᧈᦺᦡᧉᦀᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
+@@ -888,7 +888,7 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="188"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="299"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
+@@ -896,19 +896,19 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="186"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="303"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="177"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="193"/>
+         <source>Property</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦚᦻᧈᦺᦡ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="178"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="195"/>
+         <source>Delete</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦸᧇ ᦓᦲᦰ ᦃᦻᧈ</translation>
+     </message>
+ </context>
+ <context>
+@@ -916,32 +916,32 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1311"/>
+         <source>No ethernet device avaliable</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦌᦱᧉᦶᦋᧆ ᦑᦹᧅᦺᦔ ᦃᦻᧈᦙᦲᦉᦻ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="812"/>
+         <source>LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="101"/>
+         <source>conflict, unable to connect to the network normally!</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦝᦡᦝᦸᧅ，ᦢᧁᧈᦺᦡᧉ ᦑᦱᧂᦡᦲ ᦈᦸᧆᧈ ᦑᦹᧅᦺᦔ ᦃᦻᧈ！</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="442"/>
+         <source>No wired network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦌᦱᧉᦶᦋᧆ ᦑᦹᧅᦺᦔ ᦃᦻᧈᦙᦲᦉᦻ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="814"/>
+         <source>Activated LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦃᦸᧂ ᦃᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="824"/>
+         <source>Inactivated LAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦑᦱᧂᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <source>Connected, no internet access</source>
+@@ -950,17 +950,17 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1590"/>
+         <source>Connected, restricting access</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ，ᦃᦻᧈ ᦏᦹᧅᦂᧄᦓᦳᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1600"/>
+         <source>No internet access. Please click Network Check to specific reasons.</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᧁᧉᦺᦋᧉᦢᧁᧈᦺᦡᧉ ᦃᦻᧈᦷᦜᧂ 。 ᦃᦸᧉ ᦎᦲᦂᦸᧄᧉ ᦃᦻᧈ ᦌᦱᧉᦶᦋᧆ，ᦌᦱᧉᦶᦋᧆᦠᦱ ᦊᦲᧃᦃᦸᧉᦔᦲᧃᦎᦱ ᦷᦄᦵᦄᦡᧈ 。</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1610"/>
+         <source>Network Check</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦌᦱᧉᦶᦋᧆᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <source>LAN Disconnected Successfully</source>
+@@ -969,7 +969,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1411"/>
+         <source>Wired Device not carried</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦏᦜᦱᦞᧃᦓᦓᦱᦐᧂᦉᦹᦢᧁᧈᦺᦡᧉᦀᧁ</translation>
+     </message>
+     <message>
+         <source>LAN Connected Successfully</source>
+@@ -979,17 +979,17 @@
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1535"/>
+         <source>Connected: </source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1522"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦺᦡᧉᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1532"/>
+         <source>(Limited)</source>
+-        <translation type="unfinished"></translation>
++        <translation>(ᦃᦻᧈ ᦏᦹᧅᦂᧄᦓᦳᧆ)</translation>
+     </message>
+ </context>
+ <context>
+@@ -997,12 +997,12 @@
+     <message>
+         <location filename="../frontend/list-items/listitem.cpp" line="183"/>
+         <source>Kylin NM</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦎᧂᧉ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/listitem.cpp" line="186"/>
+         <source>kylin network applet desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>kylin network applet desktop message</translation>
+     </message>
+ </context>
+ <context>
+@@ -1011,19 +1011,19 @@
+         <location filename="../frontend/mainwindow.cpp" line="271"/>
+         <location filename="../frontend/mainwindow.cpp" line="302"/>
+         <source>kylin-nm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉᦞᦱᧂᦷᦠᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="465"/>
+         <source>LAN</source>
+         <translatorcomment>有线网络</translatorcomment>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="467"/>
+         <source>WLAN</source>
+         <translatorcomment>无线局域网</translatorcomment>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <source>Show MainWindow</source>
+@@ -1033,38 +1033,38 @@
+         <location filename="../frontend/mainwindow.cpp" line="500"/>
+         <source>Settings</source>
+         <translatorcomment>设置网络项</translatorcomment>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="501"/>
+         <source>Network Connectivity Detection</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦂᦱᧃᦎᦸᦰᦈᧇᦺᦡᧉ ᦌᦱᧉᦶᦋᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="842"/>
+         <location filename="../frontend/mainwindow.cpp" line="1204"/>
+         <source>Network tool</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉᦞᦱᧂᦷᦠᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="856"/>
+         <source>Network Card</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦆᦱ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+         <source>Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="950"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦺᦡᧉᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="1187"/>
+         <source>Not connected to the network</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦈᦸᧆᧈ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <source>Connection Failed</source>
+@@ -1080,17 +1080,17 @@
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="61"/>
+         <source>DNS server(Drag to sort)</source>
+-        <translation type="unfinished"></translation>
++        <translation>DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ ᦏᦱᧃᧉᦉᦳᧂ ᦂᦱᧃᦎᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="68"/>
+         <source>Click &quot;+&quot; to configure DNS</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦲᦂᦸᧄᧉ +ᦂᦱᧃᦎᧂᧉ DNS</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="106"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+ </context>
+ <context>
+@@ -1098,42 +1098,42 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="134"/>
+         <source>Kylin NM</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦎᧂᧉ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="137"/>
+         <source>kylin network desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦉᦳᧃ ᦃᦱᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
+         <source>Detail</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᦲᧂᧈᦃᦱᧁᧈᦵᦵᦆᧄᧉᦏᦲᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
+         <source>IPv4</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
+         <source>IPv6</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
+         <source>Security</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦹᧂᧈᦺᦡᧉᦔᦸᧆᦺᦘ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="971"/>
+         <source>start check IPv4 address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦟᦹᧄᧈ ᦌᦱᧉᦶᦋᧆ IPv4 ᦑᦲᧈᦊᦴᧈ ᦝᦡᦝᦸᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="988"/>
+         <source>start check IPv6 address conflict</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦟᦹᧄᧈ ᦌᦱᧉᦶᦋᧆ IPv4 ᦑᦲᧈᦊᦴᧈ ᦝᦡᦝᦸᧅ</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -1142,51 +1142,51 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="429"/>
+         <source>Config</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦆᦲᧂᧈᦂᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
+         <source>Cancel</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
+         <source>Forget this network</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦹᧄ ᦓᦲᦰ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>
+         <source>Delete this network</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦸᧇ ᦓᦲᦰ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="486"/>
+         <source>Add LAN Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦹᧄ ᦃᦻᧈᦙᦲᦉᦻ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="491"/>
+         <source>Connect Hidden WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦸᧆᧈ ᦑᦹᧅᦺᦔ ᦢᧁᧈᦉᦰᦶᦡᧂ WLAN</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="683"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="695"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1237"/>
+         <source>None</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="815"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="816"/>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="817"/>
+         <source>Auto</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦱᧄᦺᦈ ᦣᦳᧇᦶᦂᧇ</translation>
+     </message>
+     <message>
+         <source>start check ipv4 address conflict</source>
+@@ -1207,22 +1207,22 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1233"/>
+         <source>this wifi no support enterprise type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦲᦰ wifi ᦢᧁᧈ ᦉᦰᦐᦳᧃ ᦌᦲᧈᦵᦓᧉ ᦶᦠ ᦋᦸᧂᧈᦉᦱᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1238"/>
+         <source>this wifi no support None type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦲᦰ wifi ᦢᧁᧈ ᦉᦰᦐᦳᧃ ᦋᦸᧂᧈᦉᦱᧂᧉ ᦔᦱᧆᦵᦉᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1243"/>
+         <source>this wifi no support WPA2 type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦲᦰ wifi ᦢᧁᧈ ᦉᦰᦐᦳᧃ WPA2 ᦋᦸᧂᧈᦉᦱᧂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1246"/>
+         <source>this wifi no support WPA3 type</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦓᦲᦰ wifi ᦢᧁᧈ ᦉᦰᦐᦳᧃ WPA3 ᦋᦸᧂᧈᦉᦱᧂᧉ</translation>
+     </message>
+     <message>
+         <source>SSID:</source>
+@@ -1281,7 +1281,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation>Form</translation>
++        <translation>ᦎᧂᧉᦔᦲᦓ</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1309,7 +1309,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation>Form</translation>
++        <translation>ᦎᧂᧉᦔᦲᦓ</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1333,85 +1333,85 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="110"/>
+         <source>Remember the Network</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦹᧈᦈᧄᦞᦱᧂᦷᦜᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="218"/>
+         <source>Security</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦹᧂᧈᦺᦡᧉᦔᦸᧆᦺᦘ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
+         <source>Password</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦅᧄᦶᦉᧆᦅᦱᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
+         <source>EAP type</source>
+-        <translation type="unfinished"></translation>
++        <translation>EAP ᦑᦱᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="225"/>
+         <source>Identity</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦦᧆᧈᦷᦂᧆᦖᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
+         <source>Domain</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦷᦈᧆᦖᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
+         <source>CA certficate</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦂᦱᧃᧉᦉᧅᦃᦲᦰCA</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
+         <source>no need for CA certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦎᦸᧂᧉ CA ᦉᦱᧃᦌᦱᧉᦶᦋᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
+         <source>User certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦂᦱᧃᧉᦉᧅᦃᦲᦰᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
+         <source>User private key</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᦃᦰᦶᦈᦟᦸᧅᦆᦲᧃᧈᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="231"/>
+         <source>User key password</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦲᧅᦉᦄᧆᦃᦸᦃᦰᦶᦈᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="232"/>
+         <source>Password options</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᧉᦂᦱᧃᦵᦟᦲᧅᦟᦲᧅᦉᦄᧆ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="233"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="241"/>
+         <location filename="../frontend/netdetails/securitypage.h" line="128"/>
+         <source>Required</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᦸᧂᧉᦷᦜᧈᦔᦲᧆᧈᦺᦃᦠᦱᦑᦸᧂᦰᦈᧄᦜᦻᦵᦣᦲᧈᦣᦱᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="237"/>
+         <source>Ineer authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦻᦺᦓᦶᦋᧆᦑᦸᧂᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
+         <source>Username</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="240"/>
+         <source>Ask pwd each query</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦗᦸᧅᦺᦡ ᦉᦲᧂᧈ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
+@@ -1428,22 +1428,22 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1206"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1261"/>
+         <source>None</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="245"/>
+         <source>WPA&amp;WPA2 Personal</source>
+-        <translation type="unfinished"></translation>
++        <translation>WPA/WPA2 ᦵᦔᦲᧂᦷᦎᦆᦲᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="246"/>
+         <source>WPA&amp;WPA2 Enterprise</source>
+-        <translation type="unfinished"></translation>
++        <translation>WPA&amp;WPA2ᦵᦔᦲᧂᦖᦴᧈᦋᦳᧄᦅᦱᧉᦃᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="247"/>
+         <source>WPA3 Personal</source>
+-        <translation type="unfinished"></translation>
++        <translation>WPA3ᦵᦔᦲᧂᦷᦎᦆᦲᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="258"/>
+@@ -1451,85 +1451,85 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="284"/>
+         <source>Choose from file...</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦳᧅᦺᦓᦐᧂᦉᦹᦵᦟᦲᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
+         <source>Store passwords only for this user</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦖᦳᧃᦑᧁᧉᦅᦱᧈᦟᦲᧅᦉᦄᧆᦕᦴᧉᦺᦋᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="267"/>
+         <source>Store password only for this user</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦖᦳᧃᦑᧁᧉᦅᦱᧈᦟᦲᧅᦉᦄᧆᦕᦴᧉᦺᦋᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
+         <source>Store passwords for all users</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦖᦳᧃᦑᧁᧉᦟᦲᧅᦉᦄᧆᦕᦴᧉᦺᦋᧉᦑᧂᦔᦹᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="269"/>
+         <source>Store password for all users</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦖᦳᧃᦑᧁᧉᦟᦲᧅᦉᦄᧆᦕᦴᧉᦺᦋᧉᦑᧂᦔᦹᧅ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
+         <source>Ask this password every time</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦙᦲᧈᦋᦴᧈᦵᦑᦲᧈᦵᦎᧅᦺᦉᦎᦸᧂᧉᦀᧁᦟᦲᧅᦉᦄᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="271"/>
+         <source>Ask password every time</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦴᧈᦵᦑᦲᧈᦅᦸᦺᦡᧉᦏᦱᧄ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="998"/>
+         <source>Wifi password length less than 8</source>
+-        <translation type="unfinished"></translation>
++        <translation>wifiᦅᧄᦶᦉᧆᦅᦱᧆ ᦩᦱᧄᦺᦂ ᦎᧄᧈᦵᦉ ᦶᦔᧆᦑᦲᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
+         <source>TLS identity is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>TLSᦢᧁᧈᦔᦱᧁᧈᦋᦹᧈ ᦅᦳᧃ ᦞᦱᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1012"/>
+         <source>CA cert filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>CAᦉᦱᧃᦌᦱᧉᦶᦋᧆ ᦝᦻᧉ ᦶᦉᧃᦑᦱᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1019"/>
+         <source>Client cert filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦅᦳᧃᦺᦋᧉ ᦉᦱᧃᦌᦱᧉᦶᦋᧆ ᦝᦻᧉ ᦶᦉᧃᦑᦱᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1026"/>
+         <source>Client private key filepath is invalid</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦅᦳᧃᦺᦋᧉ ᦃᦸᦃᦶᦈᦉᦄᧆ ᦝᦻᧉ ᦶᦉᧃᦑᦱᧂ ᦢᧁᧈᦙᦲᦃᦸᧂᦅᦳᧃ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1032"/>
+         <source>Client private key password is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦅᦳᧃᦺᦋᧉ ᦅᧄᦶᦉᧆᦅᦱᧆ ᦟᦴᧅᦶᦉᧆᦋᦹᧈ ᦞᦱᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1038"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1051"/>
+         <source>User name or user password is empty</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦋᦹᧈᦅᦳᧃᦺᦋᧉ ᦷᦠᦵᦙᦲᧂ ᦅᧄᦶᦉᧆᦅᦱᧆ ᦞᦱᧂᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1045"/>
+         <source>No PAC file is selected </source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦵᦟᦲᧅᦺᦉᧈPACᦝᦻᧉ </translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1149"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
+         <source>Choose a CA certificate</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦟᦲᧅᦀᧁᦐᧂᦉᦹᦣᧇᦣᦸᧂCA</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1252"/>
+@@ -1543,32 +1543,32 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
+         <source>PAC provisioning</source>
+-        <translation type="unfinished"></translation>
++        <translation>PACᦊᦻᦶᦢᧂᧈᦷᦂᧂᧈᦠᦹᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
+         <source>Allow automatic PAC provisioning</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦷᦓᧉᦍᦱᧆPACᦎᦱᧄᦷᦎᦐᦹᧂᦷᦂᧂᧈᦠᦹᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
+         <source>PAC file</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦐᧂᦉᦹPAC</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="279"/>
+         <source>Anonymous</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦷᦎᦠᦻᦵᦑᦲᧂᧈᦠᦹᧃᧉ ᦃᧁᧉᦢᧃᦋᦲᦡᦽᧉᦢᧁᧈᦔᦱᧁᧈᦋᦹᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="280"/>
+         <source>Authenticated</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦁᧃᧈᦶᦋᧆᦑᦸᧂᦰ᧟</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="281"/>
+         <source>Both</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦑᧂᦉᦸᧂ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
+@@ -1580,7 +1580,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
+         <source>Choose a PAC file</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦵᦟᦲᧅᦐᧂᦉᦹPAC</translation>
+     </message>
+     <message>
+         <source>PAC Files (*.pac)</source>
+@@ -1597,32 +1597,32 @@
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="107"/>
+         <source>Current Device</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦆᦲᧂᧈᦺᦋᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="114"/>
+         <source>Devices Closed!</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦆᦲᧂᧈᦺᦋᧉ ᦠᧇ！</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="171"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="429"/>
+         <source>Kylin NM</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦎᧂᧉ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="432"/>
+         <source>kylin network applet desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>kylin network applet desktop message</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="626"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ</translation>
+     </message>
+ </context>
+ <context>
+@@ -1637,12 +1637,12 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
+         <source>Unable to save modifications</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦺᦡᧉ ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
+         <source>Confirm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧃᦑᦹᧅ ᦶᦂᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -1650,42 +1650,42 @@
+     <message>
+         <location filename="../frontend/wificonfigdialog.ui" line="14"/>
+         <source>Dialog</source>
+-        <translation>Dialog</translation>
++        <translation>ᦶᦔᧂᦵᦔᦲᧂᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="41"/>
+         <source>WLAN Authentication</source>
+-        <translation type="unfinished"></translation>
++        <translation>WLAN ᦌᦱᧉᦶᦋᧆᦅᦳᧃᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="52"/>
+         <source>Input WLAN Information Please</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦸᧉ ᦋᦸᧂᧈᦃᦱᧁ WLAN ᦃᦱᧁ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="53"/>
+         <source>WLAN ID：</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈᦢᧁᧈᦙᦲᦉᦻ ᦞᦱᧂᦷᦟᧉᦺᦓᦵᦃᧆ ID：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="54"/>
+         <source>WLAN Name:</source>
+-        <translation type="unfinished"></translation>
++        <translation>WLANᦋᦹᧈ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="55"/>
+         <source>Password：</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦴᧅᦶᦉᧆᦋᦹᧈ：</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="56"/>
+         <source>Cancl</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦆᦱᧃᦵᦆᦲᧈᦵᦁᦲ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/wificonfigdialog.cpp" line="57"/>
+         <source>Ok</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦺᦡᧉᦺᦞᧉ</translation>
+     </message>
+ </context>
+ <context>
+@@ -1693,7 +1693,7 @@
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="70"/>
+         <source>Not connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦙᦲ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="171"/>
+@@ -1702,7 +1702,7 @@
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="682"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="691"/>
+         <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="173"/>
+@@ -1711,24 +1711,24 @@
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="673"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="689"/>
+         <source>Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦈᦸᧆᧈ ᦈᧅᦀᦱᧃᧈᦷᦣᧇ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="182"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="695"/>
+         <source>Forget</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦟᦹᧄ ᦓᦲᦰ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="181"/>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="700"/>
+         <source>Property</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦚᦻᧈᦺᦡ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/wlanlistitem.cpp" line="328"/>
+         <source>Auto Connect</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦎᧂᧉᦶᦔᧂ</translation>
+     </message>
+ </context>
+ <context>
+@@ -1740,7 +1740,7 @@
+     <message>
+         <location filename="../frontend/list-items/wlanmoreitem.cpp" line="28"/>
+         <source>Add Others...</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦏᧄᦵᦋᦲᧉᦀᦹᧃᧈᦺᦉᧈ</translation>
+     </message>
+ </context>
+ <context>
+@@ -1748,23 +1748,23 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="147"/>
+         <source>WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="123"/>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="596"/>
+         <source>No wireless network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈ ᦌᦱᧉᦶᦋᧆ ᦑᦹᧅᦺᦔ ᦃᦻᧈᦢᧁᧈᦙᦲᦉᦻ ᦶᦕᧃᧈᦎᦸᦰᦈᧇᦞᦱᧂᦷᦟᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="149"/>
+         <source>Activated WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦃᦸᧂ ᦃᦾᧉ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="160"/>
+         <source>Other WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦑᦱᧂᦺᦖᧈ</translation>
+     </message>
+     <message>
+         <source>More...</source>
+@@ -1773,22 +1773,22 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1184"/>
+         <source>WLAN Connected Successfully</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1180"/>
+         <source>WLAN Disconnected Successfully</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈᦀᦸᧅᧈ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1077"/>
+         <source>The routing end rejects the access of the device</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦢᧁᧈᦀᦸᧉ ᦃᧁᧉᦉᦸᦙᧈ，ᦈᦸᧆᧈ ᦙᦸᧃᦺᦡᧉᦢᧁᧈᦡᦲ</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1079"/>
+         <source>The network access at the routing end is full</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦃᦻᧈ ᦎᦸᦰᦈᧇᦃᧁᧉ ᦎᦲᧄ᧟</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1474"/>
+@@ -1798,12 +1798,12 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1986"/>
+         <source>Connected: </source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ: </translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1988"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦢᧁᧈᦺᦡᧉᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <source>(Limited)</source>
+@@ -1870,17 +1870,17 @@
+     <message>
+         <location filename="../main.cpp" line="124"/>
+         <source>kylinnm</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦆᦲᧃᦟᦲᧃᧉ</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="128"/>
+         <source>show kylin-nm wifi page</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᦰᦶᦡᧂ ᦆᦲᧃᦟᦲᧃᧉ-NM WiFiᦐᦱᧉ</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="129"/>
+         <source>show kylin-nm lan page</source>
+-        <translation type="unfinished"></translation>
++        <translation>ᦉᦰᦶᦡᧂ kylin-nm ᦞᦱᧂᦷᦟᧉᦺᦓᦵᦃᧆ ᦐᦱᧉ</translation>
+     </message>
+ </context>
+ </TS>

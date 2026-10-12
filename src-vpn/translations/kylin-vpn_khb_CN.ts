@@ -780,7 +780,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="289"/>
         <source>No VPN configuration available</source>
-        <translation>ບໍ່ມີການຕັ້ງຄ່າ VPN ທີ່ໃຊ້ໄດ້</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -839,7 +839,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpnobject.cpp" line="59"/>
         <source>VPN Tool</source>
-        <translation>ເຄື່ອງມື VPN</translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

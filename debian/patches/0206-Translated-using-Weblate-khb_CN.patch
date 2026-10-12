@@ -1,0 +1,109 @@
+From: Anonymous <noreply@weblate.org>
+Date: Mon, 12 Oct 2026 13:04:58 +0000
+Subject: =?utf-8?b?VHJhbnNsYXRlZCB1c2luZyBXZWJsYXRlICjlgqPku4LmlocgKGtoYl9D?=
+ =?utf-8?b?Tikp?=
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/khb_CN/
+---
+ plugins/netconnect/translations/khb_CN.ts | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/plugins/netconnect/translations/khb_CN.ts b/plugins/netconnect/translations/khb_CN.ts
+index cadd9a4..4c0d347 100644
+--- a/plugins/netconnect/translations/khb_CN.ts
++++ b/plugins/netconnect/translations/khb_CN.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>ᦃᧁᧉᦉᦸᦙᧈ ᦑᦱᧂᦺᦖᧈ ᦃᦻᧈ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation>ᦓᧂᦑ ᦥᧄ ᦖᧂᦑ ᦖᧂᦑ ᦕᧂᦑ</translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ，ᦃᦻᧈ ᦏᦹᧅᦂᧄᦓᦳᧆ 。</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,20 +39,20 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation>ᦖᧂᦑ ᦓᧂᦑ</translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation>ᦅᧄ ᦓᧂᦑ</translation>
++        <translation>ᦺᦃ</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+         <location filename="../netconnect.cpp" line="224"/>
+         <source>Advanced settings</source>
+-        <translation>ᦥᧄ ᦓᧂᦑ ᦶ ᦎᧂᦑ</translation>
++        <translation>ᦶᦔᧂᦏᦱᧃᧉᦉᦳᧂ</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -70,42 +70,42 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation>ᦓᧂᦑ</translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation>ᦓᧂᦑ ᦵ ᦖᧂᦑ ᦖᧂᦑ ᦓᧂᦑ ᦶ ᦎᧂᦑ</translation>
++        <translation>ᦎᧂᧉ ᦷᦎᧅᦵᦂᧉᦊᦴᧈᦵᦞᧃᧈ ᦉᦳᧃᦃᦱᧁ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation>ᦖᧂᦑ ᦓᧂᦑ</translation>
++        <translation>ᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation>ᦂᦸ ᦵ ᦖᧂᦑ ᦖᧂᦑ ᦓᧂᦑ</translation>
++        <translation>ᦢᧁᧈ ᦌᦱᧉᦶᦋᧆ ᦑᦹᧅᦺᦔ ᦃᦻᧈᦙᦲᦉᦻ ᦶᦆᦲᧂᧈᦺᦋᧉ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation>ᦓᧂᦑᧄ</translation>
++        <translation>ᦶᦟᧅᧈᦵᦟᧆᧉ ᦈᦸᧆᧈ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation>ᦂᦸ ᦓᧂᦑ</translation>
++        <translation>ᦢᧁᧈᦺᦡᧉᦎᦸᦰᦈᧇ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation>ᦖᧂᦑ ᦓᧂᦑ</translation>
++        <translation>ᦞᦱᧂᦆᦱ</translation>
+     </message>
+ </context>
+ </TS>

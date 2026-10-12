@@ -11,7 +11,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>ᨡᦱ ᦠᦱ ᦎᦲᧄ ᦶ ᦎᦲᧄ ᦸᦱ</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Add WiredNetwork</source>

@@ -16,7 +16,7 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="145"/>
         <source>kylin vpn applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>VPNᦶᦔᧂᦵᦆᦲᧂᦖᦱᧉᦑᧇᦢᦸᧅᧈᦵᦎᦲᧃᦂᧇᦺᦉᧈ</translation>
     </message>
 </context>
 <context>
@@ -24,12 +24,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="827"/>
         <source>MPPE encryption algorithm:</source>
-        <translation type="unfinished"></translation>
+        <translation>MPPEᦓᧇᦉᦸᧃᧈᦶᦏᧄᦟᦲᧅᦵᦉᦲᧂᧈ:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
         <source>Use Stateful encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦺᦋᧉᦏᦹᦠᦳᧃᧈᦵᦟᦲᧂᧈᦶᦏᧄᦟᦲᧅᦵᦉᦲᧂᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="829"/>
@@ -39,7 +39,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="830"/>
         <source>Authentication Mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦔᦲᧂᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="831"/>
@@ -54,7 +54,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="833"/>
         <source>MSCHAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>MSCHAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="834"/>
@@ -64,7 +64,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="835"/>
         <source>EAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>EAPᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="836"/>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
         <source>Allow BSD data compression</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦷᦓᦍᦱᧆ BSDᦕᦸᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
@@ -94,22 +94,22 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="841"/>
         <source>Use Address/Control compression</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦺᦋᧈᦏᦹᦑᦲᧈᦊᦴᧈ/ᦕᧃᧉᦕᦸᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="847"/>
         <source>All Available</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦎᦱᧄᦺᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="848"/>
         <source>128-bit</source>
-        <translation type="unfinished"></translation>
+        <translation>128ᦷᦎ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="849"/>
         <source>40-bit</source>
-        <translation type="unfinished"></translation>
+        <translation>40ᦷᦎ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
         <source>Use compression</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦺᦋᧉᦏᦹᦕᦸᧃᧈᦓᦾᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1048"/>
@@ -134,7 +134,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
         <source>Set virtual device name</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦎᧂᧉ ᦶᦔᧂᦵᦖᦲᧃ ᦶᦆᦲᧂᧈᦺᦋᧉ ᦋᦹᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1051"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
         <source>Randomize remote hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦶᦔᧂᦠᦹᧉᦵᦔᧃᦶᦢᧇᧈᦈᦸᧂᧉᦶᦈᧂᧉ ᦑᦲᧈᦊᦴᧈᦃᦸᧉᦙᦳᧃ ᦶᦉᧃᦑᦱᧂᦂᦱᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
@@ -169,7 +169,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1057"/>
         <source>Infinite retry on error</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦙᦲᧈᦀᦸᧅᧈᦜᦳᧂᦟᦸᦜᦻᦗᦸᧅ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
@@ -184,7 +184,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1062"/>
         <source>Use custom renegotiation interval</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦺᦋᧈᦏᦹᦀᦳᧇᧈᦂᦱᧃᦓᧄᧉᦺᦂᦣᦸᧂᧉᦎᦱᧄᦺᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
@@ -194,12 +194,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
         <source>Use custom UDP fragment size</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦺᦋᧈᦏᦹᦓᦾᧉᦺᦊᧈᦷᦣᧇᦔᦳᧂᧈUDPᦎᦱᧄᦺᦈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
         <source>Accept authenticated packets from any address (Float)</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦣᧇᦀᧁᦆᦱᧆᦔᦲᧃᦖᦱᧃᧈᦵᦍᦂᦱᧃᧉᦂᦸᦁᧃᦶᦑᧉᦙᦱᦑᦲᧈᦜᦻᦑᦲᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
@@ -209,7 +209,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1071"/>
         <source>Key File</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦃᦸᦶᦈᦐᧂᦉᦹ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1072"/>
@@ -219,7 +219,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1074"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
@@ -234,12 +234,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
         <source>Proxy Password</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦶᦑᧃᦎᦱᧂᦟᦲᧅᦵᦉᦲᧂᧈᦀᧄ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1079"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦓᦱᦋᦱᧂᧈᦅᧁᧉᦗᦹᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
@@ -284,7 +284,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1090"/>
         <source>HMAC Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>HMACᦆᦱᧆᦔᦲᧃᦐᦱᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1100"/>
@@ -294,12 +294,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦟᦳᧇᦶᦝᧆ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1106"/>
         <source>Self-adaption</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦎᦱᧄᦷᦎᦉᦳᧄᦷᦅᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1107"/>
@@ -334,13 +334,13 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1118"/>
         <source>Verify name by prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦎᦱᧄᦷᦎᦗᦻᦐᦱᧉᦌᦱᧉᦶᦋᧆᦋᦹᧈᦵᦉᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1120"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1123"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦆᦲᧂᧈᦔᦟᦲᦰᦂᦱᧃ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1121"/>
@@ -363,7 +363,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1128"/>
         <source>TLS-Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>TLS-ᦶᦏᧄᦟᦲᧅᦵᦉᦲᧂᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1134"/>
@@ -383,7 +383,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1219"/>
         <source>Request an inner IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦃᦸᦑᦲᧈ IPᦗᦻᦺᦓ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1220"/>
@@ -416,7 +416,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="331"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦶᦢᧇᧈᦵᦔᦲᧂ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
         <source>Static Key</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦃᦸᦃᦶᦈᦢᧁᧈᦋᦱᧂᧈᦵᦔᧃᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="338"/>
         <source>NT Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦑᦲᧈNT</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="340"/>
@@ -483,7 +483,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="345"/>
         <source>Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="346"/>
@@ -499,13 +499,14 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
         <source>Notice:
 If key direction is used, it must be opposite to the VPN side used. If &apos;1&apos; is used, the connection must use &apos;0&apos;. If you are not sure which value to use, please contact your system administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦉᧂᦡᦲᦺᦋᧉᦅᧄ：
+ᦉᦹᧂᦞᦱᧈ ᦺᦋᧉ ᦵᦏᧉᦵᦓ ᦅᧄᦶᦉᧆᦅᦱᧆ ᦠᦳᧃᦗᦻ，ᦙᧃ ᦎᦸᧂᧉ ᦶᦟᧉ ᦺᦋᧉ ᦃᦸᧂVPNᦷᦠᦠᦱᧂ ᦢᧁᧈᦵᦖᦲᧃᦂᧃ 。 ᦉᦹᧂᦞᦱᧈ ᦺᦋᧉ ᦵᦏᧉᦵᦓ1，ᦈᦸᧆᧈ ᦎᦸᧂᧉ ᦺᦆᧈ ᦺᦋᧉ0。 ᦉᦹᧂᦞᦱᧈ ᦢᧁᧈ ᦎᦸᧅᦟᦸᧄ ᦺᦋᧉ ᦁᦲᧈᦺᦑ ᦩᦱᧄ，ᦕᦴᧉᦷᦔᦨᦱᧃᦚᦻᧈᦂᦱᧃ 。 ᦃᦸᧂ ᦃᦸᧉ ᦎᦲᧆᦎᦸᧈ ᦋᦴ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="359"/>
@@ -518,7 +519,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
@@ -536,7 +537,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="381"/>
         <source>Ask password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦋᦴᧈᦵᦑᦲᧈᦅᦸᦺᦡᧉᦏᦱᧄ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
@@ -568,7 +569,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="866"/>
         <source>Certificate/Private key</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦐᧂᦉᦹᦣᧇᦣᦸᧂ/ᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="867"/>
@@ -583,7 +584,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="923"/>
         <source>Choose a private key</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦟᦲᧅᦀᧁᦃᦸᦃᦶᦈᦷᦎᦵᦡᧁ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="925"/>
@@ -605,7 +606,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="949"/>
         <source>Choose a User certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦟᦲᧅᦀᧁᦐᧂᦉᦹᦣᧇᦣᦸᧂᦕᦴᧉᦺᦋᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="962"/>
@@ -635,7 +636,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦏᦱᧃᧉᦉᦳᧂ ᦣᦳᧇᦶᦂᧇ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
@@ -688,7 +689,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="176"/>
         <source>DHCP Client ID</source>
-        <translation type="unfinished"></translation>
+        <translation>IdᦑᦲᧈᦕᦴᧉᦺᦋᧈDHCP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="178"/>
@@ -698,7 +699,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
     </message>
 </context>
 <context>
@@ -706,7 +707,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="159"/>
         <source>IPv6 Config</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦵᦆᦲᧂᧈᦂᧇᦺᦉᧈIPv6</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
@@ -726,7 +727,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="163"/>
         <source>DNS Server</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS ᦑᦲᧈᦊᦴᧈᦂᦱᧃᦋᦾᧈᦵᦎᦲᧄᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="164"/>
@@ -749,13 +750,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦢᧁᧈᦙᦲ ᦈᦸᧆᧈ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
@@ -792,7 +793,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="92"/>
         <source>VPN Type</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦙᦷᦍᦵᦔᦲᧂVPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
@@ -813,7 +814,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="168"/>
         <source>Auto Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦎᦱᧄᦷᦎᦎᦸᦰᦈᧇ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
@@ -823,7 +824,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
     </message>
 </context>
 <context>

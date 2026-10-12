@@ -52,7 +52,7 @@
     <message>
         <location filename="../proxy.cpp" line="72"/>
         <source>Proxy</source>
-        <translation>Proxy</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="213"/>
@@ -133,7 +133,7 @@
         <location filename="../proxy.cpp" line="529"/>
         <location filename="../proxy.cpp" line="531"/>
         <source>App Proxy</source>
-        <translation>Apply Proxy</translation>
+        <translation></translation>
         <extra-contents_path>/Proxy/App Proxy</extra-contents_path>
     </message>
     <message>

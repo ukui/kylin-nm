@@ -45,6 +45,7 @@
 #include <QInputDialog>
 #include <QMetaEnum>
 #include <QDBusContext>
+#include <QMutex>
 
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags);
 
@@ -212,6 +213,13 @@ private:
 
 private:
     bool m_initFinished = false;
+
+    // KVE-2026-0890: 保护 m_devices 的互斥锁。
+    // worker 线程（DBus 回调 onDeviceAdded/onDeviceRemoved）与 GUI 线程
+    // （findDeviceInterface/getNetworkDevice 等遍历）并发访问 m_devices，
+    // 无锁会导致悬空指针 use-after-free。使用递归锁，因为存在
+    // onDeviceRemoved -> findDeviceUni/removeDevice 的嵌套加锁调用。
+    mutable QMutex m_devicesMutex{QMutex::Recursive};
 
 public:
     static KyNetworkResourceManager* m_pInstance;

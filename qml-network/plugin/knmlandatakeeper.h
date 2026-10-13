@@ -26,6 +26,10 @@ public:
     //添加网卡设备的连接
     void addDevConnection(QString devName, QList<QStringList> conPath);
 
+    void beginWiredMainSwitchChange(bool requestedState);
+    void cancelWiredMainSwitchChange();
+    bool applyWiredMainSwitchState(bool state, bool authoritativeConfirmation);
+
 signals:
     void onDeviceStatusChanged();
 
@@ -55,6 +59,8 @@ private slots:
 
 private:
     QDBusInterface      *m_pInterface = nullptr;
+    bool m_wiredMainSwitchChangePending = false;
+    bool m_requestedWiredMainSwitchState = false;
 };
 
 #endif // KNMLANDATAKEEPER_H

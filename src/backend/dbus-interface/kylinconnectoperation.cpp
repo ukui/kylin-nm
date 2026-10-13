@@ -203,6 +203,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
              << "specific parameter"<< specificObject;
 
     //set autoconnect
+    bool configUpdated = false;
     if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
     {
         NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -216,11 +217,12 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
             setAutoConnect(connectionSettings,true);
             // 保存autoconnect设置到配置文件
             connectPtr->update(connectionSettings->toMap());
+            configUpdated = true;
         }
     }
 
     /*v11 network-manager 不允许在连接中途修改配置 会导致连接失败，增加延时确保激活连接前配置已修改完毕*/
-    QTimer::singleShot(500,this,[this,connectPath,connectPtr, deviceIdentifier, specificObject,connectName, deviceName](){
+    auto doActivate = [this, connectPath, connectPtr, deviceIdentifier, specificObject, connectName, deviceName](){
         QDBusPendingCallWatcher * watcher;
         watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
         connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {
@@ -234,7 +236,16 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
 
              watcher->deleteLater();
         });
-    });
+    };
+
+    /*v11 network-manager 不允许在连接中途修改配置 会导致连接失败。
+      仅在确实更新了配置(configUpdated)时才延时，确保激活前配置已修改完毕；
+      未修改配置则立即激活，避免无谓的 500ms 等待。*/
+    if (configUpdated) {
+        QTimer::singleShot(500, this, doActivate);
+    } else {
+        doActivate();
+    }
 
     return ;
 }
@@ -258,6 +269,11 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
         qWarning()<<errorMessage;
         Q_EMIT deactivateConnectionError(errorMessage);
         return ;
+    }
+
+    if (concise
+            && activateConnectPtr->state() == NetworkManager::ActiveConnection::State::Deactivating) {
+        return;
     }
 
     qDebug() <<"dead active connection path:"<< activateConnectPtr->path();

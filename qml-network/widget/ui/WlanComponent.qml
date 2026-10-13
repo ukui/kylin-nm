@@ -117,6 +117,7 @@ ListView {
         property bool autoConnectCheckBoxLoaded: false
         property bool passwordError: false  // 标记当前项是否密码错误
         property bool waitingForPassword: false
+        property bool pwdBtnClicked: false  // 标记是否父级收起
 
         onConConnectedChanged: {
             updateMacConnAttr(index, conConnected)
@@ -325,6 +326,12 @@ ListView {
 
             // 点击Item时候焦点聚焦
             onClicked: {
+
+                if(pwdBtnClicked){
+                    pwdBtnClicked=false;
+                    return;
+                }
+
                 mouse.accepted = false
 
                 if (mouse.button == Qt.RightButton && model.status !== 2) {
@@ -606,22 +613,20 @@ ListView {
                                 property int textLength: textEdit.text.length
                                 validator: RegExpValidator { regExp: /^[a-zA-Z0-9\s\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^_\`\{\|\}\~]*$/}
 
+
                                 onTextLengthChanged: {
-                                    if(textLength>=8) {
-                                        if (pwdConnectBtnLoader.item) {
-                                            pwdConnectBtnLoader.item.enabled = true
-                                        }
-                                    } else {
-                                        if (pwdConnectBtnLoader.item) {
-                                            pwdConnectBtnLoader.item.enabled = false
-                                        }
+                                    if (pwdConnectBtnLoader.item) {
+                                        //pwdConnectBtnLoader.item.enabled = textLength>=8
+                                        pwdConnectBtnLoader.item.opacity = textLength>=8? 1.0:0.4
                                     }
                                 }
 
+
                                 onAccepted: {
 
-                                    KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text,
-                                                               autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
+                                    if (pwdConnectBtnLoader.item) {
+                                        pwdConnectBtnLoader.item.clicked();
+                                    }
                                 }
                             }
                         }
@@ -640,6 +645,12 @@ ListView {
                                 property var maxWidth: 88
 
                                 onClicked: {
+
+                                    if(!textEditLoader.item || textEditLoader.item.textLength<8){
+                                        pwdBtnClicked=true;
+                                        console.log("passwd is too short!")
+                                        return;
+                                    }
                                     errorText.visible = false;// 在点击连接按钮后也隐藏错误（无论成功与否）
                                     if (waitingForPassword) {
                                         // 提交新密码
@@ -655,7 +666,8 @@ ListView {
                                 }
 
                                 Component.onCompleted: {
-                                    pwdConnectBtn.enabled = (textEditLoader.item && textEditLoader.item.textLength>=8 ? true : false)
+                                    //pwdConnectBtn.enabled = (textEditLoader.item && textEditLoader.item.textLength>=8 ? true : false)
+                                    pwdConnectBtn.opacity = (textEditLoader.item && textEditLoader.item.textLength>=8 ? 1.0 : 0.4)
                                 }
                             }
                         }
@@ -907,6 +919,12 @@ ListView {
             // 每次显示时立即请求一次扫描
             KInterface.rescanWirelessConn();
         } else {
+            for(var i=0; i<wlanlistView.count; i++) {
+                var d = wlanlistView.itemAtIndex(i);
+                if (d && d.waitingForPassword) {
+                        d.hideDetail();
+                }
+            }
             try {
                 if (wlanListReorderPaused) {
                     wlanListReorderPaused = false

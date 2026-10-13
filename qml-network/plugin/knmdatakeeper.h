@@ -34,6 +34,9 @@ public:
     //清空列表(用于刷新)
     void clearDevice();
 
+    //按最新设备集合增量增删，保留仍存在设备的连接数据
+    void reconcileDeviceList(const QMap<QString, bool> &devices, DeviceType type);
+
     //清空网卡设备连接(用于列表更新)
     void clearConnectionList(QString devName);
 

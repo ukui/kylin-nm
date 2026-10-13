@@ -259,8 +259,29 @@ QVariantMap KynmSystemDbus::getExtraDnsEnhance(const QString& name)
  */
 bool KynmSystemDbus::writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value)
 {
+    // 参数校验：路径、节点名、键均不能为空
+    if (filePath.isEmpty() || feature.isEmpty() || key.isEmpty()) {
+        qWarning() << LOG_FLAG << "writeNmConfig invalid param, filePath/feature/key is empty";
+        return false;
+    }
+    
+    // 过滤".."、"."、"\\"等可改变路径指向的非法字符/路径段，防止路径穿越
+    if (filePath.contains("..") || filePath.contains('\\')) {
+        qWarning() << LOG_FLAG << "writeNmConfig filePath contains illegal chars:" << filePath;
+        return false;
+    }
+
+    // 防止节点名或键中携带路径分隔符、".."等字符，构造出非预期的配置项
+    if (feature.contains('/') || feature.contains('\\') || feature.contains("..") ||
+            key.contains('/') || key.contains('\\') || key.contains("..")) {
+        qWarning() << LOG_FLAG << "writeNmConfig invalid feature or key:" << feature << key;
+        return false;
+    }
+
+    // 路径白名单校验：规范化后仅允许写入指定配置文件，防止路径穿越、符号链接等越权写入
     QString canonicalPath = QFileInfo(filePath).canonicalFilePath();
     if (canonicalPath != "/etc/kylin-nm/netSwitch.conf") {
+        qWarning() << LOG_FLAG << "writeNmConfig invalid filePath:" << filePath;
         return false;
     }
 
@@ -287,6 +308,12 @@ bool KynmSystemDbus::writeNmConfig(const QString& filePath, const QString& featu
 QVariantMap KynmSystemDbus::getNmConfig(const QString& filePath, const QString& feature)
 {
     qWarning() << Q_FUNC_INFO << __LINE__ << filePath << feature;
+
+    // 参数校验：防止通过路径穿越（如"../"、符号链接等）越权读取任意文件
+    if (filePath.isEmpty() || feature.isEmpty()) {
+        qWarning() << LOG_FLAG << "getNmConfig filePath/feature is empty";
+        return QVariantMap();
+    }
 
     QSettings settings(filePath, QSettings::IniFormat);
     QMap<QString, QString> configMap;

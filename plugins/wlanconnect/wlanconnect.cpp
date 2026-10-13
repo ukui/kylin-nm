@@ -394,10 +394,6 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
         qWarning() << Q_FUNC_INFO << __LINE__ << "list size is less than 1, size:" << list.size();
         return;
     }
-    if (list.at(0).size() < 6) {
-        qWarning() << Q_FUNC_INFO << __LINE__ << "list.at(0) size is less than 6, size:" << list.at(0).size();
-        return;
-    }
 
     int frameIndex = 0;
     int listIndex = 1;
@@ -463,7 +459,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
             }
-            if (list.at(listIndex).size() > 6) {
+            if (list.at(listIndex).size() > 5) {
                 updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(4), list.at(listIndex).at(5).toInt());
             }
             frameIndex++;
@@ -478,6 +474,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
 {
     qDebug() << "updateIcon" << item->titileLabel->text()<<" security:"<<security;
 
+    item->secuType = security;
     int sign = setSignal(signalStrength);
     bool isLock = true;
     if (security.isEmpty()) {
@@ -485,6 +482,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
     } else {
         isLock = true;
     }
+    item->isLock = isLock;
 
     QString iconamePath;
     if (isApConnection == IsApConnection && item->isAcitve) {
@@ -714,7 +712,7 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
     QMap<QString, ItemFrame *>::iterator iter;
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         if (deviceName == iter.key()) {
-            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3), wlanInfo.at(3).toInt(), DEACTIVATED);
+            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3), wlanInfo.at(3).toInt(), DEACTIVATED, wlanInfo.at(2));
         }
     }
 
@@ -1072,7 +1070,7 @@ void WlanConnect::addActiveItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4), infoList.at(5).toInt(), ACTIVATED);
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4), infoList.at(5).toInt(), ACTIVATED, infoList.at(2));
 }
 
 //处理列表 未连接
@@ -1092,7 +1090,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(5).toInt(), DEACTIVATED);
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(5).toInt(), DEACTIVATED, infoList.at(2));
 }
 
 //增加设备
@@ -1139,7 +1137,7 @@ void WlanConnect::removeDeviceFrame(QString devName)
 }
 
 //增加ap
-void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus)
+void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus, const QString &security)
 {
     if (nullptr == frame) {
         return;
@@ -1154,6 +1152,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     //设置单项的信息
     int sign = setSignal(signal);
     WlanItem * wlanItem = new WlanItem(status, isLock, pluginWidget);
+    wlanItem->secuType = security;
     KDK_EXTEND_ALL_INFO_FORMAT(wlanItem, "WlanConnect", "", "wlan item of wlanconnect");
     QString iconamePath;
     if (bApConnection) {
@@ -1183,6 +1182,17 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     });
 
     connect(wlanItem, &QPushButton::clicked, this, [=] {
+        /* 点击企业WiFi，不打开网络托盘，需要配置时直接弹出企业WiFi页面;link bug#683975. */
+        if (wlanItem->isEnterprise()) {
+            if (wlanItem->isAcitve) {
+                deActiveConnect(name, deviceName, type);
+            } else if (m_interface != nullptr && m_interface->isValid()) {
+                qDebug() << "[WlanConnect]call activateConnect for enterprise wifi" << name << deviceName << __LINE__;
+                m_interface->call(QStringLiteral("activateConnect"), type, deviceName, name);
+            }
+            return;
+        }
+
         openKylinm();
         QTimer::singleShot(100,this,[=](){
             if (wlanItem->isAcitve) {

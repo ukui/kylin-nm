@@ -47,6 +47,7 @@ public:
     KLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
     QString uuid = "";
+    QString secuType = "";
 
     void setHalfFillet(bool flag) {useHalfFillet = flag; repaint();}
 public:
@@ -55,6 +56,7 @@ public:
     bool isAcitve = false;
     bool loading = false;
     bool isLock = false;
+    bool isEnterprise() const { return secuType.contains(QStringLiteral("802.1x"), Qt::CaseInsensitive); }
 
 
 

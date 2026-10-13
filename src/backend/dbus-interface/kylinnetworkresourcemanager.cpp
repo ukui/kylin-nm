@@ -19,6 +19,7 @@
 #include "kylinnetworkresourcemanager.h"
 #include <QMetaType>
 #include <QTimer>
+#include <QMutexLocker>
 #include "kylinutil.h"
 
 #define SIGNAL_DELAY 80000
@@ -115,10 +116,15 @@ void KyNetworkResourceManager::onInitNetwork()
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearConnections);
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearWifiNetworks);
 
+    int deviceSize = 0;
+    {
+        QMutexLocker locker(&m_devicesMutex);
+        deviceSize = m_devices.size();
+    }
     qDebug() <<"[KyNetworkResourceManager]"
              << "active connections:" << m_activeConns.size()
              << "connections:" << m_connections.size()
-             << "network device:" << m_devices.size();
+             << "network device:" << deviceSize;
     m_initFinished = true;
 
     return;
@@ -227,6 +233,13 @@ void KyNetworkResourceManager::insertConnections()
 
 void KyNetworkResourceManager::removeDevice(int pos)
 {
+    // KVE-2026-0890: 加锁保护 m_devices，防止与其他线程并发遍历/修改
+    QMutexLocker locker(&m_devicesMutex);
+
+    if (pos < 0 || pos >= m_devices.size()) {
+        return;
+    }
+
     //connections signals
     NetworkManager::Device::Ptr device = m_devices.takeAt(pos);
 
@@ -239,12 +252,17 @@ void KyNetworkResourceManager::removeDevice(int pos)
 
 void KyNetworkResourceManager::clearDevices()
 {
+    // KVE-2026-0890: 加锁保护 m_devices（递归锁，removeDevice 内部会再次加锁）
+    QMutexLocker locker(&m_devicesMutex);
     while (0 < m_devices.size())
         removeDevice(0);
 }
 
 void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 {
+    // KVE-2026-0890: 加锁保护 m_devices，防止与其他线程并发遍历/修改
+    QMutexLocker locker(&m_devicesMutex);
+
     m_devices.push_back(device);
     //device signals
 #if 0
@@ -359,7 +377,14 @@ void KyNetworkResourceManager::addWifiNetwork(NetworkManager::WirelessNetwork::P
 
 void KyNetworkResourceManager::insertWifiNetworks()
 {
-    for (auto const & device : m_devices) {
+    // KVE-2026-0890: 先在锁内取快照，避免遍历时列表被其他线程修改
+    NetworkManager::Device::List devices;
+    {
+        QMutexLocker locker(&m_devicesMutex);
+        devices = m_devices;
+    }
+
+    for (auto const & device : devices) {
         if (device.isNull()) {
             continue;
         }
@@ -387,6 +412,8 @@ NetworkManager::ActiveConnection::Ptr KyNetworkResourceManager::findActiveConnec
 template <typename Predicate>
 NetworkManager::Device::Ptr KyNetworkResourceManager::findDevice(Predicate const & pred)
 {
+    // KVE-2026-0890: 加锁保护 m_devices 遍历，防止迭代器/指针失效
+    QMutexLocker locker(&m_devicesMutex);
     auto i = std::find_if(m_devices.cbegin(), m_devices.cend(), pred);
     return m_devices.cend() == i ? NetworkManager::Device::Ptr{} : *i;
 }
@@ -416,6 +443,8 @@ NetworkManager::Device::Ptr KyNetworkResourceManager::getNetworkDevice(const QSt
         return nullptr;
     }
 
+    // KVE-2026-0890: 加锁保护 m_devices 遍历
+    QMutexLocker locker(&m_devicesMutex);
     for (int index = 0; index < m_devices.size(); ++index) {
         devicePtr = m_devices.at(index);
         if (devicePtr.isNull()) {
@@ -498,6 +527,8 @@ NetworkManager::Connection::List KyNetworkResourceManager::getConnectList()
 
 NetworkManager::Device::List KyNetworkResourceManager::getNetworkDeviceList()
 {
+    // KVE-2026-0890: 加锁后返回快照
+    QMutexLocker locker(&m_devicesMutex);
     return m_devices;
 }
 
@@ -915,10 +946,8 @@ void KyNetworkResourceManager::onWifiNetworkRemove(NetworkManager::Device * dev,
         auto pos = m_wifiNets.indexOf(net);
         if (0 <= pos) {
             removeWifiNetwork(pos);
-            NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
-            QByteArray rawSsid = accessPoitPtr->rawSsid();
-            QString wifiSsid = getSsidFromByteArray(rawSsid);
-            Q_EMIT wifiNetworkRemoved(dev->interfaceName(), wifiSsid);
+
+            Q_EMIT wifiNetworkRemoved(dev->interfaceName(), ssid);
         }
     }
 
@@ -944,6 +973,7 @@ void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)
 
 void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
 {
+    qDebug()<< LOG_FLAG << " onWifiNetworkDisappeared ."<<ssid;
     NetworkManager::Device *p_device = qobject_cast<NetworkManager::Device *>(sender());
     if (nullptr != p_device) {
         onWifiNetworkRemove(p_device, ssid);
@@ -988,6 +1018,7 @@ void KyNetworkResourceManager::onReferenceAccessPointChanged()
                     qobject_cast<NetworkManager::WirelessNetwork *>(sender());
     if (nullptr != p_wirelessNet) {
         onAccessPointUpdate(p_wirelessNet);
+        qDebug()<< LOG_FLAG  << " onReferenceAccessPointChanged"<<p_wirelessNet->ssid();
     }
 }
 
@@ -1040,8 +1071,17 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
         return;
     }
 
-    if (0 > m_devices.indexOf(networkDevice)) {
-        addDevice(networkDevice);
+    // KVE-2026-0890: 列表查重与插入在锁内完成，信号在锁外发射
+    bool added = false;
+    {
+        QMutexLocker locker(&m_devicesMutex);
+        if (0 > m_devices.indexOf(networkDevice)) {
+            addDevice(networkDevice);
+            added = true;
+        }
+    }
+
+    if (added) {
         Q_EMIT deviceAdd(networkDevice->interfaceName(), networkDevice->uni(), networkDevice->type());
     } else {
         qWarning() << networkDevice->interfaceName() <<"the device is exist in network device list.";
@@ -1052,19 +1092,32 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
 
 void KyNetworkResourceManager::onDeviceRemoved(QString const & uni)
 {
-    NetworkManager::Device::Ptr networkDevice = findDeviceUni(uni);
-    if (networkDevice.isNull()) {
-        qWarning()<<"the device is not exist in network device list ."<< uni;
-        return;
+    // KVE-2026-0890: 查找与移除在锁内完成，信号在锁外发射
+    NetworkManager::Device::Ptr networkDevice;
+    QString ifaceName;
+    QString devUni;
+
+    {
+        QMutexLocker locker(&m_devicesMutex);
+        networkDevice = findDeviceUni(uni);
+        if (networkDevice.isNull()) {
+            qWarning()<<"the device is not exist in network device list ."<< uni;
+            return;
+        }
+
+        qDebug()<<"remove network device"<< networkDevice->interfaceName() <<"uni:" << uni;
+
+        auto index = std::find(m_devices.cbegin(), m_devices.cend(), networkDevice);
+        if (m_devices.cend() != index) {
+            const int pos = index - m_devices.cbegin();
+            ifaceName = networkDevice->interfaceName();
+            devUni = networkDevice->uni();
+            removeDevice(pos);
+        }
     }
 
-    qDebug()<<"remove network device"<< networkDevice->interfaceName() <<"uni:" << uni;
-
-    auto index = std::find(m_devices.cbegin(), m_devices.cend(), networkDevice);
-    if (m_devices.cend() != index) {
-        const int pos = index - m_devices.cbegin();
-        removeDevice(pos);
-        Q_EMIT deviceRemove(networkDevice->interfaceName(), networkDevice->uni());
+    if (!ifaceName.isEmpty()) {
+        Q_EMIT deviceRemove(ifaceName, devUni);
     }
 
     return;

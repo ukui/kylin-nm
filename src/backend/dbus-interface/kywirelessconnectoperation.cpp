@@ -753,7 +753,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
 
 void KyWirelessConnectOperation::requestWirelessScan()
 {
-    for (auto const & dev : m_networkResourceInstance->m_devices) {
+    // KVE-2026-0890: 通过加锁接口获取设备列表快照，避免直接遍历 m_devices 时
+    // worker 线程并发增删导致悬空指针解引用
+    for (auto const & dev : m_networkResourceInstance->getNetworkDeviceList()) {
         auto spec_dev = dev->as<NetworkManager::WirelessDevice>();
         if (nullptr != spec_dev) {
             m_networkResourceInstance->requestScan(spec_dev);

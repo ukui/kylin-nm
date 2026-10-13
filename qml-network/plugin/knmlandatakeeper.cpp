@@ -76,6 +76,33 @@ KnmLanDataKeeper::~KnmLanDataKeeper()
     }
 }
 
+void KnmLanDataKeeper::beginWiredMainSwitchChange(bool requestedState)
+{
+    m_wiredMainSwitchChangePending = true;
+    m_requestedWiredMainSwitchState = requestedState;
+    m_wiredMainSwitchState = requestedState;
+    m_switchState = requestedState;
+}
+
+void KnmLanDataKeeper::cancelWiredMainSwitchChange()
+{
+    m_wiredMainSwitchChangePending = false;
+}
+
+bool KnmLanDataKeeper::applyWiredMainSwitchState(bool state, bool authoritativeConfirmation)
+{
+    if (m_wiredMainSwitchChangePending && state != m_requestedWiredMainSwitchState) {
+        return false;
+    }
+
+    m_wiredMainSwitchState = state;
+    m_switchState = state;
+    if (m_wiredMainSwitchChangePending && authoritativeConfirmation) {
+        m_wiredMainSwitchChangePending = false;
+    }
+    return true;
+}
+
 QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringList conPath)
 {
     QMap<QString, QVariant> connectionMap;
@@ -220,12 +247,12 @@ void KnmLanDataKeeper::onLanRemove(QString path)
     QStringList devList = m_deviceList.keys();
     for (int i = 0; i < devList.count(); i++)
     {
-        //所有网卡设备均删除该连接
-        if (m_deviceList.value(devList.at(i))->containsConnection(path)) {
-            NetDevicePtr dev = m_deviceList.take(devList.at(i));
-            dev->removeConnection(path);
-            m_deviceList.insert(devList.at(i), dev);
+        NetDevicePtr dev = m_deviceList.value(devList.at(i));
+        if (dev.isNull() || !dev->containsConnection(path)) {
+            continue;
         }
+        //所有网卡设备均删除该连接
+        dev->removeConnection(path);
     }
     if (KInterface::getInstance() != nullptr) {
         KInterface::getInstance()->getWiredDevConnList();
@@ -236,6 +263,9 @@ void KnmLanDataKeeper::onLanRemove(QString path)
 void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
 {
     qDebug() << "dddname: " << deviceName << "   info:" << lanInfo;
+    if (lanInfo.size() < 5)
+        return;
+
     QStringList devList = m_deviceList.keys();
     if (deviceName.isEmpty()) {
         for (int i = 0; i < devList.count(); i++) {
@@ -247,16 +277,9 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
                 continue;
             }
 
-            //连接不属于任何设备,且修改属性
+            // 保留实时状态，仅合并名称、Path 等连接属性。
             NetDevicePtr dev = m_deviceList.take(devList.at(i));
-            int status = DEACTIVATED;
-            QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
-            if(valueMap.value("State").toInt()
-                    && valueMap.value("Uuid").toString() == lanInfo.at(1)) {
-                status =  lanInfo.at(4).toInt();
-            }
-            dev->removeConnection(lanInfo.at(2));
-            dev->addConnection(makeConnectionMap(status, lanInfo));
+            dev->addConnection(makeConnectionMap(lanInfo.at(4).toInt(), lanInfo));
             m_deviceList.insert(devList.at(i), dev);
         }
         if (KInterface::getInstance() != nullptr) {
@@ -269,11 +292,10 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
     {
         //连接被修改为不属于列表第i个设备,故而删除
         if (devList.at(i) != deviceName) {
-            NetDevicePtr dev = m_deviceList.take(devList.at(i));
+            NetDevicePtr dev = m_deviceList.value(devList.at(i));
             if(dev.isNull() || lanInfo.at(2).isEmpty())
                 continue;
             dev->removeConnection(lanInfo.at(2));
-            m_deviceList.insert(devList.at(i), dev);
             continue;
         }
 
@@ -285,17 +307,9 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
             continue;
         }
 
-        //连接被修改了名称
+        // 连接属性变化不能覆盖 active-state 信号维护的实时状态。
         NetDevicePtr dev = m_deviceList.take(devList.at(i));
-        int status = DEACTIVATED;
-        QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
-
-        if(valueMap.value("State").toInt()
-                && valueMap.value("Uuid").toString() == lanInfo.at(1)) {
-            status = lanInfo.at(4).toInt();
-        }
-        dev->removeConnection(lanInfo.at(2));
-        dev->addConnection(makeConnectionMap(status, lanInfo));
+        dev->addConnection(makeConnectionMap(lanInfo.at(4).toInt(), lanInfo));
         m_deviceList.insert(devList.at(i), dev);
     }
     if (KInterface::getInstance() != nullptr) {
@@ -320,8 +334,9 @@ void KnmLanDataKeeper::onDeviceNameChanged(QString oldName, QString newName, int
 
 void KnmLanDataKeeper::onSwitchBtnChanged(bool status)
 {
-    m_wiredMainSwitchState = status;
-    m_switchState = status;
+    if (!applyWiredMainSwitchState(status, false)) {
+        return;
+    }
     if (KInterface::getInstance() != nullptr) {
         KInterface::getInstance()->updateWiredMainSwitch();
     }

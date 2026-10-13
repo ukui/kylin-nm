@@ -150,6 +150,48 @@ void TestNetDevice::test_addConnection_sorted()
     QVERIFY(first.value("Uuid").toString() == "uuid-1");
 }
 
+void TestNetDevice::test_addConnection_sameWiredUuidMergesRuntimeState()
+{
+    QMap<QString, QVariant> signalConnection =
+        createConnection("OldName", "uuid-1", "/path/old", DEACTIVATED);
+    signalConnection.insert("Connectivity", 4);
+    signalConnection.insert("Loading", true);
+
+    QMap<QString, QVariant> snapshotConnection =
+        createConnection("NewName", "uuid-1", "/path/new", DEACTIVATED);
+    snapshotConnection.insert("Connectivity", 0);
+    snapshotConnection.insert("Loading", false);
+
+    m_device->addConnection(signalConnection);
+    m_device->addConnection(snapshotConnection);
+
+    const QVariantList connections = m_device->getConnections();
+    QCOMPARE(connections.size(), 1);
+    const QVariantMap merged = connections.first().toMap();
+    QCOMPARE(merged.value("Uuid").toString(), QString("uuid-1"));
+    QCOMPARE(merged.value("Name").toString(), QString("NewName"));
+    QCOMPARE(merged.value("Path").toString(), QString("/path/new"));
+    QCOMPARE(merged.value("State").toInt(), DEACTIVATED);
+    QCOMPARE(merged.value("Connectivity").toInt(), 4);
+    QCOMPARE(merged.value("Loading").toBool(), true);
+}
+
+void TestNetDevice::test_addConnection_emptyUuidFallsBackToPath()
+{
+    QMap<QString, QVariant> first =
+        createConnection("Connection", QString(), "/path/1", DEACTIVATED);
+    first.insert("Connectivity", 3);
+    QMap<QString, QVariant> second = first;
+    second.insert("Connectivity", 0);
+
+    m_device->addConnection(first);
+    m_device->addConnection(second);
+
+    const QVariantList connections = m_device->getConnections();
+    QCOMPARE(connections.size(), 1);
+    QCOMPARE(connections.first().toMap().value("Connectivity").toInt(), 3);
+}
+
 void TestNetDevice::test_removeConnection_byMap()
 {
     QMap<QString, QVariant> conn = createConnection("Conn1", "uuid-1", "/path/1", DEACTIVATED);

@@ -328,6 +328,54 @@ void TestKnmLanDataKeeper::test_isDslConnection_withNonPppoeType()
     QVERIFY(true);
 }
 
+void TestKnmLanDataKeeper::test_pendingSwitchChange_ignoresStaleState()
+{
+    m_keeper->beginWiredMainSwitchChange(true);
+
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
+    QVERIFY(!m_keeper->applyWiredMainSwitchState(false, true));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
+
+    QMetaObject::invokeMethod(m_keeper, "onSwitchBtnChanged", Qt::DirectConnection,
+                              Q_ARG(bool, false));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
+}
+
+void TestKnmLanDataKeeper::test_pendingSwitchChange_acceptsLatestConfirmation()
+{
+    m_keeper->beginWiredMainSwitchChange(true);
+
+    QMetaObject::invokeMethod(m_keeper, "onSwitchBtnChanged", Qt::DirectConnection,
+                              Q_ARG(bool, true));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
+
+    QVERIFY(m_keeper->applyWiredMainSwitchState(true, true));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(!m_keeper->m_wiredMainSwitchChangePending);
+
+    QMetaObject::invokeMethod(m_keeper, "onSwitchBtnChanged", Qt::DirectConnection,
+                              Q_ARG(bool, false));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), false);
+}
+
+void TestKnmLanDataKeeper::test_pendingSwitchChange_replacesEarlierIntent()
+{
+    m_keeper->beginWiredMainSwitchChange(false);
+    m_keeper->beginWiredMainSwitchChange(true);
+
+    QVERIFY(!m_keeper->applyWiredMainSwitchState(false, true));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
+
+    QVERIFY(m_keeper->applyWiredMainSwitchState(true, true));
+    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
+    QVERIFY(!m_keeper->m_wiredMainSwitchChangePending);
+}
+
 void TestKnmLanDataKeeper::test_onActiveConnectionChanged_withEmptyDeviceName()
 {
     KnmLanDataKeeper *keeper = new KnmLanDataKeeper();
@@ -524,6 +572,29 @@ void TestKnmLanDataKeeper::test_updateLanInfo_modifyConnectionName()
     QVERIFY(dev->getConnections().size() >= 1);
     
     delete keeper;
+}
+
+void TestKnmLanDataKeeper::test_updateLanInfo_preservesRuntimeState()
+{
+    KnmLanDataKeeper keeper;
+    keeper.addDevice("eth0", true, WIRED_DEVICE);
+
+    QList<QStringList> connections;
+    connections << (QStringList() << "OldName" << "uuid-123" << "/path/1" << "0" << "2");
+    keeper.addDevConnection("eth0", connections);
+
+    NetDevicePtr device = keeper.getDeviceList().value("eth0");
+    device->updateConnectivity("uuid-123", DEACTIVATING, 4);
+
+    const QStringList lanInfo = QStringList()
+        << "NewName" << "uuid-123" << "/path/1" << "0" << "0";
+    keeper.updateLanInfo("eth0", lanInfo);
+
+    const QVariantList updatedConnections = device->getConnections();
+    QCOMPARE(updatedConnections.size(), 1);
+    const QVariantMap updated = updatedConnections.first().toMap();
+    QCOMPARE(updated.value("Name").toString(), QString("NewName"));
+    QCOMPARE(updated.value("State").toInt(), DEACTIVATING);
 }
 
 void TestKnmLanDataKeeper::test_onDeviceNameChanged_withValidData()

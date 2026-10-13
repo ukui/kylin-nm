@@ -283,20 +283,27 @@ void KnmDBusCaller::getWirelessSwitchState()
     }
 }
 
-void KnmDBusCaller::getWiredMainSwitchState()
+void KnmDBusCaller::getWiredMainSwitchState(bool confirmsInFlightRequest)
 {
 
-    qDebug() << Q_FUNC_INFO << __LINE__;
     QList<QVariant> list;
     QDBusPendingCallWatcher * watcher =  nullptr;
     if (!g_testMode)
         watcher = this->asyncCall("getWiredMainSwitchBtnState", list);
     if(watcher) {
+        watcher->setProperty("confirmsInFlightWiredSwitchRequest", confirmsInFlightRequest);
+        if (confirmsInFlightRequest) {
+            watcher->setProperty("wiredSwitchRequestedState", m_wiredMainSwitchInFlightState);
+        }
         m_pendingCount++;
         this->connect(watcher, &QDBusPendingCallWatcher::finished, this, &KnmDBusCaller::getWiredMainSwitchStateFinished);
     }
     else {
         qWarning() << "null pending";
+        if (confirmsInFlightRequest) {
+            m_wiredMainSwitchRequestInFlight = false;
+            lanDataKeeper->cancelWiredMainSwitchChange();
+        }
     }
 }
 
@@ -494,13 +501,15 @@ void KnmDBusCaller::updateWiredDeviceMapFinished(QDBusPendingCallWatcher *watche
 
         if(reply.arguments().size() > 0) {
             QDBusReply<QVariantMap> retMap = reply;
-            QVariantMap::const_iterator item = retMap.value().cbegin();
-            lanDataKeeper->clearDevice();
-            while (item != retMap.value().cend()) {
-                lanDataKeeper->addDevice(item.key(), item.value().toBool(),WIRED_DEVICE);
-                lanDataKeeper->clearConnectionList(item.key());
-                getWiredConList(item.key());
-                item++;
+            QMap<QString, bool> devices;
+            for (auto item = retMap.value().constBegin(); item != retMap.value().constEnd(); ++item) {
+                devices.insert(item.key(), item.value().toBool());
+            }
+            lanDataKeeper->reconcileDeviceList(devices, WIRED_DEVICE);
+            for (auto item = devices.constBegin(); item != devices.constEnd(); ++item) {
+                if (item.value()) {
+                    getWiredConList(item.key());
+                }
             }
             KInterface::getInstance()->updateWiredDeviceList();
         }
@@ -623,19 +632,54 @@ void KnmDBusCaller::getWirelessSwitchStateFinished(QDBusPendingCallWatcher *watc
 // LCOV_EXCL_START
 void KnmDBusCaller::getWiredMainSwitchStateFinished(QDBusPendingCallWatcher *watcher)
 {
-    qDebug() << Q_FUNC_INFO << __LINE__;
+    const bool confirmsInFlightRequest = watcher->property("confirmsInFlightWiredSwitchRequest").toBool();
+    const bool requestedState = watcher->property("wiredSwitchRequestedState").toBool();
     m_pendingCount--;
     QDBusMessage reply = watcher->reply();
-    qDebug() << Q_FUNC_INFO << __LINE__ << reply;
 
     if(reply.type() == QDBusMessage::ReplyMessage) {
         if(reply.arguments().size() > 0) {
             QDBusReply<bool> retList = reply;
-            lanDataKeeper->setWiredMainSwitchState(retList.value());
-            KInterface::getInstance()->updateWiredMainSwitch();
+            const bool state = retList.value();
+            if (confirmsInFlightRequest) {
+                m_wiredMainSwitchRequestInFlight = false;
+
+                if (requestedState != m_wiredMainSwitchDesiredState) {
+                    const bool accepted = lanDataKeeper->applyWiredMainSwitchState(state, false);
+                    if (accepted) {
+                        KInterface::getInstance()->updateWiredMainSwitch();
+                    }
+                    processWiredMainSwitchDesiredState();
+                    return;
+                }
+
+                if (state != m_wiredMainSwitchDesiredState) {
+                    lanDataKeeper->cancelWiredMainSwitchChange();
+                }
+            }
+
+            const bool accepted = lanDataKeeper->applyWiredMainSwitchState(state, confirmsInFlightRequest);
+            if (accepted) {
+                KInterface::getInstance()->updateWiredMainSwitch();
+            }
+            if (confirmsInFlightRequest) {
+                updateWiredDeviceMap();
+            }
+            return;
         }
+    }
+
+    qWarning() << reply.errorMessage();
+    if (!confirmsInFlightRequest) {
+        return;
+    }
+
+    m_wiredMainSwitchRequestInFlight = false;
+    if (requestedState != m_wiredMainSwitchDesiredState) {
+        processWiredMainSwitchDesiredState();
     } else {
-        qWarning() << reply.errorMessage();
+        lanDataKeeper->cancelWiredMainSwitchChange();
+        getWiredMainSwitchState();
     }
 }
 // LCOV_EXCL_STOP
@@ -655,8 +699,26 @@ void KnmDBusCaller::setWirelessSwitchEnableFinished(QDBusPendingCallWatcher *wat
 
 void KnmDBusCaller::setWiredMainSwitchEnable(bool enable)
 {
-    
-    qDebug() << Q_FUNC_INFO << __LINE__ << enable;
+    m_wiredMainSwitchDesiredState = enable;
+    lanDataKeeper->beginWiredMainSwitchChange(enable);
+    if (KnmInterface *interface = KInterface::getInstance()) {
+        interface->updateWiredMainSwitch();
+    }
+
+    processWiredMainSwitchDesiredState();
+}
+
+void KnmDBusCaller::processWiredMainSwitchDesiredState()
+{
+    if (m_wiredMainSwitchRequestInFlight) {
+        return;
+    }
+
+    dispatchWiredMainSwitchRequest(m_wiredMainSwitchDesiredState);
+}
+
+void KnmDBusCaller::dispatchWiredMainSwitchRequest(bool enable)
+{
     QList<QVariant> list;
     list.append(enable);
 
@@ -665,24 +727,36 @@ void KnmDBusCaller::setWiredMainSwitchEnable(bool enable)
         watcher = this->asyncCall("setWiredSwitchEnable", list);
 
     if(watcher) {
+        m_wiredMainSwitchRequestInFlight = true;
+        m_wiredMainSwitchInFlightState = enable;
+        watcher->setProperty("wiredSwitchRequestedState", enable);
         m_pendingCount++;
         this->connect(watcher, &QDBusPendingCallWatcher::finished, this, &KnmDBusCaller::setWiredMainSwitchEnableFinished);
     }
     else {
         qWarning() << "null pending";
+        lanDataKeeper->cancelWiredMainSwitchChange();
+        getWiredMainSwitchState();
     }
 }
 
 // LCOV_EXCL_START
 void KnmDBusCaller::setWiredMainSwitchEnableFinished(QDBusPendingCallWatcher *watcher)
 {
+    const bool sentState = watcher->property("wiredSwitchRequestedState").toBool();
     m_pendingCount--;
     QDBusMessage reply = watcher->reply();
     if(reply.type() == QDBusMessage::ReplyMessage) {
-        getWiredMainSwitchState();
-        updateWiredDeviceMap();
+        getWiredMainSwitchState(true);
     } else {
+        m_wiredMainSwitchRequestInFlight = false;
         qWarning() << reply.errorMessage();
+        if (sentState != m_wiredMainSwitchDesiredState) {
+            processWiredMainSwitchDesiredState();
+        } else {
+            lanDataKeeper->cancelWiredMainSwitchChange();
+            getWiredMainSwitchState();
+        }
     }
 }
 // LCOV_EXCL_STOP

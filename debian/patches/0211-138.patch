@@ -1,0 +1,1649 @@
+From: xie_klve <xie_klve@163.com>
+Date: Tue, 13 Oct 2026 06:44:45 +0000
+Subject: =?utf-8?b?ITEzOCDlkIzmraXkuLvnur/ku6PnoIE=?=
+
+Merge pull request !138 from xie_klve/openkylin/huanghe
+---
+ fuzz/testSrc/.qmake.stash                          |  23 -----
+ plugins/netconnect/translations/khb_CN.ts          |   2 +-
+ plugins/wlanconnect/wlanconnect.cpp                |  28 ++++--
+ plugins/wlanconnect/wlanconnect.h                  |   2 +-
+ plugins/wlanconnect/wlanitem.h                     |   2 +
+ qml-network/plugin/knmdatakeeper.cpp               |  25 +++++
+ qml-network/plugin/knmdatakeeper.h                 |   3 +
+ qml-network/plugin/knmdbuscaller.cpp               | 110 +++++++++++++++++----
+ qml-network/plugin/knmdbuscaller.h                 |   8 +-
+ qml-network/plugin/knmlandatakeeper.cpp            |  71 +++++++------
+ qml-network/plugin/knmlandatakeeper.h              |   6 ++
+ qml-network/plugin/knmwlandatakeeper.cpp           |  19 +++-
+ qml-network/plugin/netdevice.cpp                   |  58 +++++++++++
+ qml-network/widget/ui/WlanComponent.qml            |  40 +++++---
+ .../dbus-interface/kylinconnectoperation.cpp       |  20 +++-
+ .../dbus-interface/kylinnetworkdeviceresource.cpp  |  19 ++--
+ .../dbus-interface/kylinnetworkresourcemanager.cpp |  91 +++++++++++++----
+ .../dbus-interface/kylinnetworkresourcemanager.h   |   8 ++
+ .../dbus-interface/kywirelessconnectoperation.cpp  |   4 +-
+ .../dbus-interface/kywirelessnetresource.cpp       |   2 +
+ src/backend/dbus.cpp                               |  60 +++++++++--
+ src/backend/proxyservicemanager.cpp                |   6 +-
+ src/frontend/tab-pages/wlanpage.cpp                |   4 +
+ sys-dbus-netctrl/kylin/common/kylin_cfgInfo.c      |   2 +-
+ sys-dbus-register/kynmsystemdbus.cpp               |  27 +++++
+ .../plugin/knmdatakeeper/test_knmdatakeeper.cpp    |  29 ++++++
+ .../plugin/knmdatakeeper/test_knmdatakeeper.h      |   1 +
+ .../knmlandatakeeper/test_knmlandatakeeper.cpp     |  71 +++++++++++++
+ .../knmlandatakeeper/test_knmlandatakeeper.h       |   5 +
+ .../plugin/netdevice/test_netdevice.cpp            |  42 ++++++++
+ .../qml-network/plugin/netdevice/test_netdevice.h  |   2 +
+ 31 files changed, 655 insertions(+), 135 deletions(-)
+ delete mode 100644 fuzz/testSrc/.qmake.stash
+
+diff --git a/fuzz/testSrc/.qmake.stash b/fuzz/testSrc/.qmake.stash
+deleted file mode 100644
+index 2f5a8e7..0000000
+--- a/fuzz/testSrc/.qmake.stash
++++ /dev/null
+@@ -1,23 +0,0 @@
+-QMAKE_CXX.QT_COMPILER_STDCXX = 201703L
+-QMAKE_CXX.QMAKE_GCC_MAJOR_VERSION = 12
+-QMAKE_CXX.QMAKE_GCC_MINOR_VERSION = 3
+-QMAKE_CXX.QMAKE_GCC_PATCH_VERSION = 0
+-QMAKE_CXX.COMPILER_MACROS = \
+-    QT_COMPILER_STDCXX \
+-    QMAKE_GCC_MAJOR_VERSION \
+-    QMAKE_GCC_MINOR_VERSION \
+-    QMAKE_GCC_PATCH_VERSION
+-QMAKE_CXX.INCDIRS = \
+-    /usr/include/c++/12 \
+-    /usr/include/x86_64-linux-gnu/c++/12 \
+-    /usr/include/c++/12/backward \
+-    /usr/lib/gcc/x86_64-linux-gnu/12/include \
+-    /usr/local/include \
+-    /usr/include/x86_64-linux-gnu \
+-    /usr/include
+-QMAKE_CXX.LIBDIRS = \
+-    /usr/lib/gcc/x86_64-linux-gnu/12 \
+-    /usr/lib/x86_64-linux-gnu \
+-    /usr/lib \
+-    /lib/x86_64-linux-gnu \
+-    /lib
+diff --git a/plugins/netconnect/translations/khb_CN.ts b/plugins/netconnect/translations/khb_CN.ts
+index 4c0d347..0016056 100644
+--- a/plugins/netconnect/translations/khb_CN.ts
++++ b/plugins/netconnect/translations/khb_CN.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation>ᦖᧂᦑ ᦓᧂᦑ ᦵ ᦓᧂᦑ</translation>
++        <translation></translation>
+     </message>
+ </context>
+ <context>
+diff --git a/plugins/wlanconnect/wlanconnect.cpp b/plugins/wlanconnect/wlanconnect.cpp
+index d026c8d..3ae9bb1 100644
+--- a/plugins/wlanconnect/wlanconnect.cpp
++++ b/plugins/wlanconnect/wlanconnect.cpp
+@@ -394,10 +394,6 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
+         qWarning() << Q_FUNC_INFO << __LINE__ << "list size is less than 1, size:" << list.size();
+         return;
+     }
+-    if (list.at(0).size() < 6) {
+-        qWarning() << Q_FUNC_INFO << __LINE__ << "list.at(0) size is less than 6, size:" << list.at(0).size();
+-        return;
+-    }
+ 
+     int frameIndex = 0;
+     int listIndex = 1;
+@@ -463,7 +459,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
+                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
+                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
+             }
+-            if (list.at(listIndex).size() > 6) {
++            if (list.at(listIndex).size() > 5) {
+                 updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(4), list.at(listIndex).at(5).toInt());
+             }
+             frameIndex++;
+@@ -478,6 +474,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
+ {
+     qDebug() << "updateIcon" << item->titileLabel->text()<<" security:"<<security;
+ 
++    item->secuType = security;
+     int sign = setSignal(signalStrength);
+     bool isLock = true;
+     if (security.isEmpty()) {
+@@ -485,6 +482,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
+     } else {
+         isLock = true;
+     }
++    item->isLock = isLock;
+ 
+     QString iconamePath;
+     if (isApConnection == IsApConnection && item->isAcitve) {
+@@ -714,7 +712,7 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
+     QMap<QString, ItemFrame *>::iterator iter;
+     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
+         if (deviceName == iter.key()) {
+-            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3), wlanInfo.at(3).toInt(), DEACTIVATED);
++            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3), wlanInfo.at(3).toInt(), DEACTIVATED, wlanInfo.at(2));
+         }
+     }
+ 
+@@ -1072,7 +1070,7 @@ void WlanConnect::addActiveItem(ItemFrame *frame, QString devName, QStringList i
+     } else {
+         isLock = true;
+     }
+-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4), infoList.at(5).toInt(), ACTIVATED);
++    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4), infoList.at(5).toInt(), ACTIVATED, infoList.at(2));
+ }
+ 
+ //处理列表 未连接
+@@ -1092,7 +1090,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
+     } else {
+         isLock = true;
+     }
+-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(5).toInt(), DEACTIVATED);
++    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(5).toInt(), DEACTIVATED, infoList.at(2));
+ }
+ 
+ //增加设备
+@@ -1139,7 +1137,7 @@ void WlanConnect::removeDeviceFrame(QString devName)
+ }
+ 
+ //增加ap
+-void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus)
++void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus, const QString &security)
+ {
+     if (nullptr == frame) {
+         return;
+@@ -1154,6 +1152,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString
+     //设置单项的信息
+     int sign = setSignal(signal);
+     WlanItem * wlanItem = new WlanItem(status, isLock, pluginWidget);
++    wlanItem->secuType = security;
+     KDK_EXTEND_ALL_INFO_FORMAT(wlanItem, "WlanConnect", "", "wlan item of wlanconnect");
+     QString iconamePath;
+     if (bApConnection) {
+@@ -1183,6 +1182,17 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString
+     });
+ 
+     connect(wlanItem, &QPushButton::clicked, this, [=] {
++        /* 点击企业WiFi，不打开网络托盘，需要配置时直接弹出企业WiFi页面;link bug#683975. */
++        if (wlanItem->isEnterprise()) {
++            if (wlanItem->isAcitve) {
++                deActiveConnect(name, deviceName, type);
++            } else if (m_interface != nullptr && m_interface->isValid()) {
++                qDebug() << "[WlanConnect]call activateConnect for enterprise wifi" << name << deviceName << __LINE__;
++                m_interface->call(QStringLiteral("activateConnect"), type, deviceName, name);
++            }
++            return;
++        }
++
+         openKylinm();
+         QTimer::singleShot(100,this,[=](){
+             if (wlanItem->isAcitve) {
+diff --git a/plugins/wlanconnect/wlanconnect.h b/plugins/wlanconnect/wlanconnect.h
+index eccc08a..2549fc8 100644
+--- a/plugins/wlanconnect/wlanconnect.h
++++ b/plugins/wlanconnect/wlanconnect.h
+@@ -121,7 +121,7 @@ private:
+     //减少设备
+     void removeDeviceFrame(QString devName);
+     //增加ap
+-    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus);
++    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category, int activeStatus, const QString &security = QString());
+     //减少ap
+     void removeOneWlanFrame(ItemFrame *frame, QString deviceName, QString ssid);
+ 
+diff --git a/plugins/wlanconnect/wlanitem.h b/plugins/wlanconnect/wlanitem.h
+index d5c28b5..808bdea 100644
+--- a/plugins/wlanconnect/wlanitem.h
++++ b/plugins/wlanconnect/wlanitem.h
+@@ -47,6 +47,7 @@ public:
+     KLabel * titileLabel = nullptr;
+     QLabel * statusLabel = nullptr;
+     QString uuid = "";
++    QString secuType = "";
+ 
+     void setHalfFillet(bool flag) {useHalfFillet = flag; repaint();}
+ public:
+@@ -55,6 +56,7 @@ public:
+     bool isAcitve = false;
+     bool loading = false;
+     bool isLock = false;
++    bool isEnterprise() const { return secuType.contains(QStringLiteral("802.1x"), Qt::CaseInsensitive); }
+ 
+ 
+ 
+diff --git a/qml-network/plugin/knmdatakeeper.cpp b/qml-network/plugin/knmdatakeeper.cpp
+index b6c8416..05b98c3 100755
+--- a/qml-network/plugin/knmdatakeeper.cpp
++++ b/qml-network/plugin/knmdatakeeper.cpp
+@@ -47,6 +47,31 @@ void KnmDataKeeper::clearDevice()
+     m_deviceList.clear();
+ }
+ 
++void KnmDataKeeper::reconcileDeviceList(const QMap<QString, bool> &devices, DeviceType type)
++{
++    const QStringList currentDeviceNames = m_deviceList.keys();
++    for (const QString &deviceName : currentDeviceNames) {
++        const NetDevicePtr device = m_deviceList.value(deviceName);
++        if (!device.isNull() && device->getDevType() == type
++                && (!devices.contains(deviceName) || !devices.value(deviceName))) {
++            m_deviceList.remove(deviceName);
++        }
++    }
++
++    for (auto it = devices.constBegin(); it != devices.constEnd(); ++it) {
++        if (!it.value()) {
++            continue;
++        }
++
++        const NetDevicePtr currentDevice = m_deviceList.value(it.key());
++        if (!currentDevice.isNull() && currentDevice->getDevType() == type) {
++            currentDevice->setAvailable(true);
++            continue;
++        }
++        addDevice(it.key(), true, type);
++    }
++}
++
+ QMap<QString, NetDevicePtr> KnmDataKeeper::getDeviceList()
+ {
+     return m_deviceList;
+diff --git a/qml-network/plugin/knmdatakeeper.h b/qml-network/plugin/knmdatakeeper.h
+index 48f615e..3fb165e 100755
+--- a/qml-network/plugin/knmdatakeeper.h
++++ b/qml-network/plugin/knmdatakeeper.h
+@@ -34,6 +34,9 @@ public:
+     //清空列表(用于刷新)
+     void clearDevice();
+ 
++    //按最新设备集合增量增删，保留仍存在设备的连接数据
++    void reconcileDeviceList(const QMap<QString, bool> &devices, DeviceType type);
++
+     //清空网卡设备连接(用于列表更新)
+     void clearConnectionList(QString devName);
+ 
+diff --git a/qml-network/plugin/knmdbuscaller.cpp b/qml-network/plugin/knmdbuscaller.cpp
+index acba7f7..e0ac7ab 100755
+--- a/qml-network/plugin/knmdbuscaller.cpp
++++ b/qml-network/plugin/knmdbuscaller.cpp
+@@ -283,20 +283,27 @@ void KnmDBusCaller::getWirelessSwitchState()
+     }
+ }
+ 
+-void KnmDBusCaller::getWiredMainSwitchState()
++void KnmDBusCaller::getWiredMainSwitchState(bool confirmsInFlightRequest)
+ {
+ 
+-    qDebug() << Q_FUNC_INFO << __LINE__;
+     QList<QVariant> list;
+     QDBusPendingCallWatcher * watcher =  nullptr;
+     if (!g_testMode)
+         watcher = this->asyncCall("getWiredMainSwitchBtnState", list);
+     if(watcher) {
++        watcher->setProperty("confirmsInFlightWiredSwitchRequest", confirmsInFlightRequest);
++        if (confirmsInFlightRequest) {
++            watcher->setProperty("wiredSwitchRequestedState", m_wiredMainSwitchInFlightState);
++        }
+         m_pendingCount++;
+         this->connect(watcher, &QDBusPendingCallWatcher::finished, this, &KnmDBusCaller::getWiredMainSwitchStateFinished);
+     }
+     else {
+         qWarning() << "null pending";
++        if (confirmsInFlightRequest) {
++            m_wiredMainSwitchRequestInFlight = false;
++            lanDataKeeper->cancelWiredMainSwitchChange();
++        }
+     }
+ }
+ 
+@@ -494,13 +501,15 @@ void KnmDBusCaller::updateWiredDeviceMapFinished(QDBusPendingCallWatcher *watche
+ 
+         if(reply.arguments().size() > 0) {
+             QDBusReply<QVariantMap> retMap = reply;
+-            QVariantMap::const_iterator item = retMap.value().cbegin();
+-            lanDataKeeper->clearDevice();
+-            while (item != retMap.value().cend()) {
+-                lanDataKeeper->addDevice(item.key(), item.value().toBool(),WIRED_DEVICE);
+-                lanDataKeeper->clearConnectionList(item.key());
+-                getWiredConList(item.key());
+-                item++;
++            QMap<QString, bool> devices;
++            for (auto item = retMap.value().constBegin(); item != retMap.value().constEnd(); ++item) {
++                devices.insert(item.key(), item.value().toBool());
++            }
++            lanDataKeeper->reconcileDeviceList(devices, WIRED_DEVICE);
++            for (auto item = devices.constBegin(); item != devices.constEnd(); ++item) {
++                if (item.value()) {
++                    getWiredConList(item.key());
++                }
+             }
+             KInterface::getInstance()->updateWiredDeviceList();
+         }
+@@ -623,19 +632,54 @@ void KnmDBusCaller::getWirelessSwitchStateFinished(QDBusPendingCallWatcher *watc
+ // LCOV_EXCL_START
+ void KnmDBusCaller::getWiredMainSwitchStateFinished(QDBusPendingCallWatcher *watcher)
+ {
+-    qDebug() << Q_FUNC_INFO << __LINE__;
++    const bool confirmsInFlightRequest = watcher->property("confirmsInFlightWiredSwitchRequest").toBool();
++    const bool requestedState = watcher->property("wiredSwitchRequestedState").toBool();
+     m_pendingCount--;
+     QDBusMessage reply = watcher->reply();
+-    qDebug() << Q_FUNC_INFO << __LINE__ << reply;
+ 
+     if(reply.type() == QDBusMessage::ReplyMessage) {
+         if(reply.arguments().size() > 0) {
+             QDBusReply<bool> retList = reply;
+-            lanDataKeeper->setWiredMainSwitchState(retList.value());
+-            KInterface::getInstance()->updateWiredMainSwitch();
++            const bool state = retList.value();
++            if (confirmsInFlightRequest) {
++                m_wiredMainSwitchRequestInFlight = false;
++
++                if (requestedState != m_wiredMainSwitchDesiredState) {
++                    const bool accepted = lanDataKeeper->applyWiredMainSwitchState(state, false);
++                    if (accepted) {
++                        KInterface::getInstance()->updateWiredMainSwitch();
++                    }
++                    processWiredMainSwitchDesiredState();
++                    return;
++                }
++
++                if (state != m_wiredMainSwitchDesiredState) {
++                    lanDataKeeper->cancelWiredMainSwitchChange();
++                }
++            }
++
++            const bool accepted = lanDataKeeper->applyWiredMainSwitchState(state, confirmsInFlightRequest);
++            if (accepted) {
++                KInterface::getInstance()->updateWiredMainSwitch();
++            }
++            if (confirmsInFlightRequest) {
++                updateWiredDeviceMap();
++            }
++            return;
+         }
++    }
++
++    qWarning() << reply.errorMessage();
++    if (!confirmsInFlightRequest) {
++        return;
++    }
++
++    m_wiredMainSwitchRequestInFlight = false;
++    if (requestedState != m_wiredMainSwitchDesiredState) {
++        processWiredMainSwitchDesiredState();
+     } else {
+-        qWarning() << reply.errorMessage();
++        lanDataKeeper->cancelWiredMainSwitchChange();
++        getWiredMainSwitchState();
+     }
+ }
+ // LCOV_EXCL_STOP
+@@ -655,8 +699,26 @@ void KnmDBusCaller::setWirelessSwitchEnableFinished(QDBusPendingCallWatcher *wat
+ 
+ void KnmDBusCaller::setWiredMainSwitchEnable(bool enable)
+ {
+-    
+-    qDebug() << Q_FUNC_INFO << __LINE__ << enable;
++    m_wiredMainSwitchDesiredState = enable;
++    lanDataKeeper->beginWiredMainSwitchChange(enable);
++    if (KnmInterface *interface = KInterface::getInstance()) {
++        interface->updateWiredMainSwitch();
++    }
++
++    processWiredMainSwitchDesiredState();
++}
++
++void KnmDBusCaller::processWiredMainSwitchDesiredState()
++{
++    if (m_wiredMainSwitchRequestInFlight) {
++        return;
++    }
++
++    dispatchWiredMainSwitchRequest(m_wiredMainSwitchDesiredState);
++}
++
++void KnmDBusCaller::dispatchWiredMainSwitchRequest(bool enable)
++{
+     QList<QVariant> list;
+     list.append(enable);
+ 
+@@ -665,24 +727,36 @@ void KnmDBusCaller::setWiredMainSwitchEnable(bool enable)
+         watcher = this->asyncCall("setWiredSwitchEnable", list);
+ 
+     if(watcher) {
++        m_wiredMainSwitchRequestInFlight = true;
++        m_wiredMainSwitchInFlightState = enable;
++        watcher->setProperty("wiredSwitchRequestedState", enable);
+         m_pendingCount++;
+         this->connect(watcher, &QDBusPendingCallWatcher::finished, this, &KnmDBusCaller::setWiredMainSwitchEnableFinished);
+     }
+     else {
+         qWarning() << "null pending";
++        lanDataKeeper->cancelWiredMainSwitchChange();
++        getWiredMainSwitchState();
+     }
+ }
+ 
+ // LCOV_EXCL_START
+ void KnmDBusCaller::setWiredMainSwitchEnableFinished(QDBusPendingCallWatcher *watcher)
+ {
++    const bool sentState = watcher->property("wiredSwitchRequestedState").toBool();
+     m_pendingCount--;
+     QDBusMessage reply = watcher->reply();
+     if(reply.type() == QDBusMessage::ReplyMessage) {
+-        getWiredMainSwitchState();
+-        updateWiredDeviceMap();
++        getWiredMainSwitchState(true);
+     } else {
++        m_wiredMainSwitchRequestInFlight = false;
+         qWarning() << reply.errorMessage();
++        if (sentState != m_wiredMainSwitchDesiredState) {
++            processWiredMainSwitchDesiredState();
++        } else {
++            lanDataKeeper->cancelWiredMainSwitchChange();
++            getWiredMainSwitchState();
++        }
+     }
+ }
+ // LCOV_EXCL_STOP
+diff --git a/qml-network/plugin/knmdbuscaller.h b/qml-network/plugin/knmdbuscaller.h
+index beeef55..1203d4e 100755
+--- a/qml-network/plugin/knmdbuscaller.h
++++ b/qml-network/plugin/knmdbuscaller.h
+@@ -102,7 +102,7 @@ public:
+ 
+     void getWirelessSwitchState();
+ 
+-    void getWiredMainSwitchState();
++    void getWiredMainSwitchState(bool confirmsInFlightRequest = false);
+ 
+     void getWiredConListFinished(QDBusPendingCallWatcher *watcher, QString dev);
+ 
+@@ -138,9 +138,15 @@ protected:
+     QDBusInterface      *m_pInterface = nullptr;
+ 
+ private:
++    void processWiredMainSwitchDesiredState();
++    void dispatchWiredMainSwitchRequest(bool enable);
++
+     int m_pendingCount = 0;
+     KnmLanDataKeeperPtr  lanDataKeeper;
+     KnmWlanDataKeeperPtr wlanDataKeeper;
++    bool m_wiredMainSwitchRequestInFlight = false;
++    bool m_wiredMainSwitchInFlightState = false;
++    bool m_wiredMainSwitchDesiredState = false;
+ 
+ protected:
+     friend class SingleTon<KnmDBusCaller>;
+diff --git a/qml-network/plugin/knmlandatakeeper.cpp b/qml-network/plugin/knmlandatakeeper.cpp
+index cce0978..025556e 100644
+--- a/qml-network/plugin/knmlandatakeeper.cpp
++++ b/qml-network/plugin/knmlandatakeeper.cpp
+@@ -76,6 +76,33 @@ KnmLanDataKeeper::~KnmLanDataKeeper()
+     }
+ }
+ 
++void KnmLanDataKeeper::beginWiredMainSwitchChange(bool requestedState)
++{
++    m_wiredMainSwitchChangePending = true;
++    m_requestedWiredMainSwitchState = requestedState;
++    m_wiredMainSwitchState = requestedState;
++    m_switchState = requestedState;
++}
++
++void KnmLanDataKeeper::cancelWiredMainSwitchChange()
++{
++    m_wiredMainSwitchChangePending = false;
++}
++
++bool KnmLanDataKeeper::applyWiredMainSwitchState(bool state, bool authoritativeConfirmation)
++{
++    if (m_wiredMainSwitchChangePending && state != m_requestedWiredMainSwitchState) {
++        return false;
++    }
++
++    m_wiredMainSwitchState = state;
++    m_switchState = state;
++    if (m_wiredMainSwitchChangePending && authoritativeConfirmation) {
++        m_wiredMainSwitchChangePending = false;
++    }
++    return true;
++}
++
+ QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringList conPath)
+ {
+     QMap<QString, QVariant> connectionMap;
+@@ -220,12 +247,12 @@ void KnmLanDataKeeper::onLanRemove(QString path)
+     QStringList devList = m_deviceList.keys();
+     for (int i = 0; i < devList.count(); i++)
+     {
+-        //所有网卡设备均删除该连接
+-        if (m_deviceList.value(devList.at(i))->containsConnection(path)) {
+-            NetDevicePtr dev = m_deviceList.take(devList.at(i));
+-            dev->removeConnection(path);
+-            m_deviceList.insert(devList.at(i), dev);
++        NetDevicePtr dev = m_deviceList.value(devList.at(i));
++        if (dev.isNull() || !dev->containsConnection(path)) {
++            continue;
+         }
++        //所有网卡设备均删除该连接
++        dev->removeConnection(path);
+     }
+     if (KInterface::getInstance() != nullptr) {
+         KInterface::getInstance()->getWiredDevConnList();
+@@ -236,6 +263,9 @@ void KnmLanDataKeeper::onLanRemove(QString path)
+ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
+ {
+     qDebug() << "dddname: " << deviceName << "   info:" << lanInfo;
++    if (lanInfo.size() < 5)
++        return;
++
+     QStringList devList = m_deviceList.keys();
+     if (deviceName.isEmpty()) {
+         for (int i = 0; i < devList.count(); i++) {
+@@ -247,16 +277,9 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
+                 continue;
+             }
+ 
+-            //连接不属于任何设备,且修改属性
++            // 保留实时状态，仅合并名称、Path 等连接属性。
+             NetDevicePtr dev = m_deviceList.take(devList.at(i));
+-            int status = DEACTIVATED;
+-            QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
+-            if(valueMap.value("State").toInt()
+-                    && valueMap.value("Uuid").toString() == lanInfo.at(1)) {
+-                status =  lanInfo.at(4).toInt();
+-            }
+-            dev->removeConnection(lanInfo.at(2));
+-            dev->addConnection(makeConnectionMap(status, lanInfo));
++            dev->addConnection(makeConnectionMap(lanInfo.at(4).toInt(), lanInfo));
+             m_deviceList.insert(devList.at(i), dev);
+         }
+         if (KInterface::getInstance() != nullptr) {
+@@ -269,11 +292,10 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
+     {
+         //连接被修改为不属于列表第i个设备,故而删除
+         if (devList.at(i) != deviceName) {
+-            NetDevicePtr dev = m_deviceList.take(devList.at(i));
++            NetDevicePtr dev = m_deviceList.value(devList.at(i));
+             if(dev.isNull() || lanInfo.at(2).isEmpty())
+                 continue;
+             dev->removeConnection(lanInfo.at(2));
+-            m_deviceList.insert(devList.at(i), dev);
+             continue;
+         }
+ 
+@@ -285,17 +307,9 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
+             continue;
+         }
+ 
+-        //连接被修改了名称
++        // 连接属性变化不能覆盖 active-state 信号维护的实时状态。
+         NetDevicePtr dev = m_deviceList.take(devList.at(i));
+-        int status = DEACTIVATED;
+-        QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
+-
+-        if(valueMap.value("State").toInt()
+-                && valueMap.value("Uuid").toString() == lanInfo.at(1)) {
+-            status = lanInfo.at(4).toInt();
+-        }
+-        dev->removeConnection(lanInfo.at(2));
+-        dev->addConnection(makeConnectionMap(status, lanInfo));
++        dev->addConnection(makeConnectionMap(lanInfo.at(4).toInt(), lanInfo));
+         m_deviceList.insert(devList.at(i), dev);
+     }
+     if (KInterface::getInstance() != nullptr) {
+@@ -320,8 +334,9 @@ void KnmLanDataKeeper::onDeviceNameChanged(QString oldName, QString newName, int
+ 
+ void KnmLanDataKeeper::onSwitchBtnChanged(bool status)
+ {
+-    m_wiredMainSwitchState = status;
+-    m_switchState = status;
++    if (!applyWiredMainSwitchState(status, false)) {
++        return;
++    }
+     if (KInterface::getInstance() != nullptr) {
+         KInterface::getInstance()->updateWiredMainSwitch();
+     }
+diff --git a/qml-network/plugin/knmlandatakeeper.h b/qml-network/plugin/knmlandatakeeper.h
+index fd4c0bd..ea5c226 100755
+--- a/qml-network/plugin/knmlandatakeeper.h
++++ b/qml-network/plugin/knmlandatakeeper.h
+@@ -26,6 +26,10 @@ public:
+     //添加网卡设备的连接
+     void addDevConnection(QString devName, QList<QStringList> conPath);
+ 
++    void beginWiredMainSwitchChange(bool requestedState);
++    void cancelWiredMainSwitchChange();
++    bool applyWiredMainSwitchState(bool state, bool authoritativeConfirmation);
++
+ signals:
+     void onDeviceStatusChanged();
+ 
+@@ -55,6 +59,8 @@ private slots:
+ 
+ private:
+     QDBusInterface      *m_pInterface = nullptr;
++    bool m_wiredMainSwitchChangePending = false;
++    bool m_requestedWiredMainSwitchState = false;
+ };
+ 
+ #endif // KNMLANDATAKEEPER_H
+diff --git a/qml-network/plugin/knmwlandatakeeper.cpp b/qml-network/plugin/knmwlandatakeeper.cpp
+index e85455a..1520e66 100755
+--- a/qml-network/plugin/knmwlandatakeeper.cpp
++++ b/qml-network/plugin/knmwlandatakeeper.cpp
+@@ -365,11 +365,22 @@ void KnmWlanDataKeeper::onNetworkAdd(QString deviceName, QStringList wlanInfo)
+ 
+     qDebug() << deviceName << wlanInfo << wlanInfo.count();
+     NetDevicePtr dev = m_deviceList.value(deviceName);
+-    /*根据后端链表每个项添加的参数来的，改了后端需要改这里，只有10项表示未连接，11项表示已连接；后面需要优化可一样的项数通过赋特定空值区分，不然维护,容易改漏且容易歧义*/
+-    if (wlanInfo.count() == 10)
+-        dev->addConnection(makeConnectionMap(DEACTIVATED, wlanInfo));
+-    if (wlanInfo.count() == 11)
++    /*根据后端链表每个项添加的参数来的，改了后端需要改这里：
++     * 10项：未配置/无激活状态，按未连接处理；
++     * 11项：末尾为 NetworkManager::ActiveConnection::State（与 ACTIVATING/ACTIVATED/... 取值一致）。
++     * ifconfig down/up 回连时，AP 可能以已连接状态直接 wlanAdd，若仍按 DEACTIVATED 入库，
++     * 且此时未必再收到 wlanactiveConnectionStateChanged，任务栏会一直不显示「已连接」。*/
++    int status = DEACTIVATED;
++    if (wlanInfo.count() == 11) {
++        int nmState = wlanInfo.last().toInt();
++        if (nmState == ACTIVATING || nmState == ACTIVATED
++                || nmState == DEACTIVATING || nmState == DEACTIVATED) {
++            status = nmState;
++        }
++        dev->addConnection(makeConnectionMap(status, wlanInfo));
++    } else if (wlanInfo.count() == 10) {
+         dev->addConnection(makeConnectionMap(DEACTIVATED, wlanInfo));
++    }
+     KInterface::getInstance()->getWirelessDevConnList();
+ }
+ 
+diff --git a/qml-network/plugin/netdevice.cpp b/qml-network/plugin/netdevice.cpp
+index 591f2d1..eee7501 100755
+--- a/qml-network/plugin/netdevice.cpp
++++ b/qml-network/plugin/netdevice.cpp
+@@ -19,6 +19,42 @@
+  */
+ #include "netdevice.h"
+ 
++namespace {
++
++bool sameWiredConnection(const QVariantMap &left, const QVariantMap &right)
++{
++    const QString leftUuid = left.value(QStringLiteral("Uuid")).toString();
++    const QString rightUuid = right.value(QStringLiteral("Uuid")).toString();
++    if (!leftUuid.isEmpty() && !rightUuid.isEmpty()) {
++        return leftUuid == rightUuid;
++    }
++
++    const QString leftPath = left.value(QStringLiteral("Path")).toString();
++    const QString rightPath = right.value(QStringLiteral("Path")).toString();
++    return !leftPath.isEmpty() && leftPath == rightPath;
++}
++
++bool isWiredRuntimeField(const QString &key)
++{
++    return key == QStringLiteral("State")
++        || key == QStringLiteral("Connectivity")
++        || key == QStringLiteral("Loading");
++}
++
++QVariantMap mergeWiredConnection(const QVariantMap &current, const QVariantMap &incoming)
++{
++    QVariantMap merged = current;
++    for (auto it = incoming.constBegin(); it != incoming.constEnd(); ++it) {
++        if (isWiredRuntimeField(it.key()) && current.contains(it.key())) {
++            continue;
++        }
++        merged.insert(it.key(), it.value());
++    }
++    return merged;
++}
++
++}
++
+ NetDevice::NetDevice(QString devName, DeviceType type)
+     : m_Name(devName)
+     , m_Available(false)
+@@ -52,6 +88,28 @@ DeviceType NetDevice::getDevType()
+ 
+ void NetDevice::addConnection(QMap<QString, QVariant> connections)
+ {
++    if (m_DevType == WIRED_DEVICE) {
++        QList<int> matchingIndexes;
++        for (int i = 0; i < m_connectionsList.size(); ++i) {
++            if (sameWiredConnection(m_connectionsList.at(i).toMap(), connections)) {
++                matchingIndexes.append(i);
++            }
++        }
++
++        if (!matchingIndexes.isEmpty()) {
++            const int canonicalIndex = matchingIndexes.first();
++            const QVariantMap current = m_connectionsList.at(canonicalIndex).toMap();
++            const QVariantMap merged = mergeWiredConnection(current, connections);
++
++            // Collapse any duplicates left by earlier refresh races before updating in place.
++            for (int i = matchingIndexes.size() - 1; i > 0; --i) {
++                m_connectionsList.removeAt(matchingIndexes.at(i));
++            }
++            m_connectionsList.replace(canonicalIndex, merged);
++            return;
++        }
++    }
++
+     if (m_connectionsList.contains(connections))
+         return;
+ 
+diff --git a/qml-network/widget/ui/WlanComponent.qml b/qml-network/widget/ui/WlanComponent.qml
+index 3aff1e7..5d06e52 100755
+--- a/qml-network/widget/ui/WlanComponent.qml
++++ b/qml-network/widget/ui/WlanComponent.qml
+@@ -117,6 +117,7 @@ ListView {
+         property bool autoConnectCheckBoxLoaded: false
+         property bool passwordError: false  // 标记当前项是否密码错误
+         property bool waitingForPassword: false
++        property bool pwdBtnClicked: false  // 标记是否父级收起
+ 
+         onConConnectedChanged: {
+             updateMacConnAttr(index, conConnected)
+@@ -325,6 +326,12 @@ ListView {
+ 
+             // 点击Item时候焦点聚焦
+             onClicked: {
++
++                if(pwdBtnClicked){
++                    pwdBtnClicked=false;
++                    return;
++                }
++
+                 mouse.accepted = false
+ 
+                 if (mouse.button == Qt.RightButton && model.status !== 2) {
+@@ -606,22 +613,20 @@ ListView {
+                                 property int textLength: textEdit.text.length
+                                 validator: RegExpValidator { regExp: /^[a-zA-Z0-9\s\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^_\`\{\|\}\~]*$/}
+ 
++
+                                 onTextLengthChanged: {
+-                                    if(textLength>=8) {
+-                                        if (pwdConnectBtnLoader.item) {
+-                                            pwdConnectBtnLoader.item.enabled = true
+-                                        }
+-                                    } else {
+-                                        if (pwdConnectBtnLoader.item) {
+-                                            pwdConnectBtnLoader.item.enabled = false
+-                                        }
++                                    if (pwdConnectBtnLoader.item) {
++                                        //pwdConnectBtnLoader.item.enabled = textLength>=8
++                                        pwdConnectBtnLoader.item.opacity = textLength>=8? 1.0:0.4
+                                     }
+                                 }
+ 
++
+                                 onAccepted: {
+ 
+-                                    KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text,
+-                                                               autoConnectCheckBoxLoader.item ? autoConnectCheckBoxLoader.item.checkState : true)
++                                    if (pwdConnectBtnLoader.item) {
++                                        pwdConnectBtnLoader.item.clicked();
++                                    }
+                                 }
+                             }
+                         }
+@@ -640,6 +645,12 @@ ListView {
+                                 property var maxWidth: 88
+ 
+                                 onClicked: {
++
++                                    if(!textEditLoader.item || textEditLoader.item.textLength<8){
++                                        pwdBtnClicked=true;
++                                        console.log("passwd is too short!")
++                                        return;
++                                    }
+                                     errorText.visible = false;// 在点击连接按钮后也隐藏错误（无论成功与否）
+                                     if (waitingForPassword) {
+                                         // 提交新密码
+@@ -655,7 +666,8 @@ ListView {
+                                 }
+ 
+                                 Component.onCompleted: {
+-                                    pwdConnectBtn.enabled = (textEditLoader.item && textEditLoader.item.textLength>=8 ? true : false)
++                                    //pwdConnectBtn.enabled = (textEditLoader.item && textEditLoader.item.textLength>=8 ? true : false)
++                                    pwdConnectBtn.opacity = (textEditLoader.item && textEditLoader.item.textLength>=8 ? 1.0 : 0.4)
+                                 }
+                             }
+                         }
+@@ -907,6 +919,12 @@ ListView {
+             // 每次显示时立即请求一次扫描
+             KInterface.rescanWirelessConn();
+         } else {
++            for(var i=0; i<wlanlistView.count; i++) {
++                var d = wlanlistView.itemAtIndex(i);
++                if (d && d.waitingForPassword) {
++                        d.hideDetail();
++                }
++            }
+             try {
+                 if (wlanListReorderPaused) {
+                     wlanListReorderPaused = false
+diff --git a/src/backend/dbus-interface/kylinconnectoperation.cpp b/src/backend/dbus-interface/kylinconnectoperation.cpp
+index 59f43a1..8d72e6a 100644
+--- a/src/backend/dbus-interface/kylinconnectoperation.cpp
++++ b/src/backend/dbus-interface/kylinconnectoperation.cpp
+@@ -203,6 +203,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
+              << "specific parameter"<< specificObject;
+ 
+     //set autoconnect
++    bool configUpdated = false;
+     if (autoconnect)//当前配置仅在有线连接的时候默认配置，无线遵循Windows逻辑
+     {
+         NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+@@ -216,11 +217,12 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
+             setAutoConnect(connectionSettings,true);
+             // 保存autoconnect设置到配置文件
+             connectPtr->update(connectionSettings->toMap());
++            configUpdated = true;
+         }
+     }
+ 
+     /*v11 network-manager 不允许在连接中途修改配置 会导致连接失败，增加延时确保激活连接前配置已修改完毕*/
+-    QTimer::singleShot(500,this,[this,connectPath,connectPtr, deviceIdentifier, specificObject,connectName, deviceName](){
++    auto doActivate = [this, connectPath, connectPtr, deviceIdentifier, specificObject, connectName, deviceName](){
+         QDBusPendingCallWatcher * watcher;
+         watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
+         connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {
+@@ -234,7 +236,16 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
+ 
+              watcher->deleteLater();
+         });
+-    });
++    };
++
++    /*v11 network-manager 不允许在连接中途修改配置 会导致连接失败。
++      仅在确实更新了配置(configUpdated)时才延时，确保激活前配置已修改完毕；
++      未修改配置则立即激活，避免无谓的 500ms 等待。*/
++    if (configUpdated) {
++        QTimer::singleShot(500, this, doActivate);
++    } else {
++        doActivate();
++    }
+ 
+     return ;
+ }
+@@ -260,6 +271,11 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
+         return ;
+     }
+ 
++    if (concise
++            && activateConnectPtr->state() == NetworkManager::ActiveConnection::State::Deactivating) {
++        return;
++    }
++
+     qDebug() <<"dead active connection path:"<< activateConnectPtr->path();
+     QDBusPendingReply<> reply = NetworkManager::deactivateConnection(activateConnectPtr->path());
+     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
+diff --git a/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp b/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp
+index 51341d4..8195ebb 100644
+--- a/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp
++++ b/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp
+@@ -95,6 +95,7 @@ void KyNetworkDeviceResourse::initDeviceMap()
+     NetworkManager::Device::List deviceList
+             = m_networkResourceInstance->getNetworkDeviceList();
+ 
++
+     if (deviceList.isEmpty()) {
+         qDebug() << LOG_FLAG << "there is not interface in computer.";
+         return;
+@@ -161,7 +162,7 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->getNetworkDevice(ifaceName);
+ 
+-    if (nullptr == connectDevice || !connectDevice->isValid()) {
++    if (connectDevice.isNull() || !connectDevice->isValid()) {
+         qWarning()<< LOG_FLAG <<"get hardware info failed, the device" << ifaceName << "is not existed";
+         hardAddress.clear();
+         bandWith = 0;
+@@ -252,7 +253,7 @@ qulonglong KyNetworkDeviceResourse::getDeviceRxRefreshRate(QString deviceName)
+ {
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->findDeviceInterface(deviceName);
+-    if (connectDevice->isValid()) {
++    if (!connectDevice.isNull() && connectDevice->isValid())  {
+         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
+         qulonglong rx = 0;
+         rx = deviceStatistics->rxBytes();
+@@ -270,7 +271,7 @@ qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
+ {
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->findDeviceInterface(deviceName);
+-    if (connectDevice->isValid()) {
++    if (!connectDevice.isNull() && connectDevice->isValid())  {
+         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
+         qulonglong tx = 0;
+         tx = deviceStatistics->txBytes();
+@@ -290,7 +291,7 @@ void KyNetworkDeviceResourse::getDeviceConnectivity(const QString &deviceName, N
+     QString dbusPath;
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->findDeviceInterface(deviceName);
+-    if (connectDevice != nullptr && connectDevice->isValid()) {
++    if (!connectDevice.isNull() && connectDevice->isValid()) {
+        dbusPath = connectDevice->uni();
+     } else {
+         qWarning() << "[KyNetworkDeviceResourse] can not find device " << deviceName;
+@@ -326,7 +327,7 @@ bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->getNetworkDevice(devName);
+ 
+-    if (nullptr == connectDevice || !connectDevice->isValid()) {
++    if (connectDevice.isNull() || !connectDevice->isValid()) {
+         qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
+         return false;
+     }
+@@ -513,7 +514,7 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->getNetworkDevice(devName);
+ 
+-    if (nullptr == connectDevice || !connectDevice->isValid()) {
++    if (connectDevice.isNull() || !connectDevice->isValid()) {
+         qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
+         return;
+     }
+@@ -549,7 +550,7 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
+ {
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->findDeviceInterface(deviceName);
+-    if (connectDevice->isValid()
++    if (!connectDevice.isNull()  && connectDevice->isValid()
+             && NetworkManager::Device::Type::Wifi == connectDevice->type()) {
+         NetworkManager::WirelessDevice *wirelessDevicePtr =
+             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+@@ -649,7 +650,7 @@ void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
+     QString dbusPath;
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->findDeviceInterface(devName);
+-    if (connectDevice->isValid()) {
++    if (!connectDevice.isNull() && connectDevice->isValid()) {
+        dbusPath = connectDevice->uni();
+     } else {
+         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << devName;
+@@ -681,7 +682,7 @@ bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)
+ {
+     NetworkManager::Device::Ptr connectDevice =
+                         m_networkResourceInstance->findDeviceInterface(deviceName);
+-    if (connectDevice != nullptr && connectDevice->isValid()) {
++    if (!connectDevice.isNull() && connectDevice->isValid()) {
+        return connectDevice->managed();
+     } else {
+         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << deviceName;
+diff --git a/src/backend/dbus-interface/kylinnetworkresourcemanager.cpp b/src/backend/dbus-interface/kylinnetworkresourcemanager.cpp
+index 1f36ee2..494fd58 100644
+--- a/src/backend/dbus-interface/kylinnetworkresourcemanager.cpp
++++ b/src/backend/dbus-interface/kylinnetworkresourcemanager.cpp
+@@ -19,6 +19,7 @@
+ #include "kylinnetworkresourcemanager.h"
+ #include <QMetaType>
+ #include <QTimer>
++#include <QMutexLocker>
+ #include "kylinutil.h"
+ 
+ #define SIGNAL_DELAY 80000
+@@ -115,10 +116,15 @@ void KyNetworkResourceManager::onInitNetwork()
+     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearConnections);
+     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearWifiNetworks);
+ 
++    int deviceSize = 0;
++    {
++        QMutexLocker locker(&m_devicesMutex);
++        deviceSize = m_devices.size();
++    }
+     qDebug() <<"[KyNetworkResourceManager]"
+              << "active connections:" << m_activeConns.size()
+              << "connections:" << m_connections.size()
+-             << "network device:" << m_devices.size();
++             << "network device:" << deviceSize;
+     m_initFinished = true;
+ 
+     return;
+@@ -227,6 +233,13 @@ void KyNetworkResourceManager::insertConnections()
+ 
+ void KyNetworkResourceManager::removeDevice(int pos)
+ {
++    // KVE-2026-0890: 加锁保护 m_devices，防止与其他线程并发遍历/修改
++    QMutexLocker locker(&m_devicesMutex);
++
++    if (pos < 0 || pos >= m_devices.size()) {
++        return;
++    }
++
+     //connections signals
+     NetworkManager::Device::Ptr device = m_devices.takeAt(pos);
+ 
+@@ -239,12 +252,17 @@ void KyNetworkResourceManager::removeDevice(int pos)
+ 
+ void KyNetworkResourceManager::clearDevices()
+ {
++    // KVE-2026-0890: 加锁保护 m_devices（递归锁，removeDevice 内部会再次加锁）
++    QMutexLocker locker(&m_devicesMutex);
+     while (0 < m_devices.size())
+         removeDevice(0);
+ }
+ 
+ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
+ {
++    // KVE-2026-0890: 加锁保护 m_devices，防止与其他线程并发遍历/修改
++    QMutexLocker locker(&m_devicesMutex);
++
+     m_devices.push_back(device);
+     //device signals
+ #if 0
+@@ -359,7 +377,14 @@ void KyNetworkResourceManager::addWifiNetwork(NetworkManager::WirelessNetwork::P
+ 
+ void KyNetworkResourceManager::insertWifiNetworks()
+ {
+-    for (auto const & device : m_devices) {
++    // KVE-2026-0890: 先在锁内取快照，避免遍历时列表被其他线程修改
++    NetworkManager::Device::List devices;
++    {
++        QMutexLocker locker(&m_devicesMutex);
++        devices = m_devices;
++    }
++
++    for (auto const & device : devices) {
+         if (device.isNull()) {
+             continue;
+         }
+@@ -387,6 +412,8 @@ NetworkManager::ActiveConnection::Ptr KyNetworkResourceManager::findActiveConnec
+ template <typename Predicate>
+ NetworkManager::Device::Ptr KyNetworkResourceManager::findDevice(Predicate const & pred)
+ {
++    // KVE-2026-0890: 加锁保护 m_devices 遍历，防止迭代器/指针失效
++    QMutexLocker locker(&m_devicesMutex);
+     auto i = std::find_if(m_devices.cbegin(), m_devices.cend(), pred);
+     return m_devices.cend() == i ? NetworkManager::Device::Ptr{} : *i;
+ }
+@@ -416,6 +443,8 @@ NetworkManager::Device::Ptr KyNetworkResourceManager::getNetworkDevice(const QSt
+         return nullptr;
+     }
+ 
++    // KVE-2026-0890: 加锁保护 m_devices 遍历
++    QMutexLocker locker(&m_devicesMutex);
+     for (int index = 0; index < m_devices.size(); ++index) {
+         devicePtr = m_devices.at(index);
+         if (devicePtr.isNull()) {
+@@ -498,6 +527,8 @@ NetworkManager::Connection::List KyNetworkResourceManager::getConnectList()
+ 
+ NetworkManager::Device::List KyNetworkResourceManager::getNetworkDeviceList()
+ {
++    // KVE-2026-0890: 加锁后返回快照
++    QMutexLocker locker(&m_devicesMutex);
+     return m_devices;
+ }
+ 
+@@ -915,10 +946,8 @@ void KyNetworkResourceManager::onWifiNetworkRemove(NetworkManager::Device * dev,
+         auto pos = m_wifiNets.indexOf(net);
+         if (0 <= pos) {
+             removeWifiNetwork(pos);
+-            NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+-            QByteArray rawSsid = accessPoitPtr->rawSsid();
+-            QString wifiSsid = getSsidFromByteArray(rawSsid);
+-            Q_EMIT wifiNetworkRemoved(dev->interfaceName(), wifiSsid);
++
++            Q_EMIT wifiNetworkRemoved(dev->interfaceName(), ssid);
+         }
+     }
+ 
+@@ -944,6 +973,7 @@ void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)
+ 
+ void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
+ {
++    qDebug()<< LOG_FLAG << " onWifiNetworkDisappeared ."<<ssid;
+     NetworkManager::Device *p_device = qobject_cast<NetworkManager::Device *>(sender());
+     if (nullptr != p_device) {
+         onWifiNetworkRemove(p_device, ssid);
+@@ -988,6 +1018,7 @@ void KyNetworkResourceManager::onReferenceAccessPointChanged()
+                     qobject_cast<NetworkManager::WirelessNetwork *>(sender());
+     if (nullptr != p_wirelessNet) {
+         onAccessPointUpdate(p_wirelessNet);
++        qDebug()<< LOG_FLAG  << " onReferenceAccessPointChanged"<<p_wirelessNet->ssid();
+     }
+ }
+ 
+@@ -1040,8 +1071,17 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
+         return;
+     }
+ 
+-    if (0 > m_devices.indexOf(networkDevice)) {
+-        addDevice(networkDevice);
++    // KVE-2026-0890: 列表查重与插入在锁内完成，信号在锁外发射
++    bool added = false;
++    {
++        QMutexLocker locker(&m_devicesMutex);
++        if (0 > m_devices.indexOf(networkDevice)) {
++            addDevice(networkDevice);
++            added = true;
++        }
++    }
++
++    if (added) {
+         Q_EMIT deviceAdd(networkDevice->interfaceName(), networkDevice->uni(), networkDevice->type());
+     } else {
+         qWarning() << networkDevice->interfaceName() <<"the device is exist in network device list.";
+@@ -1052,19 +1092,32 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
+ 
+ void KyNetworkResourceManager::onDeviceRemoved(QString const & uni)
+ {
+-    NetworkManager::Device::Ptr networkDevice = findDeviceUni(uni);
+-    if (networkDevice.isNull()) {
+-        qWarning()<<"the device is not exist in network device list ."<< uni;
+-        return;
+-    }
++    // KVE-2026-0890: 查找与移除在锁内完成，信号在锁外发射
++    NetworkManager::Device::Ptr networkDevice;
++    QString ifaceName;
++    QString devUni;
+ 
+-    qDebug()<<"remove network device"<< networkDevice->interfaceName() <<"uni:" << uni;
++    {
++        QMutexLocker locker(&m_devicesMutex);
++        networkDevice = findDeviceUni(uni);
++        if (networkDevice.isNull()) {
++            qWarning()<<"the device is not exist in network device list ."<< uni;
++            return;
++        }
++
++        qDebug()<<"remove network device"<< networkDevice->interfaceName() <<"uni:" << uni;
++
++        auto index = std::find(m_devices.cbegin(), m_devices.cend(), networkDevice);
++        if (m_devices.cend() != index) {
++            const int pos = index - m_devices.cbegin();
++            ifaceName = networkDevice->interfaceName();
++            devUni = networkDevice->uni();
++            removeDevice(pos);
++        }
++    }
+ 
+-    auto index = std::find(m_devices.cbegin(), m_devices.cend(), networkDevice);
+-    if (m_devices.cend() != index) {
+-        const int pos = index - m_devices.cbegin();
+-        removeDevice(pos);
+-        Q_EMIT deviceRemove(networkDevice->interfaceName(), networkDevice->uni());
++    if (!ifaceName.isEmpty()) {
++        Q_EMIT deviceRemove(ifaceName, devUni);
+     }
+ 
+     return;
+diff --git a/src/backend/dbus-interface/kylinnetworkresourcemanager.h b/src/backend/dbus-interface/kylinnetworkresourcemanager.h
+index e12bd8e..77fac9d 100644
+--- a/src/backend/dbus-interface/kylinnetworkresourcemanager.h
++++ b/src/backend/dbus-interface/kylinnetworkresourcemanager.h
+@@ -45,6 +45,7 @@
+ #include <QInputDialog>
+ #include <QMetaEnum>
+ #include <QDBusContext>
++#include <QMutex>
+ 
+ QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags);
+ 
+@@ -213,6 +214,13 @@ private:
+ private:
+     bool m_initFinished = false;
+ 
++    // KVE-2026-0890: 保护 m_devices 的互斥锁。
++    // worker 线程（DBus 回调 onDeviceAdded/onDeviceRemoved）与 GUI 线程
++    // （findDeviceInterface/getNetworkDevice 等遍历）并发访问 m_devices，
++    // 无锁会导致悬空指针 use-after-free。使用递归锁，因为存在
++    // onDeviceRemoved -> findDeviceUni/removeDevice 的嵌套加锁调用。
++    mutable QMutex m_devicesMutex{QMutex::Recursive};
++
+ public:
+     static KyNetworkResourceManager* m_pInstance;
+ 
+diff --git a/src/backend/dbus-interface/kywirelessconnectoperation.cpp b/src/backend/dbus-interface/kywirelessconnectoperation.cpp
+index cf46da8..2145770 100644
+--- a/src/backend/dbus-interface/kywirelessconnectoperation.cpp
++++ b/src/backend/dbus-interface/kywirelessconnectoperation.cpp
+@@ -753,7 +753,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
+ 
+ void KyWirelessConnectOperation::requestWirelessScan()
+ {
+-    for (auto const & dev : m_networkResourceInstance->m_devices) {
++    // KVE-2026-0890: 通过加锁接口获取设备列表快照，避免直接遍历 m_devices 时
++    // worker 线程并发增删导致悬空指针解引用
++    for (auto const & dev : m_networkResourceInstance->getNetworkDeviceList()) {
+         auto spec_dev = dev->as<NetworkManager::WirelessDevice>();
+         if (nullptr != spec_dev) {
+             m_networkResourceInstance->requestScan(spec_dev);
+diff --git a/src/backend/dbus-interface/kywirelessnetresource.cpp b/src/backend/dbus-interface/kywirelessnetresource.cpp
+index 72d2aaa..7eb0e0d 100644
+--- a/src/backend/dbus-interface/kywirelessnetresource.cpp
++++ b/src/backend/dbus-interface/kywirelessnetresource.cpp
+@@ -529,6 +529,8 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
+ 
+ void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString ssid)
+ {
++
++    qDebug()<< LOG_FLAG << " KyWirelessNetResource: onWifiNetworkRemoved " << devIfaceName << ssid;
+     if (!m_WifiNetworkList.contains(devIfaceName)) {
+         return;
+     }
+diff --git a/src/backend/dbus.cpp b/src/backend/dbus.cpp
+index 55e12bb..580aeca 100644
+--- a/src/backend/dbus.cpp
++++ b/src/backend/dbus.cpp
+@@ -414,12 +414,7 @@ QVariantMap DbusAdaptor::getDeviceListAndEnabled(int devType)
+     getDeviceEnableState(devType, map);
+     QVariantMap vMap;
+     QMap<QString, bool>::const_iterator item = map.cbegin();
+-    QString switchSettingFile = "/etc/kylin-nm/switch.conf";
+-    QSettings switchSetting(switchSettingFile, QSettings::IniFormat, this);
+     while (item != map.cend()) {
+-        if (switchSetting.contains(item.key()))
+-            vMap.insert(item.key(), QVariant::fromValue(switchSetting.value(item.key())));
+-        else
+             vMap.insert(item.key(), QVariant::fromValue(item.value()));
+         item ++;
+     }
+@@ -636,6 +631,50 @@ int DbusAdaptor::registerInputPasswdAgent(QString agentName,QVariantMap value)
+     return 0;
+ }
+ 
++/*
++ * 校验 QVariant 是否为可安全序列化到 DBus 的基础类型。
++ * 外部传入的 a{sv} 可能包含非法/未知类型的 variant（如模糊测试构造的畸形数据），
++ * 直接转发该数据会在重新序列化时触发 libdbus 内部一致性检查失败而 abort。
++ */
++static bool isDbusSafeVariant(const QVariant &v)
++{
++    if (!v.isValid()) {
++        return false;
++    }
++
++    switch (v.userType()) {
++    case QMetaType::QString:
++    case QMetaType::Bool:
++    case QMetaType::Int:
++    case QMetaType::UInt:
++    case QMetaType::LongLong:
++    case QMetaType::ULongLong:
++    case QMetaType::Double:
++    case QMetaType::QStringList:
++        return true;
++    case QMetaType::QVariantMap: {
++        const QVariantMap map = v.toMap();
++        for (auto it = map.cbegin(); it != map.cend(); ++it) {
++            if (!isDbusSafeVariant(it.value())) {
++                return false;
++            }
++        }
++        return true;
++    }
++    case QMetaType::QVariantList: {
++        const QVariantList list = v.toList();
++        for (const QVariant &item : list) {
++            if (!isDbusSafeVariant(item)) {
++                return false;
++            }
++        }
++        return true;
++    }
++    default:
++        return false;
++    }
++}
++
+ /*请求代理接管输入*/
+ int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
+ {
+@@ -649,7 +688,16 @@ int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
+     }
+ #endif
+     //防止kylin-nm崩溃导致的未注册
+-    Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
++    //入参来自外部 DBus 调用，过滤掉无法安全序列化的值后再转发，防止畸形数据导致进程 abort
++    QVariantMap safeValue;
++    for (auto it = value.cbegin(); it != value.cend(); ++it) {
++        if (isDbusSafeVariant(it.value())) {
++            safeValue.insert(it.key(), it.value());
++        } else {
++            qWarning() << Q_FUNC_INFO << "drop unsafe variant value, key:" << it.key();
++        }
++    }
++    Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,safeValue);
+     qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
+     return  0;
+ }
+diff --git a/src/backend/proxyservicemanager.cpp b/src/backend/proxyservicemanager.cpp
+index b0be250..6cbfb4b 100644
+--- a/src/backend/proxyservicemanager.cpp
++++ b/src/backend/proxyservicemanager.cpp
+@@ -56,7 +56,7 @@ QJsonObject readJsonFile(QString filePath)
+ QJsonObject dealJsonObj(const QStringList configList)
+ {
+     QJsonObject configObj = QJsonObject();
+-    if (configList.isEmpty() && configList.count() < 3) {
++    if (configList.count() < 3) {
+         qWarning() << "configList item less!";
+         return configObj;
+     }
+@@ -834,6 +834,10 @@ void ProxyServiceManager::setAppProxyConfig(const QStringList configList)
+     QString jsonPath = QDir::homePath() + "/" + PROXYCONF_FILE;
+     QJsonObject readObj = readJsonFile(jsonPath);
+     QJsonObject configObj = dealJsonObj(configList);
++    if (configObj.isEmpty()) {
++        qWarning() << "setAppProxyConfig invalid configList, ignore";
++        return;
++    }
+     startProxy(configObj);
+     if (configObj != readObj) {
+         wirteJsonFile(jsonPath, configObj);
+diff --git a/src/frontend/tab-pages/wlanpage.cpp b/src/frontend/tab-pages/wlanpage.cpp
+index 94a29ea..cc99475 100644
+--- a/src/frontend/tab-pages/wlanpage.cpp
++++ b/src/frontend/tab-pages/wlanpage.cpp
+@@ -666,6 +666,10 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
+             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
+             qDebug() << "emit wlanConnectChanged Activated";
+             Q_EMIT wlanConnectChanged(Activated);//直接修改路由器加密方式会造成没有连接过程但是ap会重新出现 如果ap是已经连接的ap，应该主动发信号告诉任务栏刷新一下图标不然可能连接还在但是图标没更新
++            // ifconfig down/up 等场景下 AP 以已连接状态重新出现时，NM 可能不再走 Activating→Activated，
++            // 需主动通知侧边栏/控制面板刷新连接状态，否则界面仍显示未连接。
++            qDebug()<< LOG_FLAG << "Q_EMIT wlanActiveConnectionStateChanged" << interface << item.m_NetSsid << Activated;
++            Q_EMIT wlanActiveConnectionStateChanged(interface, item.m_NetSsid, item.m_connectUuid, Activated);
+             return;
+         }
+     }
+diff --git a/sys-dbus-netctrl/kylin/common/kylin_cfgInfo.c b/sys-dbus-netctrl/kylin/common/kylin_cfgInfo.c
+index 6a2b8a7..ee8769e 100644
+--- a/sys-dbus-netctrl/kylin/common/kylin_cfgInfo.c
++++ b/sys-dbus-netctrl/kylin/common/kylin_cfgInfo.c
+@@ -352,7 +352,7 @@ KYLIN_CFG_API int kylinCfgLoad(KYLIN_CFG_HANDLE handle,char *path)
+ 
+     if(access(path, F_OK)!=0)
+     {
+-        KYLIN_COMMON_LOG(_LOGL_ERR,"path not exist %s",path);
++        KYLIN_COMMON_LOG(LOG_INFO,"path not exist %s",path);
+         return COMMON_FILE_NOT_EXIST;
+     }
+ 
+diff --git a/sys-dbus-register/kynmsystemdbus.cpp b/sys-dbus-register/kynmsystemdbus.cpp
+index e2f9c25..a7e79fa 100644
+--- a/sys-dbus-register/kynmsystemdbus.cpp
++++ b/sys-dbus-register/kynmsystemdbus.cpp
+@@ -259,8 +259,29 @@ QVariantMap KynmSystemDbus::getExtraDnsEnhance(const QString& name)
+  */
+ bool KynmSystemDbus::writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value)
+ {
++    // 参数校验：路径、节点名、键均不能为空
++    if (filePath.isEmpty() || feature.isEmpty() || key.isEmpty()) {
++        qWarning() << LOG_FLAG << "writeNmConfig invalid param, filePath/feature/key is empty";
++        return false;
++    }
++    
++    // 过滤".."、"."、"\\"等可改变路径指向的非法字符/路径段，防止路径穿越
++    if (filePath.contains("..") || filePath.contains('\\')) {
++        qWarning() << LOG_FLAG << "writeNmConfig filePath contains illegal chars:" << filePath;
++        return false;
++    }
++
++    // 防止节点名或键中携带路径分隔符、".."等字符，构造出非预期的配置项
++    if (feature.contains('/') || feature.contains('\\') || feature.contains("..") ||
++            key.contains('/') || key.contains('\\') || key.contains("..")) {
++        qWarning() << LOG_FLAG << "writeNmConfig invalid feature or key:" << feature << key;
++        return false;
++    }
++
++    // 路径白名单校验：规范化后仅允许写入指定配置文件，防止路径穿越、符号链接等越权写入
+     QString canonicalPath = QFileInfo(filePath).canonicalFilePath();
+     if (canonicalPath != "/etc/kylin-nm/netSwitch.conf") {
++        qWarning() << LOG_FLAG << "writeNmConfig invalid filePath:" << filePath;
+         return false;
+     }
+ 
+@@ -288,6 +309,12 @@ QVariantMap KynmSystemDbus::getNmConfig(const QString& filePath, const QString&
+ {
+     qWarning() << Q_FUNC_INFO << __LINE__ << filePath << feature;
+ 
++    // 参数校验：防止通过路径穿越（如"../"、符号链接等）越权读取任意文件
++    if (filePath.isEmpty() || feature.isEmpty()) {
++        qWarning() << LOG_FLAG << "getNmConfig filePath/feature is empty";
++        return QVariantMap();
++    }
++
+     QSettings settings(filePath, QSettings::IniFormat);
+     QMap<QString, QString> configMap;
+ 
+diff --git a/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.cpp b/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.cpp
+index 99aeafe..8c39324 100644
+--- a/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.cpp
++++ b/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.cpp
+@@ -76,6 +76,35 @@ void TestKnmDataKeeper::test_addDevice_notAvailable()
+     QVERIFY(m_keeper->getDeviceList().isEmpty());
+ }
+ 
++void TestKnmDataKeeper::test_reconcileDeviceList_preservesConnections()
++{
++    m_keeper->addDevice("eth0", true, WIRED_DEVICE);
++    m_keeper->addDevice("eth-old", true, WIRED_DEVICE);
++    const NetDevicePtr originalDevice = m_keeper->getDeviceList().value("eth0");
++
++    QMap<QString, QVariant> connection;
++    connection.insert("Name", "Wired connection 1");
++    connection.insert("Uuid", "uuid-1");
++    connection.insert("Path", "/path/1");
++    connection.insert("State", ACTIVATED);
++    originalDevice->addConnection(connection);
++
++    QMap<QString, bool> refreshedDevices;
++    refreshedDevices.insert("eth0", true);
++    refreshedDevices.insert("eth1", true);
++    m_keeper->reconcileDeviceList(refreshedDevices, WIRED_DEVICE);
++
++    const QMap<QString, NetDevicePtr> devices = m_keeper->getDeviceList();
++    QCOMPARE(devices.size(), 2);
++    QVERIFY(devices.contains("eth0"));
++    QVERIFY(devices.contains("eth1"));
++    QVERIFY(!devices.contains("eth-old"));
++    QCOMPARE(devices.value("eth0").data(), originalDevice.data());
++    QCOMPARE(devices.value("eth0")->getConnections().size(), 1);
++    QCOMPARE(devices.value("eth0")->getConnections().first().toMap().value("Uuid").toString(),
++             QString("uuid-1"));
++}
++
+ void TestKnmDataKeeper::test_clearDevice()
+ {
+     m_keeper->addDevice("eth0", true, WIRED_DEVICE);
+diff --git a/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.h b/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.h
+index 0da3c62..45bc355 100644
+--- a/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.h
++++ b/tests/qml-network/plugin/knmdatakeeper/test_knmdatakeeper.h
+@@ -24,6 +24,7 @@ private slots:
+     void test_destructor();
+     void test_addDevice();
+     void test_addDevice_notAvailable();
++    void test_reconcileDeviceList_preservesConnections();
+     void test_clearDevice();
+     void test_getDeviceList();
+     void test_getWiredMainSwitchState();
+diff --git a/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.cpp b/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.cpp
+index 44e45ed..eecabd4 100644
+--- a/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.cpp
++++ b/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.cpp
+@@ -328,6 +328,54 @@ void TestKnmLanDataKeeper::test_isDslConnection_withNonPppoeType()
+     QVERIFY(true);
+ }
+ 
++void TestKnmLanDataKeeper::test_pendingSwitchChange_ignoresStaleState()
++{
++    m_keeper->beginWiredMainSwitchChange(true);
++
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
++    QVERIFY(!m_keeper->applyWiredMainSwitchState(false, true));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
++
++    QMetaObject::invokeMethod(m_keeper, "onSwitchBtnChanged", Qt::DirectConnection,
++                              Q_ARG(bool, false));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
++}
++
++void TestKnmLanDataKeeper::test_pendingSwitchChange_acceptsLatestConfirmation()
++{
++    m_keeper->beginWiredMainSwitchChange(true);
++
++    QMetaObject::invokeMethod(m_keeper, "onSwitchBtnChanged", Qt::DirectConnection,
++                              Q_ARG(bool, true));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
++
++    QVERIFY(m_keeper->applyWiredMainSwitchState(true, true));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(!m_keeper->m_wiredMainSwitchChangePending);
++
++    QMetaObject::invokeMethod(m_keeper, "onSwitchBtnChanged", Qt::DirectConnection,
++                              Q_ARG(bool, false));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), false);
++}
++
++void TestKnmLanDataKeeper::test_pendingSwitchChange_replacesEarlierIntent()
++{
++    m_keeper->beginWiredMainSwitchChange(false);
++    m_keeper->beginWiredMainSwitchChange(true);
++
++    QVERIFY(!m_keeper->applyWiredMainSwitchState(false, true));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(m_keeper->m_wiredMainSwitchChangePending);
++
++    QVERIFY(m_keeper->applyWiredMainSwitchState(true, true));
++    QCOMPARE(m_keeper->getWiredMainSwitchState(), true);
++    QVERIFY(!m_keeper->m_wiredMainSwitchChangePending);
++}
++
+ void TestKnmLanDataKeeper::test_onActiveConnectionChanged_withEmptyDeviceName()
+ {
+     KnmLanDataKeeper *keeper = new KnmLanDataKeeper();
+@@ -526,6 +574,29 @@ void TestKnmLanDataKeeper::test_updateLanInfo_modifyConnectionName()
+     delete keeper;
+ }
+ 
++void TestKnmLanDataKeeper::test_updateLanInfo_preservesRuntimeState()
++{
++    KnmLanDataKeeper keeper;
++    keeper.addDevice("eth0", true, WIRED_DEVICE);
++
++    QList<QStringList> connections;
++    connections << (QStringList() << "OldName" << "uuid-123" << "/path/1" << "0" << "2");
++    keeper.addDevConnection("eth0", connections);
++
++    NetDevicePtr device = keeper.getDeviceList().value("eth0");
++    device->updateConnectivity("uuid-123", DEACTIVATING, 4);
++
++    const QStringList lanInfo = QStringList()
++        << "NewName" << "uuid-123" << "/path/1" << "0" << "0";
++    keeper.updateLanInfo("eth0", lanInfo);
++
++    const QVariantList updatedConnections = device->getConnections();
++    QCOMPARE(updatedConnections.size(), 1);
++    const QVariantMap updated = updatedConnections.first().toMap();
++    QCOMPARE(updated.value("Name").toString(), QString("NewName"));
++    QCOMPARE(updated.value("State").toInt(), DEACTIVATING);
++}
++
+ void TestKnmLanDataKeeper::test_onDeviceNameChanged_withValidData()
+ {
+     KnmLanDataKeeper *keeper = new KnmLanDataKeeper();
+diff --git a/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.h b/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.h
+index 84d2c25..e61d76f 100644
+--- a/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.h
++++ b/tests/qml-network/plugin/knmlandatakeeper/test_knmlandatakeeper.h
+@@ -57,6 +57,7 @@ private slots:
+     void test_updateLanInfo_withEmptyDeviceName();
+     void test_updateLanInfo_withValidDeviceName();
+     void test_updateLanInfo_modifyConnectionName();
++    void test_updateLanInfo_preservesRuntimeState();
+     void test_onDeviceNameChanged_withValidData();
+     void test_onDeviceNameChanged_withInvalidType();
+     void test_onDeviceNameChanged_withNonExistentDevice();
+@@ -68,6 +69,10 @@ private slots:
+     void test_isDslConnection_withPppoeType();
+     void test_isDslConnection_withNonPppoeType();
+ 
++    void test_pendingSwitchChange_ignoresStaleState();
++    void test_pendingSwitchChange_acceptsLatestConfirmation();
++    void test_pendingSwitchChange_replacesEarlierIntent();
++
+     // 测试模式控制测试
+     void test_isTestMode_defaultValue();
+     void test_isTestMode_afterSetTestMode();
+diff --git a/tests/qml-network/plugin/netdevice/test_netdevice.cpp b/tests/qml-network/plugin/netdevice/test_netdevice.cpp
+index 119266f..661cb1f 100644
+--- a/tests/qml-network/plugin/netdevice/test_netdevice.cpp
++++ b/tests/qml-network/plugin/netdevice/test_netdevice.cpp
+@@ -150,6 +150,48 @@ void TestNetDevice::test_addConnection_sorted()
+     QVERIFY(first.value("Uuid").toString() == "uuid-1");
+ }
+ 
++void TestNetDevice::test_addConnection_sameWiredUuidMergesRuntimeState()
++{
++    QMap<QString, QVariant> signalConnection =
++        createConnection("OldName", "uuid-1", "/path/old", DEACTIVATED);
++    signalConnection.insert("Connectivity", 4);
++    signalConnection.insert("Loading", true);
++
++    QMap<QString, QVariant> snapshotConnection =
++        createConnection("NewName", "uuid-1", "/path/new", DEACTIVATED);
++    snapshotConnection.insert("Connectivity", 0);
++    snapshotConnection.insert("Loading", false);
++
++    m_device->addConnection(signalConnection);
++    m_device->addConnection(snapshotConnection);
++
++    const QVariantList connections = m_device->getConnections();
++    QCOMPARE(connections.size(), 1);
++    const QVariantMap merged = connections.first().toMap();
++    QCOMPARE(merged.value("Uuid").toString(), QString("uuid-1"));
++    QCOMPARE(merged.value("Name").toString(), QString("NewName"));
++    QCOMPARE(merged.value("Path").toString(), QString("/path/new"));
++    QCOMPARE(merged.value("State").toInt(), DEACTIVATED);
++    QCOMPARE(merged.value("Connectivity").toInt(), 4);
++    QCOMPARE(merged.value("Loading").toBool(), true);
++}
++
++void TestNetDevice::test_addConnection_emptyUuidFallsBackToPath()
++{
++    QMap<QString, QVariant> first =
++        createConnection("Connection", QString(), "/path/1", DEACTIVATED);
++    first.insert("Connectivity", 3);
++    QMap<QString, QVariant> second = first;
++    second.insert("Connectivity", 0);
++
++    m_device->addConnection(first);
++    m_device->addConnection(second);
++
++    const QVariantList connections = m_device->getConnections();
++    QCOMPARE(connections.size(), 1);
++    QCOMPARE(connections.first().toMap().value("Connectivity").toInt(), 3);
++}
++
+ void TestNetDevice::test_removeConnection_byMap()
+ {
+     QMap<QString, QVariant> conn = createConnection("Conn1", "uuid-1", "/path/1", DEACTIVATED);
+diff --git a/tests/qml-network/plugin/netdevice/test_netdevice.h b/tests/qml-network/plugin/netdevice/test_netdevice.h
+index d6654f2..8a7bf15 100644
+--- a/tests/qml-network/plugin/netdevice/test_netdevice.h
++++ b/tests/qml-network/plugin/netdevice/test_netdevice.h
+@@ -33,6 +33,8 @@ private slots:
+     void test_addConnection();
+     void test_addConnection_activated();
+     void test_addConnection_sorted();
++    void test_addConnection_sameWiredUuidMergesRuntimeState();
++    void test_addConnection_emptyUuidFallsBackToPath();
+     void test_removeConnection_byMap();
+     void test_removeConnection_byPath();
+     void test_removeConnectionByName();

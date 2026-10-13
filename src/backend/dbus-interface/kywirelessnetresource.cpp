@@ -529,6 +529,8 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
 
 void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString ssid)
 {
+
+    qDebug()<< LOG_FLAG << " KyWirelessNetResource: onWifiNetworkRemoved " << devIfaceName << ssid;
     if (!m_WifiNetworkList.contains(devIfaceName)) {
         return;
     }

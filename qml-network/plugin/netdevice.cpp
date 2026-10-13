@@ -19,6 +19,42 @@
  */
 #include "netdevice.h"
 
+namespace {
+
+bool sameWiredConnection(const QVariantMap &left, const QVariantMap &right)
+{
+    const QString leftUuid = left.value(QStringLiteral("Uuid")).toString();
+    const QString rightUuid = right.value(QStringLiteral("Uuid")).toString();
+    if (!leftUuid.isEmpty() && !rightUuid.isEmpty()) {
+        return leftUuid == rightUuid;
+    }
+
+    const QString leftPath = left.value(QStringLiteral("Path")).toString();
+    const QString rightPath = right.value(QStringLiteral("Path")).toString();
+    return !leftPath.isEmpty() && leftPath == rightPath;
+}
+
+bool isWiredRuntimeField(const QString &key)
+{
+    return key == QStringLiteral("State")
+        || key == QStringLiteral("Connectivity")
+        || key == QStringLiteral("Loading");
+}
+
+QVariantMap mergeWiredConnection(const QVariantMap &current, const QVariantMap &incoming)
+{
+    QVariantMap merged = current;
+    for (auto it = incoming.constBegin(); it != incoming.constEnd(); ++it) {
+        if (isWiredRuntimeField(it.key()) && current.contains(it.key())) {
+            continue;
+        }
+        merged.insert(it.key(), it.value());
+    }
+    return merged;
+}
+
+}
+
 NetDevice::NetDevice(QString devName, DeviceType type)
     : m_Name(devName)
     , m_Available(false)
@@ -52,6 +88,28 @@ DeviceType NetDevice::getDevType()
 
 void NetDevice::addConnection(QMap<QString, QVariant> connections)
 {
+    if (m_DevType == WIRED_DEVICE) {
+        QList<int> matchingIndexes;
+        for (int i = 0; i < m_connectionsList.size(); ++i) {
+            if (sameWiredConnection(m_connectionsList.at(i).toMap(), connections)) {
+                matchingIndexes.append(i);
+            }
+        }
+
+        if (!matchingIndexes.isEmpty()) {
+            const int canonicalIndex = matchingIndexes.first();
+            const QVariantMap current = m_connectionsList.at(canonicalIndex).toMap();
+            const QVariantMap merged = mergeWiredConnection(current, connections);
+
+            // Collapse any duplicates left by earlier refresh races before updating in place.
+            for (int i = matchingIndexes.size() - 1; i > 0; --i) {
+                m_connectionsList.removeAt(matchingIndexes.at(i));
+            }
+            m_connectionsList.replace(canonicalIndex, merged);
+            return;
+        }
+    }
+
     if (m_connectionsList.contains(connections))
         return;
 

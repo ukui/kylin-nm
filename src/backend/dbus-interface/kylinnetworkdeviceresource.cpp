@@ -95,6 +95,7 @@ void KyNetworkDeviceResourse::initDeviceMap()
     NetworkManager::Device::List deviceList
             = m_networkResourceInstance->getNetworkDeviceList();
 
+
     if (deviceList.isEmpty()) {
         qDebug() << LOG_FLAG << "there is not interface in computer.";
         return;
@@ -161,7 +162,7 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->getNetworkDevice(ifaceName);
 
-    if (nullptr == connectDevice || !connectDevice->isValid()) {
+    if (connectDevice.isNull() || !connectDevice->isValid()) {
         qWarning()<< LOG_FLAG <<"get hardware info failed, the device" << ifaceName << "is not existed";
         hardAddress.clear();
         bandWith = 0;
@@ -252,7 +253,7 @@ qulonglong KyNetworkDeviceResourse::getDeviceRxRefreshRate(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice->isValid()) {
+    if (!connectDevice.isNull() && connectDevice->isValid())  {
         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
         qulonglong rx = 0;
         rx = deviceStatistics->rxBytes();
@@ -270,7 +271,7 @@ qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice->isValid()) {
+    if (!connectDevice.isNull() && connectDevice->isValid())  {
         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
         qulonglong tx = 0;
         tx = deviceStatistics->txBytes();
@@ -290,7 +291,7 @@ void KyNetworkDeviceResourse::getDeviceConnectivity(const QString &deviceName, N
     QString dbusPath;
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice != nullptr && connectDevice->isValid()) {
+    if (!connectDevice.isNull() && connectDevice->isValid()) {
        dbusPath = connectDevice->uni();
     } else {
         qWarning() << "[KyNetworkDeviceResourse] can not find device " << deviceName;
@@ -326,7 +327,7 @@ bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->getNetworkDevice(devName);
 
-    if (nullptr == connectDevice || !connectDevice->isValid()) {
+    if (connectDevice.isNull() || !connectDevice->isValid()) {
         qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
         return false;
     }
@@ -513,7 +514,7 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->getNetworkDevice(devName);
 
-    if (nullptr == connectDevice || !connectDevice->isValid()) {
+    if (connectDevice.isNull() || !connectDevice->isValid()) {
         qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
         return;
     }
@@ -549,7 +550,7 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice->isValid()
+    if (!connectDevice.isNull()  && connectDevice->isValid()
             && NetworkManager::Device::Type::Wifi == connectDevice->type()) {
         NetworkManager::WirelessDevice *wirelessDevicePtr =
             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
@@ -649,7 +650,7 @@ void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
     QString dbusPath;
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(devName);
-    if (connectDevice->isValid()) {
+    if (!connectDevice.isNull() && connectDevice->isValid()) {
        dbusPath = connectDevice->uni();
     } else {
         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << devName;
@@ -681,7 +682,7 @@ bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice != nullptr && connectDevice->isValid()) {
+    if (!connectDevice.isNull() && connectDevice->isValid()) {
        return connectDevice->managed();
     } else {
         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << deviceName;

@@ -352,7 +352,7 @@ KYLIN_CFG_API int kylinCfgLoad(KYLIN_CFG_HANDLE handle,char *path)
 
     if(access(path, F_OK)!=0)
     {
-        KYLIN_COMMON_LOG(_LOGL_ERR,"path not exist %s",path);
+        KYLIN_COMMON_LOG(LOG_INFO,"path not exist %s",path);
         return COMMON_FILE_NOT_EXIST;
     }
 

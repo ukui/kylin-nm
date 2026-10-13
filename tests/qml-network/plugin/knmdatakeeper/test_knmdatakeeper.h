@@ -24,6 +24,7 @@ private slots:
     void test_destructor();
     void test_addDevice();
     void test_addDevice_notAvailable();
+    void test_reconcileDeviceList_preservesConnections();
     void test_clearDevice();
     void test_getDeviceList();
     void test_getWiredMainSwitchState();

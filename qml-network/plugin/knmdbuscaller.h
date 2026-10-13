@@ -102,7 +102,7 @@ public:
 
     void getWirelessSwitchState();
 
-    void getWiredMainSwitchState();
+    void getWiredMainSwitchState(bool confirmsInFlightRequest = false);
 
     void getWiredConListFinished(QDBusPendingCallWatcher *watcher, QString dev);
 
@@ -138,9 +138,15 @@ protected:
     QDBusInterface      *m_pInterface = nullptr;
 
 private:
+    void processWiredMainSwitchDesiredState();
+    void dispatchWiredMainSwitchRequest(bool enable);
+
     int m_pendingCount = 0;
     KnmLanDataKeeperPtr  lanDataKeeper;
     KnmWlanDataKeeperPtr wlanDataKeeper;
+    bool m_wiredMainSwitchRequestInFlight = false;
+    bool m_wiredMainSwitchInFlightState = false;
+    bool m_wiredMainSwitchDesiredState = false;
 
 protected:
     friend class SingleTon<KnmDBusCaller>;

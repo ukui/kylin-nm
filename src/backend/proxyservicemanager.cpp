@@ -56,7 +56,7 @@ QJsonObject readJsonFile(QString filePath)
 QJsonObject dealJsonObj(const QStringList configList)
 {
     QJsonObject configObj = QJsonObject();
-    if (configList.isEmpty() && configList.count() < 3) {
+    if (configList.count() < 3) {
         qWarning() << "configList item less!";
         return configObj;
     }
@@ -834,6 +834,10 @@ void ProxyServiceManager::setAppProxyConfig(const QStringList configList)
     QString jsonPath = QDir::homePath() + "/" + PROXYCONF_FILE;
     QJsonObject readObj = readJsonFile(jsonPath);
     QJsonObject configObj = dealJsonObj(configList);
+    if (configObj.isEmpty()) {
+        qWarning() << "setAppProxyConfig invalid configList, ignore";
+        return;
+    }
     startProxy(configObj);
     if (configObj != readObj) {
         wirteJsonFile(jsonPath, configObj);

@@ -365,11 +365,22 @@ void KnmWlanDataKeeper::onNetworkAdd(QString deviceName, QStringList wlanInfo)
 
     qDebug() << deviceName << wlanInfo << wlanInfo.count();
     NetDevicePtr dev = m_deviceList.value(deviceName);
-    /*根据后端链表每个项添加的参数来的，改了后端需要改这里，只有10项表示未连接，11项表示已连接；后面需要优化可一样的项数通过赋特定空值区分，不然维护,容易改漏且容易歧义*/
-    if (wlanInfo.count() == 10)
+    /*根据后端链表每个项添加的参数来的，改了后端需要改这里：
+     * 10项：未配置/无激活状态，按未连接处理；
+     * 11项：末尾为 NetworkManager::ActiveConnection::State（与 ACTIVATING/ACTIVATED/... 取值一致）。
+     * ifconfig down/up 回连时，AP 可能以已连接状态直接 wlanAdd，若仍按 DEACTIVATED 入库，
+     * 且此时未必再收到 wlanactiveConnectionStateChanged，任务栏会一直不显示「已连接」。*/
+    int status = DEACTIVATED;
+    if (wlanInfo.count() == 11) {
+        int nmState = wlanInfo.last().toInt();
+        if (nmState == ACTIVATING || nmState == ACTIVATED
+                || nmState == DEACTIVATING || nmState == DEACTIVATED) {
+            status = nmState;
+        }
+        dev->addConnection(makeConnectionMap(status, wlanInfo));
+    } else if (wlanInfo.count() == 10) {
         dev->addConnection(makeConnectionMap(DEACTIVATED, wlanInfo));
-    if (wlanInfo.count() == 11)
-        dev->addConnection(makeConnectionMap(DEACTIVATED, wlanInfo));
+    }
     KInterface::getInstance()->getWirelessDevConnList();
 }
 

@@ -76,6 +76,35 @@ void TestKnmDataKeeper::test_addDevice_notAvailable()
     QVERIFY(m_keeper->getDeviceList().isEmpty());
 }
 
+void TestKnmDataKeeper::test_reconcileDeviceList_preservesConnections()
+{
+    m_keeper->addDevice("eth0", true, WIRED_DEVICE);
+    m_keeper->addDevice("eth-old", true, WIRED_DEVICE);
+    const NetDevicePtr originalDevice = m_keeper->getDeviceList().value("eth0");
+
+    QMap<QString, QVariant> connection;
+    connection.insert("Name", "Wired connection 1");
+    connection.insert("Uuid", "uuid-1");
+    connection.insert("Path", "/path/1");
+    connection.insert("State", ACTIVATED);
+    originalDevice->addConnection(connection);
+
+    QMap<QString, bool> refreshedDevices;
+    refreshedDevices.insert("eth0", true);
+    refreshedDevices.insert("eth1", true);
+    m_keeper->reconcileDeviceList(refreshedDevices, WIRED_DEVICE);
+
+    const QMap<QString, NetDevicePtr> devices = m_keeper->getDeviceList();
+    QCOMPARE(devices.size(), 2);
+    QVERIFY(devices.contains("eth0"));
+    QVERIFY(devices.contains("eth1"));
+    QVERIFY(!devices.contains("eth-old"));
+    QCOMPARE(devices.value("eth0").data(), originalDevice.data());
+    QCOMPARE(devices.value("eth0")->getConnections().size(), 1);
+    QCOMPARE(devices.value("eth0")->getConnections().first().toMap().value("Uuid").toString(),
+             QString("uuid-1"));
+}
+
 void TestKnmDataKeeper::test_clearDevice()
 {
     m_keeper->addDevice("eth0", true, WIRED_DEVICE);

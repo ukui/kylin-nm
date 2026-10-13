@@ -1,3 +1,12 @@
+kylin-nm (4.24.0.0-ok0.8) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: 同步v11-2603的代码
+  * 其他改动影响域: 无
+
+ -- jiahua xie <xiejiahua@kylinos.cn>  Tue, 13 Oct 2026 14:07:26 +0800
+
 kylin-nm (4.24.0.0-ok0.7) huanghe; urgency=medium
 
   * BUG: 无

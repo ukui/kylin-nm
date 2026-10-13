@@ -666,6 +666,10 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
             qDebug() << "emit wlanConnectChanged Activated";
             Q_EMIT wlanConnectChanged(Activated);//直接修改路由器加密方式会造成没有连接过程但是ap会重新出现 如果ap是已经连接的ap，应该主动发信号告诉任务栏刷新一下图标不然可能连接还在但是图标没更新
+            // ifconfig down/up 等场景下 AP 以已连接状态重新出现时，NM 可能不再走 Activating→Activated，
+            // 需主动通知侧边栏/控制面板刷新连接状态，否则界面仍显示未连接。
+            qDebug()<< LOG_FLAG << "Q_EMIT wlanActiveConnectionStateChanged" << interface << item.m_NetSsid << Activated;
+            Q_EMIT wlanActiveConnectionStateChanged(interface, item.m_NetSsid, item.m_connectUuid, Activated);
             return;
         }
     }

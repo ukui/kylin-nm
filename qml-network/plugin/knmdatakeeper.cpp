@@ -47,6 +47,31 @@ void KnmDataKeeper::clearDevice()
     m_deviceList.clear();
 }
 
+void KnmDataKeeper::reconcileDeviceList(const QMap<QString, bool> &devices, DeviceType type)
+{
+    const QStringList currentDeviceNames = m_deviceList.keys();
+    for (const QString &deviceName : currentDeviceNames) {
+        const NetDevicePtr device = m_deviceList.value(deviceName);
+        if (!device.isNull() && device->getDevType() == type
+                && (!devices.contains(deviceName) || !devices.value(deviceName))) {
+            m_deviceList.remove(deviceName);
+        }
+    }
+
+    for (auto it = devices.constBegin(); it != devices.constEnd(); ++it) {
+        if (!it.value()) {
+            continue;
+        }
+
+        const NetDevicePtr currentDevice = m_deviceList.value(it.key());
+        if (!currentDevice.isNull() && currentDevice->getDevType() == type) {
+            currentDevice->setAvailable(true);
+            continue;
+        }
+        addDevice(it.key(), true, type);
+    }
+}
+
 QMap<QString, NetDevicePtr> KnmDataKeeper::getDeviceList()
 {
     return m_deviceList;

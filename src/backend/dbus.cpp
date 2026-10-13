@@ -414,12 +414,7 @@ QVariantMap DbusAdaptor::getDeviceListAndEnabled(int devType)
     getDeviceEnableState(devType, map);
     QVariantMap vMap;
     QMap<QString, bool>::const_iterator item = map.cbegin();
-    QString switchSettingFile = "/etc/kylin-nm/switch.conf";
-    QSettings switchSetting(switchSettingFile, QSettings::IniFormat, this);
     while (item != map.cend()) {
-        if (switchSetting.contains(item.key()))
-            vMap.insert(item.key(), QVariant::fromValue(switchSetting.value(item.key())));
-        else
             vMap.insert(item.key(), QVariant::fromValue(item.value()));
         item ++;
     }
@@ -636,6 +631,50 @@ int DbusAdaptor::registerInputPasswdAgent(QString agentName,QVariantMap value)
     return 0;
 }
 
+/*
+ * 校验 QVariant 是否为可安全序列化到 DBus 的基础类型。
+ * 外部传入的 a{sv} 可能包含非法/未知类型的 variant（如模糊测试构造的畸形数据），
+ * 直接转发该数据会在重新序列化时触发 libdbus 内部一致性检查失败而 abort。
+ */
+static bool isDbusSafeVariant(const QVariant &v)
+{
+    if (!v.isValid()) {
+        return false;
+    }
+
+    switch (v.userType()) {
+    case QMetaType::QString:
+    case QMetaType::Bool:
+    case QMetaType::Int:
+    case QMetaType::UInt:
+    case QMetaType::LongLong:
+    case QMetaType::ULongLong:
+    case QMetaType::Double:
+    case QMetaType::QStringList:
+        return true;
+    case QMetaType::QVariantMap: {
+        const QVariantMap map = v.toMap();
+        for (auto it = map.cbegin(); it != map.cend(); ++it) {
+            if (!isDbusSafeVariant(it.value())) {
+                return false;
+            }
+        }
+        return true;
+    }
+    case QMetaType::QVariantList: {
+        const QVariantList list = v.toList();
+        for (const QVariant &item : list) {
+            if (!isDbusSafeVariant(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    default:
+        return false;
+    }
+}
+
 /*请求代理接管输入*/
 int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
 {
@@ -649,7 +688,16 @@ int DbusAdaptor::requestInputPasswdAgent(QVariantMap value)
     }
 #endif
     //防止kylin-nm崩溃导致的未注册
-    Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,value);
+    //入参来自外部 DBus 调用，过滤掉无法安全序列化的值后再转发，防止畸形数据导致进程 abort
+    QVariantMap safeValue;
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
+        if (isDbusSafeVariant(it.value())) {
+            safeValue.insert(it.key(), it.value());
+        } else {
+            qWarning() << Q_FUNC_INFO << "drop unsafe variant value, key:" << it.key();
+        }
+    }
+    Q_EMIT DbusAdaptor::sigRequestInputPasswdAgent(m_agentName,safeValue);
     qDebug() << Q_FUNC_INFO << "emit request"<<m_agentName;
     return  0;
 }

@@ -57,6 +57,7 @@ private slots:
     void test_updateLanInfo_withEmptyDeviceName();
     void test_updateLanInfo_withValidDeviceName();
     void test_updateLanInfo_modifyConnectionName();
+    void test_updateLanInfo_preservesRuntimeState();
     void test_onDeviceNameChanged_withValidData();
     void test_onDeviceNameChanged_withInvalidType();
     void test_onDeviceNameChanged_withNonExistentDevice();
@@ -67,6 +68,10 @@ private slots:
     // 工具函数测试
     void test_isDslConnection_withPppoeType();
     void test_isDslConnection_withNonPppoeType();
+
+    void test_pendingSwitchChange_ignoresStaleState();
+    void test_pendingSwitchChange_acceptsLatestConfirmation();
+    void test_pendingSwitchChange_replacesEarlierIntent();
 
     // 测试模式控制测试
     void test_isTestMode_defaultValue();

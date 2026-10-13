@@ -33,6 +33,8 @@ private slots:
     void test_addConnection();
     void test_addConnection_activated();
     void test_addConnection_sorted();
+    void test_addConnection_sameWiredUuidMergesRuntimeState();
+    void test_addConnection_emptyUuidFallsBackToPath();
     void test_removeConnection_byMap();
     void test_removeConnection_byPath();
     void test_removeConnectionByName();

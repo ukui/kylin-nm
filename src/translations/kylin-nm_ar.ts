@@ -168,7 +168,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
@@ -1113,12 +1113,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
         <source>IPv4</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
         <source>IPv6</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>

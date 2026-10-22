@@ -1,0 +1,40 @@
+From: Zamo <zamo.rzgar1@gmail.com>
+Date: Thu, 22 Oct 2026 11:54:41 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 100.0% (238 of 238 strings)
+
+Translation: openkylin-huanghe/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/kylin-nm/ar/
+---
+ src/translations/kylin-nm_ar.ts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ar.ts b/src/translations/kylin-nm_ar.ts
+index a33da85..ad94486 100644
+--- a/src/translations/kylin-nm_ar.ts
++++ b/src/translations/kylin-nm_ar.ts
+@@ -168,7 +168,7 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
+         <source> </source>
+-        <translation type="unfinished"></translation>
++        <translation> </translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
+@@ -1113,12 +1113,12 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
+         <source>IPv4</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv4</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
+         <source>IPv6</source>
+-        <translation type="unfinished"></translation>
++        <translation>IPv6</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>

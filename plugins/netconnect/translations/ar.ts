@@ -82,7 +82,7 @@
         <location filename="../netconnect.cpp" line="227"/>
         <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation>شبكة سلكية</translation>
+        <translation>الشبكة المحلية (LAN)</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="346"/>

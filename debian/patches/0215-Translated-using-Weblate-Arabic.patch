@@ -1,0 +1,25 @@
+From: YahyaSDN <medyahyasaadan34@gmail.com>
+Date: Fri, 23 Oct 2026 14:45:10 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/ar/
+---
+ plugins/netconnect/translations/ar.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/netconnect/translations/ar.ts b/plugins/netconnect/translations/ar.ts
+index d305fbc..952bce8 100644
+--- a/plugins/netconnect/translations/ar.ts
++++ b/plugins/netconnect/translations/ar.ts
+@@ -82,7 +82,7 @@
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation>شبكة سلكية</translation>
++        <translation>الشبكة المحلية (LAN)</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>

@@ -1,0 +1,43 @@
+From: YahyaSDN <medyahyasaadan34@gmail.com>
+Date: Fri, 23 Oct 2026 03:51:13 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 100.0% (13 of 13 strings)
+
+Translation: openkylin-huanghe/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/netconnect/ar/
+---
+ plugins/netconnect/translations/ar.ts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/netconnect/translations/ar.ts b/plugins/netconnect/translations/ar.ts
+index a9fea3c..d305fbc 100644
+--- a/plugins/netconnect/translations/ar.ts
++++ b/plugins/netconnect/translations/ar.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>إضافة أخرى</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation>متصل، الشبكة محدودة.</translation>
++        <translation>متصل، لكن الوصول إلى الشبكة محدود.</translation>
+     </message>
+ </context>
+ <context>
+@@ -87,7 +87,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation>لم يتم اكتشاف جهاز سلكي</translation>
++        <translation>لا يتوفر جهاز إيثرنت</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>

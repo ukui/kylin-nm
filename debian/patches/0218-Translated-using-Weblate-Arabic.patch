@@ -1,0 +1,25 @@
+From: YahyaSDN <medyahyasaadan34@gmail.com>
+Date: Fri, 23 Oct 2026 03:48:05 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/wlanconnect/ar/
+---
+ plugins/wlanconnect/translations/ar.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/wlanconnect/translations/ar.ts b/plugins/wlanconnect/translations/ar.ts
+index 8aa0f6a..9d87192 100644
+--- a/plugins/wlanconnect/translations/ar.ts
++++ b/plugins/wlanconnect/translations/ar.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation>الانضمام إلى شبكة أخرى</translation>
++        <translation>إضافة أخرى</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>

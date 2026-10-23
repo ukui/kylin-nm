@@ -1,0 +1,31 @@
+From: YahyaSDN <medyahyasaadan34@gmail.com>
+Date: Fri, 23 Oct 2026 03:48:05 +0000
+Subject: Translated using Weblate (Arabic)
+
+Currently translated at 100.0% (12 of 12 strings)
+
+Translation: openkylin-huanghe/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-huanghe/vpn/ar/
+---
+ plugins/vpn/translations/ar.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/vpn/translations/ar.ts b/plugins/vpn/translations/ar.ts
+index c1c27de..7743cad 100644
+--- a/plugins/vpn/translations/ar.ts
++++ b/plugins/vpn/translations/ar.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>إضافة أخرى</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation></translation>
++        <translation>إضافة شبكة سلكية</translation>
+     </message>
+ </context>
+ <context>

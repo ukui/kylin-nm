@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>إضافة أخرى</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation>متصل، الشبكة محدودة.</translation>
+        <translation>متصل، لكن الوصول إلى الشبكة محدود.</translation>
     </message>
 </context>
 <context>
@@ -87,7 +87,7 @@
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>لم يتم اكتشاف جهاز سلكي</translation>
+        <translation>لا يتوفر جهاز إيثرنت</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>

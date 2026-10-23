@@ -266,13 +266,13 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
         <source>BandWidth:</source>
-        <translation>عرض النطاق:</translation>
+        <translation>عرض النطاق الترددي:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>عنوان IPv6 للارتباط المحلي:</translation>
+        <translation>عنوان IPv6:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
@@ -284,13 +284,13 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
         <source>IPv4 DNS:</source>
-        <translation>خادم DNS IPv4:</translation>
+        <translation>خوادم DNS لـ IPv4:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation>العنوان الفيزيائي:</translation>
+        <translation>عنوان MAC:</translation>
     </message>
 </context>
 <context>
@@ -693,7 +693,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="121"/>
         <source>Auto(DHCP)</source>
-        <translation>تلقائي</translation>
+        <translation>تلقائي (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
@@ -757,7 +757,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation>بوابة افتراضية</translation>
+        <translation>البوابة الافتراضية</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -770,7 +770,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="182"/>
         <source>Auto(DHCP)</source>
-        <translation>تلقائي</translation>
+        <translation>تلقائي (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
@@ -1147,7 +1147,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="438"/>
         <source>Confirm</source>
-        <translation>موافق</translation>
+        <translation>تأكيد</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>

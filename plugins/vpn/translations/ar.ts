@@ -28,12 +28,12 @@
         <location filename="../vpn.ui" line="53"/>
         <location filename="../vpn.cpp" line="70"/>
         <source>VPN</source>
-        <translation></translation>
+        <translation>VPN</translation>
     </message>
     <message>
         <location filename="../vpn.ui" line="68"/>
         <source>import</source>
-        <translation></translation>
+        <translation>import</translation>
     </message>
     <message>
         <location filename="../vpn.cpp" line="159"/>

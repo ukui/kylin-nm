@@ -23,7 +23,7 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation>شبكة WLAN</translation>
+        <translation>WlanConnect</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
@@ -37,7 +37,7 @@
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <source>open</source>
-        <translation>تشغيل</translation>
+        <translation>فتح</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>

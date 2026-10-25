@@ -1344,7 +1344,7 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="219"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="239"/>
         <source>Password</source>
-        <translation>ᦟᦴᧅᦶᦉᧆᦋᦹᧈ：</translation>
+        <translation>ᦵᦔᧃᧈᦟᦲᧅᦉᦄᧆ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>

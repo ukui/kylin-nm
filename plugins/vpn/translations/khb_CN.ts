@@ -28,7 +28,7 @@
         <location filename="../vpn.ui" line="53"/>
         <location filename="../vpn.cpp" line="70"/>
         <source>VPN</source>
-        <translation></translation>
+        <translation>ᦵᦆᦲᧂᧈᦺᦋᧉVPN</translation>
     </message>
     <message>
         <location filename="../vpn.ui" line="68"/>

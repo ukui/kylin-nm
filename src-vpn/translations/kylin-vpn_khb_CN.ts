@@ -219,7 +219,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1074"/>
         <source>Server Address</source>
-        <translation>ᦑᦲᧈᦵᦔᦲᧂᦔᦟᦲᦰᦂᦱᧃ</translation>
+        <translation>服务器地址</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1075"/>
@@ -294,7 +294,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
         <source>No</source>
-        <translation>ᦟᦳᧇᦶᦝᧆ</translation>
+        <translation>ᦢᧁᧈᦙᦲ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1106"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
         <source>Username</source>
-        <translation>ᦋᦹᧈᦕᦴᧉᦺᦋᧉ</translation>
+        <translation>ᦋᦹᧉᦕᦴᧉᦺᦋᧉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
@@ -519,7 +519,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
         <source>None</source>
-        <translation>ᦺᦋᧉ ᦆᦱᧉᦉᦱᧄᧉᦉᦴ ᦎᧂᧉ ᦺᦙᦡᦲᧉᦓᦲᦰ</translation>
+        <translation>无</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
@@ -636,7 +636,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="172"/>
         <source>Advanced</source>
-        <translation>ᦏᦱᧃᧉᦉᦳᧂ ᦣᦳᧇᦶᦂᧇ</translation>
+        <translation>设置网络</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="177"/>
@@ -699,7 +699,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="179"/>
         <source>Manual</source>
-        <translation>ᦗᦸᧇᦶᦈᧆᦕᦴᧉᦺᦋᧉ</translation>
+        <translation>手动</translation>
     </message>
 </context>
 <context>
@@ -750,13 +750,13 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="65"/>
         <source>Not connected</source>
-        <translation>ᦢᧁᧈᦙᦲ ᦈᦸᧆᧈ</translation>
+        <translation>未连接任何网络</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="150"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="165"/>
         <source>Disconnect</source>
-        <translation>ᦔᦳᧆᦃᦱᧆᦎᦸᦰᦈᧇ</translation>
+        <translation>断开连接</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="152"/>
@@ -824,7 +824,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="172"/>
         <source>Cancel</source>
-        <translation>ᦠᦳᧃᦀᦸᧅᧈ</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>

@@ -71,4 +71,7 @@ TRANSLATIONS += \
         translations/ms.ts \
         translations/th.ts \
         translations/bo.ts\
-        translations/bo_CN.ts
+        translations/bo_CN.ts \
+        translations/ko_KP.ts \
+        translations/khb_CN.ts \
+        translations/ar.ts

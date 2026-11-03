@@ -63,7 +63,10 @@ TRANSLATIONS += \
         translations/th.ts \
         translations/ms.ts \
         translations/bo.ts\
-        translations/bo_CN.ts
+        translations/bo_CN.ts \
+        translations/ko_KP.ts \
+        translations/khb_CN.ts \
+        translations/ar.ts
 
 CONFIG(release, debug|release) {
     !system($$PWD/translate_generation.sh): error("Failed to generate translation")

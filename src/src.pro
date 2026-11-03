@@ -104,4 +104,7 @@ TRANSLATIONS += \
         translations/kylin-nm_vi.ts\
         translations/kylin-nm_ms.ts\
         translations/kylin-nm_bo.ts\
-        translations/kylin-nm_bo_CN.ts
+        translations/kylin-nm_bo_CN.ts \
+        translations/kylin-nm_ko_KP.ts \
+        translations/kylin-nm_khb_CN.ts \
+        translations/kylin-nm_ar.ts

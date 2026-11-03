@@ -94,7 +94,10 @@ TRANSLATIONS += \
         translations/kylin-vpn_th.ts \
         translations/kylin-vpn_ms.ts \
         translations/kylin-vpn_bo.ts\
-        translations/kylin-vpn_bo_CN.ts
+        translations/kylin-vpn_bo_CN.ts \
+        translations/kylin-vpn_ko_KP.ts \
+        translations/kylin-vpn_khb_CN.ts \
+        translations/kylin-vpn_ar.ts
 
 CONFIG(release, debug|release) {
     !system($$PWD/translate_generation.sh): error("Failed to generate translation")

@@ -70,3 +70,6 @@ TRANSLATIONS += \
         translations/ug.ts \
         translations/kk.ts \
         translations/ky.ts \
+        translations/ko_KP.ts \
+        translations/khb_CN.ts \
+        translations/ar.ts

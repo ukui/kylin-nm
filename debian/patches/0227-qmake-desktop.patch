@@ -1,0 +1,187 @@
+From: kwwzzz <305466682@qq.com>
+Date: Tue, 3 Nov 2026 22:02:54 +0800
+Subject: =?utf-8?b?5pu05pawIHFtYWtlIOW3peeoi+aWh+S7tu+8jOW5tuabtOaWsCBkZXNr?=
+ =?utf-8?b?dG9wIOaWh+S7tuOAgg==?=
+
+---
+ plugins/mobilehotspot/mobilehotspot.pro    | 5 ++++-
+ plugins/netconnect/netconnect.pro          | 5 ++++-
+ plugins/proxy/proxy.pro                    | 5 ++++-
+ plugins/vpn/vpn.pro                        | 5 ++++-
+ plugins/wlanconnect/translations/ar.ts     | 4 ++--
+ plugins/wlanconnect/translations/khb_CN.ts | 4 ++--
+ plugins/wlanconnect/wlanconnect.pro        | 3 +++
+ src-vpn/kylin-vpn.desktop                  | 3 +++
+ src-vpn/src-vpn.pro                        | 5 ++++-
+ src/kylin-nm.desktop                       | 3 +++
+ src/src.pro                                | 5 ++++-
+ 11 files changed, 37 insertions(+), 10 deletions(-)
+
+diff --git a/plugins/mobilehotspot/mobilehotspot.pro b/plugins/mobilehotspot/mobilehotspot.pro
+index 4383b5b..6e1fc21 100644
+--- a/plugins/mobilehotspot/mobilehotspot.pro
++++ b/plugins/mobilehotspot/mobilehotspot.pro
+@@ -71,5 +71,8 @@ TRANSLATIONS += \
+         translations/th.ts \
+         translations/bo.ts\
+         translations/bo_CN.ts \
+-
++ \
++    translations/ko_KP.ts \
++    translations/khb_CN.ts \
++    translations/ar.ts
+ 
+diff --git a/plugins/netconnect/netconnect.pro b/plugins/netconnect/netconnect.pro
+index c704df3..1bd9f3b 100644
+--- a/plugins/netconnect/netconnect.pro
++++ b/plugins/netconnect/netconnect.pro
+@@ -71,4 +71,7 @@ TRANSLATIONS += \
+         translations/ms.ts \
+         translations/th.ts \
+         translations/bo.ts\
+-        translations/bo_CN.ts
++        translations/bo_CN.ts \
++        translations/ko_KP.ts \
++        translations/khb_CN.ts \
++        translations/ar.ts
+diff --git a/plugins/proxy/proxy.pro b/plugins/proxy/proxy.pro
+index 33ea86c..169c6c4 100644
+--- a/plugins/proxy/proxy.pro
++++ b/plugins/proxy/proxy.pro
+@@ -69,4 +69,7 @@ TRANSLATIONS += \
+         translations/ms.ts \
+         translations/th.ts \
+         translations/bo.ts\
+-        translations/bo_CN.ts
++        translations/bo_CN.ts \
++        translations/ko_KP.ts \
++        translations/khb_CN.ts \
++        translations/ar.ts
+diff --git a/plugins/vpn/vpn.pro b/plugins/vpn/vpn.pro
+index 15ee56e..d6e8eb9 100644
+--- a/plugins/vpn/vpn.pro
++++ b/plugins/vpn/vpn.pro
+@@ -63,7 +63,10 @@ TRANSLATIONS += \
+         translations/th.ts \
+         translations/ms.ts \
+         translations/bo.ts\
+-        translations/bo_CN.ts
++        translations/bo_CN.ts \
++        translations/ko_KP.ts \
++        translations/khb_CN.ts \
++        translations/ar.ts
+ 
+ CONFIG(release, debug|release) {
+     !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+diff --git a/plugins/wlanconnect/translations/ar.ts b/plugins/wlanconnect/translations/ar.ts
+index 9d87192..6719bc7 100644
+--- a/plugins/wlanconnect/translations/ar.ts
++++ b/plugins/wlanconnect/translations/ar.ts
+@@ -23,7 +23,7 @@
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+         <source>WlanConnect</source>
+-        <translation>شبكة WLAN</translation>
++        <translation>WlanConnect</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+@@ -37,7 +37,7 @@
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+         <source>open</source>
+-        <translation>تشغيل</translation>
++        <translation>فتح</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+diff --git a/plugins/wlanconnect/translations/khb_CN.ts b/plugins/wlanconnect/translations/khb_CN.ts
+index 90eab17..8e19ea3 100644
+--- a/plugins/wlanconnect/translations/khb_CN.ts
++++ b/plugins/wlanconnect/translations/khb_CN.ts
+@@ -11,7 +11,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation></translation>
++        <translation>ᦶᦏᧄᦞᦱᧂᦷᦟᧉᦙᦲᦉᦻ</translation>
+     </message>
+     <message>
+         <source>Add WiredNetwork</source>
+@@ -57,7 +57,7 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="137"/>
+         <source>Settings</source>
+-        <translation>ᦞᦱᧂᦷᦟᧉᦢᧁᧈᦙᦲᦉᦻ</translation>
++        <translation>配置项</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="140"/>
+diff --git a/plugins/wlanconnect/wlanconnect.pro b/plugins/wlanconnect/wlanconnect.pro
+index 5f235f3..a98ad59 100644
+--- a/plugins/wlanconnect/wlanconnect.pro
++++ b/plugins/wlanconnect/wlanconnect.pro
+@@ -70,3 +70,6 @@ TRANSLATIONS += \
+         translations/ug.ts \
+         translations/kk.ts \
+         translations/ky.ts \
++        translations/ko_KP.ts \
++        translations/khb_CN.ts \
++        translations/ar.ts
+diff --git a/src-vpn/kylin-vpn.desktop b/src-vpn/kylin-vpn.desktop
+index f059e19..f0bb9b2 100644
+--- a/src-vpn/kylin-vpn.desktop
++++ b/src-vpn/kylin-vpn.desktop
+@@ -1,6 +1,9 @@
+ [Desktop Entry]
+ Encoding=UTF-8
+ Name=Kylin VPN
++Name[khb_CN]=ᦵᦆᦲᧂᧈᦺᦋᧉVPN
++Name[ar]=أدوات الشبكة الخاصة الافتراضية
++Name[ko_KP]=VPN 도구
+ Name[zh_CN]=麒麟VPN设置工具
+ Name[zh_HK]=麒麟VPN設置工具
+ Name[zh_TW]=麒麟VPN設置工具
+diff --git a/src-vpn/src-vpn.pro b/src-vpn/src-vpn.pro
+index 94c1a15..1e84596 100644
+--- a/src-vpn/src-vpn.pro
++++ b/src-vpn/src-vpn.pro
+@@ -94,7 +94,10 @@ TRANSLATIONS += \
+         translations/kylin-vpn_th.ts \
+         translations/kylin-vpn_ms.ts \
+         translations/kylin-vpn_bo.ts\
+-        translations/kylin-vpn_bo_CN.ts
++        translations/kylin-vpn_bo_CN.ts \
++        translations/kylin-vpn_ko_KP.ts \
++        translations/kylin-vpn_khb_CN.ts \
++        translations/kylin-vpn_ar.ts
+ 
+ CONFIG(release, debug|release) {
+     !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+diff --git a/src/kylin-nm.desktop b/src/kylin-nm.desktop
+index 39b6681..323f402 100644
+--- a/src/kylin-nm.desktop
++++ b/src/kylin-nm.desktop
+@@ -1,6 +1,9 @@
+ [Desktop Entry]
+ Encoding=UTF-8
+ Name=Kylin NM
++Name[khb_CN]=ᦃᦻᧈ ᦎᧂᧉ ᦶᦆᦲᧂᧈᦺᦋᧉ
++Name[ar]=أداة إعداد الشبكة
++Name[ko_KP]=네트워크 설정 도구
+ Name[zh_CN]=麒麟网络设置工具
+ Name[zh_HK]=麒麟網路設置工具
+ Name[zh_TW]=麒麟網路設置工具
+diff --git a/src/src.pro b/src/src.pro
+index 34db73e..c4f2336 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -104,4 +104,7 @@ TRANSLATIONS += \
+         translations/kylin-nm_vi.ts\
+         translations/kylin-nm_ms.ts\
+         translations/kylin-nm_bo.ts\
+-        translations/kylin-nm_bo_CN.ts
++        translations/kylin-nm_bo_CN.ts \
++        translations/kylin-nm_ko_KP.ts \
++        translations/kylin-nm_khb_CN.ts \
++        translations/kylin-nm_ar.ts

@@ -1,3 +1,12 @@
+kylin-nm (4.24.0.0-ok0.9) huanghe; urgency=medium
+
+  * BUG: 无
+  * 需求: 无
+  * 其他改动说明: 更新 qmake 工程文件，并更新 desktop 文件
+  * 其他改动影响域: 无
+
+ -- kwwzzz <305466682@qq.com>  Tue, 03 Nov 2026 22:02:51 +0800
+
 kylin-nm (4.24.0.0-ok0.8) huanghe; urgency=medium
 
   * BUG: 无

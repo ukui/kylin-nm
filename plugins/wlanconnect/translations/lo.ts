@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນ</translation>
+        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນໆ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -23,7 +23,7 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation>ເຄືອຂ່າຍບໍລິເວນໄວຣ໌</translation>
+        <translation>ເຄືອຂ່າຍ LAN ໄຮ້ສາຍ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
@@ -31,13 +31,13 @@
         <location filename="../wlanconnect.cpp" line="283"/>
         <location filename="../wlanconnect.cpp" line="285"/>
         <source>WLAN</source>
-        <translation>ເຄືອຂ່າຍບໍລິເວນໄວຣ໌</translation>
+        <translation>ເຄືອຂ່າຍ LAN ໄຮ້ສາຍ</translation>
         <extra-contents_path>/wlanconnect/WLAN</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <source>open</source>
-        <translation>ເປີດ</translation>
+        <translation>ເປີດໃຊ້</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
@@ -57,24 +57,24 @@
     <message>
         <location filename="../wlanconnect.cpp" line="137"/>
         <source>Settings</source>
-        <translation>ຕັ້ງຄ່າ</translation>
+        <translation>ການຕັ້ງຄ່າ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="140"/>
         <source>Settings desktop message</source>
-        <translation>ຕັ້ງຄ່າ ການແຈ້ງເຕືອນຂອງເດັສທັອບ</translation>
+        <translation>ຕັ້ງຄ່າ ການແຈ້ງເຕືອນເດັສທັອບ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="278"/>
         <source>Add Others</source>
-        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນ</translation>
+        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນໆ</translation>
         <extra-contents_path>/wlanconnect/Add Others&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="301"/>
         <location filename="../wlanconnect.cpp" line="1299"/>
         <source>No wireless network card detected</source>
-        <translation>ບໍ່ພົບແຜ່ນໄວຣ໌</translation>
+        <translation>ກວດບໍ່ພົບກາດເຄືອຂ່າຍໄຮ້ສາຍ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="433"/>
@@ -86,7 +86,7 @@
     <message>
         <location filename="../wlanconnect.cpp" line="1075"/>
         <source>card</source>
-        <translation>ແຜ່ນເຄືອຂ່າຍ</translation>
+        <translation>ອະແດັບເຕີເຄືອຂ່າຍ</translation>
     </message>
 </context>
 </TS>

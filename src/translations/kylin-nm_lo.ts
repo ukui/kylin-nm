@@ -168,7 +168,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
@@ -242,7 +242,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
         <source>Protocol:</source>
-        <translation>ໂປຣໂຕຄໍ:</translation>
+        <translation>ໂປຣໂຕຄອນ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
@@ -266,13 +266,13 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
         <source>BandWidth:</source>
-        <translation>ຄວາມກ້ວາງຂອງຊ່ວງຄວາມຖີ່:</translation>
+        <translation>ແບນວິດ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>ທີ່ຢູ່ IPv6 ສຳລັບ local link:</translation>
+        <translation>ທີ່ຢູ່ IPv6:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
@@ -284,13 +284,13 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
         <source>IPv4 DNS:</source>
-        <translation>IPv4 DNS ເຊີບເວີ:</translation>
+        <translation>ເຊີບເວີ DNS IPv4:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation>ທີ່ຢູ່ທາງກາຍສຳເນົາ:</translation>
+        <translation>ທີ່ຢູ່ກາຍະພາບ:</translation>
     </message>
 </context>
 <context>
@@ -665,7 +665,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
         <source>IPv4Config</source>
-        <translation>ການຕັ້ງຄ່າ IPv4</translation>
+        <translation>ການກຳນົດຄ່າ IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
@@ -675,12 +675,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
         <source>Netmask</source>
-        <translation>Subnet mask</translation>
+        <translation>ໜ້າກາກເຄືອຂ່າຍຍ່ອຍ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation>ເຄືອຂ່າຍ Gateway ປົກກະຕິ</translation>
+        <translation>ເກດເວເລີ່ມຕົ້ນ</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -698,7 +698,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
         <source>Manual</source>
-        <translation>ດ້ວຍມື</translation>
+        <translation>ດ້ວຍຕົນເອງ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
         <source>IPv6Config</source>
-        <translation>ການຕັ້ງຄ່າ IPv6</translation>
+        <translation>ການກຳນົດຄ່າ IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
@@ -752,12 +752,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
         <source>Subnet prefix Length</source>
-        <translation>ຄວາມຍາວຄຳນຳໜ້າຂອງ subnet</translation>
+        <translation>ຄວາມຍາວສ່ວນນຳໜ້າຂອງເຄືອຂ່າຍຍ່ອຍ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation>ເຄືອຂ່າຍພື້ນຖານ</translation>
+        <translation>ເກດເວເລີ່ມຕົ້ນ</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -1033,7 +1033,7 @@
         <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation>ຕັ້ງຄ່າລາຍການເຄືອຂ່າຍ</translation>
+        <translation>ການຕັ້ງຄ່າ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="501"/>
@@ -1113,12 +1113,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
         <source>IPv4</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
         <source>IPv6</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>

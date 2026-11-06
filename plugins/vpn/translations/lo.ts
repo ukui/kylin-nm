@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນໆ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -39,7 +39,7 @@
         <location filename="../vpn.cpp" line="159"/>
         <location filename="../vpn.cpp" line="291"/>
         <source>Show on Taskbar</source>
-        <translation>ສະແດງໄອຄອນໃນແຖບວຽກ</translation>
+        <translation>ສະແດງໄອຄອນເທິງແຖບໜ້າວຽກ</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
     </message>
     <message>
@@ -58,7 +58,7 @@
         <location filename="../vpn.cpp" line="376"/>
         <location filename="../vpn.cpp" line="500"/>
         <source>not connected</source>
-        <translation>ບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
+        <translation>ຍັງບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
     </message>
 </context>
 <context>

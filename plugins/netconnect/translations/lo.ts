@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນໆ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -39,13 +39,13 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation>ເຄືອຂ່າຍແບບມີສາຍ</translation>
+        <translation>ເຄືອຂ່າຍແບບໃຊ້ສາຍ</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="229"/>
         <source>open</source>
-        <translation>ເປີດ</translation>
+        <translation>ເປີດໃຊ້</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
@@ -70,24 +70,24 @@
     <message>
         <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation>ການຕັ້ງຄ່າ</translation>
+        <translation>ການຕັ້ງຄ່າເຄືອຂ່າຍ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation>ຕັ້ງຄ່າການແຈ້ງເຕືອນແບບເດັສທັອບ</translation>
+        <translation>ຕັ້ງຄ່າ ການແຈ້ງເຕືອນເດັສທັອບ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="92"/>
         <location filename="../netconnect.cpp" line="227"/>
         <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation>ເຄືອຂ່າຍແບບມີສາຍ</translation>
+        <translation>ເຄືອຂ່າຍແບບໃຊ້ສາຍ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>ບໍ່ພົບອຸປະກອນແບບມີສາຍ</translation>
+        <translation>ກວດບໍ່ພົບກາດເຄືອຂ່າຍມີສາຍ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>
@@ -100,12 +100,12 @@
         <location filename="../netconnect.cpp" line="952"/>
         <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation>ບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
+        <translation>ຍັງບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation>ແຜ່ນເຄືອຂ່າຍ</translation>
+        <translation>ອະແດັບເຕີເຄືອຂ່າຍ</translation>
     </message>
 </context>
 </TS>

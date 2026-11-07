@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>Gabung ke jaringan lain</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>Tambah Jaringan Kabel</translation>
+        <translation>Tambah jaringan berkabel</translation>
     </message>
 </context>
 <context>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation>Terhubung, jaringan terbatas.</translation>
+        <translation>Tersambung, jaringan terbatas.</translation>
     </message>
 </context>
 <context>
@@ -39,7 +39,7 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation>Jaringan Kabel</translation>
+        <translation>Jaringan berkabel</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
@@ -70,42 +70,42 @@
     <message>
         <location filename="../netconnect.cpp" line="72"/>
         <source>Settings</source>
-        <translation>Pengaturan</translation>
+        <translation>Pengaturan jaringan</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation>Atur Notifikasi Desktop</translation>
+        <translation>Atur notifikasi desktop</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="92"/>
         <location filename="../netconnect.cpp" line="227"/>
         <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation>Jaringan Kabel</translation>
+        <translation>Jaringan berkabel</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>Tidak mendeteksi perangkat kabel</translation>
+        <translation>Kartu jaringan berkabel tidak terdeteksi</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>
         <location filename="../netconnect.cpp" line="1137"/>
         <source>connected</source>
-        <translation>Terhubung</translation>
+        <translation>Tersambung</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="637"/>
         <location filename="../netconnect.cpp" line="952"/>
         <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation>Tidak Terhubung</translation>
+        <translation>Tidak tersambung</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation>Kartu Jaringan</translation>
+        <translation>Kartu jaringan</translation>
     </message>
 </context>
 </TS>

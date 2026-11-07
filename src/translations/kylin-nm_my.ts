@@ -168,7 +168,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
@@ -242,7 +242,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="245"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="341"/>
         <source>Protocol:</source>
-        <translation>ပရိုတိုကောလ်:</translation>
+        <translation>သဘောတူညီချက်:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="249"/>
@@ -266,31 +266,31 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="345"/>
         <source>BandWidth:</source>
-        <translation>ဘန်ဒ္ ဝိုင်ဒါ-</translation>
+        <translation>ဘရော့ဘန်း-</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>စက်တွင်းချိတ် IPv6 လိပ်စာ:</translation>
+        <translation>IPV6 လိပ်စာ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="346"/>
         <source>IPv4:</source>
-        <translation>IPv4 လိပ်စာ -</translation>
+        <translation>IPV4 လိပ်စာ-</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="271"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="347"/>
         <source>IPv4 DNS:</source>
-        <translation>IPv4 DNS ဆာဗာ:</translation>
+        <translation>IPV4 DNS ဆာဗာ-</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="349"/>
         <source>Mac:</source>
-        <translation>ရူပိုင်လိပ်စာ -</translation>
+        <translation>ရုပ်ပိုင်းဆိုင်ရာ လိပ်စာ-</translation>
     </message>
 </context>
 <context>
@@ -665,7 +665,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="68"/>
         <source>IPv4Config</source>
-        <translation>IPv4 ဖွဲ့စည်းပုံ</translation>
+        <translation>IPv4 ဖွဲ့စည်းမှု</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
@@ -675,12 +675,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
         <source>Netmask</source>
-        <translation>ဆပ်နက်မာစက်</translation>
+        <translation>ဆပ်နက်မတ်စ်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation>မူလ ဂိတ်ဝေး</translation>
+        <translation>မူရင်း ကွန်ရက်တံခါးပေါက်</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -698,7 +698,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="122"/>
         <source>Manual</source>
-        <translation>ကိုယ်တိုင်လုပ်ဆောင်ခြင်း</translation>
+        <translation>လက်ဖြင့်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="244"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="135"/>
         <source>IPv6Config</source>
-        <translation>IPv6 ဖွဲ့စည်းပုံ</translation>
+        <translation>IPv6 ဖွဲ့စည်းမှု</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
@@ -757,7 +757,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation>မူလ ပေါက်ကိုင်း</translation>
+        <translation>မူရင်း ကွန်ရက်တံခါးပေါက်</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -775,7 +775,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="183"/>
         <source>Manual</source>
-        <translation>ကိုယ်တိုင်လုပ်ဆောင်ချက်</translation>
+        <translation>လက်ဖြင့်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="234"/>
@@ -1033,7 +1033,7 @@
         <location filename="../frontend/mainwindow.cpp" line="500"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation>ကွန်ရက်အရာများကို သတ်မှတ်ပါ</translation>
+        <translation>ဆက်တင်များ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="501"/>
@@ -1054,7 +1054,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Connected</source>
-        <translation>ချိတ်ဆက်ပြီး</translation>
+        <translation>ချိတ်ဆက်ထားသည်</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
@@ -1108,17 +1108,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="413"/>
         <source>Detail</source>
-        <translation>အသေးစိတ်</translation>
+        <translation>အသေးစိတ်အချက်အလက်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
         <source>IPv4</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
         <source>IPv6</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>
@@ -1157,7 +1157,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="505"/>
         <source>Forget this network</source>
-        <translation>ဒီကွန်ရက်ကို မေ့ပါ</translation>
+        <translation>ဤကွန်ရက်ကို မေ့ထားရန်</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="507"/>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>အခြား ကွန်ရက်သို့ ချိတ်ဆက်မည်</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -19,7 +19,7 @@
     <message>
         <location filename="../itemframe.cpp" line="40"/>
         <source>Add VPN</source>
-        <translation>ဗီပီအိုင်အယ် ထည့်ပါ</translation>
+        <translation>VPN ထည့်ရန်</translation>
     </message>
 </context>
 <context>
@@ -39,26 +39,26 @@
         <location filename="../vpn.cpp" line="159"/>
         <location filename="../vpn.cpp" line="291"/>
         <source>Show on Taskbar</source>
-        <translation>လုပ်ငန်းခွက်တန်းတွင် အိုင်ကွန်ပြသပါ</translation>
+        <translation>တာ့စ်ခ်ဘားတွင် အိုင်ကွန် ပြသမည်</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="293"/>
         <source>Add VPN</source>
-        <translation>ဗီပီအိုင်အယ် ချိတ်ဆက်မှု ထည့်ပါ</translation>
+        <translation>VPN ချိတ်ဆက်မှု ထည့်ရန်</translation>
         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="374"/>
         <location filename="../vpn.cpp" line="490"/>
         <source>connected</source>
-        <translation>ချိတ်ဆက်ပြီး</translation>
+        <translation>ချိတ်ဆက်ထားသည်</translation>
     </message>
     <message>
         <location filename="../vpn.cpp" line="376"/>
         <location filename="../vpn.cpp" line="500"/>
         <source>not connected</source>
-        <translation>မချိတ်ဆက်ပါ</translation>
+        <translation>ချိတ်ဆက်မထားပါ</translation>
     </message>
 </context>
 <context>
@@ -66,19 +66,19 @@
     <message>
         <location filename="../vpnitem.cpp" line="60"/>
         <source>Delete</source>
-        <translation>ဖယ်ရှားပါ</translation>
+        <translation>ဖျက်မည်</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="117"/>
         <location filename="../vpnitem.cpp" line="130"/>
         <source>Disconnect</source>
-        <translation>ချိတ်ဆက်မှု ဖြတ်ပါ</translation>
+        <translation>ချိတ်ဆက်မှု ဖြတ်တောက်မည်</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="119"/>
         <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
-        <translation>ချိတ်ဆက်ပါ</translation>
+        <translation>ချိတ်ဆက်မည်</translation>
     </message>
 </context>
 </TS>

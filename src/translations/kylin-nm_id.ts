@@ -168,7 +168,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="236"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="335"/>
@@ -272,7 +272,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="348"/>
         <source>IPv6:</source>
-        <translation>Alamat IPv6 tautan lokal:</translation>
+        <translation>Alamat IPv6:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="265"/>
@@ -675,12 +675,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="70"/>
         <source>Netmask</source>
-        <translation>Subnet Mask</translation>
+        <translation>Subnet mask</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>Default Gateway</source>
-        <translation>Gateway default</translation>
+        <translation>Gateway bawaan</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -752,12 +752,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="137"/>
         <source>Subnet prefix Length</source>
-        <translation>Panjang awalan subnet</translation>
+        <translation>Panjang prefiks subnet</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="138"/>
         <source>Default Gateway</source>
-        <translation>Gateway default</translation>
+        <translation>Gateway bawaan</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -1054,7 +1054,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
         <source>Connected</source>
-        <translation>Terhubung</translation>
+        <translation>Tersambung</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="950"/>
@@ -1113,12 +1113,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="414"/>
         <source>IPv4</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="417"/>
         <source>IPv6</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="420"/>

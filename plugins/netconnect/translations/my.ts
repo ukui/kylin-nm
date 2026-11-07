@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>အခြား ကွန်ရက်သို့ ချိတ်ဆက်မည်</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>ကြိုးဆွယ် ကွန်ရက် ထည့်ရန်</translation>
+        <translation>ကြိုးတပ် ကွန်ရက် ထည့်မည်</translation>
     </message>
 </context>
 <context>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../lanitem.cpp" line="147"/>
         <source>Connected, restricting access.</source>
-        <translation>ချိတ်ဆက်ပြီး၊ ကွန်ရက် ကန့်သတ်ချက် ရှိပါသည်။</translation>
+        <translation>ချိတ်ဆက်ထားသည်၊ ကွန်ရက် ကန့်သတ်ထားသည်။</translation>
     </message>
 </context>
 <context>
@@ -39,13 +39,13 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation>ကြိုးဆွယ် ကွန်ရက်</translation>
+        <translation>ကြိုးတပ် ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="229"/>
         <source>open</source>
-        <translation>ဖွင့်ရန်</translation>
+        <translation>ဖွင့်မည်</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
@@ -75,37 +75,37 @@
     <message>
         <location filename="../netconnect.cpp" line="75"/>
         <source>Settings desktop message</source>
-        <translation>စက်မျက်နှာပြင် အသိပေးချက်များ ဆက်တင်</translation>
+        <translation>ဒက်စ်တော့ အကြောင်းကြားချက် သတ်မှတ်မည်</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="92"/>
         <location filename="../netconnect.cpp" line="227"/>
         <location filename="../netconnect.cpp" line="230"/>
         <source>LAN</source>
-        <translation>ကြိုးဆွယ် ကွန်ရက်</translation>
+        <translation>ကြိုးတပ် ကွန်ရက်</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="346"/>
         <source>No ethernet device avaliable</source>
-        <translation>ကြိုးဆွယ် စက်များ မတွေ့ပါ</translation>
+        <translation>ကြိုးတပ် ကွန်ရက်ကတ် စစ်ဆေးမတွေ့ရှိပါ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="635"/>
         <location filename="../netconnect.cpp" line="1137"/>
         <source>connected</source>
-        <translation>ချိတ်ဆက်ပြီး</translation>
+        <translation>ချိတ်ဆက်ထားသည်</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="637"/>
         <location filename="../netconnect.cpp" line="952"/>
         <location filename="../netconnect.cpp" line="1147"/>
         <source>not connected</source>
-        <translation>မချိတ်ဆက်ပါ</translation>
+        <translation>ချိတ်ဆက်မထားပါ</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="714"/>
         <source>card</source>
-        <translation>ကွန်ရက် ကဒ်</translation>
+        <translation>ကွန်ရက်ကတ်</translation>
     </message>
 </context>
 </TS>

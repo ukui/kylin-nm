@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>Gabung ke jaringan lain</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation></translation>
+        <translation>Tambah jaringan berkabel</translation>
     </message>
 </context>
 <context>
@@ -45,20 +45,20 @@
     <message>
         <location filename="../vpn.cpp" line="293"/>
         <source>Add VPN</source>
-        <translation>Tambah koneksi VPN</translation>
+        <translation>Tambah sambungan VPN</translation>
         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="374"/>
         <location filename="../vpn.cpp" line="490"/>
         <source>connected</source>
-        <translation>Terhubung</translation>
+        <translation>Tersambung</translation>
     </message>
     <message>
         <location filename="../vpn.cpp" line="376"/>
         <location filename="../vpn.cpp" line="500"/>
         <source>not connected</source>
-        <translation>Tidak terhubung</translation>
+        <translation>Tidak tersambung</translation>
     </message>
 </context>
 <context>
@@ -78,7 +78,7 @@
         <location filename="../vpnitem.cpp" line="119"/>
         <location filename="../vpnitem.cpp" line="128"/>
         <source>Connect</source>
-        <translation>Hubungkan</translation>
+        <translation>Sambungan</translation>
     </message>
 </context>
 </TS>

@@ -20,6 +20,7 @@
 #include "proxyServer/proxyapphandler.h"
 #include <QCoreApplication>
 #include <QDBusConnection>
+#include <QDBusConnectionInterface>
 #include <QDBusError>
 #include <QDebug>
 
@@ -27,9 +28,16 @@ int main(int argc, char *argv[]){
 
     QCoreApplication app(argc, argv);
 
+    const QString serviceName = QStringLiteral("com.kylin.network.qt.systemdbus");
     QDBusConnection systemBus = QDBusConnection::systemBus();
-    if (!systemBus.registerService("com.kylin.network.qt.systemdbus")){
+    if (!systemBus.registerService(serviceName)){
         qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
+        // lastError 为空通常意味着名称已被其它连接持有，打印持有者便于定位
+        if (QDBusConnectionInterface *iface = systemBus.interface()) {
+            qCritical() << "service registered:" << iface->isServiceRegistered(serviceName).value()
+                        << "owner:" << iface->serviceOwner(serviceName).value()
+                        << "owner pid:" << iface->servicePid(serviceName).value();
+        }
         exit(1);
     }
 

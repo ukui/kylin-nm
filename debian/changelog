@@ -1,3 +1,12 @@
+kylin-nm (4.24.0.0-ok0.10) huanghe; urgency=medium
+
+   * BUG: IKUOF6 更新过程中打开托盘网络面板，导致 kylin-nm 配置失败、系统更新中断
+  * 需求: 无
+  * 其他改动说明: 无
+  * 其他改动影响域: 无
+
+ -- yangling <yangling@kylinos.cn>  Fri, 13 Nov 2026 16:42:49 +0800
+
 kylin-nm (4.24.0.0-ok0.9) huanghe; urgency=medium
 
   * BUG: 无

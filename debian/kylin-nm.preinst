@@ -5,5 +5,22 @@ set -e
 CONFLICT_FILE="/etc/nm_enhance/nm_enhance_dns.conf"
 dpkg-divert --package kylin-network-manager-enhance-daemon  --rename --divert "$CONFLICT_FILE"".old" --add $CONFLICT_FILE
 
-pkill -f "kylin-nm-sysdbus" || true
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl stop kylin-nm-sysdbus.service >/dev/null 2>&1 || true
+fi
+# 旧包激活文件没有 SystemdService，可能存在不受 systemd 管理的实例
+pkill -f "^/usr/bin/kylin-nm-sysdbus" || true
+
+# 等待 D-Bus 名称真正释放，否则 postinst 启动的新实例会因名称被占用而注册失败
+if command -v busctl >/dev/null 2>&1; then
+    i=0
+    while [ "$i" -lt 50 ]; do
+        if ! busctl --system status com.kylin.network.qt.systemdbus >/dev/null 2>&1; then
+            break
+        fi
+        sleep 0.1
+        i=$((i + 1))
+    done
+fi
+
 exit 0

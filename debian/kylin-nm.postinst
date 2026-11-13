@@ -16,9 +16,24 @@ if [ "$1" = "configure" ]; then
     # Enable and start the systemd service
     if command -v systemctl >/dev/null 2>&1; then
         systemctl daemon-reload
-        systemctl enable kylin-nm-sysdbus.service
-        systemctl start kylin-nm-sysdbus.service
-		
+        # 让新安装的 D-Bus 激活文件和安全策略立即生效
+        systemctl reload dbus.service >/dev/null 2>&1 || true
+
+        systemctl enable kylin-nm-sysdbus.service || true
+
+        # 名称可能仍被旧实例短暂占用，重试避免一次竞态导致包配置失败
+        attempt=0
+        while [ "$attempt" -lt 3 ]; do
+            if systemctl restart kylin-nm-sysdbus.service; then
+                break
+            fi
+            attempt=$((attempt + 1))
+            sleep 1
+        done
+        if [ "$attempt" -ge 3 ]; then
+            echo "警告: kylin-nm-sysdbus.service 启动失败，请用 journalctl -u kylin-nm-sysdbus 查看原因" >&2
+        fi
+
         systemctl enable nm-enhance-optimization.service
         systemctl restart nm-enhance-optimization.service
     fi

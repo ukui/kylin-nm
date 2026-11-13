@@ -1,0 +1,467 @@
+From: =?utf-8?b?6YKT5omY?= <dengtuo@kylinos.cn>
+Date: Fri, 13 Nov 2026 10:15:21 +0000
+Subject: =?utf-8?b?ITE0MCBob3RmaXggaXNzdWUjSUtVT0Y2IOabtOaWsOi/h+eoi+S4rQ==?=
+ =?utf-8?b?5omT5byA5omY55uY572R57uc6Z2i5p2/77yM5a+86Ie0IGt5bGluLW5tIOmFjQ==?=
+ =?utf-8?b?572u5aSx6LSl44CB57O757uf5pu05paw5Lit5pat?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+Merge pull request !140 from 杨玲/issue#IKUOF6
+---
+ plugins/netconnect/translations/id.ts              | 22 +++++++++++-----------
+ plugins/netconnect/translations/lo.ts              | 18 +++++++++---------
+ plugins/netconnect/translations/my.ts              | 22 +++++++++++-----------
+ plugins/vpn/translations/id.ts                     | 12 ++++++------
+ plugins/vpn/translations/lo.ts                     |  6 +++---
+ plugins/vpn/translations/my.ts                     | 18 +++++++++---------
+ .../conf/com.kylin.network.qt.systemdbus.service   |  1 +
+ sys-dbus-register/main.cpp                         | 10 +++++++++-
+ 8 files changed, 59 insertions(+), 50 deletions(-)
+
+diff --git a/plugins/netconnect/translations/id.ts b/plugins/netconnect/translations/id.ts
+index c6ef178..74cc9ff 100644
+--- a/plugins/netconnect/translations/id.ts
++++ b/plugins/netconnect/translations/id.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>Gabung ke jaringan lain</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation>Tambah Jaringan Kabel</translation>
++        <translation>Tambah jaringan berkabel</translation>
+     </message>
+ </context>
+ <context>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation>Terhubung, jaringan terbatas.</translation>
++        <translation>Tersambung, jaringan terbatas.</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,7 +39,7 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation>Jaringan Kabel</translation>
++        <translation>Jaringan berkabel</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+@@ -70,42 +70,42 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation>Pengaturan</translation>
++        <translation>Pengaturan jaringan</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation>Atur Notifikasi Desktop</translation>
++        <translation>Atur notifikasi desktop</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation>Jaringan Kabel</translation>
++        <translation>Jaringan berkabel</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation>Tidak mendeteksi perangkat kabel</translation>
++        <translation>Kartu jaringan berkabel tidak terdeteksi</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation>Terhubung</translation>
++        <translation>Tersambung</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation>Tidak Terhubung</translation>
++        <translation>Tidak tersambung</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation>Kartu Jaringan</translation>
++        <translation>Kartu jaringan</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/netconnect/translations/lo.ts b/plugins/netconnect/translations/lo.ts
+index b010a81..72290ba 100644
+--- a/plugins/netconnect/translations/lo.ts
++++ b/plugins/netconnect/translations/lo.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນໆ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -39,13 +39,13 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation>ເຄືອຂ່າຍແບບມີສາຍ</translation>
++        <translation>ເຄືອຂ່າຍແບບໃຊ້ສາຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation>ເປີດ</translation>
++        <translation>ເປີດໃຊ້</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+@@ -70,24 +70,24 @@
+     <message>
+         <location filename="../netconnect.cpp" line="72"/>
+         <source>Settings</source>
+-        <translation>ການຕັ້ງຄ່າ</translation>
++        <translation>ການຕັ້ງຄ່າເຄືອຂ່າຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation>ຕັ້ງຄ່າການແຈ້ງເຕືອນແບບເດັສທັອບ</translation>
++        <translation>ຕັ້ງຄ່າ ການແຈ້ງເຕືອນເດັສທັອບ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation>ເຄືອຂ່າຍແບບມີສາຍ</translation>
++        <translation>ເຄືອຂ່າຍແບບໃຊ້ສາຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation>ບໍ່ພົບອຸປະກອນແບບມີສາຍ</translation>
++        <translation>ກວດບໍ່ພົບກາດເຄືອຂ່າຍມີສາຍ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+@@ -100,12 +100,12 @@
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation>ບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
++        <translation>ຍັງບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation>ແຜ່ນເຄືອຂ່າຍ</translation>
++        <translation>ອະແດັບເຕີເຄືອຂ່າຍ</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/netconnect/translations/my.ts b/plugins/netconnect/translations/my.ts
+index 71b4b1b..4b978cd 100644
+--- a/plugins/netconnect/translations/my.ts
++++ b/plugins/netconnect/translations/my.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>အခြား ကွန်ရက်သို့ ချိတ်ဆက်မည်</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation>ကြိုးဆွယ် ကွန်ရက် ထည့်ရန်</translation>
++        <translation>ကြိုးတပ် ကွန်ရက် ထည့်မည်</translation>
+     </message>
+ </context>
+ <context>
+@@ -31,7 +31,7 @@
+     <message>
+         <location filename="../lanitem.cpp" line="147"/>
+         <source>Connected, restricting access.</source>
+-        <translation>ချိတ်ဆက်ပြီး၊ ကွန်ရက် ကန့်သတ်ချက် ရှိပါသည်။</translation>
++        <translation>ချိတ်ဆက်ထားသည်၊ ကွန်ရက် ကန့်သတ်ထားသည်။</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,13 +39,13 @@
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+         <source>Wired Network</source>
+-        <translation>ကြိုးဆွယ် ကွန်ရက်</translation>
++        <translation>ကြိုးတပ် ကွန်ရက်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+         <location filename="../netconnect.cpp" line="229"/>
+         <source>open</source>
+-        <translation>ဖွင့်ရန်</translation>
++        <translation>ဖွင့်မည်</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+@@ -75,37 +75,37 @@
+     <message>
+         <location filename="../netconnect.cpp" line="75"/>
+         <source>Settings desktop message</source>
+-        <translation>စက်မျက်နှာပြင် အသိပေးချက်များ ဆက်တင်</translation>
++        <translation>ဒက်စ်တော့ အကြောင်းကြားချက် သတ်မှတ်မည်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="92"/>
+         <location filename="../netconnect.cpp" line="227"/>
+         <location filename="../netconnect.cpp" line="230"/>
+         <source>LAN</source>
+-        <translation>ကြိုးဆွယ် ကွန်ရက်</translation>
++        <translation>ကြိုးတပ် ကွန်ရက်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="346"/>
+         <source>No ethernet device avaliable</source>
+-        <translation>ကြိုးဆွယ် စက်များ မတွေ့ပါ</translation>
++        <translation>ကြိုးတပ် ကွန်ရက်ကတ် စစ်ဆေးမတွေ့ရှိပါ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="635"/>
+         <location filename="../netconnect.cpp" line="1137"/>
+         <source>connected</source>
+-        <translation>ချိတ်ဆက်ပြီး</translation>
++        <translation>ချိတ်ဆက်ထားသည်</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="637"/>
+         <location filename="../netconnect.cpp" line="952"/>
+         <location filename="../netconnect.cpp" line="1147"/>
+         <source>not connected</source>
+-        <translation>မချိတ်ဆက်ပါ</translation>
++        <translation>ချိတ်ဆက်မထားပါ</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="714"/>
+         <source>card</source>
+-        <translation>ကွန်ရက် ကဒ်</translation>
++        <translation>ကွန်ရက်ကတ်</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/vpn/translations/id.ts b/plugins/vpn/translations/id.ts
+index 81d0473..f837f21 100644
+--- a/plugins/vpn/translations/id.ts
++++ b/plugins/vpn/translations/id.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>Gabung ke jaringan lain</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation></translation>
++        <translation>Tambah jaringan berkabel</translation>
+     </message>
+ </context>
+ <context>
+@@ -45,20 +45,20 @@
+     <message>
+         <location filename="../vpn.cpp" line="293"/>
+         <source>Add VPN</source>
+-        <translation>Tambah koneksi VPN</translation>
++        <translation>Tambah sambungan VPN</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="490"/>
+         <source>connected</source>
+-        <translation>Terhubung</translation>
++        <translation>Tersambung</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation>Tidak terhubung</translation>
++        <translation>Tidak tersambung</translation>
+     </message>
+ </context>
+ <context>
+@@ -78,7 +78,7 @@
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation>Hubungkan</translation>
++        <translation>Sambungan</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/vpn/translations/lo.ts b/plugins/vpn/translations/lo.ts
+index 900a35b..a18fc0a 100644
+--- a/plugins/vpn/translations/lo.ts
++++ b/plugins/vpn/translations/lo.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>ເຂົ້າຮ່ວມເຄືອຂ່າຍອື່ນໆ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -39,7 +39,7 @@
+         <location filename="../vpn.cpp" line="159"/>
+         <location filename="../vpn.cpp" line="291"/>
+         <source>Show on Taskbar</source>
+-        <translation>ສະແດງໄອຄອນໃນແຖບວຽກ</translation>
++        <translation>ສະແດງໄອຄອນເທິງແຖບໜ້າວຽກ</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+@@ -58,7 +58,7 @@
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation>ບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
++        <translation>ຍັງບໍ່ໄດ້ເຊື່ອມຕໍ່</translation>
+     </message>
+ </context>
+ <context>
+diff --git a/plugins/vpn/translations/my.ts b/plugins/vpn/translations/my.ts
+index d7c849d..caf467e 100644
+--- a/plugins/vpn/translations/my.ts
++++ b/plugins/vpn/translations/my.ts
+@@ -6,7 +6,7 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>အခြား ကွန်ရက်သို့ ချိတ်ဆက်မည်</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../itemframe.cpp" line="40"/>
+         <source>Add VPN</source>
+-        <translation>ဗီပီအိုင်အယ် ထည့်ပါ</translation>
++        <translation>VPN ထည့်ရန်</translation>
+     </message>
+ </context>
+ <context>
+@@ -39,26 +39,26 @@
+         <location filename="../vpn.cpp" line="159"/>
+         <location filename="../vpn.cpp" line="291"/>
+         <source>Show on Taskbar</source>
+-        <translation>လုပ်ငန်းခွက်တန်းတွင် အိုင်ကွန်ပြသပါ</translation>
++        <translation>တာ့စ်ခ်ဘားတွင် အိုင်ကွန် ပြသမည်</translation>
+         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="293"/>
+         <source>Add VPN</source>
+-        <translation>ဗီပီအိုင်အယ် ချိတ်ဆက်မှု ထည့်ပါ</translation>
++        <translation>VPN ချိတ်ဆက်မှု ထည့်ရန်</translation>
+         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="374"/>
+         <location filename="../vpn.cpp" line="490"/>
+         <source>connected</source>
+-        <translation>ချိတ်ဆက်ပြီး</translation>
++        <translation>ချိတ်ဆက်ထားသည်</translation>
+     </message>
+     <message>
+         <location filename="../vpn.cpp" line="376"/>
+         <location filename="../vpn.cpp" line="500"/>
+         <source>not connected</source>
+-        <translation>မချိတ်ဆက်ပါ</translation>
++        <translation>ချိတ်ဆက်မထားပါ</translation>
+     </message>
+ </context>
+ <context>
+@@ -66,19 +66,19 @@
+     <message>
+         <location filename="../vpnitem.cpp" line="60"/>
+         <source>Delete</source>
+-        <translation>ဖယ်ရှားပါ</translation>
++        <translation>ဖျက်မည်</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="117"/>
+         <location filename="../vpnitem.cpp" line="130"/>
+         <source>Disconnect</source>
+-        <translation>ချိတ်ဆက်မှု ဖြတ်ပါ</translation>
++        <translation>ချိတ်ဆက်မှု ဖြတ်တောက်မည်</translation>
+     </message>
+     <message>
+         <location filename="../vpnitem.cpp" line="119"/>
+         <location filename="../vpnitem.cpp" line="128"/>
+         <source>Connect</source>
+-        <translation>ချိတ်ဆက်ပါ</translation>
++        <translation>ချိတ်ဆက်မည်</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/sys-dbus-register/conf/com.kylin.network.qt.systemdbus.service b/sys-dbus-register/conf/com.kylin.network.qt.systemdbus.service
+index 297fe77..4b93b6a 100644
+--- a/sys-dbus-register/conf/com.kylin.network.qt.systemdbus.service
++++ b/sys-dbus-register/conf/com.kylin.network.qt.systemdbus.service
+@@ -2,3 +2,4 @@
+ Name=com.kylin.network.qt.systemdbus
+ Exec=/usr/bin/kylin-nm-sysdbus
+ User=root
++SystemdService=kylin-nm-sysdbus.service
+diff --git a/sys-dbus-register/main.cpp b/sys-dbus-register/main.cpp
+index 9353520..1773bc6 100644
+--- a/sys-dbus-register/main.cpp
++++ b/sys-dbus-register/main.cpp
+@@ -20,6 +20,7 @@
+ #include "proxyServer/proxyapphandler.h"
+ #include <QCoreApplication>
+ #include <QDBusConnection>
++#include <QDBusConnectionInterface>
+ #include <QDBusError>
+ #include <QDebug>
+ 
+@@ -27,9 +28,16 @@ int main(int argc, char *argv[]){
+ 
+     QCoreApplication app(argc, argv);
+ 
++    const QString serviceName = QStringLiteral("com.kylin.network.qt.systemdbus");
+     QDBusConnection systemBus = QDBusConnection::systemBus();
+-    if (!systemBus.registerService("com.kylin.network.qt.systemdbus")){
++    if (!systemBus.registerService(serviceName)){
+         qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
++        // lastError 为空通常意味着名称已被其它连接持有，打印持有者便于定位
++        if (QDBusConnectionInterface *iface = systemBus.interface()) {
++            qCritical() << "service registered:" << iface->isServiceRegistered(serviceName).value()
++                        << "owner:" << iface->serviceOwner(serviceName).value()
++                        << "owner pid:" << iface->servicePid(serviceName).value();
++        }
+         exit(1);
+     }
+ 
